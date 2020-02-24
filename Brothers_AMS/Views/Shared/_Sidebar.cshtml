@@ -1,0 +1,180 @@
+﻿@using Brothers_WMS.Models;
+@using System.Data.SqlClient;
+@using Brothers_WMS.Controllers;
+@using System.Configuration;
+@{
+    string UserName = string.Empty;
+    List<M_SP_PageandAccess_Result> MasterPageList = (List<M_SP_PageandAccess_Result>)(Session["MasterPageList"]);
+    List<M_SP_PageandAccess_Result> ApplicationFormPageList = (List<M_SP_PageandAccess_Result>)(Session["ApplicationFormPageList"]);
+    List<M_SP_PageandAccess_Result> SummaryPageList = (List<M_SP_PageandAccess_Result>)(Session["SummaryPageList"]);
+    List<M_SP_PageandAccess_Result> ForeCastList = (List<M_SP_PageandAccess_Result>)(Session["ForeCastList"]);
+    string Userphoto = string.Empty;
+    string UserSection = string.Empty;
+    if ((M_Users)(Session["user"]) != null)
+    {
+        M_Users UserInfo = (M_Users)(Session["user"]);
+        UserName = UserInfo.FirstName + " " + UserInfo.LastName;
+        string picuser = "";
+        if (UserInfo.UserPhoto == "" || UserInfo.UserPhoto == null)
+        {
+            Userphoto = "/Content/images/2014-09-16-Anoynmous-The-Rise-of-Personal-Networks.jpg";
+        }
+        else
+        {
+            Userphoto = "/PictureResources/UsersPhoto/" + UserInfo.UserPhoto;
+        }
+
+        UserSection = UserInfo.Section;
+    }
+    else
+    {
+        Url.Action("Logout", "Login");
+    }
+}
+<style>
+    .touploadImage {
+        cursor: pointer;
+    }
+</style>
+@if (MasterPageList != null)
+{
+    <aside class="main-sidebar">
+        <!-- sidebar: style can be found in sidebar.less -->
+        <section class="sidebar">
+            <!-- Sidebar user panel -->
+            <div class="user-panel">
+                <div class="image float-left">
+                    <img src=@Userphoto id="layoutpic" class="rounded touploadImage" style="width:200px" alt="User Image">
+                    <input class="file-userphoto" id="userpicto" type="file" accept="image/*" hidden />
+                </div>
+                <div class="info float-left">
+                    <p>@UserName</p>
+                    <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+                </div>
+                <br><br><br>
+                <div class="col-10">
+                    <button type="button" class="btn btn-block btn-info btn-xs" onclick="btnChangePassword_OnClick()">Change Password</button>
+                </div>
+            </div>
+            <!-- sidebar menu: : style can be found in sidebar.less -->
+            <ul class="sidebar-menu" id="themenu" data-widget="tree">
+                <li class="treeview menu-open" id="dashi">
+                    <a id="Dashboard" href="/Masters/Employee/Employee">
+                        <i class="fa fa-tachometer"></i> <span> Dashboard</span>
+                    </a>
+                </li>
+                @if (MasterPageList.Count > 0)
+                {
+                    <li class="treeview" id="Mastermodule">
+                        <a href="#">
+                            <i class="fa fa-users"></i> <span>Master Module</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu" style="">
+                            @foreach (M_SP_PageandAccess_Result x in MasterPageList)
+                    {
+                        if (x.AccessType == true)
+                        {
+                                    <li class=""><a href="@Url.Action(x.PageIndex, x.PageIndex, new { area = "Masters" })"><i class="fa fa-circle-o"></i> @x.PageName </a></li>
+                                }
+                            }
+                        </ul>
+                    </li>
+                }
+                @if (ApplicationFormPageList.Count > 0)
+                {
+                    <li class="treeview" id="Correctionmodule">
+                        <a href="#">
+                            <i class="fa fa-wrench"></i> <span>Application Forms</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu" style="">
+                            @foreach (M_SP_PageandAccess_Result x in ApplicationFormPageList)
+                    {
+                        if (x.AccessType == true)
+                        {
+                                    <li class=""><a href="@Url.Action(x.PageIndex, x.PageIndex, new { area = "Correction" })"><i class="fa fa-circle-o"></i> @x.PageName </a></li>
+                                }
+                            }
+                        </ul>
+                    </li>
+                }
+                @if (SummaryPageList.Count > 0)
+                {
+                    <li class="treeview" id="Summarymodule">
+                        <a href="#">
+                            <i class="fa fa-newspaper-o"></i> <span>Reports</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu" style="">
+                            @foreach (M_SP_PageandAccess_Result x in SummaryPageList)
+                    {
+                        if (x.AccessType == true)
+                        {
+                                    <li class=""><a href="@Url.Action(x.PageIndex, x.PageIndex, new { area = "Summary" })"><i class="fa fa-circle-o"></i> @x.PageName </a></li>
+                                }
+                            }
+                        </ul>
+                    </li>
+                }
+                @*<li class="treeview" id="forecastSetting">
+                    <a id="TimeIn" onclick="goTime()">
+                        <i class="fa fa-area-chart"></i> <span> Forecast Setting</span>
+                    </a>
+                </li>*@
+                @*@if (ForeCastList.Count > 0)
+                {
+                    <li class="treeview" id="Forecastmodule">
+                        <a href="#">
+                            <i class="fa fa-newspaper-o"></i> <span>Forecast</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu" style="">
+                            @foreach (M_SP_PageandAccess_Result x in ForeCastList)
+                    {
+                        if (x.AccessType == true)
+                        {
+                                    <li class=""><a href="@Url.Action(x.PageIndex, x.PageIndex, new { area = "Forecast" })"><i class="fa fa-circle-o"></i> @x.PageName </a></li>
+                                }
+                            }
+                        </ul>
+                    </li>
+                }*@
+                <li class="treeview" id="timin">
+                    <a id="TimeIn" onclick="goTime()">
+                        <i class="fa fa-id-badge"></i> <span> Time In and Out</span>
+                    </a>
+                </li>
+                <li class="treeview" id="liner">
+                    <a id="TimeIn" onclick="goLine()">
+                        <i class="fa fa-line-chart"></i> <span> Line View</span>
+                    </a>
+                </li>
+                <li class="treeview" id="Logouthere">
+                    <a id="Logouthere" onclick="LogOff()">
+                        <i class="fa fa-sign-out "></i> <span> Log Out</span>
+                    </a>
+                </li>
+            </ul>
+        </section>
+        <!-- /.sidebar -->
+        <div class="sidebar-footer" style="display:none;">
+            <!-- item-->
+            <a href="#" class="link" data-toggle="tooltip" title="" data-original-title="Settings"><i class="fa fa-cog fa-spin"></i></a>
+            <!-- item-->
+            <a href="#" class="link" data-toggle="tooltip" title="" data-original-title="Email"><i class="fa fa-envelope"></i></a>
+            <!-- item-->
+            <a href="#" class="link" data-toggle="tooltip" title="" data-original-title="Logout"><i class="fa fa-power-off"></i></a>
+        </div>
+    </aside>
+}
+@section script{
+}

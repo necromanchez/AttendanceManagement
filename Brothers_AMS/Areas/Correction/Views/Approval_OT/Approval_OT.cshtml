@@ -1,0 +1,196 @@
+﻿
+@{
+    ViewBag.Title = "Approval_OT";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<link href="~/Content/assets/vendor_components/select2/dist/css/select2.min.css" rel="stylesheet" />
+<section class="content-header">
+    <h1>
+        OT Approver
+    </h1>
+</section>
+<section class="content">
+    <div class="box box-primary">
+        <div class="box-body">
+                <table id="OTApproverTable" class="table table-bordered table-striped table-responsive" style="width:100%">
+                    <thead>
+                    </thead>
+                </table>
+        </div>
+    </div>
+</section>
+
+
+<div class="modal fade AgencyEmail" tabindex="-1" role="dialog" aria-labelledby="bannerformmodal" aria-hidden="true" id="OTDetails">
+    <div class="modal-dialog modal-lg">
+            <div class="modal-content modalsizer">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3 class="modal-title" id="myModalLabel">Employees</h3>
+                </div>
+                <div class="modal-body fixed-modal-height div-chk-less-height">
+
+                
+                        <div class="table-responsive">
+                                <table id="OTApproverDetails" class="table table-bordered table-striped table-responsive Fordatatableonehundred">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                <input type="checkbox" id="checkall_emp" class="filled-in chk-col-light-blue" />
+                                                <label class="checker" for="checkall_emp"></label>
+                                            </th>
+                                            @*<th> OT Reference No </th>*@
+                                            <th> Employee No </th>
+                                            <th> Employee Name </th>
+                                            <th> Section </th>
+                                            <th> Purpose </th>
+                                            <th> Overtime Type </th>
+                                            <th> Date </th>
+                                            @*<th> Date To </th>*@
+                                            <th> OT In </th>
+                                            <th> OT Out </th>
+                                            <th> Cumulative OT (Hours)</th>
+                                            <th> Requestor</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                        </div>
+
+                    
+                    <div class="form-group">
+                      
+                     
+                        @*<div class="input-group" id="theapprovebtn">*@
+                        <div class="input-group" >
+                            <div class="col-md-4">
+                                <button type="button" class="btn btn-flat bg-green btn-lg btn-block theapprovebtn" id="btnApprovedRequest">
+                                    <i class="fa fa-upload"></i> Approve
+                                </button>
+                            </div>
+                            <div class="col-md-4 ">
+                                <button type="button" class="btn btn-flat bg-orange btn-lg btn-block theapprovebtn" id="btnRejectRequest">
+                                    <i class="fa fa-address-book"></i> Reject
+                                </button>
+                            </div>
+                            <div class="col-md-4">
+                                <button type="button" class="btn btn-flat bg-yellow btn-lg btn-block" id="btnCancel">
+                                    <i class="fa fa-address-trash"></i> Cancel
+                                </button>
+                            </div>
+                           
+                        </div>
+                        <label class="Noteme">NOTE: Ongoing application cannot be approve right now </label>
+                    </div>
+                </div>
+            </div>
+       
+    </div>
+</div>
+
+
+<div class="modal fade AgencyEmail" tabindex="-1" role="dialog" aria-labelledby="bannerformmodal" aria-hidden="true" id="OTApprovers">
+    <div class="modal-dialog modal-lg">
+
+        <div class="modal-content modalsizer">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="modal-title" id="myModalLabel">Approvers</h3>
+            </div>
+            <div class="modal-body fixed-modal-height div-chk-less-height">
+
+                <div class="table-responsive">
+                    <table id="OTApproverStatustable" class="table table-bordered table-striped table-responsive" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th> Position </th>
+                                <th> User Name </th>
+                                <th> Employee Name </th>
+                                <th> Status </th>
+                                @*<th> Resend </th>*@
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+               
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="bannerformmodal" aria-hidden="true" id="AlternativesModal">
+    <div class="modal-dialog modal-lg">
+
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="modal-title" id="myModalLabel">Alternative Approver</h3>
+            </div>
+            <div class="modal-body fixed-modal-height div-chk-less-height">
+
+                <form action="" method="POST" role="form" id="ApproverForm">
+                    
+
+                    <div class="row">
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon" style="border-color:white;" id="posname"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <div class="input-group">
+
+                                    <input list="EmployeeNoList_Supervisor" placeholder="Employee No" name="Supervisor" id="Supervisor" class="form-control" onkeyup="getEmployeeNo_SectionSupervisor()">
+                                    <datalist id="EmployeeNoList_Supervisor"></datalist>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="SupervisorName" name="SupervisorName" disabled />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                   
+
+                    <div class="row">
+                        <div class="offset-md-8 col-md-3">
+                            <button type="button" class="btn btn-flat bg-green btn-lg btn-block" id="btnSend">
+                                <i class="fa fa-save"></i> Send Email
+                            </button>
+                        </div>
+                    </div>
+
+
+
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+
+@section Scripts{
+<script src="~/Content/plugins/daterangepicker/moment.js"></script>
+<script src="~/Areas/Correction/Javascripts/OTApprover.js"></script>
+
+}
+
+

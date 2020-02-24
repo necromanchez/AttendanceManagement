@@ -1,0 +1,191 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from html-templates.multipurposethemes.com/bootstrap-4/admin/bonito-admin-templates/pages/examples/login.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 20 Feb 2018 06:30:48 GMT -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../images/favicon.ico">
+
+    <title>AMS - Log in </title>
+
+    <!-- Bootstrap 4.0-->
+    <link href="~/Content/assets/vendor_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Bootstrap 4.0-->
+    <link rel="stylesheet" href="~/Content/assets/vendor_components/bootstrap/dist/css/bootstrap-extend.css">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="~/Content/assets/vendor_components/font-awesome/css/font-awesome.min.css">
+
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="~/Content/assets/vendor_components/Ionicons/css/ionicons.min.css">
+
+    <!-- Theme style -->
+    <link href="~/Content/css/master_style.css" rel="stylesheet" />
+    <!-- bonitoadmin Skins. Choose a skin from the css/skins
+       folder instead of downloading all of them to reduce the load. -->
+    <link href="~/Content/css/skins/_all-skins.css" rel="stylesheet" />
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- google font -->
+    @*<link href="../../../../../../fonts.googleapis.com/css6079.css?family=Poppins:300,400,500,600,700" rel="stylesheet">*@
+
+</head>
+<body class="hold-transition login-page">
+    <div class="login-box">
+       
+        <!-- /.login-logo -->
+        <div class="login-box-body">
+            <span class="login-box-msg">
+                <img src="~/Content/images/Brother_Logo_Blue.png" alt="Brother" style="height:65px;" />
+            </span>
+            <br><br>
+            <p class="login-box-msg">Sign in to start your session</p>
+            <div class="logo">
+              
+              
+            </div>
+            <form method="post" class="form-element">
+                <div class="form-group has-feedback">
+                    <input id="UserName" type="text" class="form-control" placeholder="User Name">
+                    <span class="ion ion-email form-control-feedback"></span>
+                </div>
+                <div class="form-group has-feedback">
+                    <input id="Password" type="password" class="form-control" placeholder="Password"  onmousedown="mouseoverPass();" onmouseup="mouseoutPass();">
+                    <span class="ion ion-eye form-control-feedback toviewpass" ></span>
+                </div>
+                <div class="col-md-12" id="incorrectpass">
+                    <label style="color:red;padding-left:50px">Incorrect Username or Password</label>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <div class="checkbox">
+                            <input type="checkbox" id="Rememberme" class="empmod filled-in chk-col-light-blue" name="employchosen"> <label class="checker" for="Rememberme">Remember me</label>
+                        </div>
+                    </div>
+                   
+                    <!-- /.col -->
+                   
+                    <!-- /.col -->
+                    <div class="col-12 text-center">
+                        <button type="button" class="btn btn-info btn-block btn-flat margin-top-10" id="Loginbtn">SIGN IN</button>
+                    </div>
+                    <!-- /.col -->
+                </div>
+            </form>
+            <!-- /.social-auth-links -->
+
+        </div>
+        <!-- /.login-box-body -->
+    </div>
+    <!-- /.login-box -->
+    <!-- jQuery 3 -->
+    <script src="~/Content/assets/vendor_components/jquery/dist/jquery.min.js"></script>
+
+    <!-- popper -->
+    <script src="~/Content/assets/vendor_components/popper/dist/popper.min.js"></script>
+
+    <!-- Bootstrap 4.0-->
+    <script src="~/Content/assets/vendor_components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+    <script type="text/javascript">
+        function mouseoverPass(obj) {
+            var obj = document.getElementById('Password');
+            obj.type = "text";
+        }
+        function mouseoutPass(obj) {
+            var obj = document.getElementById('Password');
+            obj.type = "password";
+        }
+        $(function () {
+            $("#UserName").focus();
+            $('#Password').keypress(function (e) {
+                var key = e.which;
+                if (key == 13)  // the enter key code
+                {
+                    $('#Loginbtn').click();
+                    return false;
+                }
+            });
+            $("#incorrectpass").hide();
+            $("#Loginbtn").on("click", function () {
+                var rem = ($('#Rememberme').is(":checked")) ? true : false;
+                $.ajax({
+                    url: '/Login/Authenticate',
+                    data: {
+                        UserName: $("#UserName").val()
+                        , Password: $("#Password").val()
+                        , Rememberme: rem
+                    },
+                    type: 'POST',
+                    datatype: "json",
+                    success: function (returnData) {
+                        if (returnData.result == "Success" && returnData.urlmail != "/") {
+                            window.location.href = returnData.urlmail;
+                        }
+                        else if (returnData.result == "Success") {
+                            window.location.href = "/Home/Index";
+                        }
+                        else {
+                            $("#incorrectpass").show();
+                        }
+                       
+                    }
+                });
+            })
+
+            $('#UserName').keypress(function (event) {
+                var keycode = (event.keyCode ? event.keyCode : event.which);
+                if (keycode == '13') {
+                    var ss = $("#IDno").val();
+                    $("#Line").prop("disabled", false);
+                    $.ajax({
+                        url: '/Login/GetEmployeeNo',
+                        data: {
+                            RFID: $("#UserName").val(),
+                            //LineID: $("#Line").val()
+                        },
+                        type: 'GET',
+                        datatype: "json",
+                        success: function (returnData) {
+                            if (returnData.empno != "") {
+                                $('#UserName').val(returnData.empno);
+                            }
+                            else {
+                                $("#incorrectpass").show();
+                            }
+                            
+                        }
+                    });
+                }
+            });
+        })
+
+        function myFunction() {
+            var x = document.getElementById("Password");
+            if (x.type === "password") {
+                x.type = "text";
+            } else {
+                x.type = "password";
+            }
+        }
+    </script>
+
+</body>
+
+<!-- Mirrored from html-templates.multipurposethemes.com/bootstrap-4/admin/bonito-admin-templates/pages/examples/login.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 20 Feb 2018 06:30:48 GMT -->
+</html>

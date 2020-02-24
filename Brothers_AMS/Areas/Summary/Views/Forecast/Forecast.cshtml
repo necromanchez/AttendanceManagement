@@ -1,0 +1,868 @@
+﻿
+@{
+    ViewBag.Title = "Forecast";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        Number of Employee Forecast
+    </h1>
+</section>
+
+
+
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col">
+            <div class="box">
+                <div class="box-header">
+                    <i class="fa fa-th"></i>
+
+                    <h3 class="box-title">Number of Employee (Persons)</h3>
+
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-white btn-sm" data-widget="collapse">
+                            <i class="fa fa-minus"></i>
+                        </button>
+                        @*<button type="button" class="btn btn-white btn-sm" data-widget="remove">
+                            <i class="fa fa-times"></i>
+                        </button>*@
+                    </div>
+                </div>
+                <div class="box-body border-radius-none">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="box">
+                              
+                                <!-- /.box-header -->
+                                <div class="box-body no-padding">
+                                    <table class="table table-hover table-responsive">
+                                        <tr>
+                                            <th>Class (J)</th>
+                                            <th>Class (E)</th>
+                                            <th>Unit</th>
+                                            <th>Apr</th>
+                                            <th>May</th>
+                                            <th>Jun</th>
+                                            <th>Jul</th>
+                                            <th>Aug</th>
+                                            <th>Sep</th>
+                                            <th>Oct</th>
+                                            <th>Nov</th>
+                                            <th>Dec</th>
+                                            <th>Jan</th>
+                                            <th>Feb</th>
+                                            <th>Mar</th>
+                                        </tr>
+                                        <tr>
+                                            <td>マネージャー</td>
+                                            <td>Manager</td>
+                                            <td>Person</td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>監督者</td>
+                                            <td>Supervisor</td>
+                                            <td>Person</td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>シニアスタッフ</td>
+                                            <td>Senior Staff</td>
+                                            <td>Person</td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>スタッフ</td>
+                                            <td>Staff</td>
+                                            <td>Person</td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Sランク</td>
+                                            <td>S-Rank</td>
+                                            <td>Person</td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>オペレーター01</td>
+                                            <td>Operator 01 & Above</td>
+                                            <td>Person</td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>オペレーター00</td>
+                                            <td>Operator 00</td>
+                                            <td>Person</td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>一時的なオペレーター</td>
+                                            <td>Temporary Operator</td>
+                                            <td>Person</td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                        </tr>
+
+                                        <tr>
+                                           
+                                            <td colspan="3" align="center"><strong>TOTAL</strong></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                        </tr>
+                                    </table>
+                                    <div class="form-group">
+
+                                        <div class="input-group">
+                                            <div class="col-md-6 col-xs-12 no-padding-l">
+                                                <button type="button" class="btn btn-flat bg-blue btn-lg btn-block" id="Add_btn">
+                                                    <i class="fa fa-edit"></i> Modify
+                                                </button>
+                                            </div>
+                                            <div class="col-md-6 col-xs-12 no-padding-l">
+                                                <button type="button" class="btn btn-flat bg-green btn-lg btn-block" id="Add_btn" href="#SectionAdd" data-toggle="modal" data-target="#bannerformmodal">
+                                                    <i class="fa fa-save"></i> Save
+                                                </button>
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /.box-body -->
+                            </div>
+                            <!-- /.box -->
+                        </div>
+                    </div>
+                </div>
+             
+            </div>
+        </div>
+        <!-- /.col -->
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <div class="box">
+                <div class="box-header">
+                    <i class="fa fa-th"></i>
+
+                    <h3 class="box-title">Overtime Cost Unit</h3>
+
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-white btn-sm" data-widget="collapse">
+                            <i class="fa fa-minus"></i>
+                        </button>
+                        @*<button type="button" class="btn btn-white btn-sm" data-widget="remove">
+                                <i class="fa fa-times"></i>
+                            </button>*@
+                    </div>
+                </div>
+                <div class="box-body border-radius-none">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="box">
+
+                                <!-- /.box-header -->
+                                <div class="box-body no-padding">
+                                    <table class="table table-hover table-responsive">
+                                        <tr>
+                                            <th>Class (J)</th>
+                                            <th>Class (E)</th>
+                                            <th>Unit</th>
+                                            <th>Apr</th>
+                                            <th>May</th>
+                                            <th>Jun</th>
+                                            <th>Jul</th>
+                                            <th>Aug</th>
+                                            <th>Sep</th>
+                                            <th>Oct</th>
+                                            <th>Nov</th>
+                                            <th>Dec</th>
+                                            <th>Jan</th>
+                                            <th>Feb</th>
+                                            <th>Mar</th>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3" align="center">Working Day</td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td rowspan="2" style="vertical-align : middle;text-align:center;">Regular OT</td>
+                                            <td>Staff/SPV/MGR</td>
+                                            <td style="color:red">Hours/Day</td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>Operator/S-Rank</td>
+                                            <td style="color:red">Hours/Day</td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td rowspan="2" style="vertical-align : middle;text-align:center;">Holiday OT</td>
+                                            <td>Staff/SPV/MGR</td>
+                                            <td style="color:red">Hours</td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>Operator/S-Rank</td>
+                                            <td style="color:red">Hours</td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                        </tr>
+                                        
+                                        
+                                    </table>
+                                    <div class="form-group">
+
+                                        <div class="input-group">
+                                            <div class="col-md-6 col-xs-12 no-padding-l">
+                                                <button type="button" class="btn btn-flat bg-blue btn-lg btn-block" id="Add_btn">
+                                                    <i class="fa fa-edit"></i> Modify
+                                                </button>
+                                            </div>
+                                            <div class="col-md-6 col-xs-12 no-padding-l">
+                                                <button type="button" class="btn btn-flat bg-green btn-lg btn-block" id="Add_btn" href="#SectionAdd" data-toggle="modal" data-target="#bannerformmodal">
+                                                    <i class="fa fa-save"></i> Save
+                                                </button>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /.box-body -->
+                            </div>
+                            <!-- /.box -->
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <!-- /.col -->
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <div class="box">
+                <div class="box-header">
+                    <i class="fa fa-th"></i>
+
+                    <h3 class="box-title">Regular Overtime Hour (Persons * Hour)</h3>
+
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-white btn-sm" data-widget="collapse">
+                            <i class="fa fa-minus"></i>
+                        </button>
+                        @*<button type="button" class="btn btn-white btn-sm" data-widget="remove">
+                                <i class="fa fa-times"></i>
+                            </button>*@
+                    </div>
+                </div>
+                <div class="box-body border-radius-none">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="box">
+
+                                <!-- /.box-header -->
+                                <div class="box-body no-padding">
+                                    <table class="table table-hover table-responsive">
+                                        <tr>
+                                            <th>Class (J)</th>
+                                            <th>Class (E)</th>
+                                            <th>Unit</th>
+                                            <th>Apr</th>
+                                            <th>May</th>
+                                            <th>Jun</th>
+                                            <th>Jul</th>
+                                            <th>Aug</th>
+                                            <th>Sep</th>
+                                            <th>Oct</th>
+                                            <th>Nov</th>
+                                            <th>Dec</th>
+                                            <th>Jan</th>
+                                            <th>Feb</th>
+                                            <th>Mar</th>
+                                        </tr>
+                                        <tr>
+                                            <td>マネージャー</td>
+                                            <td>Manager</td>
+                                            <td>Person</td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>監督者</td>
+                                            <td>Supervisor</td>
+                                            <td>Person</td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>シニアスタッフ</td>
+                                            <td>Senior Staff</td>
+                                            <td>Person</td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>スタッフ</td>
+                                            <td>Staff</td>
+                                            <td>Person</td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Sランク</td>
+                                            <td>S-Rank</td>
+                                            <td>Person</td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>オペレーター01</td>
+                                            <td>Operator 01 & Above</td>
+                                            <td>Person</td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>オペレーター00</td>
+                                            <td>Operator 00</td>
+                                            <td>Person</td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>一時的なオペレーター</td>
+                                            <td>Temporary Operator</td>
+                                            <td>Person</td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                        </tr>
+
+                                        <tr>
+
+                                            <td colspan="3" align="center"><strong>TOTAL</strong></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                        </tr>
+                                    </table>
+                                    <div class="form-group">
+
+                                        <div class="input-group">
+                                            <div class="col-md-6 col-xs-12 no-padding-l">
+                                                <button type="button" class="btn btn-flat bg-blue btn-lg btn-block" id="Add_btn">
+                                                    <i class="fa fa-edit"></i> Modify
+                                                </button>
+                                            </div>
+                                            <div class="col-md-6 col-xs-12 no-padding-l">
+                                                <button type="button" class="btn btn-flat bg-green btn-lg btn-block" id="Add_btn" href="#SectionAdd" data-toggle="modal" data-target="#bannerformmodal">
+                                                    <i class="fa fa-save"></i> Save
+                                                </button>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /.box-body -->
+                            </div>
+                            <!-- /.box -->
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+        <!-- /.col -->
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <div class="box">
+                <div class="box-header">
+                    <i class="fa fa-th"></i>
+
+                    <h3 class="box-title">Holiday OT Hour (Persons * Hour)</h3>
+
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-white btn-sm" data-widget="collapse">
+                            <i class="fa fa-minus"></i>
+                        </button>
+                        @*<button type="button" class="btn btn-white btn-sm" data-widget="remove">
+                                <i class="fa fa-times"></i>
+                            </button>*@
+                    </div>
+                </div>
+                <div class="box-body border-radius-none">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="box">
+
+                                <!-- /.box-header -->
+                                <div class="box-body no-padding">
+                                    <table class="table table-hover table-responsive">
+                                        <tr>
+                                            <th>Class (J)</th>
+                                            <th>Class (E)</th>
+                                            <th>Unit</th>
+                                            <th>Apr</th>
+                                            <th>May</th>
+                                            <th>Jun</th>
+                                            <th>Jul</th>
+                                            <th>Aug</th>
+                                            <th>Sep</th>
+                                            <th>Oct</th>
+                                            <th>Nov</th>
+                                            <th>Dec</th>
+                                            <th>Jan</th>
+                                            <th>Feb</th>
+                                            <th>Mar</th>
+                                        </tr>
+                                        <tr>
+                                            <td>マネージャー</td>
+                                            <td>Manager</td>
+                                            <td>Person</td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>監督者</td>
+                                            <td>Supervisor</td>
+                                            <td>Person</td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>シニアスタッフ</td>
+                                            <td>Senior Staff</td>
+                                            <td>Person</td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>スタッフ</td>
+                                            <td>Staff</td>
+                                            <td>Person</td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Sランク</td>
+                                            <td>S-Rank</td>
+                                            <td>Person</td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>オペレーター01</td>
+                                            <td>Operator 01 & Above</td>
+                                            <td>Person</td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>オペレーター00</td>
+                                            <td>Operator 00</td>
+                                            <td>Person</td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>一時的なオペレーター</td>
+                                            <td>Temporary Operator</td>
+                                            <td>Person</td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                        </tr>
+
+                                        <tr>
+
+                                            <td colspan="3" align="center"><strong>TOTAL</strong></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                        </tr>
+                                    </table>
+                                    <div class="form-group">
+
+                                        <div class="input-group">
+                                            <div class="col-md-6 col-xs-12 no-padding-l">
+                                                <button type="button" class="btn btn-flat bg-blue btn-lg btn-block" id="Add_btn">
+                                                    <i class="fa fa-edit"></i> Modify
+                                                </button>
+                                            </div>
+                                            <div class="col-md-6 col-xs-12 no-padding-l">
+                                                <button type="button" class="btn btn-flat bg-green btn-lg btn-block" id="Add_btn" href="#SectionAdd" data-toggle="modal" data-target="#bannerformmodal">
+                                                    <i class="fa fa-save"></i> Save
+                                                </button>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /.box-body -->
+                            </div>
+                            <!-- /.box -->
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+        <!-- /.col -->
+    </div>
+
+
+  
+</section>
+
+
+
+@section Scripts{
+<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+
+
+
+
+
+}

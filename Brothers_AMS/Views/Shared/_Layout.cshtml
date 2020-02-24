@@ -1,0 +1,141 @@
+﻿
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+    @*@Styles.Render("~/Content/css")*@
+    <link href="~/Content/assets/vendor_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/assets/vendor_components/bootstrap/dist/css/bootstrap-extend.css" rel="stylesheet" />
+    <link href="~/Content/assets/vendor_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/Content/assets/vendor_components/Ionicons/css/ionicons.min.css" rel="stylesheet" />
+    <link href="~/Content/css/skins/_all-skins.css" rel="stylesheet" />
+    <link href="~/Content/css/custom.css" rel="stylesheet" />
+    <link href="~/Content/css/master_style.css" rel="stylesheet" />
+    <link href="~/Content/assets/vendor_components/jquery-toast-plugin-master/src/jquery.toast.css" rel="stylesheet" />
+    <link href="~/Content/assets/vendor_components/sweetalert/sweetalert.css" rel="stylesheet" />
+    <link href="~/Content/assets/vendor_components/select2/dist/css/select2.min.css" rel="stylesheet" />
+    <link href="~/Content/assets/vendor_plugins/timepicker/bootstrap-timepicker.min.css" rel="stylesheet" />
+    <link href="~/Content/IEcssdatepicker.css" rel="stylesheet" />
+
+
+    @Styles.Render("~/Content/DataTablesCss")
+    @RenderSection("styles", required: false)
+</head>
+
+
+
+
+    <body class="hold-transition skin-blue sidebar-mini">
+        <div class="wrapper">
+           
+            @Html.Partial("_Header")
+           
+            @Html.Partial("_Sidebar")
+           
+           
+
+            <div class="content-wrapper">
+                @RenderBody()
+
+                @Html.Partial("_Modals")
+            </div>
+            @Html.Partial("_Footer")
+            @Html.Partial("_Control")
+            @Html.Partial("_LoadingScreen")
+            <div class="control-sidebar-bg"></div>
+                
+        </div>
+
+        @Scripts.Render("~/Content/js")
+        <script src="~/Content/assets/vendor_components/jquery-toast-plugin-master/src/jquery.toast.js"></script>
+        <script src="~/Content/assets/vendor_components/sweetalert/sweetalert.min.js"></script>
+        <script src="~/Scripts/ToastrNotifications.js"></script>
+        <script src="~/Scripts/jquery.signalR-2.3.0.min.js"></script>
+        <script src="/signalr/hubs"></script>
+        <script src="~/Content/iziToast.min.js"></script>
+        <script src="~/Scripts/Sidebar.js"></script>
+        <script src="~/Scripts/ToastrNotifications.js"></script>
+        <script src="~/Scripts/helper.js"></script>
+        <script src="~/Content/DatePickerIE.js"></script>
+        <script src="~/Content/assets/vendor_plugins/timepicker/bootstrap-timepicker.min.js"></script>
+
+
+
+
+        <!-- start - This is for export functionality only -->
+        <script src="~/Content/assets/vendor_plugins/DataTables-1.10.15/extensions/Buttons/js/dataTables.buttons.min.js"></script>
+        <script src="~/Content/assets/vendor_plugins/DataTables-1.10.15/extensions/Buttons/js/buttons.flash.min.js"></script>
+        <script src="~/Content/assets/vendor_plugins/DataTables-1.10.15/ex-js/jszip.min.js"></script>
+        <script src="~/Content/assets/vendor_plugins/DataTables-1.10.15/ex-js/pdfmake.min.js"></script>
+        <script src="~/Content/assets/vendor_plugins/DataTables-1.10.15/ex-js/vfs_fonts.js"></script>
+        <script src="~/Content/assets/vendor_plugins/DataTables-1.10.15/extensions/Buttons/js/buttons.html5.min.js"></script>
+        <script src="~/Content/assets/vendor_plugins/DataTables-1.10.15/extensions/Buttons/js/buttons.print.min.js"></script>
+        <!-- end - This is for export functionality only -->
+
+        <script>
+            $(function () {
+               
+
+
+                $('.select2').select2();
+                $(".select2").addClass("form-control input-sm");
+                $(".select2").css("width", '146.813px');
+                $('.timepicker').timepicker({
+                    showInputs: false,
+                    showMeridian: false //24hr mode 
+
+                });
+                $("input").attr('autocomplete', 'off');
+
+               
+                $("#Dashboard").on("click", function () {
+                    window.location = "/Home/Index"
+                })
+                $(".touploadImage").on("click", function () {
+                    $("#userpicto").click();
+                })
+
+                $(".file-userphoto").on('change', function () {
+                    var files = new FormData();
+                    var file1 = document.getElementById("userpicto").files[0];
+                    files.append('files[0]', file1);
+                    var sa = this;
+                    $.ajax({
+                        type: 'POST',
+                        url: '/Masters/Users/UploadEmployeePhoto',
+                        data: files,
+                        dataType: 'json',
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        success: function (response) {
+                            readURLlayout(sa);
+                            swal("User image profile updated");
+                        },
+                        error: function (error) {
+                            $('#uploadMsg').text('Error has occured. Upload is failed');
+                        }
+                    });
+
+                });
+            })
+
+            function readURLlayout(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('#layoutpic').attr('src', e.target.result);
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+        </script>
+        @RenderSection("scripts", required: false)
+    </body>
+
+
+</html>
+

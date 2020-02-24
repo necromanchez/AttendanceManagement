@@ -1,0 +1,229 @@
+﻿
+@{
+    ViewBag.Title = "MPMonitoring";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    HttpContext.Current.Response.AddHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+    HttpContext.Current.Response.AddHeader("Pragma", "no-cache");
+    HttpContext.Current.Response.AddHeader("Expires", "0");
+}
+<style type="text/css">
+    #flotcontainer {
+        width: 600px;
+        height: 200px;
+        text-align: left;
+    }
+
+    .NotCertified {
+        color: #FF0000 !important;
+        font-weight: bold;
+        font-size: 16px !important;
+    }
+
+    .Certified {
+        color: #00F033 !important;
+        font-weight: bold;
+        font-size: 16px !important;
+    }
+
+    .Orig {
+        font-weight: bold;
+        font-size: 16px !important;
+    }
+
+
+    /*.flot-x-axis .flot-tick-label {
+    white-space: nowrap;
+    transform: translate(-9px, 0) rotate(-60deg);
+    text-indent: -100%;
+    transform-origin: top right;
+    text-align: right !important;
+
+}*/
+
+</style>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link href="~/Content/assets/vendor_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.css" rel="stylesheet" />
+<link href="~/Content/assets/vendor_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css" rel="stylesheet" />
+<link href="~/Content/assets/vendor_components/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet" />
+<!-- Bootstrap CSS -->
+<link href="~/Content2/css/bootstrap.min.css" rel="stylesheet" media="screen" />
+
+<!-- Main CSS -->
+<link href="~/Content2/css/main.css" rel="stylesheet" media="screen" />
+
+
+<!-- Ion Icons -->
+<link href="~/Content2/fonts/icomoon/icomoon.css" rel="stylesheet" />
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        Man Power Monitoring 
+    </h1>
+</section>
+
+
+
+<!-- Main content -->
+
+<section class="content">
+   
+
+    <div class="row">
+        <div class="col">
+            <div class="box">
+                <div class="box-header with-border">
+                    @*<h3 class="box-title">Attendance Charts</h3>*@
+
+
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                  
+
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <div class="panel panel-light">
+                                <div class="panel-heading">
+                                    <h4>Manpower Change Graph</h4>
+                                </div>
+                                <div class="panel-body">
+                                    <div id="stacked-vertical-chart" class="chart-height1"></div>
+                                </div>
+                            </div>
+                        </div>
+                     
+
+                    </div>
+
+
+                  
+                            <form action="" method="POST" role="form" id="ScheduleForm" autocomplete="off">
+                                <input type="hidden" class="form-control input-sm" name="ID" id="ID" readonly="">
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">Date From</span>
+                                                <input type="text" class="form-control step fil" id="DateFrom" name="DateFrom">
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">Date To</span>
+                                                <input type="text" class="form-control step fil" id="DateTo" name="DateTo">
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                  
+                                </div>
+
+
+                            </form>
+
+
+                    <div class="row">
+                       
+                            <div class="col-md-6" id="superuser">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">Section</span>
+                                        <select class="form-control fil" id="Section">
+                                            
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                       
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">Shift</span>
+                                        <select class="form-control fil" id="Shift">
+                                       
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+                    <div class="row">
+                     
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon">Line</span>
+                                    <select class="form-control fil" id="Line">
+                                      
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon">Process</span>
+                                    <select class="form-control fil" id="Process">
+                                       
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                   
+                            <table id="MPTable" class="table table-bordered table-responsive">
+                                <tbody></tbody>
+                            </table>
+
+                       
+                </div>
+                <!-- ./box-body -->
+                <!-- /.box-footer -->
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+    </div>
+
+
+</section>
+
+
+
+@section Scripts{
+
+    <script src="~/Content2/js/bootstrap.min.js"></script>
+
+
+    <script src="~/Content2/js/flot/jquery.flot.min.js"></script>
+    <script src="~/Content2/js/flot/jquery.flot.time.min.js"></script>
+    <script src="~/Content2/js/flot/jquery.flot.pie.min.js"></script>
+    <script src="~/Content2/js/flot/jquery.flot.stack.min.js"></script>
+    <script src="~/Content2/js/flot/jquery.flot.tooltip.min.js"></script>
+    <script src="~/Content2/js/flot/jquery.flot.resize.min.js"></script>
+
+
+    <script src="~/Content2/js/flot/custom/line.js"></script>
+    <script src="~/Content2/js/flot/custom/area.js"></script>
+    <script src="~/Content2/js/flot/custom/combine-chart.js"></script>
+    <script src="~/Content2/js/flot/custom/stacked-area.js"></script>
+    <script src="~/Content2/js/flot/custom/vertical.js"></script>
+    <script src="~/Content2/js/flot/custom/horizontal.js"></script>
+    @*<script src="~/Content2/js/flot/custom/stacked-vertical.js"></script>
+    <script src="~/Content2/js/flot/custom/stacked-vertical2.js"></script>*@
+    <script src="~/Content2/js/flot/custom/stacked-horizontal.js"></script>
+    <script src="~/Content2/js/flot/custom/rectangular-pie.js"></script>
+    <script src="~/Content/assets/vendor_components/moment/min/moment.min.js"></script>
+    <script src="~/Content/assets/vendor_components/bootstrap-daterangepicker/daterangepicker.js"></script>
+<script src="~/Content/flotrotate.js"></script>
+
+
+ 
+
+    <script src="~/Scripts/pages/Lodash.js"></script>
+<script src="~/Areas/Summary/Javascript/MPMonitoring.js"></script>
+}

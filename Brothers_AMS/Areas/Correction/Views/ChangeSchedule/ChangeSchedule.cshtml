@@ -1,0 +1,362 @@
+﻿
+@{
+    ViewBag.Title = "ChangeSchedule";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link rel="stylesheet" href="~/Content/assets/vendor_components/glyphicons/glyphicon.css">
+<link href="~/Content/IEcssdatepicker.css" rel="stylesheet" />
+<link href="~/Content/assets/vendor_plugins/timepicker/bootstrap-timepicker.min.css" rel="stylesheet" />
+<section class="content-header">
+    <h1>
+        Change Schedule
+    </h1>
+</section>
+<section class="content">
+    <div class="box box-primary">
+
+        <div class="box-body pad">
+
+            <form action="" method="POST" role="form" id="ChangeScheduleForm">
+                <input name="CSin" id="CSin" class="form-control" hidden>
+                <input name="CSout" id="CSout" class="form-control" hidden>
+              
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon">Section</span>
+                                @*<select class="form-control autof" id="Section" name="Section"></select>*@
+                                <input type="text" class="form-control" id="Section" name="Section">
+                            </div>
+
+                        </div>
+                    </div>
+                   
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon">Schedule</span>
+                                <select class="form-control autof select2" id="Schedule" name="Schedule" disabled></select>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon">BIPH/Agency</span>
+                                <select class="form-control autof select2" id="BIPH_Agency" name="BIPH_Agency"></select>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon">Date From</span>
+                                <input type="text" class="form-control autof" id="DateFrom" name="DateFrom" disabled>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon">File Type</span>
+                                <select class="form-control autof select2" id="FileType" name="FileType" disabled>
+                                    <option value="">--SELECT--</option>
+                                    <option value=1>Individual</option>
+                                    <option value=2>Group</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon">Employee No/ADID</span>
+                                <input list="EmployeeNoList" name="EmployeeNo" id="EmployeeNo" class="form-control" onkeyup="getEmployeeNo()" disabled>
+                                <datalist id="EmployeeNoList"></datalist>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon">Date To</span>
+                                <input type="text" class="form-control autof" id="DateTo" name="DateTo" disabled>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon">Line/Team</span>
+                                <select class="form-control autof select2" id="Line_Team" name="Line_Team" disabled></select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon">Type</span>
+                                <select class="form-control autof select2" id="CSType" name="CSType" disabled>
+                                    <option value="">--SELECT--</option>
+                                    <option value="CS">Change of Shift Schedule</option>
+                                    <option value="RD">Change of Rest Day</option>
+                                    <option value="NW">No Work Schedule</option>
+                                </select>                            
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group">
+                                <div class="col-md-6 col-xs-12 no-padding-l">
+                                    <button type="button" class="btn btn-flat bg-green btn-lg btn-block" id="btnDownloadTemplate">
+                                        <i class="fa fa-download"></i> Download Template
+                                    </button>
+                                </div>
+                                <div class="col-md-6 col-xs-12 no-padding-l">
+                                    <button type="button" class="btn btn-flat bg-green btn-lg btn-block" id="btnFileUpload">
+                                        <i class="fa fa-upload"></i> Upload
+                                    </button>
+                                    <input type="file" name="UploadedFile" id="UploadedFile" placeholder="(.xlsx)" accept=".xlsx" style="display:none">
+
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-flat bg-blue btn-lg btn-block" id="btnSearch" style="display:none">
+                                <i class="fa fa-search"></i> Search
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="col-md-12 col-xs-12 no-padding-l">
+                                <button type="button" class="btn btn-flat bg-green btn-lg btn-block" id="btnconfirm">
+                                    <i class="fa fa-save"></i> Submit
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="box-body">
+            <div class="row"><h3 style="margin-left:20px;">Employee List</h3></div>
+            <div class="table-responsive">
+                <table id="ChangeScheduleTable" class="table table-bordered table-striped table-responsive">
+                    <thead>
+                        <tr>
+                            <th>
+                                <input type="checkbox" id="checkall_emp" class="filled-in chk-col-light-blue" />
+                                <label class="checker" for="checkall_emp"></label>
+                            </th>
+                            <th>Employee ID</th>
+                            <th>Last Name</th>
+                            <th>First Name</th>
+                            <th>Agency</th>
+                            <th>CostCenter (AMS)</th>
+                            <th>Section</th>
+                            <th>Schedule</th>
+                            @*<th>Line</th>*@
+
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                      
+                    </tbody>
+                </table>
+            </div>
+            @*<div class="row">
+                <div class="offset-md-9 col-md-3 no-ad">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="col-md-12 col-xs-12 no-padding-l">
+                                <button type="button" class="btn btn-flat bg-green btn-lg btn-block" id="btnconfirm">
+                                    <i class="fa fa-save"></i> Submit
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>*@
+        </div>
+    </div>
+</section>
+
+
+
+<div class="modal fade bannerformmodal" tabindex="-1" role="dialog" aria-labelledby="bannerformmodal" aria-hidden="true" id="ConfirmChangeSchedule">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3 class="modal-title" id="myModalLabel">Change Schedule Summary</h3>
+                </div>
+                <div class="modal-body fixed-modal-height div-chk-less-height">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon">Date From</span>
+                                    <input type="text" class="form-control" id="jobTitle1" value="09/20/2019" disabled>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon">Date To</span>
+                                    <input type="text" class="form-control" id="jobTitle1" value="09/21/2019" disabled>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon">Shift</span>
+                                    <input type="text" class="form-control" id="Shift" value="" disabled>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon">Time</span>
+                                    @*<input type="text" class="form-control" id="ScheduleSum" value="" disabled>*@
+                                    <select class="form-control" id="ScheduleSum" disabled></select>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon">Reason for Filing</span>
+                                    <input type="text" class="form-control" id="Pposgroup" value="">
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="table-responsive col-md-12">
+                            <table id="ChosenEmployeeTable" class="table table-bordered table-striped table-responsive" style="width:100%">
+                                <thead>
+
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="row">
+                        <div class="col-md-6">
+                            @*<label style="font-weight:bold"><label style="color:red">*&nbsp;</label>Change Schedule Reference:&nbsp;&nbsp;</label><label id="CSRefno"> </label>*@
+                        </div>
+                        <div class="col-md-6">
+                            <button type="button" class="btn btn-flat bg-green btn-lg btn-block" id="btnSaveCS" data-dismiss="modal">
+                                <i class="fa fa-save"></i> Submit
+                            </button>
+                        </div>
+                       <!--  <div class="col-md-3">
+                            <button type="button" class="btn btn-flat bg-red btn-lg btn-block" data-dismiss="modal">
+                                <i class="fa fa-close"></i> Cancel
+                            </button>
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade AgencyEmail" tabindex="-1" role="dialog" aria-labelledby="bannerformmodal" aria-hidden="true" id="BreakSettings">
+    <div class="modal-dialog modal-s">
+        <div class="modal-content">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3 class="modal-title" id="myModalLabel">Agency Email</h3>
+                </div>
+                <div class="modal-body fixed-modal-height div-chk-less-height">
+                    <div class="row">
+                        <div class="table-responsive">
+                            <table id="example2" class="table table-bordered table-striped" style="width:100%;">
+                                <thead>
+                                    <tr>
+                                        <th>Break</th>
+                                        <th>Break Out</th>
+                                        <th>Break In</th>
+                                        <th>Break (Mins)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>AM Break</td>
+                                        <td>10:00</td>
+                                        <td>10:15</td>
+                                        <td>15</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Lunch Break</td>
+                                        <td>11:45</td>
+                                        <td>12:45</td>
+                                        <td>60</td>
+                                    </tr>
+                                    <tr>
+                                        <td>PM Break</td>
+                                        <td>03:00</td>
+                                        <td>03:15</td>
+                                        <td>15</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+    @section Scripts{
+    <script src="~/Content/DatePickerIE.js"></script>
+    <script src="~/Content/assets/vendor_plugins/timepicker/bootstrap-timepicker.min.js"></script>
+    <script src="~/Areas/Correction/Javascripts/ChangeSchedule.js"></script>
+    }
+
+
+

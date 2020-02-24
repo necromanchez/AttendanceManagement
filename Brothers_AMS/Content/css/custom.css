@@ -1,0 +1,145 @@
+﻿.content-header>h1, .content-header>.container>h1 {
+	margin: 0 0 0px;
+	font-size: 20px;
+}
+.input-group-addon, .input-group-btn, table, input, input+label, select, .table-responsive * {
+	font-size: 11px !important;
+}
+
+.logo-img {
+	width: 160px;
+}
+
+.modal-lg {
+	width: 900px;
+}
+
+.modal-sm {
+	width: 300px;
+}
+
+.modal-full {
+	width: 99%;
+}
+.form-control, .form-control-sm{
+	height: 2.35rem !important;
+}
+.btn-lg{
+	font-size: 0.811rem;
+}
+.input-group-btn .btn{
+	padding: 7.5px 10px;
+}
+.sidebar-mini:not(.sidebar-mini-expand-feature).sidebar-collapse .sidebar-menu>li:hover>.treeview-menu, .sidebar-mini:not(.sidebar-mini-expand-feature).sidebar-collapse .sidebar-menu>li:hover>a>span:not(.pull-right) {
+	width: 215px !important;
+ }
+select::-ms-expand {
+	display: none;
+ }
+.margin-bottom-5 {
+    margin-bottom:5px; 
+}
+@media(max-width: 767px){
+	.input-group-btn .btn{
+		padding: 6.4px 10px;
+	}
+}
+@media(min-width:768px){
+	.no-padding{
+		padding-left: 0;
+		padding-right: 0;
+	}
+	.no-padding-l{
+		padding-left: 0;
+	}
+	.no-padding-r{
+		padding-right: 0;
+	}
+}
+.div-chk-less-height [type=checkbox] + label {
+	height: 10px;
+}
+@media(max-width: 767px){
+
+ .content-wrapper{
+	margin-top: 100px !important;
+ }
+
+ }
+ .main-header{
+	 position: fixed !important;
+	 top: 0;
+	 left: 0;
+	 width: 100%;
+ }
+ .content-wrapper{
+ margin-top: 50px;
+ }
+ /*.main-sidebar,*/ .control-sidebar{
+	position: fixed !important;
+ }
+ @media (min-width: 768px){
+	 .sidebar-mini.sidebar-collapse .main-sidebar .user-panel>.info, 
+	 .sidebar-mini.sidebar-collapse .sidebar-form, 
+	 .sidebar-mini.sidebar-collapse .sidebar-menu li.header, 
+	 .sidebar-mini.sidebar-collapse .sidebar-menu>li>.treeview-menu, 
+	 .sidebar-mini.sidebar-collapse .sidebar-menu>li>a>.pull-right, 
+	 .sidebar-mini.sidebar-collapse .sidebar-menu>li>a>span 
+     {
+        display: none !important;
+     }
+ }
+ .sidebar-mini:not(.sidebar-mini-expand-feature).sidebar-collapse .sidebar-menu>li:hover>a>.pull-right-container {
+	 left: 215px!important;
+	 background: none !important;
+ }
+.form-group {
+	margin-bottom: 1rem;
+}
+.padding-t-10{
+	padding-top:10px;
+}
+input[type=text]:not(:disabled){
+	background-color:#f6f9d3 !important;
+}
+select:not(:disabled){
+	background-color: #d3eaf9 !important;
+}
+.btn:disabled {
+    background: #848484!important;
+    border-color: #848484!important;
+}
+.row_selected td {
+    background-color: #bdd4ff !important; 
+}
+
+ .modalsizer{
+        width:1200px !important;
+    }
+.tableadjustermodal{
+    font-size: 10px !important;
+    font-weight: 300 !important;
+}
+
+.select2-container--disabled{
+        background-color: #E9ECEF
+}
+
+.Noteme{
+   
+     /*text-align:center*/
+     display: block;
+    text-align: center !important;
+   padding-top:10px !important;
+   font-style:italic !important;
+}
+
+.ipinagbawal{
+    background-color:#F5B7B1 !important;
+}
+
+.withOTna{
+    background-color:#6CE2DD !important;
+}
+
+

@@ -1,0 +1,98 @@
+﻿<div class="modal fade bannerformmodal" tabindex="-1" role="dialog" aria-labelledby="bannerformmodal" aria-hidden="true" id="Logoup">
+    <input type="hidden" id="idlogo" />
+    <div class="modal-dialog modal-s">
+        <div class="modal-content">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">Logo</h4>
+                </div>
+                <div class="modal-body fixed-modal-height div-chk-less-height" style="height:450px;">
+                    <div class="row">
+                        <div class="col-md-12 col-lg-12">
+                            <div class="box box-default">
+                                <img class="card-img-top img-responsive" src="~/Content/images/card/img1.jpg" alt="Card image cap" id="packImage">
+                                <div class="box-body">
+                                    <a href="#" class="btn btn-primary" id="pusher">Update Logo</a>
+                                    <input class="file-upload" id="picturepackage" type="file" accept="image/*" hidden />
+                                </div>
+                                <!-- /.box-body -->
+                            </div>
+                            <!-- /.box -->
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="bannerformmodal" aria-hidden="true" id="AF_ApproversModal">
+    <div class="modal-dialog modal-lg">
+
+        <div class="modal-content modalsizer">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="modal-title" id="myModalLabel">Approvers</h3>
+            </div>
+            <div class="modal-body fixed-modal-height div-chk-less-height">
+
+                <div class="table-responsive">
+                    <table id="AF_ApproverStatustable" class="table table-bordered table-striped table-responsive" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th> Position </th>
+                                <th> User Name </th>
+                                <th> Employee Name </th>
+                                <th> Status </th>
+                                @*<th> Resend </th>*@
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="bannerformmodal" aria-hidden="true" id="AF_ApproversModalSummary">
+    <div class="modal-dialog modal-lg">
+
+        <div class="modal-content modalsizer">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="modal-title" id="myModalLabel">Approvers</h3>
+            </div>
+            <div class="modal-body fixed-modal-height div-chk-less-height">
+
+                <div class="table-responsive">
+                    <table id="AF_ApproverStatustableSummary" class="table table-bordered table-striped table-responsive" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th> Position </th>
+                                <th> User Name </th>
+                                <th> Employee Name </th>
+                                <th> Status </th>
+                                @*<th> Resend </th>*@
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+

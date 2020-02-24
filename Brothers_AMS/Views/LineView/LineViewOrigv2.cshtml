@@ -1,0 +1,105 @@
+﻿
+@{
+    ViewBag.Title = "TimeIn";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+<link href="~/Content/assets/vendor_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.css" rel="stylesheet" />
+<link href="~/Content/assets/vendor_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css" rel="stylesheet" />
+<link href="~/Content/assets/vendor_components/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet" />
+<!-- Bootstrap CSS -->
+@*<link href="~/Content2/css/bootstrap.min.css" rel="stylesheet" media="screen" />*@
+
+<!-- Main CSS -->
+@*<link href="~/Content2/css/main.css" rel="stylesheet" media="screen" />*@
+
+<style>
+
+   /*.Blackislife{
+       color:black !important;
+       border: 1px solid black;
+   }*/
+    /*Blackislife{
+        color:black;
+        font-size:100px !important;
+    }*/
+    td{
+        color:black;
+        font-family:Arial;
+        font-size:30px !important;
+    }
+
+
+</style>
+<!-- Ion Icons -->
+
+<section class="content-header">
+    <h1>
+        Line View
+    </h1>
+</section>
+<section class="content">
+    <div class="box box-primary">
+
+
+        
+                <!-- right column -->
+              
+                        <div class="row">
+                            <div class="col">
+                                <div class="box">
+                                    <div class="box-header with-border">
+                                        @*<h3 class="box-title">Line View</h3>*@
+
+                                        <div class="box-tools pull-right">
+
+
+                                        </div>
+                                    </div>
+                                    <!-- /.box-header -->
+                                   
+                                        <div class="row" id="theLineView">
+                                          
+
+                                         
+
+                                        </div>
+                                   
+                                    <!-- ./box-body -->
+                                    <!-- /.box-footer -->
+                                </div>
+                                <!-- /.box -->
+                            </div>
+                            <!-- /.col -->
+                        </div>
+                  
+               
+           
+
+            <!--/.col (right) -->
+       
+    </div>
+
+  
+</section>
+
+
+@section Scripts{
+    <script src="~/Content2/js/bootstrap.min.js"></script>
+
+
+
+
+
+
+    <script src="~/Content/plugins/daterangepicker/moment.js"></script>
+    <script src="~/Content/iziToast.min.js"></script>
+    <script src="~/Scripts/CustomPages/LineView.js"></script>
+
+   
+}
+

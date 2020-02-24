@@ -1,0 +1,329 @@
+﻿
+@{
+    ViewBag.Title = "Home";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+
+  
+    HttpContext.Current.Response.AddHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+    HttpContext.Current.Response.AddHeader("Pragma", "no-cache");
+    HttpContext.Current.Response.AddHeader("Expires", "0");
+}
+@using Brothers_WMS.Models;
+@using System.Data.SqlClient;
+@using Brothers_WMS.Controllers;
+@using System.Configuration;
+@{
+    string UserName = string.Empty;
+    List<M_SP_PageandAccess_Result> MasterPageList = (List<M_SP_PageandAccess_Result>)(Session["MasterPageList"]);
+    List<M_SP_PageandAccess_Result> ApplicationFormPageList = (List<M_SP_PageandAccess_Result>)(Session["ApplicationFormPageList"]);
+    List<M_SP_PageandAccess_Result> SummaryPageList = (List<M_SP_PageandAccess_Result>)(Session["SummaryPageList"]);
+
+    if ((M_Users)(Session["user"]) != null)
+    {
+        M_Users UserInfo = (M_Users)(Session["user"]);
+        UserName = UserInfo.FirstName;
+    }
+    else
+    {
+        Url.Action("Logout", "Login");
+    }
+}
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link href="~/Content/assets/vendor_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.css" rel="stylesheet" />
+<link href="~/Content/assets/vendor_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css" rel="stylesheet" />
+<link href="~/Content/assets/vendor_components/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet" />
+<!-- Bootstrap CSS -->
+<link href="~/Content2/css/bootstrap.min.css" rel="stylesheet" media="screen" />
+
+<!-- Main CSS -->
+<link href="~/Content2/css/main.css" rel="stylesheet" media="screen" />
+
+
+<!-- Ion Icons -->
+<link href="~/Content2/fonts/icomoon/icomoon.css" rel="stylesheet" />
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        Welcome @UserName
+    </h1>
+</section>
+
+
+
+<!-- Main content -->
+
+<section class="content">
+    <div class="row">
+        <div class="col">
+            <div class="box-tools pull-right">
+                <div class="form-group">
+                    @*<div class="input-group">
+                        <span class="input-group-addon">Month</span>
+                        <select class="form-control" id="FileType" name="FileType">
+                            <option value=1>Jan</option>
+                            <option value=2>Feb</option>
+                        </select>
+
+                        <div class="input-group-addon">
+                            <i class="fa fa-calendar"></i>
+                        </div>
+                        <input type="text" class="form-control pull-right daterange" id="reservation">
+                    </div>*@
+              
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+  
+        <div class="row">
+            <div class="col">
+                <div class="box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Attendance Charts</h3>
+
+                        
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                <div class="panel panel-light">
+                                    <div class="panel-heading">
+                                       
+                                        <h4>Attendance Rate</h4>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div id="line-chart" class="chart-height1"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                <div class="panel panel-light">
+                                    <div class="panel-heading">
+                                        <h4>Overtime Rate</h4>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div id="stacked-vertical-chart2" class="chart-height1"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                <div class="panel panel-light">
+                                    <div class="panel-heading">
+                                        <h4>Absent Rate</h4>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-3">
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><i class="fa fa-users"></i></span>
+                                                    <select class="form-control" id="BIPH_Agency2" name="BIPH_Agency2"></select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-3">
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                                    <select class="form-control step step4" id="Month" name="Month">
+                                                        <option value=''>--SELECT--</option>
+                                                        <option value='1'>January</option>
+                                                        <option value='2'>February</option>
+                                                        <option value='3'>March</option>
+                                                        <option value='4'>April</option>
+                                                        <option value='5'>May</option>
+                                                        <option value='6'>June</option>
+                                                        <option value='7'>July</option>
+                                                        <option value='8'>August</option>
+                                                        <option value='9'>September</option>
+                                                        <option value='10'>October</option>
+                                                        <option value='11'>November</option>
+                                                        <option value='12'>December</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-2">
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <select class="form-control step step4" id="Year" name="Year">
+
+                                                        <option value=''>--SELECT--</option>
+                                                        <option value="2020">2020</option>
+                                                        <option value="2019">2019</option>
+                                                        <option value="2018">2018</option>
+                                                        <option value="2017">2017</option>
+                                                        <option value="2016">2016</option>
+                                                        <option value="2015">2015</option>
+                                                        <option value="2014">2014</option>
+                                                        <option value="2013">2013</option>
+                                                        <option value="2012">2012</option>
+                                                        <option value="2011">2011</option>
+                                                        <option value="2010">2010</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-3">
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><i class="fa fa-moon-o"></i><i class="fa fa-sun-o"></i></span>
+                                                    <select class="form-control" id="Shift" name="Shift">
+                                                        <option value="Day">Day Shift</option>
+                                                        <option value="Night">Night Shift</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div id="absentrateGraph" class="chart-height1"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                <div class="panel panel-light">
+                                    <div class="panel-heading">
+                                                <h4>Manpower Attendance Rate</h4>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-3">
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><i class="fa fa-users"></i></span>
+                                                    <select class="form-control" id="BIPH_Agency" name="BIPH_Agency"></select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-3">
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                                    <select class="form-control step step4" id="Month" name="Month">
+                                                        <option value=''>--SELECT--</option>
+                                                        <option value='1'>January</option>
+                                                        <option value='2'>February</option>
+                                                        <option value='3'>March</option>
+                                                        <option value='4'>April</option>
+                                                        <option value='5'>May</option>
+                                                        <option value='6'>June</option>
+                                                        <option value='7'>July</option>
+                                                        <option value='8'>August</option>
+                                                        <option value='9'>September</option>
+                                                        <option value='10'>October</option>
+                                                        <option value='11'>November</option>
+                                                        <option value='12'>December</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-2">
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <select class="form-control step step4" id="Year" name="Year">
+
+                                                        <option value=''>--SELECT--</option>
+                                                        <option value="2020">2020</option>
+                                                        <option value="2019">2019</option>
+                                                        <option value="2018">2018</option>
+                                                        <option value="2017">2017</option>
+                                                        <option value="2016">2016</option>
+                                                        <option value="2015">2015</option>
+                                                        <option value="2014">2014</option>
+                                                        <option value="2013">2013</option>
+                                                        <option value="2012">2012</option>
+                                                        <option value="2011">2011</option>
+                                                        <option value="2010">2010</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-3">
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><i class="fa fa-moon-o"></i><i class="fa fa-sun-o"></i></span>
+                                                    <select class="form-control" id="Shift" name="Shift">
+                                                        <option value="Day">Day Shift</option>
+                                                        <option value="Night">Night Shift</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="panel-body">
+                                        <div id="combineChart" class="chart-height1"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <!-- ./box-body -->
+                    <!-- /.box-footer -->
+                </div>
+                <!-- /.box -->
+            </div>
+            <!-- /.col -->
+        </div>
+
+     
+</section>
+
+
+
+@section Scripts{
+  
+    <script src="~/Content2/js/bootstrap.min.js"></script>
+
+  
+    <script src="~/Content2/js/flot/jquery.flot.min.js"></script>
+    <script src="~/Content2/js/flot/jquery.flot.time.min.js"></script>
+    <script src="~/Content2/js/flot/jquery.flot.pie.min.js"></script>
+    <script src="~/Content2/js/flot/jquery.flot.stack.min.js"></script>
+    <script src="~/Content2/js/flot/jquery.flot.tooltip.min.js"></script>
+    <script src="~/Content2/js/flot/jquery.flot.resize.min.js"></script>
+
+<script src="~/Content/flotrotate.js"></script>
+
+
+<script src="~/Scripts/pages/Lodash.js"></script>
+@*<script src="~/Content/jquery.flot.tooltip.js"></script>*@
+<script src="~/Scripts/Dashboard/Dashboard_ManpowerAttendanceRate.js"></script>
+<script src="~/Scripts/Dashboard/Dashboard_AbsentRate.js"></script>
+
+@*<script src="~/Content2/js/flot/custom/combine-chart.js"></script>*@
+
+
+
+
+  
+            <script src="~/Content2/js/flot/custom/line.js"></script>
+    <script src="~/Content2/js/flot/custom/area.js"></script>
+           
+    <script src="~/Content2/js/flot/custom/stacked-area.js"></script>
+    <script src="~/Content2/js/flot/custom/vertical.js"></script>
+    <script src="~/Content2/js/flot/custom/horizontal.js"></script>
+            <script src="~/Content2/js/flot/custom/stacked-vertical.js"></script>
+            <script src="~/Content2/js/flot/custom/stacked-vertical2.js"></script>
+    <script src="~/Content2/js/flot/custom/stacked-horizontal.js"></script>
+    <script src="~/Content2/js/flot/custom/rectangular-pie.js"></script>
+<script src="~/Content/assets/vendor_components/moment/min/moment.min.js"></script>
+<script src="~/Content/assets/vendor_components/bootstrap-daterangepicker/daterangepicker.js"></script>
+
+    @*<script type="text/javascript">
+        $(function () {
+            $('.daterange').daterangepicker();
+        })
+    </script>*@
+
+   
+    }

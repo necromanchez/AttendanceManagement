@@ -1,0 +1,179 @@
+﻿
+@{
+    ViewBag.Title = "Process";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="content-header">
+    <h1>
+        Line/Team
+    </h1>
+</section>
+<section class="content">
+    <div class="box box-primary">
+        <div class="box-header">
+            <i class="fa fa-gears"></i>
+            <h3 class="box-title">Line/Team Details</h3>
+        </div>
+        <div class="box-body pad">
+            <form action="" method="POST" role="form" id="LineProcessTeamForm">
+                <input type="hidden" class="form-control input-sm" name="ID" id="ID" readonly="">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon">Section</span>
+                                <input type="text" class="form-control input-sm" name="Section2" id="Section2">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon">Line/Team</span>
+                                <input type="text" class="form-control input-sm" name="Line" id="Line">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group"  style="display:none">
+                            <div class="input-group">
+                                <span class="input-group-addon">Ideal Manpower Count</span>
+                                <input type="text" class="form-control input-sm" name="Section" id="Section">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group" id="remarks_group">
+                            <div class="input-group">
+                                <span class="input-group-addon">Status</span>
+                                <select class="form-control" id="Status" name="Status">
+                                    <option value=true>Active</option>
+                                    <option value=false>Inactive</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="offset-md-9 col-md-3">
+                        <button type="submit" class="btn btn-flat bg-green btn-lg btn-block" id="Add_btn">
+                            <i class="fa fa-save"></i> Save
+                        </button>
+                    </div>
+                </div>
+
+
+
+            </form>
+
+        </div>
+
+        <div class="box-body">
+            <table class="table table-striped table-no-bordered table-hover" id="LineProcessTeamTable">
+                <thead>
+
+                </thead>
+            </table>
+        </div>
+    </div>
+</section>
+
+
+<div class="modal fade bannerformmodal" tabindex="-1" role="dialog" aria-labelledby="bannerformmodal" aria-hidden="true" id="Skillmodal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">Skills</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="requestacallform">
+                        <input type="hidden" id="LineID" />
+                        <input type="hidden" id="SkillID" />
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+
+                                    <span class="btn btn-flat btn-file bg-green btn-lg btn-block">
+                                        <i class="fa fa-folder-open"></i> Browse<input type="file" onchange="UploadSkill()" name="UploadedFile" id="UploadedFile" placeholder="(.xlsx)" accept=".xlsx">
+                                    </span>
+
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+
+                                    <span class="btn btn-flat btn-file bg-green btn-lg btn-block">
+                                        <a style="color:white" href="../../Correction/Templates/DownloadTemplate?filename=SkillsTemplate.xlsx"><i class="fa fa-download"></i> Download Template Skill</a>
+                                    </span>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group" id="remarks_group">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">Skill</span>
+                                        <input type="text" class="form-control" name="Skill" id="Skill" maxlength="20" />
+                                    </div>
+                                </div>
+                            </div>
+                            @*<div class="col-md-6">
+                                    <div class="form-group" id="remarks_group">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">Type</span>
+                                            <select class="form-control" id="Type" name="Type"><option value="1">Per Employee</option><option value="2">Common</option></select>
+                                        </div>
+                                    </div>
+                                </div>*@
+                            <div class="col-md-6">
+                                <div class="form-group" id="remarks_group">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">Ideal MPC</span>
+                                        <input type="number" class="form-control" name="Count" id="Count" maxlength="10" style="background-color:#F6F9D3;" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group" id="remarks_group">
+                                    <button type="button" class="btn btn-flat bg-green btn-lg btn-block" id="btnskillsave">
+                                        <i class="fa fa-save"></i> Save
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <table id="SkillsTable" class="table table-bordered table-striped table-responsive" style="width:100%">
+                        <thead>
+
+                        </thead>
+                        <tbody></tbody>
+
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    @*<button type="button" class="btn bg-blue btn-flat btn-block" id="updatePagebtn"><i class="fa fa-floppy-o"></i> Save</button>*@
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script src="~/Areas/Masters/Javascripts/LineProcessTeam.js"></script>
+}
+
+
+
+

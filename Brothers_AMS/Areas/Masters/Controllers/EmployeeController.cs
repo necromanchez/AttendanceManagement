@@ -1,0 +1,1356 @@
+﻿using Brothers_WMS.Controllers;
+using Brothers_WMS.Models;
+using OfficeOpenXml;
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
+using System.Data.Entity;
+using System.Data.OleDb;
+using System.IO;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using static Brothers_WMS.Controllers.SessionExpire;
+
+namespace Brothers_WMS.Areas.Masters.Controllers
+{
+    [SessionExpire]
+    public class EmployeeController : Controller
+    {
+        Brothers_AMSDBEntities db = new Brothers_AMSDBEntities();
+        M_Users user = (M_Users)System.Web.HttpContext.Current.Session["user"];
+
+        // GET: Masters/Employee
+        public ActionResult Employee()
+        {
+            return View();
+        }
+
+        public ActionResult SyncIT()
+        {
+            try
+            {
+                db.M_SP_ImportEmployeeFromITSystem();
+                return Json(new { msg = "Success" }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception err)
+            {
+                //Error_Logs error = new Error_Logs();
+                //error.PageModule = "Master - Employee";
+                //error.ErrorLog = err.InnerException.Message;
+                //error.DateLog = DateTime.Now;
+                //error.Username = user.UserName;
+                //db.Error_Logs.Add(error);
+                //db.SaveChanges();
+                return Json(new { msg = "Failed" }, JsonRequestBehavior.AllowGet);
+            }
+        }
+        public ActionResult GetEmployeeList(string supersection, string Status, string MStatus)
+        {
+            System.Web.HttpContext.Current.Session["Searchvaluenow"] = Request["search[value]"];
+
+            //Server Side Parameter
+            int start = Convert.ToInt32(Request["start"]);
+            int length = Convert.ToInt32(Request["length"]);
+            string searchValue = Request["search[value]"];
+            string sortColumnName = Request["columns[" + Request["order[0][column]"] + "][name]"];
+            string sortDirection = Request["order[0][dir]"];
+
+            List<GET_Employee_Details_Result> list = new List<GET_Employee_Details_Result>();
+            supersection = (supersection == null) ? "" : supersection;
+            list = db.GET_Employee_Details(user.CostCode, supersection).ToList();
+
+
+
+
+            if (!string.IsNullOrEmpty(searchValue))//filter
+            {
+                #region null remover
+                list = list.Where(xx => xx.EmpNo != null).ToList();
+                list = list.Where(xx => xx.First_Name != null).ToList();
+                list = list.Where(xx => xx.Family_Name != null).ToList();
+                list = list.Where(xx => xx.CostCenter_AMS != null).ToList();
+                #endregion
+                list = list.Where(x => x.First_Name.ToLower().Contains(searchValue.ToLower())
+                || x.Family_Name.ToLower().Contains(searchValue.ToLower())
+                || x.EmpNo.ToLower().Contains(searchValue.ToLower())
+                || x.CostCenter_AMS.Contains(searchValue)
+                ).ToList<GET_Employee_Details_Result>();
+
+
+
+
+            }
+            if (!string.IsNullOrEmpty(MStatus))
+            {
+                list = list.Where(xx => xx.ModifiedStatus != null).ToList();
+                list = list.Where(x => x.ModifiedStatus.ToLower() == MStatus.ToLower()).ToList();
+            }
+
+            if (!string.IsNullOrEmpty(Status))
+            {
+                list = list.Where(x => x.Status.ToLower() == Status.ToLower()).ToList();
+            }
+
+
+
+
+            if (sortColumnName != "" && sortColumnName != null)
+            {
+                if (sortDirection == "asc")
+                {
+                    list = list.OrderBy(x => TypeHelper.GetPropertyValue(x, sortColumnName)).ToList();
+                }
+                else
+                {
+                    list = list.OrderByDescending(x => TypeHelper.GetPropertyValue(x, sortColumnName)).ToList();
+                }
+            }
+            int totalrows = list.Count;
+            int totalrowsafterfiltering = list.Count;
+
+
+            //paging
+            list = list.Skip(start).Take(length).ToList<GET_Employee_Details_Result>();
+            return Json(new { data = list, draw = Request["draw"], recordsTotal = totalrows, recordsFiltered = totalrowsafterfiltering }, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult GetEmployeeSkill(string EmployeeNo)
+        {
+            //Server Side Parameter
+
+            int start = Convert.ToInt32(Request["start"]);
+            int length = Convert.ToInt32(Request["length"]);
+            string searchValue = Request["search[value]"];
+            string sortColumnName = Request["columns[" + Request["order[0][column]"] + "][name]"];
+            string sortDirection = Request["order[0][dir]"];
+
+            List<GET_Employee_Skills_Result> list = new List<GET_Employee_Skills_Result>();
+            list = db.GET_Employee_Skills(EmployeeNo).ToList();
+
+            if (!string.IsNullOrEmpty(searchValue))//filter
+            {
+                list = list.Where(x => x.Skill.ToLower().Contains(searchValue.ToLower())
+                || x.Line.ToLower().Contains(searchValue.ToLower())).ToList<GET_Employee_Skills_Result>();
+            }
+            if (sortColumnName != "" && sortColumnName != null)
+            {
+                if (sortDirection == "asc")
+                {
+                    list = list.OrderBy(x => TypeHelper.GetPropertyValue(x, sortColumnName)).ToList();
+                }
+                else
+                {
+                    list = list.OrderByDescending(x => TypeHelper.GetPropertyValue(x, sortColumnName)).ToList();
+                }
+            }
+            int totalrows = list.Count;
+            int totalrowsafterfiltering = list.Count;
+
+            //paging
+            list = list.Skip(start).Take(length).ToList<GET_Employee_Skills_Result>();
+            return Json(new { data = list, draw = Request["draw"], recordsTotal = totalrows, recordsFiltered = totalrowsafterfiltering }, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult AddSkill(M_Employee_Skills EmploySkill)
+        {
+            try
+            {
+                EmploySkill.CreateID = user.UserName;
+                EmploySkill.CreateDate = DateTime.Now;
+                EmploySkill.UpdateID = user.UserName;
+                EmploySkill.UpdateDate = DateTime.Now;
+
+                M_Employee_Skills checker = (from c in db.M_Employee_Skills
+                                             where c.LineID == EmploySkill.LineID
+                                             && c.SkillID == EmploySkill.SkillID
+                                             && c.EmpNo == EmploySkill.EmpNo
+                                             select c).FirstOrDefault();
+                if (checker == null)
+                {
+                    db.M_Employee_Skills.Add(EmploySkill);
+                    db.SaveChanges();
+                    return Json(new { msg = "Success", employno = EmploySkill.EmpNo }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { msg = "Failed", employno = EmploySkill.EmpNo }, JsonRequestBehavior.AllowGet);
+
+                }
+            }
+            catch (Exception err)
+            {
+                Error_Logs error = new Error_Logs();
+                error.PageModule = "Master - Employee";
+                error.ErrorLog = err.Message;
+                error.DateLog = DateTime.Now;
+                error.Username = user.UserName;
+                db.Error_Logs.Add(error);
+                db.SaveChanges();
+                return Json(new { msg = err.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        public ActionResult DeleteSkills(string EmpNo, long SkillID)
+        {
+            M_Employee_Skills EmploySkill = (from c in db.M_Employee_Skills where c.EmpNo == EmpNo && c.SkillID == SkillID select c).FirstOrDefault();
+            db.M_Employee_Skills.Remove(EmploySkill);
+            db.SaveChanges();
+            return Json(new { msg = "Success" }, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult GetEmployeeCostCenter(string EmployeeNo)
+        {
+            //Server Side Parameter
+            int start = Convert.ToInt32(Request["start"]);
+            int length = Convert.ToInt32(Request["length"]);
+            string searchValue = Request["search[value]"];
+            string sortColumnName = Request["columns[" + Request["order[0][column]"] + "][name]"];
+            string sortDirection = Request["order[0][dir]"];
+
+            List<GET_Employee_CostCenter_Result> list = db.GET_Employee_CostCenter(EmployeeNo).ToList();
+
+            if (!string.IsNullOrEmpty(searchValue))//filter
+            {
+                list = list.Where(x => x.CostCenter_AMS.ToLower().Contains(searchValue.ToLower())).ToList<GET_Employee_CostCenter_Result>();
+            }
+            if (sortColumnName != "" && sortColumnName != null)
+            {
+                if (sortDirection == "asc")
+                {
+                    list = list.OrderBy(x => TypeHelper.GetPropertyValue(x, sortColumnName)).ToList();
+                }
+                else
+                {
+                    list = list.OrderByDescending(x => TypeHelper.GetPropertyValue(x, sortColumnName)).ToList();
+                }
+            }
+            int totalrows = list.Count;
+            int totalrowsafterfiltering = list.Count;
+
+            //paging
+            list = list.Skip(start).Take(length).ToList<GET_Employee_CostCenter_Result>();
+            return Json(new { data = list, draw = Request["draw"], recordsTotal = totalrows, recordsFiltered = totalrowsafterfiltering }, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult ModifyCostCenter(M_Employee_CostCenter EmployCostCenter)
+        {
+            try
+            {
+                M_Employee_CostCenter oldCostCenter = (from c in db.M_Employee_CostCenter where c.EmployNo == EmployCostCenter.EmployNo orderby c.UpdateDate_AMS descending select c).FirstOrDefault();
+
+                M_Employee_CostCenter newCostCenter = new M_Employee_CostCenter();
+                if (oldCostCenter != null)
+                {
+                    newCostCenter.EmployNo = EmployCostCenter.EmployNo;
+
+                    newCostCenter.UpdateDate_IT = oldCostCenter.UpdateDate_IT;
+                    newCostCenter.CostCenter_IT = oldCostCenter.CostCenter_IT;
+
+                    //Only update this
+                    newCostCenter.UpdateDate_AMS = DateTime.Now;
+                    newCostCenter.CostCenter_AMS = EmployCostCenter.CostCenter_AMS;
+                    newCostCenter.UpdateDate_EXPROD = DateTime.Now;
+                    newCostCenter.CostCenter_EXPROD = EmployCostCenter.CostCenter_EXPROD;
+                    newCostCenter.Update_ID = user.UserName;
+                }
+                else
+                {
+                    newCostCenter.EmployNo = EmployCostCenter.EmployNo;
+                    //Only update this
+                    newCostCenter.UpdateDate_AMS = DateTime.Now;
+                    newCostCenter.CostCenter_AMS = EmployCostCenter.CostCenter_AMS;
+                    newCostCenter.UpdateDate_EXPROD = DateTime.Now;
+                    newCostCenter.CostCenter_EXPROD = EmployCostCenter.CostCenter_EXPROD;
+                    newCostCenter.Update_ID = user.UserName;
+
+                }
+                db.M_Employee_CostCenter.Add(newCostCenter);
+                db.SaveChanges();
+                return Json(new { msg = "Success", employno = EmployCostCenter.EmployNo }, JsonRequestBehavior.AllowGet);
+
+            }
+            catch (Exception err)
+            {
+                Error_Logs error = new Error_Logs();
+                error.PageModule = "Master - Employee";
+                error.ErrorLog = err.Message;
+                error.DateLog = DateTime.Now;
+                error.Username = user.UserName;
+                db.Error_Logs.Add(error);
+                db.SaveChanges();
+                return Json(new { msg = err.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        public ActionResult GetSkillLogo(long SkillID)
+        {
+            string skillLogo = (from c in db.M_Skills where c.ID == SkillID select c.SkillLogo).FirstOrDefault();
+
+            return Json(new { skillLogo = skillLogo }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult UploadExprod()
+        {
+            try
+            {
+                var postedFile = Request.Files[0] as HttpPostedFileBase;
+                string filePath = string.Empty;
+                if (postedFile != null)
+                {
+                    string path = Server.MapPath("~/Uploads/");
+                    if (!Directory.Exists(path))
+                    {
+                        Directory.CreateDirectory(path);
+                    }
+                    filePath = path + Path.GetFileName(postedFile.FileName);
+                    string extension = Path.GetExtension(postedFile.FileName);
+                    postedFile.SaveAs(filePath);
+                    string conString = string.Empty;
+                    switch (extension.ToLower())
+                    {
+                        case ".xls": //Excel 97-03.
+                            conString = ConfigurationManager.ConnectionStrings["Excel03ConString"].ConnectionString;
+                            break;
+                        case ".xlsx": //Excel 07 and above.
+                            conString = ConfigurationManager.ConnectionStrings["Excel07ConString"].ConnectionString;
+                            break;
+                    }
+                    conString = string.Format(conString, filePath);
+
+                    using (OleDbConnection connExcel = new OleDbConnection(conString))
+                    {
+                        using (OleDbCommand cmdExcel = new OleDbCommand())
+                        {
+                            using (OleDbDataAdapter odaExcel = new OleDbDataAdapter())
+                            {
+                                DataTable dt = new DataTable();
+                                cmdExcel.Connection = connExcel;
+                                string sheetName = "Sheet1";
+                                try
+                                {
+                                    connExcel.Open();
+                                }
+                                catch (Exception err)
+                                {
+                                    Error_Logs error = new Error_Logs();
+                                    error.PageModule = "Master - Employee";
+                                    error.ErrorLog = err.Message;
+                                    error.DateLog = DateTime.Now;
+                                    error.Username = user.UserName;
+                                    db.Error_Logs.Add(error);
+                                    db.SaveChanges();
+                                }
+                                cmdExcel.CommandText = "SELECT EmployeeNumber, EXPROD_CostCenter, AMS_CostCenter FROM [" + sheetName + "$]";//ung * is column name, ung sheetname ay settings
+                                odaExcel.SelectCommand = cmdExcel;
+                                odaExcel.Fill(dt);
+                                connExcel.Close();
+                                for (int x = 0; x < dt.Rows.Count; x++)
+                                {
+                                    try
+                                    {
+                                        string EmployeeNo = dt.Rows[x]["EmployeeNumber"].ToString();
+                                        string CostCenter_EXPROD = dt.Rows[x]["EXPROD_CostCenter"].ToString();
+                                        string CostCenter_AMS = dt.Rows[x]["AMS_CostCenter"].ToString();
+                                        M_Employee_CostCenter employee = (from c in db.M_Employee_CostCenter
+                                                                          where c.EmployNo == EmployeeNo
+                                                                          select c).FirstOrDefault();
+                                        employee.CostCenter_EXPROD = CostCenter_EXPROD;
+                                        employee.CostCenter_AMS = CostCenter_AMS;
+
+                                        employee.UpdateDate_IT = DateTime.Now;
+                                        employee.Update_ID = user.UserName;
+                                        db.Entry(employee).State = EntityState.Modified;
+                                        db.SaveChanges();
+                                    }
+                                    catch (Exception err)
+                                    {
+                                        Error_Logs error = new Error_Logs();
+                                        error.PageModule = "Master - Employee";
+                                        error.ErrorLog = err.Message;
+                                        error.DateLog = DateTime.Now;
+                                        error.Username = user.UserName;
+                                        db.Error_Logs.Add(error);
+                                        db.SaveChanges();
+
+                                    }
+
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception err)
+            {
+                Error_Logs error = new Error_Logs();
+                error.PageModule = "Master - Employee";
+                error.ErrorLog = err.Message;
+                error.DateLog = DateTime.Now;
+                error.Username = user.UserName;
+                db.Error_Logs.Add(error);
+                db.SaveChanges();
+                return Json(new { result = "failed" }, JsonRequestBehavior.AllowGet);
+            }
+            return Json(new { result = "success" }, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult UploadSkills(long LineID)
+        {
+            List<UploadError> uploaderror = new List<UploadError>();
+            try
+            {
+                var postedFile = Request.Files[0] as HttpPostedFileBase;
+                string filePath = string.Empty;
+                if (postedFile != null)
+                {
+                    string path = Server.MapPath("~/Uploads/");
+                    if (!Directory.Exists(path))
+                    {
+                        Directory.CreateDirectory(path);
+                    }
+                    filePath = path + Path.GetFileName(postedFile.FileName);
+                    string extension = Path.GetExtension(postedFile.FileName);
+                    postedFile.SaveAs(filePath);
+                    string conString = string.Empty;
+                    switch (extension.ToLower())
+                    {
+                        case ".xls": //Excel 97-03.
+                            conString = ConfigurationManager.ConnectionStrings["Excel03ConString"].ConnectionString;
+                            break;
+                        case ".xlsx": //Excel 07 and above.
+                            conString = ConfigurationManager.ConnectionStrings["Excel07ConString"].ConnectionString;
+                            break;
+                    }
+                    conString = string.Format(conString, filePath);
+
+                    using (OleDbConnection connExcel = new OleDbConnection(conString))
+                    {
+                        using (OleDbCommand cmdExcel = new OleDbCommand())
+                        {
+                            using (OleDbDataAdapter odaExcel = new OleDbDataAdapter())
+                            {
+                                DataTable dt = new DataTable();
+                                cmdExcel.Connection = connExcel;
+                                string sheetName = "Sheet1";
+                                try
+                                {
+                                    connExcel.Open();
+                                }
+                                catch (Exception err)
+                                {
+                                    Error_Logs error = new Error_Logs();
+                                    error.PageModule = "Master - Employee";
+                                    error.ErrorLog = err.Message;
+                                    error.DateLog = DateTime.Now;
+                                    error.Username = user.UserName;
+                                    db.Error_Logs.Add(error);
+                                    db.SaveChanges();
+                                }
+                                cmdExcel.CommandText = "SELECT EmployeeNumber, Skills FROM [" + sheetName + "$]";//ung * is column name, ung sheetname ay settings
+                                odaExcel.SelectCommand = cmdExcel;
+                                odaExcel.Fill(dt);
+                                connExcel.Close();
+
+                                long ROWcount = 0;
+                                string Linename = (from m in db.M_LineTeam where m.ID == LineID && m.IsDeleted == false select m.Line).FirstOrDefault();
+                                for (int x = 0; x < dt.Rows.Count; x++)
+                                {
+                                    try
+                                    {
+                                        ROWcount++;
+                                        string EmployeeNo = dt.Rows[x]["EmployeeNumber"].ToString();
+                                        string Skill = dt.Rows[x]["Skills"].ToString();
+                                        long SkillID = (from c in db.M_Skills
+                                                        where c.Line == LineID
+                                                        && c.Skill == Skill
+                                                        && c.IsDeleted == false
+                                                        select c.ID).FirstOrDefault();
+                                        M_Employee_Skills employee = (from c in db.M_Employee_Skills
+                                                                      where c.EmpNo == EmployeeNo
+                                                                      && c.SkillID == SkillID
+                                                                      select c).FirstOrDefault();
+
+                                        if (SkillID != 0) // Skill not in line
+                                        {
+                                            if (employee == null)
+                                            {
+                                                M_Employee_Skills addSkill = new M_Employee_Skills();
+                                                addSkill.EmpNo = EmployeeNo;
+                                                addSkill.LineID = LineID;
+                                                addSkill.SkillID = SkillID;
+
+                                                addSkill.CreateID = user.UserName;
+                                                addSkill.CreateDate = DateTime.Now;
+                                                addSkill.UpdateID = user.UserName;
+                                                addSkill.UpdateDate = DateTime.Now;
+
+                                                db.M_Employee_Skills.Add(addSkill);
+                                                db.SaveChanges();
+                                            }
+                                        }
+                                        else
+                                        {
+                                            UploadError errorUP = new UploadError();
+                                            errorUP.Row = ROWcount.ToString();
+                                            errorUP.Message = Skill + " not in existing in " + Linename;
+                                            uploaderror.Add(errorUP);
+
+                                            Error_Logs error = new Error_Logs();
+                                            error.PageModule = "Master - Employee";
+                                            error.ErrorLog = Skill + " not in existing in " + Linename;
+                                            error.DateLog = DateTime.Now;
+                                            error.Username = user.UserName;
+                                            db.Error_Logs.Add(error);
+                                            db.SaveChanges();
+                                        }
+                                    }
+                                    catch (Exception err)
+                                    {
+                                        Error_Logs error = new Error_Logs();
+                                        error.PageModule = "Master - Employee";
+                                        error.ErrorLog = err.Message;
+                                        error.DateLog = DateTime.Now;
+                                        error.Username = user.UserName;
+                                        db.Error_Logs.Add(error);
+                                        db.SaveChanges();
+
+                                    }
+
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception err)
+            {
+                Error_Logs error = new Error_Logs();
+                error.PageModule = "Master - Employee";
+                error.ErrorLog = err.Message;
+                error.DateLog = DateTime.Now;
+                error.Username = user.UserName;
+                db.Error_Logs.Add(error);
+                db.SaveChanges();
+                return Json(new { result = "failed" }, JsonRequestBehavior.AllowGet);
+            }
+            return Json(new { result = "success", uploaderror = uploaderror }, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult UploadSchedule()
+        {
+            try
+            {
+                var postedFile = Request.Files[0] as HttpPostedFileBase;
+                string filePath = string.Empty;
+                if (postedFile != null)
+                {
+                    string path = Server.MapPath("~/Uploads/");
+                    if (!Directory.Exists(path))
+                    {
+                        Directory.CreateDirectory(path);
+                    }
+                    filePath = path + Path.GetFileName(postedFile.FileName);
+                    string extension = Path.GetExtension(postedFile.FileName);
+                    postedFile.SaveAs(filePath);
+                    string conString = string.Empty;
+                    switch (extension.ToLower())
+                    {
+                        case ".xls": //Excel 97-03.
+                            conString = ConfigurationManager.ConnectionStrings["Excel03ConString"].ConnectionString;
+                            break;
+                        case ".xlsx": //Excel 07 and above.
+                            conString = ConfigurationManager.ConnectionStrings["Excel07ConString"].ConnectionString;
+                            break;
+                    }
+                    conString = string.Format(conString, filePath);
+
+                    using (OleDbConnection connExcel = new OleDbConnection(conString))
+                    {
+                        using (OleDbCommand cmdExcel = new OleDbCommand())
+                        {
+                            using (OleDbDataAdapter odaExcel = new OleDbDataAdapter())
+                            {
+                                DataTable dt = new DataTable();
+                                cmdExcel.Connection = connExcel;
+                                string sheetName = "Sheet1";
+                                try
+                                {
+                                    connExcel.Open();
+                                }
+                                catch (Exception err)
+                                {
+                                    Error_Logs error = new Error_Logs();
+                                    error.PageModule = "Master - Employee";
+                                    error.ErrorLog = err.Message;
+                                    error.DateLog = DateTime.Now;
+                                    error.Username = user.UserName;
+                                    db.Error_Logs.Add(error);
+                                    db.SaveChanges();
+                                }
+                                cmdExcel.CommandText = "SELECT EmployeeNumber, ScheduleName FROM [" + sheetName + "$]";//ung * is column name, ung sheetname ay settings
+                                odaExcel.SelectCommand = cmdExcel;
+                                odaExcel.Fill(dt);
+                                connExcel.Close();
+                                for (int x = 0; x < dt.Rows.Count; x++)
+                                {
+                                    try
+                                    {
+                                        string EmployeeNo = dt.Rows[x]["EmployeeNumber"].ToString();
+                                        string ScheduleName = dt.Rows[x]["ScheduleName"].ToString();
+                                        long ScheduleID = (from c in db.M_Schedule where c.Type == ScheduleName && c.IsDeleted == false select c.ID).FirstOrDefault();
+
+                                        M_Employee_Master_List_Schedule employeesched = new M_Employee_Master_List_Schedule();
+                                        employeesched.EmployeeNo = EmployeeNo;
+                                        employeesched.ScheduleID = ScheduleID;
+                                        employeesched.UpdateDate = DateTime.Now;
+                                        employeesched.UpdateID = user.UserName;
+
+                                        db.M_Employee_Master_List_Schedule.Add(employeesched);
+                                        db.SaveChanges();
+                                    }
+                                    catch (Exception err)
+                                    {
+                                        Error_Logs error = new Error_Logs();
+                                        error.PageModule = "Master - Employee";
+                                        error.ErrorLog = err.Message;
+                                        error.DateLog = DateTime.Now;
+                                        error.Username = user.UserName;
+                                        db.Error_Logs.Add(error);
+                                        db.SaveChanges();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception err)
+            {
+                Error_Logs error = new Error_Logs();
+                error.PageModule = "Master - Employee";
+                error.ErrorLog = err.Message;
+                error.DateLog = DateTime.Now;
+                error.Username = user.UserName;
+                db.Error_Logs.Add(error);
+                db.SaveChanges();
+                return Json(new { result = "failed" }, JsonRequestBehavior.AllowGet);
+            }
+            return Json(new { result = "success" }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult UploadStatus()
+        {
+            try
+            {
+                var postedFile = Request.Files[0] as HttpPostedFileBase;
+                string filePath = string.Empty;
+                if (postedFile != null)
+                {
+                    string path = Server.MapPath("~/Uploads/");
+                    if (!Directory.Exists(path))
+                    {
+                        Directory.CreateDirectory(path);
+                    }
+                    filePath = path + Path.GetFileName(postedFile.FileName);
+                    string extension = Path.GetExtension(postedFile.FileName);
+                    postedFile.SaveAs(filePath);
+                    string conString = string.Empty;
+                    switch (extension.ToLower())
+                    {
+                        case ".xls": //Excel 97-03.
+                            conString = ConfigurationManager.ConnectionStrings["Excel03ConString"].ConnectionString;
+                            break;
+                        case ".xlsx": //Excel 07 and above.
+                            conString = ConfigurationManager.ConnectionStrings["Excel07ConString"].ConnectionString;
+                            break;
+                    }
+                    conString = string.Format(conString, filePath);
+
+                    using (OleDbConnection connExcel = new OleDbConnection(conString))
+                    {
+                        using (OleDbCommand cmdExcel = new OleDbCommand())
+                        {
+                            using (OleDbDataAdapter odaExcel = new OleDbDataAdapter())
+                            {
+                                DataTable dt = new DataTable();
+                                cmdExcel.Connection = connExcel;
+                                string sheetName = "Sheet1";
+                                try
+                                {
+                                    connExcel.Open();
+                                }
+                                catch (Exception err)
+                                {
+                                    Error_Logs error = new Error_Logs();
+                                    error.PageModule = "Master - Employee";
+                                    error.ErrorLog = err.Message;
+                                    error.DateLog = DateTime.Now;
+                                    error.Username = user.UserName;
+                                    db.Error_Logs.Add(error);
+                                    db.SaveChanges();
+                                }
+                                cmdExcel.CommandText = "SELECT EmployeeNumber, Status FROM [" + sheetName + "$]";//ung * is column name, ung sheetname ay settings
+                                odaExcel.SelectCommand = cmdExcel;
+                                odaExcel.Fill(dt);
+                                connExcel.Close();
+                                for (int x = 0; x < dt.Rows.Count; x++)
+                                {
+                                    try
+                                    {
+                                        string EmployeeNo = dt.Rows[x]["EmployeeNumber"].ToString();
+                                        string Status = dt.Rows[x]["Status"].ToString();
+
+                                        M_Employee_Status EmpStatus = new M_Employee_Status();
+                                        EmpStatus.EmployNo = EmployeeNo;
+                                        EmpStatus.Status = Status;
+                                        EmpStatus.UpdateDate = DateTime.Now;
+                                        EmpStatus.Update_ID = user.UserName;
+
+                                        db.M_Employee_Status.Add(EmpStatus);
+                                        db.SaveChanges();
+                                    }
+                                    catch (Exception err)
+                                    {
+                                        Error_Logs error = new Error_Logs();
+                                        error.PageModule = "Master - Employee";
+                                        error.ErrorLog = err.Message;
+                                        error.DateLog = DateTime.Now;
+                                        error.Username = user.UserName;
+                                        db.Error_Logs.Add(error);
+                                        db.SaveChanges();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception err)
+            {
+                Error_Logs error = new Error_Logs();
+                error.PageModule = "Master - Employee";
+                error.ErrorLog = err.Message;
+                error.DateLog = DateTime.Now;
+                error.Username = user.UserName;
+                db.Error_Logs.Add(error);
+                db.SaveChanges();
+                return Json(new { result = "failed" }, JsonRequestBehavior.AllowGet);
+            }
+            return Json(new { result = "success" }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult UploadPosition()
+        {
+            try
+            {
+                var postedFile = Request.Files[0] as HttpPostedFileBase;
+                string filePath = string.Empty;
+                if (postedFile != null)
+                {
+                    string path = Server.MapPath("~/Uploads/");
+                    if (!Directory.Exists(path))
+                    {
+                        Directory.CreateDirectory(path);
+                    }
+                    filePath = path + Path.GetFileName(postedFile.FileName);
+                    string extension = Path.GetExtension(postedFile.FileName);
+                    postedFile.SaveAs(filePath);
+                    string conString = string.Empty;
+                    switch (extension.ToLower())
+                    {
+                        case ".xls": //Excel 97-03.
+                            conString = ConfigurationManager.ConnectionStrings["Excel03ConString"].ConnectionString;
+                            break;
+                        case ".xlsx": //Excel 07 and above.
+                            conString = ConfigurationManager.ConnectionStrings["Excel07ConString"].ConnectionString;
+                            break;
+                    }
+                    conString = string.Format(conString, filePath);
+
+                    using (OleDbConnection connExcel = new OleDbConnection(conString))
+                    {
+                        using (OleDbCommand cmdExcel = new OleDbCommand())
+                        {
+                            using (OleDbDataAdapter odaExcel = new OleDbDataAdapter())
+                            {
+                                DataTable dt = new DataTable();
+                                cmdExcel.Connection = connExcel;
+                                string sheetName = "Sheet1";
+                                try
+                                {
+                                    connExcel.Open();
+                                }
+                                catch (Exception err)
+                                {
+                                    Error_Logs error = new Error_Logs();
+                                    error.PageModule = "Master - Employee";
+                                    error.ErrorLog = err.Message;
+                                    error.DateLog = DateTime.Now;
+                                    error.Username = user.UserName;
+                                    db.Error_Logs.Add(error);
+                                    db.SaveChanges();
+                                }
+                                cmdExcel.CommandText = "SELECT EmployeeNumber, Position FROM [" + sheetName + "$]";//ung * is column name, ung sheetname ay settings
+                                odaExcel.SelectCommand = cmdExcel;
+                                odaExcel.Fill(dt);
+                                connExcel.Close();
+                                for (int x = 0; x < dt.Rows.Count; x++)
+                                {
+                                    try
+                                    {
+                                        string EmployeeNo = dt.Rows[x]["EmployeeNumber"].ToString();
+                                        string Status = dt.Rows[x]["Position"].ToString();
+
+                                        M_Employee_Position EmpStatus = new M_Employee_Position();
+                                        EmpStatus.EmployNo = EmployeeNo;
+                                        EmpStatus.Position = Status;
+                                        EmpStatus.UpdateDate = DateTime.Now;
+                                        EmpStatus.Update_ID = user.UserName;
+
+                                        db.M_Employee_Position.Add(EmpStatus);
+                                        db.SaveChanges();
+                                    }
+                                    catch (Exception err)
+                                    {
+                                        Error_Logs error = new Error_Logs();
+                                        error.PageModule = "Master - Employee";
+                                        error.ErrorLog = err.Message;
+                                        error.DateLog = DateTime.Now;
+                                        error.Username = user.UserName;
+                                        db.Error_Logs.Add(error);
+                                        db.SaveChanges();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception err)
+            {
+                Error_Logs error = new Error_Logs();
+                error.PageModule = "Master - Employee";
+                error.ErrorLog = err.Message;
+                error.DateLog = DateTime.Now;
+                error.Username = user.UserName;
+                db.Error_Logs.Add(error);
+                db.SaveChanges();
+                return Json(new { result = "failed" }, JsonRequestBehavior.AllowGet);
+            }
+            return Json(new { result = "success" }, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult RemoveSkillAll()
+        {
+            db.M_SP_SkillSectionDeletion(user.Section);
+            return Json(new { msg = "Success" }, JsonRequestBehavior.AllowGet);
+        }
+
+
+        public ActionResult ExportExpro(string CostCode)
+        {
+            try
+            {
+                string searchnow = System.Web.HttpContext.Current.Session["Searchvaluenow"].ToString();
+                CostCode = (user.CostCode == "") ? CostCode : "";
+                CostCode = (CostCode == "undefined") ? "" : CostCode;
+                string templateFilename = "UploadExprod_AMSTemplate.xlsx";
+                string dir = Path.GetTempPath();
+                string datetimeToday = DateTime.Now.ToString("yyMMddhhmmss");
+                string filename = string.Format("UploadExprod_AMSTemplate{0}_{1}.xlsx", datetimeToday, CostCode);
+                FileInfo newFile = new FileInfo(Path.Combine(dir, filename));
+                string apptemplatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"TemplateFiles\", templateFilename);
+                FileInfo templateFile = new FileInfo(apptemplatePath);
+
+                using (ExcelPackage package = new ExcelPackage(newFile, templateFile))  //-- With template.
+                {
+                    List<GET_Employee_Details_Result> list = new List<GET_Employee_Details_Result>();
+                    list = db.GET_Employee_Details(user.CostCode, CostCode).ToList();
+                    list = list.Where(xx => xx.ModifiedStatus != null).ToList();
+                    list = list.Where(x => x.ModifiedStatus.ToLower() == "active").ToList();
+                    ExcelWorksheet ExportData = package.Workbook.Worksheets["Sheet1"];
+                    int start = 2;
+                    if (!string.IsNullOrEmpty(searchnow))//filter
+                    {
+                        #region null remover
+                        list = list.Where(xx => xx.EmpNo != null).ToList();
+                        list = list.Where(xx => xx.First_Name != null).ToList();
+                        list = list.Where(xx => xx.Family_Name != null).ToList();
+                        #endregion
+                        list = list.Where(x => x.First_Name.ToLower().Contains(searchnow.ToLower())
+                        || x.Family_Name.ToLower().Contains(searchnow.ToLower())
+                        || x.EmpNo.Contains(searchnow)
+                        ).ToList<GET_Employee_Details_Result>();
+                        // list = list.Where(x => x.CostCode == CostCode).ToList();
+
+                    }
+                    //else
+                    //{
+                    //   list = (from c in list where c.CostCode == CostCode select c).ToList();
+                    //}
+                    for (int i = 0; i < list.Count; i++)
+                    {
+                        ExportData.Cells["A" + start].Value = list[i].EmpNo;
+                        ExportData.Cells["B" + start].Value = list[i].Family_Name + ", " + list[i].First_Name;
+                        start++;
+                    }
+                    return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename);
+                }
+            }
+            catch (Exception err) { }
+            return Json(new { }, JsonRequestBehavior.AllowGet);
+        }
+
+        #region OLD Skill Export
+        //public ActionResult old_ExportSkillEmployee(string CostCode)
+        //{
+        //    try
+        //    {
+        //        string searchnow = System.Web.HttpContext.Current.Session["Searchvaluenow"].ToString();
+        //        CostCode = (user.CostCode == "") ? CostCode : "";
+        //        CostCode = (CostCode == "undefined") ? "" : CostCode;
+        //        string templateFilename = "EmployeeSkillTemplate.xlsx";
+        //        string dir = Path.GetTempPath();
+        //        string datetimeToday = DateTime.Now.ToString("yyMMddhhmmss");
+        //        string filename = string.Format("EmployeeSkillTemplate{0}_{1}.xlsx", datetimeToday, CostCode);
+        //        FileInfo newFile = new FileInfo(Path.Combine(dir, filename));
+        //        string apptemplatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"TemplateFiles\", templateFilename);
+        //        FileInfo templateFile = new FileInfo(apptemplatePath);
+
+        //        using (ExcelPackage package = new ExcelPackage(newFile, templateFile))  //-- With template.
+        //        {
+
+        //            List<GET_Employee_Details_Result> list = new List<GET_Employee_Details_Result>();
+        //            list = db.GET_Employee_Details(user.CostCode, CostCode).ToList();
+        //            list = list.Where(xx => xx.ModifiedStatus != null).ToList();
+        //            list = list.Where(x => x.ModifiedStatus.ToLower() == "active").ToList();
+        //            ExcelWorksheet ExportData = package.Workbook.Worksheets["Sheet1"];
+        //            int start = 2;
+        //            if (!string.IsNullOrEmpty(searchnow))//filter
+        //            {
+        //                #region null remover
+        //                list = list.Where(xx => xx.EmpNo != null).ToList();
+        //                list = list.Where(xx => xx.First_Name != null).ToList();
+        //                list = list.Where(xx => xx.Family_Name != null).ToList();
+        //                #endregion
+        //                list = list.Where(x => x.First_Name.ToLower().Contains(searchnow.ToLower())
+        //                || x.Family_Name.ToLower().Contains(searchnow.ToLower())
+        //                || x.EmpNo.Contains(searchnow)
+        //                ).ToList<GET_Employee_Details_Result>();
+        //                //list = list.Where(x => x.CostCode == CostCode).ToList();
+
+        //            }
+        //            //else
+        //            //{
+        //            //    list = (from c in list where c.CostCode == CostCode select c).ToList();
+        //            //}
+        //            for (int i = 0; i < list.Count; i++)
+        //            {
+        //                ExportData.Cells["A" + start].Value = list[i].EmpNo;
+        //                ExportData.Cells["B" + start].Value = list[i].Family_Name + ", " + list[i].First_Name;
+        //                start++;
+        //            }
+        //            return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename);
+        //        }
+        //    }
+        //    catch (Exception err) { }
+        //    return Json(new { }, JsonRequestBehavior.AllowGet);
+        //}
+
+        #endregion
+
+        public ActionResult ExportSkillEmployee(string CostCode)
+        {
+            try
+            {
+                string searchnow = System.Web.HttpContext.Current.Session["Searchvaluenow"].ToString();
+                CostCode = (user.CostCode == "") ? CostCode : "";
+                CostCode = (CostCode == "undefined") ? "" : CostCode;
+                string templateFilename = "EmployeeSkillTemplate.xlsx";
+                string dir = Path.GetTempPath();
+                string datetimeToday = DateTime.Now.ToString("yyMMddhhmmss");
+                string filename = string.Format("EmployeeSkillTemplate{0}_{1}.xlsx", datetimeToday, CostCode);
+                FileInfo newFile = new FileInfo(Path.Combine(dir, filename));
+                string apptemplatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"TemplateFiles\", templateFilename);
+                FileInfo templateFile = new FileInfo(apptemplatePath);
+
+                using (ExcelPackage package = new ExcelPackage(newFile, templateFile))  //-- With template.
+                {
+
+                    List<GET_Employee_Details_Skill_Result> list = new List<GET_Employee_Details_Skill_Result>();
+                    list = db.GET_Employee_Details_Skill(user.CostCode, CostCode).ToList();
+                    list = list.Where(xx => xx.ModifiedStatus != null).ToList();
+                    list = list.Where(x => x.ModifiedStatus.ToLower() == "active").ToList();
+                    ExcelWorksheet ExportData = package.Workbook.Worksheets["Sheet1"];
+                    int start = 2;
+                    if (!string.IsNullOrEmpty(searchnow))//filter
+                    {
+                        #region null remover
+                        list = list.Where(xx => xx.EmpNo != null).ToList();
+                        list = list.Where(xx => xx.First_Name != null).ToList();
+                        list = list.Where(xx => xx.Family_Name != null).ToList();
+                        #endregion
+                        list = list.Where(x => x.First_Name.ToLower().Contains(searchnow.ToLower())
+                        || x.Family_Name.ToLower().Contains(searchnow.ToLower())
+                        || x.EmpNo.Contains(searchnow)
+                        ).ToList<GET_Employee_Details_Skill_Result>();
+
+                    }
+                    //else
+                    //{
+                    //    list = (from c in list where c.CostCode == CostCode select c).ToList();
+                    //}
+                    for (int i = 0; i < list.Count; i++)
+                    {
+                        ExportData.Cells["A" + start].Value = list[i].EmpNo;
+                        ExportData.Cells["B" + start].Value = list[i].Family_Name + ", " + list[i].First_Name;
+                        ExportData.Cells["C" + start].Value = list[i].Line;
+                        ExportData.Cells["D" + start].Value = list[i].Skill;
+                        start++;
+                    }
+                    return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename);
+                }
+            }
+            catch (Exception err) { }
+            return Json(new { }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult ExportSchedule(string CostCode)
+        {
+            try
+            {
+                string searchnow = System.Web.HttpContext.Current.Session["Searchvaluenow"].ToString();
+                CostCode = (user.CostCode == "") ? CostCode : "";
+                CostCode = (CostCode == "undefined") ? "" : CostCode;
+
+                string templateFilename = "EmployeeSchedule.xlsx";
+                string dir = Path.GetTempPath();
+                string datetimeToday = DateTime.Now.ToString("yyMMddhhmmss");
+                string filename = string.Format("EmployeeSchedule{0}_{1}.xlsx", datetimeToday, CostCode);
+                FileInfo newFile = new FileInfo(Path.Combine(dir, filename));
+                string apptemplatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"TemplateFiles\", templateFilename);
+                FileInfo templateFile = new FileInfo(apptemplatePath);
+
+                using (ExcelPackage package = new ExcelPackage(newFile, templateFile))  //-- With template.
+                {
+
+                    List<GET_Employee_Details_Result> list = new List<GET_Employee_Details_Result>();
+                    list = db.GET_Employee_Details(user.CostCode, CostCode).ToList();
+                    list = list.Where(xx => xx.ModifiedStatus != null).ToList();
+                    list = list.Where(x => x.ModifiedStatus.ToLower() == "active").ToList();
+                    ExcelWorksheet ExportData = package.Workbook.Worksheets["Sheet1"];
+                    int start = 2;
+                    if (!string.IsNullOrEmpty(searchnow))//filter
+                    {
+                        #region null remover
+                        list = list.Where(xx => xx.EmpNo != null).ToList();
+                        list = list.Where(xx => xx.First_Name != null).ToList();
+                        list = list.Where(xx => xx.Family_Name != null).ToList();
+                        #endregion
+                        list = list.Where(x => x.First_Name.ToLower().Contains(searchnow.ToLower())
+                        || x.Family_Name.ToLower().Contains(searchnow.ToLower())
+                        || x.EmpNo.Contains(searchnow)
+                        ).ToList<GET_Employee_Details_Result>();
+                        //list = list.Where(x => x.CostCode == CostCode).ToList();
+
+                    }
+                    //else
+                    //{
+                    //    list = (from c in list where c.CostCode == CostCode select c).ToList();
+                    //}
+                    for (int i = 0; i < list.Count; i++)
+                    {
+                        ExportData.Cells["A" + start].Value = list[i].EmpNo;
+                        ExportData.Cells["B" + start].Value = list[i].Family_Name + ", " + list[i].First_Name;
+                        start++;
+                    }
+                    return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename);
+                }
+            }
+            catch (Exception err)
+            {
+                Error_Logs error = new Error_Logs();
+                error.PageModule = "Application Form - OT";
+                error.ErrorLog = err.Message;
+                error.DateLog = DateTime.Now;
+                error.Username = user.UserName;
+                db.Error_Logs.Add(error);
+                db.SaveChanges();
+            }
+            return Json(new { }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult ExportStatus(string CostCode)
+        {
+            try
+            {
+                string searchnow = System.Web.HttpContext.Current.Session["Searchvaluenow"].ToString();
+                CostCode = (user.CostCode == "") ? CostCode : "";
+                CostCode = (CostCode == "undefined") ? "" : CostCode;
+
+                string templateFilename = "EmployeeStatus.xlsx";
+                string dir = Path.GetTempPath();
+                string datetimeToday = DateTime.Now.ToString("yyMMddhhmmss");
+                string filename = string.Format("EmployeeStatus{0}_{1}.xlsx", datetimeToday, CostCode);
+                FileInfo newFile = new FileInfo(Path.Combine(dir, filename));
+                string apptemplatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"TemplateFiles\", templateFilename);
+                FileInfo templateFile = new FileInfo(apptemplatePath);
+
+                using (ExcelPackage package = new ExcelPackage(newFile, templateFile))  //-- With template.
+                {
+
+                    List<GET_Employee_Details_Result> list = new List<GET_Employee_Details_Result>();
+                    list = db.GET_Employee_Details(user.CostCode, CostCode).Where(x => x.Status.ToLower() == "active").ToList();
+                    ExcelWorksheet ExportData = package.Workbook.Worksheets["Sheet1"];
+                    int start = 2;
+                    if (!string.IsNullOrEmpty(searchnow))//filter
+                    {
+                        #region null remover
+                        list = list.Where(xx => xx.EmpNo != null).ToList();
+                        list = list.Where(xx => xx.First_Name != null).ToList();
+                        list = list.Where(xx => xx.Family_Name != null).ToList();
+                        #endregion
+                        list = list.Where(x => x.First_Name.ToLower().Contains(searchnow.ToLower())
+                        || x.Family_Name.ToLower().Contains(searchnow.ToLower())
+                        || x.EmpNo.Contains(searchnow)
+                        ).ToList<GET_Employee_Details_Result>();
+                        //list = list.Where(x => x.CostCode == CostCode).ToList();
+
+                    }
+                    //else
+                    //{
+                    //    list = (from c in list where c.CostCode == CostCode select c).ToList();
+                    //}
+                    for (int i = 0; i < list.Count; i++)
+                    {
+                        ExportData.Cells["A" + start].Value = list[i].EmpNo;
+                        ExportData.Cells["B" + start].Value = list[i].Family_Name + ", " + list[i].First_Name;
+                        start++;
+                    }
+                    return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename);
+                }
+            }
+            catch (Exception err)
+            {
+                Error_Logs error = new Error_Logs();
+                error.PageModule = "Application Form - OT";
+                error.ErrorLog = err.Message;
+                error.DateLog = DateTime.Now;
+                error.Username = user.UserName;
+                db.Error_Logs.Add(error);
+                db.SaveChanges();
+            }
+            return Json(new { }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult ExportPosition(string CostCode)
+        {
+            try
+            {
+                string searchnow = System.Web.HttpContext.Current.Session["Searchvaluenow"].ToString();
+                CostCode = (user.CostCode == "") ? CostCode : "";
+                CostCode = (CostCode == "undefined") ? "" : CostCode;
+
+                string templateFilename = "EmployeePosition.xlsx";
+                string dir = Path.GetTempPath();
+                string datetimeToday = DateTime.Now.ToString("yyMMddhhmmss");
+                string filename = string.Format("EmployeePosition{0}_{1}.xlsx", datetimeToday, CostCode);
+                FileInfo newFile = new FileInfo(Path.Combine(dir, filename));
+                string apptemplatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"TemplateFiles\", templateFilename);
+                FileInfo templateFile = new FileInfo(apptemplatePath);
+
+                using (ExcelPackage package = new ExcelPackage(newFile, templateFile))  //-- With template.
+                {
+
+                    List<GET_Employee_Details_Result> list = new List<GET_Employee_Details_Result>();
+                    list = db.GET_Employee_Details(user.CostCode, CostCode).Where(x => x.Status.ToLower() == "active").ToList();
+                    ExcelWorksheet ExportData = package.Workbook.Worksheets["Sheet1"];
+                    int start = 2;
+                    if (!string.IsNullOrEmpty(searchnow))//filter
+                    {
+                        #region null remover
+                        list = list.Where(xx => xx.EmpNo != null).ToList();
+                        list = list.Where(xx => xx.First_Name != null).ToList();
+                        list = list.Where(xx => xx.Family_Name != null).ToList();
+                        #endregion
+                        list = list.Where(x => x.First_Name.ToLower().Contains(searchnow.ToLower())
+                        || x.Family_Name.ToLower().Contains(searchnow.ToLower())
+                        || x.EmpNo.Contains(searchnow)
+                        ).ToList<GET_Employee_Details_Result>();
+                        //list = list.Where(x => x.CostCode == CostCode).ToList();
+
+                    }
+                    //else
+                    //{
+                    //    list = (from c in list where c.CostCode == CostCode select c).ToList();
+                    //}
+                    for (int i = 0; i < list.Count; i++)
+                    {
+                        ExportData.Cells["A" + start].Value = list[i].EmpNo;
+                        ExportData.Cells["B" + start].Value = list[i].Family_Name + ", " + list[i].First_Name;
+                        start++;
+                    }
+                    return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename);
+                }
+            }
+            catch (Exception err)
+            {
+                Error_Logs error = new Error_Logs();
+                error.PageModule = "Application Form - OT";
+                error.ErrorLog = err.Message;
+                error.DateLog = DateTime.Now;
+                error.Username = user.UserName;
+                db.Error_Logs.Add(error);
+                db.SaveChanges();
+            }
+            return Json(new { }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetEmployeeStatus(string EmployeeNo)
+        {
+            //Server Side Parameter
+
+            int start = Convert.ToInt32(Request["start"]);
+            int length = Convert.ToInt32(Request["length"]);
+            string searchValue = Request["search[value]"];
+            string sortColumnName = Request["columns[" + Request["order[0][column]"] + "][name]"];
+            string sortDirection = Request["order[0][dir]"];
+
+            List<GET_Employee_ModifiedStatus_Result> list = db.GET_Employee_ModifiedStatus(EmployeeNo).ToList();
+
+            if (!string.IsNullOrEmpty(searchValue))//filter
+            {
+                list = list.Where(x => x.Status.ToLower().Contains(searchValue.ToLower())).ToList<GET_Employee_ModifiedStatus_Result>();
+            }
+            if (sortColumnName != "" && sortColumnName != null)
+            {
+                if (sortDirection == "asc")
+                {
+                    list = list.OrderBy(x => TypeHelper.GetPropertyValue(x, sortColumnName)).ToList();
+                }
+                else
+                {
+                    list = list.OrderByDescending(x => TypeHelper.GetPropertyValue(x, sortColumnName)).ToList();
+                }
+            }
+            int totalrows = list.Count;
+            int totalrowsafterfiltering = list.Count;
+
+            //paging
+            list = list.Skip(start).Take(length).ToList<GET_Employee_ModifiedStatus_Result>();
+            return Json(new { data = list, draw = Request["draw"], recordsTotal = totalrows, recordsFiltered = totalrowsafterfiltering }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetEmployeePosition(string EmployeeNo)
+        {
+            //Server Side Parameter
+
+            int start = Convert.ToInt32(Request["start"]);
+            int length = Convert.ToInt32(Request["length"]);
+            string searchValue = Request["search[value]"];
+            string sortColumnName = Request["columns[" + Request["order[0][column]"] + "][name]"];
+            string sortDirection = Request["order[0][dir]"];
+
+            List<GET_Employee_ModifiedPosition_Result> list = db.GET_Employee_ModifiedPosition(EmployeeNo).ToList();
+
+            if (!string.IsNullOrEmpty(searchValue))//filter
+            {
+                list = list.Where(x => x.Position.ToLower().Contains(searchValue.ToLower())).ToList<GET_Employee_ModifiedPosition_Result>();
+            }
+            if (sortColumnName != "" && sortColumnName != null)
+            {
+                if (sortDirection == "asc")
+                {
+                    list = list.OrderBy(x => TypeHelper.GetPropertyValue(x, sortColumnName)).ToList();
+                }
+                else
+                {
+                    list = list.OrderByDescending(x => TypeHelper.GetPropertyValue(x, sortColumnName)).ToList();
+                }
+            }
+            int totalrows = list.Count;
+            int totalrowsafterfiltering = list.Count;
+
+            //paging
+            list = list.Skip(start).Take(length).ToList<GET_Employee_ModifiedPosition_Result>();
+            return Json(new { data = list, draw = Request["draw"], recordsTotal = totalrows, recordsFiltered = totalrowsafterfiltering }, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult UpdateStatus(string EmpNo, string Status)
+        {
+            M_Employee_Status EmpStatus = new M_Employee_Status();
+            EmpStatus.EmployNo = EmpNo;
+            EmpStatus.Status = Status;
+            EmpStatus.Update_ID = user.UserName;
+            EmpStatus.UpdateDate = DateTime.Now;
+            db.M_Employee_Status.Add(EmpStatus);
+            db.SaveChanges();
+            return Json(new { }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult UpdatePosition(string EmpNo, string Position)
+        {
+            M_Employee_Position EmpPos = new M_Employee_Position();
+            EmpPos.EmployNo = EmpNo;
+            EmpPos.Position = Position;
+            EmpPos.Update_ID = user.UserName;
+            EmpPos.UpdateDate = DateTime.Now;
+            db.M_Employee_Position.Add(EmpPos);
+            db.SaveChanges();
+            return Json(new { }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult ActiveInactiveReport(string Status)
+        {
+            try
+            {
+                string templateFilename = "ActiveInactiveReport.xlsx";
+                string dir = Path.GetTempPath();
+                string datetimeToday = DateTime.Now.ToString("yyMMddhhmmss");
+                string filename = string.Format("ActiveInactiveReport{0}.xlsx", datetimeToday);
+                FileInfo newFile = new FileInfo(Path.Combine(dir, filename));
+                string apptemplatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"TemplateFiles\", templateFilename);
+                FileInfo templateFile = new FileInfo(apptemplatePath);
+
+
+                using (ExcelPackage package = new ExcelPackage(newFile, templateFile))  //-- With template.
+                {
+
+                    ExcelWorksheet ExportData = package.Workbook.Worksheets["Employee List"];
+                    List<Report_ActiveInactive_Employee_Result> list = db.Report_ActiveInactive_Employee(Status).ToList();
+                    int start = 2;
+                    foreach (Report_ActiveInactive_Employee_Result item in list)
+                    {
+                        ExportData.Cells["A" + start].Value = item.REFID;
+                        ExportData.Cells["B" + start].Value = item.ADID;
+                        ExportData.Cells["C" + start].Value = item.EmpNo;
+                        ExportData.Cells["D" + start].Value = item.Family_Name_Suffix;
+                        ExportData.Cells["E" + start].Value = item.Family_Name;
+                        ExportData.Cells["F" + start].Value = item.First_Name;
+                        ExportData.Cells["G" + start].Value = item.Middle_Name;
+                        ExportData.Cells["H" + start].Value = item.Date_Hired;
+                        ExportData.Cells["I" + start].Value = item.Status;
+                        ExportData.Cells["J" + start].Value = item.Emp_Category;
+                        ExportData.Cells["K" + start].Value = item.Date_Regularized;
+                        ExportData.Cells["L" + start].Value = item.Position;
+                        ExportData.Cells["M" + start].Value = item.Email;
+                        ExportData.Cells["N" + start].Value = item.Gender;
+                        ExportData.Cells["O" + start].Value = item.RFID;
+                        ExportData.Cells["P" + start].Value = item.Section;
+                        ExportData.Cells["Q" + start].Value = item.Department;
+                        ExportData.Cells["R" + start].Value = item.Company;
+                        ExportData.Cells["S" + start].Value = item.CostCode;
+                        ExportData.Cells["T" + start].Value = item.SectionGroup;
+                        ExportData.Cells["U" + start].Value = item.ModifiedStatus;
+                        ExportData.Cells["V" + start].Value = item.ModifiedPosition;
+                        ExportData.Cells["W" + start].Value = item.CostCenter_AMS;
+                        ExportData.Cells["X" + start].Value = item.CostCenter_IT;
+                        ExportData.Cells["Y" + start].Value = item.CostCenter_EXPROD;
+                        start++;
+                    }
+
+
+
+                    return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename);
+                }
+            }
+            catch (Exception err) { }
+            return Json(new { }, JsonRequestBehavior.AllowGet);
+
+        }
+    }
+}

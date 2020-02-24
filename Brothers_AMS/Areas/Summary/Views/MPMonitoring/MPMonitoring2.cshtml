@@ -1,0 +1,133 @@
+﻿
+@{
+    ViewBag.Title = "MPChangeMonitoring";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Main CSS -->
+<link href="~/Content2/css/main.css" rel="stylesheet" media="screen" />
+
+
+
+<link rel="stylesheet" href="~/Content/assets/vendor_components/bootstrap/dist/css/bootstrap.min.css">
+
+<!-- Bootstrap 4.0-->
+<link rel="stylesheet" href="~/Content/assets/vendor_components/bootstrap/dist/css/bootstrap-extend.css">
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="~/Content/assets/vendor_components/font-awesome/css/font-awesome.min.css">
+
+<!-- Ionicons -->
+<link rel="stylesheet" href="~/Content/assets/vendor_components/Ionicons/css/ionicons.min.css">
+
+<!-- Theme style -->
+<link rel="stylesheet" href="~/Content/css/master_style.css">
+
+<!-- bonitoadmin Skins. Choose a skin from the css/skins
+   folder instead of downloading all of them to reduce the load. -->
+<link rel="stylesheet" href="~/Content/css/skins/_all-skins.css">
+<!-- CSS -->
+<style type="text/css">
+    #flotcontainer {
+        width: 600px;
+        height: 200px;
+        text-align: left;
+    }
+
+    .NotCertified{
+        color:#FF0000 !important;
+        font-weight:bold;
+        font-size:16px !important;
+    }
+
+    .Certified{
+       color:#00F033 !important; 
+       font-weight:bold;
+       font-size:16px !important;
+    }
+
+    .Orig{
+       font-weight:bold;
+       font-size:16px !important;
+    }
+</style>
+
+<section class="content-header">
+    <h1>
+        Manpower Change Monitoring
+    </h1>
+</section>
+<section class="content">
+    <div class="box box-primary">
+      
+        <div class="box-body">
+              <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="panel panel-light">
+                                    <div class="panel-heading">
+                                        <h4>Attendance Rate</h4>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div id="stacked-vertical-chart" class="chart-height1"></div>
+                                    </div>
+                                </div>
+                            </div>
+                           
+            	</div>
+
+            <form action="" method="POST" role="form" id="ScheduleForm" autocomplete="off">
+                <input type="hidden" class="form-control input-sm" name="ID" id="ID" readonly="">
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon">Date From</span>
+                                <input type="text" class="form-control step step5" id="DateFrom" name="DateFrom">
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon">Date To</span>
+                                <input type="text" class="form-control step step5" id="DateTo" name="DateTo">
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+
+            </form>
+            <table id="MPTable" class="table table-bordered table-responsive">
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+
+    @section Scripts{
+
+        <!-- start - This is for export functionality only -->
+        <script src="~/Content/assets/vendor_plugins/DataTables-1.10.15/extensions/Buttons/js/dataTables.buttons.min.js"></script>
+        <script src="~/Content/assets/vendor_plugins/DataTables-1.10.15/extensions/Buttons/js/buttons.flash.min.js"></script>
+        <script src="~/Content/assets/vendor_plugins/DataTables-1.10.15/ex-js/jszip.min.js"></script>
+        <script src="~/Content/assets/vendor_plugins/DataTables-1.10.15/ex-js/pdfmake.min.js"></script>
+        <script src="~/Content/assets/vendor_plugins/DataTables-1.10.15/ex-js/vfs_fonts.js"></script>
+        <script src="~/Content/assets/vendor_plugins/DataTables-1.10.15/extensions/Buttons/js/buttons.html5.min.js"></script>
+        <script src="~/Content/assets/vendor_plugins/DataTables-1.10.15/extensions/Buttons/js/buttons.print.min.js"></script>
+        <!-- end - This is for export functionality only -->
+
+        <script src="~/Content2/js/flot/jquery.flot.min.js"></script>
+        <script src="~/Content2/js/flot/jquery.flot.time.min.js"></script>
+        <script src="~/Scripts/pages/Lodash.js"></script>
+        <script src="~/Areas/Summary/Javascript/MPMonitoring.js"></script>
+
+    }
+
+
+
+

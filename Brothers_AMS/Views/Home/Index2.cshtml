@@ -1,0 +1,94 @@
+﻿
+@{
+    ViewBag.Title = "Home";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+
+  
+    HttpContext.Current.Response.AddHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+    HttpContext.Current.Response.AddHeader("Pragma", "no-cache");
+    HttpContext.Current.Response.AddHeader("Expires", "0");
+}
+@using Brothers_WMS.Models;
+@using System.Data.SqlClient;
+@using Brothers_WMS.Controllers;
+@using System.Configuration;
+@{
+    string UserName = string.Empty;
+    List<M_SP_PageandAccess_Result> MasterPageList = (List<M_SP_PageandAccess_Result>)(Session["MasterPageList"]);
+    List<M_SP_PageandAccess_Result> ApplicationFormPageList = (List<M_SP_PageandAccess_Result>)(Session["ApplicationFormPageList"]);
+    List<M_SP_PageandAccess_Result> SummaryPageList = (List<M_SP_PageandAccess_Result>)(Session["SummaryPageList"]);
+
+    if ((M_Users)(Session["user"]) != null)
+    {
+        M_Users UserInfo = (M_Users)(Session["user"]);
+        UserName = UserInfo.FirstName;
+    }
+    else
+    {
+        Url.Action("Logout", "Login");
+    }
+}
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link href="~/Content/assets/vendor_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.css" rel="stylesheet" />
+<link href="~/Content/assets/vendor_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css" rel="stylesheet" />
+<link href="~/Content/assets/vendor_components/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet" />
+<!-- Bootstrap CSS -->
+<link href="~/Content2/css/bootstrap.min.css" rel="stylesheet" media="screen" />
+
+<!-- Main CSS -->
+<link href="~/Content2/css/main.css" rel="stylesheet" media="screen" />
+
+
+<!-- Ion Icons -->
+<link href="~/Content2/fonts/icomoon/icomoon.css" rel="stylesheet" />
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        Welcome @UserName
+    </h1>
+</section>
+
+
+
+<!-- Main content -->
+
+<section class="content">
+    <div class="row">
+        <div class="col">
+            <div class="box-tools pull-right">
+                <div class="form-group">
+                    @*<div class="input-group">
+                        <span class="input-group-addon">Month</span>
+                        <select class="form-control" id="FileType" name="FileType">
+                            <option value=1>Jan</option>
+                            <option value=2>Feb</option>
+                        </select>
+
+                        <div class="input-group-addon">
+                            <i class="fa fa-calendar"></i>
+                        </div>
+                        <input type="text" class="form-control pull-right daterange" id="reservation">
+                    </div>*@
+              
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+  
+        <div class="row">
+          asd
+        </div>
+
+     
+</section>
+
+
+
+@section Scripts{
+  
+   
+    }

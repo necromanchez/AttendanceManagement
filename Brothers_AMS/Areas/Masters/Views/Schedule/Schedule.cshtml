@@ -1,0 +1,243 @@
+﻿
+@{
+    ViewBag.Title = "Schedule";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link rel="stylesheet" href="~/Content/assets/vendor_components/glyphicons/glyphicon.css">
+
+<link href="~/Content/assets/vendor_components/select2/dist/css/select2.min.css" rel="stylesheet" />
+<link href="~/Content/css/master_style.css" rel="stylesheet" />
+<link href="~/Content/css/skins/_all-skins.css" rel="stylesheet" />
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link href="~/Content/assets/vendor_plugins/timepicker/bootstrap-timepicker.min.css" rel="stylesheet" />
+
+<link rel="stylesheet" href="~/Content/assets/vendor_components/glyphicons/glyphicon.css">
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<section class="content-header">
+    <h1>
+        Schedule
+    </h1>
+</section>
+<section class="content">
+    <div class="box box-primary">
+        <div class="box-header">
+            <i class="fa fa-clock-o"></i>
+            <h3 class="box-title">Schedule Details</h3>
+        </div>
+        <div class="box-body pad">
+            <form action="" method="POST" role="form" id="ScheduleForm" autocomplete="off">
+                <input type="hidden" class="form-control input-sm" name="ID" id="ID" readonly="">
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group" id="remarks_group">
+                            <div class="input-group">
+                                <span class="input-group-addon">Schedule Name</span>
+                                <input type="text" class="form-control input-sm" name="Type" id="Type" >
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group" id="remarks_group">
+                            <div class="input-group">
+                                <span class="input-group-addon">Status</span>
+                                <select class="form-control" id="Status" name="Status">
+                                    <option value=true>Active</option>
+                                    <option value=false>Inactive</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @*<div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group" id="item_code_group">
+                            <div class="input-group">
+                                <span class="input-group-addon">Time In</span>
+                                <input type="time" class="form-control input-sm" name="TimeIn" id="TimeIn">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group" id="remarks_group">
+                            <div class="input-group">
+                                <span class="input-group-addon">Time Out</span>
+                                <input type="time" class="form-control input-sm" name="TimeOut" id="TimeOut">
+                            </div>
+                        </div>
+                    </div>
+                </div>*@
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="bootstrap-timepicker">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon">Time In</span>
+                                    <input type="text" class="form-control timepicker" id="Timein" name="Timein">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="bootstrap-timepicker">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon">Time Out</span>
+                                    <input type="text" class="form-control timepicker" id="TimeOut" name="TimeOut">
+                                </div>
+                            </div>
+                        </div>
+                       
+                    </div>
+
+
+                    
+
+
+                </div>
+                <div class="row">
+                    <div class="offset-md-9 col-md-3">
+                        <button type="submit" class="btn btn-flat bg-green btn-lg btn-block" id="Add_btn">
+                            <i class="fa fa-save"></i> Save
+                        </button>
+                    </div>
+                </div>
+
+
+            </form>
+
+        </div>
+
+        <div class="box-body">
+            <table class="table table-striped table-no-bordered table-hover" id="ScheduleTable">
+                <thead>
+
+                </thead>
+            </table>
+        </div>
+    </div>
+</section>
+
+<div class="modal fade bannerformmodal" tabindex="-1" role="dialog" aria-labelledby="bannerformmodal" aria-hidden="true" id="BreakAdd">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">Add Breaks</h4>
+                </div>
+                <div class="modal-body fixed-modal-height div-chk-less-height">
+
+                    <form action="" method="POST" role="form" id="BreaksForm">
+                       
+                        <input type="hidden" id="BreakID" name="BreakID"/>
+                        <input type="hidden" id="ScheduleID" name="ScheduleID" />
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="bootstrap-timepicker">
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">Break Out</span>
+                                            <input type="text" class="form-control timepicker" id="BreakOut" name="BreakOut">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+
+                                <div class="bootstrap-timepicker">
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">Break In</span>
+                                            <input type="text" class="form-control timepicker" id="BreakIn" name="BreakIn">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                            <div class="row">
+                                <div class="offset-md-9 col-md-3">
+                                    <button type="button" class="btn btn-flat bg-green btn-sm btn-block" id="btnAddBreaks">
+                                        <i class="fa fa-plus" id="brekbtn">Add</i> 
+                                    </button>
+                                </div>
+                            </div>
+                    </form>
+                    <table id="tbl_ScheduleBreaks" class="table table-bordered table-striped table-responsive" style="width:100%">
+                        <thead>
+                            @*<tr>
+                                <th>Break In</th>
+                                <th>Break Out</th>
+                                <th>Break Time(Minutes)</th>
+                                <th>Action</th>
+                            </tr>*@
+                        </thead>
+                        <tbody>
+                            @*<tr>
+                                <td>09:00</td>
+                                <td>09:10</td>
+                                <td>10</td>
+                                <td>
+                                    <a class="btn bg-red btn-sm">
+                                        <i class="fa fa-trash"></i> Delete
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>11:00</td>
+                                <td>11:30</td>
+                                <td>30</td>
+                                <td>
+                                    <a class="btn bg-red btn-sm">
+                                        <i class="fa fa-trash"></i> Delete
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>03:00</td>
+                                <td>03:10</td>
+                                <td>10</td>
+                                <td>
+                                    <a class="btn bg-red btn-sm">
+                                        <i class="fa fa-trash"></i> Delete
+                                    </a>
+                                </td>
+                            </tr>*@
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    @*<button type="button" class="btn bg-blue btn-flat btn-block" id="updatePagebtn"><i class="fa fa-floppy-o"></i> Save</button>*@
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script src="~/Content/assets/vendor_components/moment/min/moment.min.js"></script>
+    <script src="~/Content/assets/vendor_components/bootstrap-daterangepicker/daterangepicker.js"></script>
+    <script src="~/Content/assets/vendor_components/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js"></script>
+    <script src="~/Content/assets/vendor_plugins/timepicker/bootstrap-timepicker.min.js"></script>
+    <script src="~/Content/assets/vendor_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="~/Content/assets/vendor_plugins/iCheck/icheck.min.js"></script>
+    <script src="~/Scripts/pages/advanced-form-element.js"></script>
+    <script src="~/Content/assets/vendor_plugins/input-mask/jquery.inputmask.js"></script>
+    <script src="~/Content/assets/vendor_plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
+    <script src="~/Content/assets/vendor_plugins/input-mask/jquery.inputmask.extensions.js"></script>
+    <script src="~/Content/DatePickerIE.js"></script>
+    <script src="~/Content/assets/vendor_plugins/timepicker/bootstrap-timepicker.min.js"></script>
+
+    <script src="~/Areas/Masters/Javascripts/Schedule.js"></script>
+}
+
+
+
+
+
+

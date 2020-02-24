@@ -1,0 +1,335 @@
+﻿
+@{
+    ViewBag.Title = "Overtime (Agency)";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<link rel="stylesheet" href="~/Content/assets/vendor_components/glyphicons/glyphicon.css">
+
+<link href="~/Content/assets/vendor_plugins/timepicker/bootstrap-timepicker.min.css" rel="stylesheet" />
+
+<section class="content-header">
+    <h1>
+        Overtime Filing 
+    </h1>
+    
+</section>
+<section class="content">
+    <div class="box box-primary">
+        <div class="box-body pad">
+            <form action="" method="POST" role="form" id="OTForm">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon">Section</span>
+                                @*<select class="form-control" id="Section" name="Section"></select>*@
+                                <input type="text" class="form-control" id="Section" name="Section">
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon">Overtime Type</span>
+                                <select class="form-control step step4 select2" id="OvertimeType" name="OvertimeType" disabled>
+                                    <option value="">--SELECT--</option>
+                                    <option value="Regular">Regular</option>
+                                    <option value="SundayHoliday">Sunday/Holiday</option>
+                                    <option value="LegalHoliday">Legal Holiday</option>
+                                    <option value="SpecialHoliday">Special Holiday</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                  
+                   
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon">BIPH/Agency</span>
+                                <select class="form-control step step1 select2" id="BIPH_Agency" name="BIPH_Agency"></select>
+                            </div>
+
+                        </div>
+                    </div>
+                   
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon">Date</span>
+                                <input type="text" class="form-control step step5" id="DateFrom" name="DateFrom" disabled>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon">File Type</span>
+                                <select class="form-control step step2 select2" id="FileType" name="FileType" disabled>
+                                    <option value="">--SELECT--</option>
+                                    <option value=1>Individual</option>
+                                    <option value=2>Group</option>
+                                </select>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon">Employee No/ADID</span>
+
+                                <input list="EmployeeNoList" name="EmployeeNo" id="EmployeeNo" class="form-control" onkeyup="getEmployeeNo()" disabled>
+                                <datalist id="EmployeeNoList"></datalist>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="bootstrap-timepicker">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon">OT In</span>
+                                    <input type="text" class="form-control timepicker step step6" id="OTin" name="OTin" disabled>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon">Line/Team</span>
+                                <select class="form-control step step3 select2" id="Line_Team" name="Line_Team" disabled></select>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="bootstrap-timepicker">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon">OT Out</span>
+                                    <input type="text" class="form-control timepicker step step7" id="OTout" name="OTout" disabled>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                
+               
+                <div class="row">
+                    <div class="col-md-6">
+                       
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="col-md-6 col-xs-12 no-padding-l">
+                                    <button type="button" class="btn btn-flat bg-green btn-lg btn-block" id="btnDownloadTemplate">
+                                        <i class="fa fa-download"></i> Download Template
+                                    </button>
+                                </div>
+                                <div class="col-md-6 col-xs-12 no-padding-l">
+                                    <button type="button" class="btn btn-flat bg-green btn-lg btn-block" id="btnFileUpload">
+                                        <i class="fa fa-upload"></i> Upload
+                                    </button>
+                                    <input type="file" name="UploadedFile" id="UploadedFile" placeholder="(.xlsx)" accept=".xlsx" style="display:none">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="col-md-12 col-xs-12 no-padding-l">
+                                    <button type="button" class="btn btn-flat bg-green btn-lg btn-block" id="btnconfirm">
+                                        <i class="fa fa-save"></i> Submit
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="col-md-6 col-xs-12 no-padding-l">
+                                   
+                                </div>
+                                <div class="col-md-6 col-xs-12 no-padding-l">
+                                    <button type="button" class="btn btn-flat bg-blue btn-lg btn-block" id="btnSearch" style="display:none">
+                                        <i class="fa fa-search"></i> Search
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+
+
+
+          
+        </div>
+        <div class="box-body pad">
+            <div class="row"><h3 style="margin-left:20px;">Employee List</h3>  
+            </div>
+            <div class="table-responsive">
+                <table class="table table-striped table-no-bordered table-hover" id="OTTable" style="width:100%;">
+                    <thead>
+                        <tr>
+                            <th>
+                                <input type="checkbox" id="checkall_emp" class="filled-in chk-col-light-blue" />
+                                <label class="checker" for="checkall_emp"></label>
+                            </th>
+                            <th>Employee ID</th>
+                            <th>Last Name</th>
+                            <th>First Name</th>
+                            <th>Agency</th>
+                            <th>CostCenter (AMS)</th>
+                            <th>Section</th>
+                            <th>Schedule</th>
+                            <th>Cumulative OT (Hour)</th>
+
+                           
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+
+
+
+            <div class="row">
+                <div class="offset-md-9 col-md-3 no-ad">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="col-md-12 col-xs-12 no-padding-l">
+                                <button type="button" class="btn btn-flat bg-green btn-lg btn-block" id="Quicksend" style="display:none">
+                                    <i class="fa fa-save"></i> Send Mail
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</section>
+
+
+
+<div class="modal fade bannerformmodal" tabindex="-1" role="dialog" aria-labelledby="bannerformmodal" aria-hidden="true" id="ConfirmOT">
+    <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3 class="modal-title" id="myModalLabel">Overtime Summary</h3>
+                </div>
+                <div class="modal-body fixed-modal-height div-chk-less-height">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon">Date</span>
+                                    <input type="text" class="form-control" id="DateFromSum" value="" disabled>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon">OT In</span>
+                                    <input type="text" class="form-control" id="OTInsum" value="" disabled>
+                                </div>
+
+                            </div>
+                            <div class="form-group" style="display:none">
+                                <div class="input-group">
+                                    <span class="input-group-addon">Date To</span>
+                                    <input type="text" class="form-control" id="DateToSum" value="" disabled>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                          
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">Group Purpose</span>
+                                        <input type="text" class="form-control" id="Pposgroup" value="">
+                                    </div>
+                                </div>
+                           
+                        </div>
+                        <div class="col-md-6">
+                            <div class="bootstrap-timepicker">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">OT Out</span>
+                                        <input type="text" class="form-control timepicker" id="OTOutsum" name="OTOutsum" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                           
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="table-responsive col-md-12">
+                        <table id="ChosenEmployeeTable" class="table table-bordered table-striped table-responsive" style="width:100%">
+                            <thead>
+                               
+                            </thead>
+                            <tbody>
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="row">
+                        <div class="col-md-6">
+                            @*<label style="font-weight:bold"><label style="color:red">*&nbsp;</label>OT Reference:&nbsp;&nbsp;</label><label id="OTRefno"> </label>*@
+                        </div>
+                        <div class="col-md-6">
+                            <button type="button" class="btn btn-flat bg-green btn-lg btn-block" id="btnSaveOT" data-dismiss="modal">
+                                <i class="fa fa-save"></i> Submit
+                            </button>
+                        </div>
+                       <!--  <div class="col-md-3">
+                            <button type="button" class="btn btn-flat bg-red btn-lg btn-block" data-dismiss="modal">
+                                <i class="fa fa-close"></i> Cancel
+                            </button>
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+       
+    </div>
+</div>
+
+
+@section Scripts{
+
+    <script src="~/Areas/Correction/Javascripts/OT.js"></script>
+   }
+

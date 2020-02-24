@@ -1,0 +1,251 @@
+﻿
+@{
+    ViewBag.Title = "OTSummary";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link rel="stylesheet" href="~/Content/assets/vendor_components/glyphicons/glyphicon.css">
+
+<link href="~/Content/assets/vendor_components/select2/dist/css/select2.min.css" rel="stylesheet" />
+<link href="~/Content/css/master_style.css" rel="stylesheet" />
+<link href="~/Content/css/skins/_all-skins.css" rel="stylesheet" />
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link href="~/Content/assets/vendor_plugins/timepicker/bootstrap-timepicker.min.css" rel="stylesheet" />
+<style>
+    .resized {
+    width: 146.813px !important;
+    }
+</style>
+<div class="box-body">
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item"> <a class="nav-link active" href="@Url.Action("OTSummary", "OTSummary", new { area = "Summary" })" role="tab"><span class="hidden-sm-up"><i class="ion-home"></i></span> <span class="hidden-xs-down">OT Summary</span></a> </li>
+        <li class="nav-item"> <a class="nav-link" href="@Url.Action("ChangeScheduleSummary", "ChangeScheduleSummary", new { area = "Summary" })" role="tab"><span class="hidden-sm-up"><i class="ion-person"></i></span> <span class="hidden-xs-down">CS Summary</span></a> </li>
+        <li class="nav-item"> <a class="nav-link" href="@Url.Action("DTRSummary", "DTRSummary", new { area = "Summary" })" role="tab"><span class="hidden-sm-up"><i class="ion-email"></i></span> <span class="hidden-xs-down">DTR Summary</span></a> </li>
+    </ul>
+
+</div>
+
+<section class="content-header">
+    <h1>
+        OT Summary
+    </h1>
+</section>
+
+    <section class="content">
+        <div class="box box-primary">
+
+            <div class="box-body pad">
+
+                <form action="" method="POST" role="form">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon resized">OT Reference No.</span>
+                                    <input list="OTRefNoList" name="OTRefno" id="OTRefno" class="form-control" onkeyup="GetOTReflist()">
+                                    <datalist id="OTRefNoList"></datalist>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon resized">Section</span>
+                                    <select class="form-control autof select2" id="Section" name="Section"></select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon resized">Date From</span>
+                                    <input type="text" class="form-control autof" id="DateFrom" name="DateFrom">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon resized">Date To</span>
+                                    <input type="text" class="form-control autof" id="DateTo" name="DateTo">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon resized">Type</span>
+                                    <select class="form-control autof select2" id="OvertimeType" name="OvertimeType">
+                                        <option value="">--SELECT--</option>
+                                        <option value="Regular">Regular</option>
+                                        <option value="SundayHoliday">Sunday/Holiday</option>
+                                        <option value="LegalHoliday">Legal Holiday</option>
+                                        <option value="SpecialHoliday">Special Holiday</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <span class="input-group-addon resized">Approver Status</span>
+                                        <select class="form-control autof select2" id="Status" name="Status">
+                                            <option value="">--SELECT--</option>
+                                            <option value="-2">Cancelled</option>
+                                            <option value="-1">Rejected</option>
+                                            <option value="0">Pending</option>
+                                            <option value="1">Supervisor approved</option>
+                                            <option value="2">Manager approved</option>
+                                            <option value="3">General approved</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <div class="col-md-6 col-xs-12 no-padding-l">
+                                        <button type="button" class="btn btn-flat bg-green btn-lg btn-block" id="btnFilter" style="display:none">
+                                            <i class="fa fa-address-book"></i> Filter
+                                        </button>
+                                    </div>
+                                    @*<div class="col-md-6 col-xs-6 no-padding-l">
+                                            <button type="button" class="btn btn-flat bg-green btn-lg btn-block" id="btnExportbatch">
+                                                <i class="fa fa-address-book"></i> Export
+                                            </button>
+                                        </div>*@
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="box-body">
+                <div class="table-responsive" style="width:100%">
+                    <table id="OTSummaryTable" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <input type="checkbox" id="checkall_emp" class="filled-in chk-col-light-blue" />
+                                    <label class="checker" for="checkall_emp"></label>
+                                </th>
+                                <th>OT Reference No</th>
+                                <th>Section</th>
+                                <th>Type</th>
+                                <th>Date Created</th>
+                                @*<th>Status</th>
+                                    <th>Approver</th>*@
+                                <th>Supervisor</th>
+                                <th>Manager</th>
+                                <th>General Manager</th>
+                                <th>Factory General Manager</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+    <div class="modal fade AgencyEmail" tabindex="-1" role="dialog" aria-labelledby="bannerformmodal" aria-hidden="true" id="OTDetails">
+        <div class="modal-dialog modal-lg">
+
+            <div class="modal-content modalsizer">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3 class="modal-title" id="myModalLabel">Employees</h3>
+                </div>
+                <div class="modal-body fixed-modal-height div-chk-less-height">
+
+                    <div class="table-responsive">
+                        <table id="OTApproverDetails" class="table table-bordered table-striped table-responsive" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th> OT Reference No </th>
+                                    <th> Employee No </th>
+                                    <th> Employee Name </th>
+                                    <th> Section </th>
+                                    <th> Purpose </th>
+                                    <th> Overtime Type </th>
+                                    <th> Date From </th>
+                                    @*<th> Date To </th>*@
+                                    <th> OT In </th>
+                                    <th> OT Out </th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group" id="theapprovebtn">
+                            <div class="col-md-6 col-xs-12 no-padding-l">
+
+                            </div>
+                            @*<div class="col-md-6 col-xs-12 no-padding-l">
+                                    <button type="button" class="btn btn-flat bg-green btn-lg btn-block" id="btnExport">
+                                        <i class="fa fa-download"></i> Export
+                                    </button>
+                                </div>*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="modal fade AgencyEmail" tabindex="-1" role="dialog" aria-labelledby="bannerformmodal" aria-hidden="true" id="OTApprovers">
+        <div class="modal-dialog modal-lg">
+
+            <div class="modal-content modalsizer">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3 class="modal-title" id="myModalLabel">Approvers</h3>
+                </div>
+                <div class="modal-body fixed-modal-height div-chk-less-height">
+
+                    <div class="table-responsive">
+                        <table id="OTApproverStatustable" class="table table-bordered table-striped table-responsive" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th> Position </th>
+                                    <th> User Name </th>
+                                    <th> Employee Name </th>
+                                    <th> Status </th>
+                                    @*<th> Resend </th>*@
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+
+    @section Scripts{
+        <script src="~/Content/DatePickerIE.js"></script>
+        <script src="~/Content/plugins/daterangepicker/moment.js"></script>
+        <script src="~/Areas/Summary/Javascript/OTSummary.js"></script>
+    }
+

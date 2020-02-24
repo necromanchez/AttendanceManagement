@@ -1,0 +1,59 @@
+﻿@model Brothers_WMS.Models.LoginViewModel
+
+
+
+
+@if (!Request.IsAuthenticated)
+{
+    ViewBag.Title = "Log in";
+    @*Elmer: this will prevent going back to previous page after logging out.*@
+    //HttpContext.Current.Response.AddHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+    //HttpContext.Current.Response.AddHeader("Pragma", "no-cache");
+    //HttpContext.Current.Response.AddHeader("Expires", "0");
+
+    <script>
+  function preventBack(){window.history.forward();}
+  setTimeout("preventBack()", 0);
+  window.onunload=function(){null};
+    </script>
+
+    <div class="login-box" style="box-shadow: 5px 10px #888888;">
+        <div class="login-box-body">
+            <div class="login-logo">
+                <img src="~/Content/images/Brother_Logo_Blue.png" class="img-fluid"  style="max-width:75%"/>
+            </div>
+            <p class="login-box-msg">Sign in to start your session</p>
+            @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-element", role = "form" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true)
+                <div class="form-group has-feedback">
+                    @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", placeholder = "     Username", @style = "background-color: #ffffff !important;" })
+                    <span class="ion ion-person form-control-feedback"></span>
+                    @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group has-feedback">
+                    @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "     Password", @style = "background-color: #ffffff !important;" })
+                    <span class="ion ion-locked form-control-feedback"></span>
+                    @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="checkbox">
+                            @Html.CheckBoxFor(m => m.RememberMe)
+                            @Html.LabelFor(m => m.RememberMe)
+                        </div>
+                    </div>
+                    <div class="col-12 text-center">
+                        <button type="submit" class="btn btn-info btn-block btn-flat margin-top-10">SIGN IN</button>
+                    </div>
+                </div>
+            }
+            <p></p>
+        </div>
+    </div>
+}
+else
+{
+    ViewBag.Title = "Dashboard";
+}

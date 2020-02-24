@@ -1,0 +1,223 @@
+﻿
+@{
+    ViewBag.Title = "Line";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="content-header">
+    <h1>
+        Line
+    </h1>
+</section>
+<section class="content">
+    <div class="box box-primary">
+        <div class="box-body pad">
+
+            <form action="" method="POST" role="form">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon">Section</span>
+                                <input type="text" class="form-control" id="jobTitle1">
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon">Line</span>
+                                <input type="text" class="form-control" id="jobTitle1">
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon">Status</span>
+                                <select class="form-control">
+                                    <option>Active</option>
+                                    <option>Inactive</option>
+                                </select>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="col-md-6 col-xs-12 no-padding-l">
+                                    <button type="button" class="btn btn-flat bg-green btn-lg btn-block" id="Add_btn">
+                                        <i class="fa fa-upload"></i> Upload
+                                    </button>
+                                </div>
+                                <div class="col-md-6 col-xs-12 no-padding-l">
+                                    <button type="button" class="btn btn-flat bg-green btn-lg btn-block" id="Add_btn">
+                                        <i class="fa fa-address-book"></i> Submit
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+
+        </div>
+
+
+        <div class="box-body">
+            <table id="example1" class="table table-bordered table-striped table-responsive">
+                <thead>
+                    <tr>
+                        <th>Section</th>
+                        <th>Line</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>29316</td>
+                        <td>LineB</td>
+                        <td>Active</td>
+                        <td>
+                            <a class="btn bg-blue">
+                                <i class="fa fa-users"></i> Import
+                            </a>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>27124</td>
+                        <td>LineB</td>
+                        <td>Inactive</td>
+                        <td>
+                            <a class="btn bg-blue">
+                                <i class="fa fa-users"></i> Import
+                            </a>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>13733</td>
+                        <td>LineB</td>
+                        <td>Inactive</td>
+                        <td>
+                            <a class="btn bg-blue">
+                                <i class="fa fa-users"></i> Import
+                            </a>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>87637</td>
+                        <td>LineD</td>
+                        <td>Active</td>
+                        <td>
+                            <a class="btn bg-blue">
+                                <i class="fa fa-users"></i> Import
+                            </a>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>17783</td>
+                        <td>LineD</td>
+                        <td>Inactive</td>
+                        <td>
+                            <a class="btn bg-blue">
+                                <i class="fa fa-users"></i> Import
+                            </a>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>15298</td>
+                        <td>LineA</td>
+                        <td>Active</td>
+                        <td>
+                            <a class="btn bg-blue">
+                                <i class="fa fa-users"></i> Import
+                            </a>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>21916</td>
+                        <td>LineB</td>
+                        <td>Active</td>
+                        <td>
+                            <a class="btn bg-blue">
+                                <i class="fa fa-users"></i> Import
+                            </a>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>96256</td>
+                        <td>LineE</td>
+                        <td>Inactive</td>
+                        <td>
+                            <a class="btn bg-blue">
+                                <i class="fa fa-users"></i> Import
+                            </a>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>09889</td>
+                        <td>LineD</td>
+                        <td>Active</td>
+                        <td>
+                            <a class="btn bg-blue">
+                                <i class="fa fa-users"></i> Import
+                            </a>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>84152</td>
+                        <td>LineE</td>
+                        <td>Inactive</td>
+                        <td>
+                            <a class="btn bg-blue">
+                                <i class="fa fa-users"></i> Import
+                            </a>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>38873</td>
+                        <td>LineD</td>
+                        <td>Active</td>
+                        <td>
+                            <a class="btn bg-blue">
+                                <i class="fa fa-users"></i> Import
+                            </a>
+
+                        </td>
+                    </tr>
+                
+
+
+
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+</section>
+
+
+@section Scripts{
+    <script src="~/Scripts/pages/data-table.js"></script>
+}
+
+
+

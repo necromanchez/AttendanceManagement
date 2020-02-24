@@ -1,0 +1,23 @@
+﻿@using Brothers_WMS.Models;
+@{
+    ViewBag.Title = "Account Password";
+}
+<section class="content-header">
+    <h1>
+        @ViewBag.Title
+    </h1>
+    
+</section>
+
+<!-- Main content -->
+<section class="content">
+    @if (ViewBag.HasLocalPassword)
+    {
+        @Html.Partial("_ChangePasswordPartial")
+    }
+    else
+    {
+        @Html.Partial("_SetPasswordPartial")
+    }
+</section>
+<!-- /.content -->
