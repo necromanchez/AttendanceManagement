@@ -4,39 +4,36 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="175aea6708874428b72bbad637d774be" Name="Diagram1" ZoomLevel="55">
-        <EntityTypeShape EntityType="Brothers_AMSDBModel.AF_ChangeSchedulefiling" Width="1.5" PointX="0.75" PointY="0.75" />
-        <EntityTypeShape EntityType="Brothers_AMSDBModel.AF_DTRfiling" Width="1.5" PointX="2.75" PointY="0.75" />
-        <EntityTypeShape EntityType="Brothers_AMSDBModel.AF_OTfiling" Width="1.5" PointX="4.75" PointY="0.75" />
+      <Diagram DiagramId="175aea6708874428b72bbad637d774be" Name="Diagram1" ZoomLevel="44">
         <EntityTypeShape EntityType="Brothers_AMSDBModel.AF_OTfiling_Cumulative" Width="1.5" PointX="6.75" PointY="0.75" />
-        <EntityTypeShape EntityType="Brothers_AMSDBModel.Error_Logs" Width="1.5" PointX="0.75" PointY="6.75" />
-        <EntityTypeShape EntityType="Brothers_AMSDBModel.FC_EmployeeForecast" Width="1.5" PointX="2.75" PointY="6.75" />
-        <EntityTypeShape EntityType="Brothers_AMSDBModel.FC_ForecastYears" Width="1.5" PointX="4.75" PointY="6.75" />
         <EntityTypeShape EntityType="Brothers_AMSDBModel.M_Agency" Width="1.5" PointX="6.75" PointY="5.75" />
         <EntityTypeShape EntityType="Brothers_AMSDBModel.M_Agency_Email" Width="1.5" PointX="8.75" PointY="0.75" />
-        <EntityTypeShape EntityType="Brothers_AMSDBModel.M_Approver" Width="1.5" PointX="8.75" PointY="4.75" />
-        <EntityTypeShape EntityType="Brothers_AMSDBModel.M_Cost_Center_List" Width="1.5" PointX="8.75" PointY="8.75" />
         <EntityTypeShape EntityType="Brothers_AMSDBModel.M_Employee_CostCenter" Width="1.5" PointX="10.75" PointY="0.75" />
-        <EntityTypeShape EntityType="Brothers_AMSDBModel.M_Employee_Master_List" Width="1.5" PointX="0.75" PointY="10.75" />
-        <EntityTypeShape EntityType="Brothers_AMSDBModel.M_Employee_Master_List_Schedule" Width="1.5" PointX="10.75" PointY="4.75" />
         <EntityTypeShape EntityType="Brothers_AMSDBModel.M_Employee_Position" Width="1.5" PointX="10.75" PointY="8.75" />
         <EntityTypeShape EntityType="Brothers_AMSDBModel.M_Employee_Skills" Width="1.5" PointX="6.75" PointY="11.75" />
-        <EntityTypeShape EntityType="Brothers_AMSDBModel.M_Employee_Status" Width="1.5" PointX="8.75" PointY="11.75" />
         <EntityTypeShape EntityType="Brothers_AMSDBModel.M_LineTeam" Width="1.5" PointX="10.75" PointY="11.75" />
-        <EntityTypeShape EntityType="Brothers_AMSDBModel.M_Position" Width="1.5" PointX="12.75" PointY="0.75" />
         <EntityTypeShape EntityType="Brothers_AMSDBModel.M_Schedule" Width="1.5" PointX="2.75" PointY="12.75" />
         <EntityTypeShape EntityType="Brothers_AMSDBModel.M_ScheduleBreaks" Width="1.5" PointX="12.75" PointY="4.75" />
         <EntityTypeShape EntityType="Brothers_AMSDBModel.M_Section" Width="1.5" PointX="12.75" PointY="8.75" />
         <EntityTypeShape EntityType="Brothers_AMSDBModel.M_Section_Approver" Width="1.5" PointX="12.75" PointY="12.75" />
-        <EntityTypeShape EntityType="Brothers_AMSDBModel.M_Section_ApproverStatus" Width="1.5" PointX="14.75" PointY="0.75" />
         <EntityTypeShape EntityType="Brothers_AMSDBModel.M_Skills" Width="1.5" PointX="14.75" PointY="4.75" />
         <EntityTypeShape EntityType="Brothers_AMSDBModel.M_Users" Width="1.5" PointX="14.75" PointY="8.75" />
-        <EntityTypeShape EntityType="Brothers_AMSDBModel.PA_Line" Width="1.5" PointX="14.75" PointY="13.75" />
         <EntityTypeShape EntityType="Brothers_AMSDBModel.PA_Pages" Width="1.5" PointX="4.75" PointY="15.75" />
-        <EntityTypeShape EntityType="Brothers_AMSDBModel.PA_Section" Width="1.5" PointX="6.75" PointY="15.75" />
         <EntityTypeShape EntityType="Brothers_AMSDBModel.PA_Users" Width="1.5" PointX="8.75" PointY="15.75" />
-        <EntityTypeShape EntityType="Brothers_AMSDBModel.RP_AttendanceMonitoring" Width="1.5" PointX="16.75" PointY="0.75" />
-        <EntityTypeShape EntityType="Brothers_AMSDBModel.T_TimeInOut" Width="1.5" PointX="0.75" PointY="16.75" />
+        <EntityTypeShape EntityType="Brothers_AMSDBModel.RP_AttendanceMonitoring" Width="1.5" PointX="11.375" PointY="16.75" />
+        <EntityTypeShape EntityType="Brothers_AMSDBModel.AF_DTRfiling" Width="1.5" PointX="15.75" PointY="16.75" />
+        <EntityTypeShape EntityType="Brothers_AMSDBModel.M_Employee_Master_List_Schedule" Width="1.5" PointX="3.75" PointY="0.75" />
+        <EntityTypeShape EntityType="Brothers_AMSDBModel.AF_OTfiling" Width="1.5" PointX="17.375" PointY="0.75" />
+        <EntityTypeShape EntityType="Brothers_AMSDBModel.Error_Logs" Width="1.5" PointX="3.375" PointY="3.75" />
+        <EntityTypeShape EntityType="Brothers_AMSDBModel.M_Employee_Master_List" Width="1.5" PointX="17.375" PointY="9.75" />
+        <EntityTypeShape EntityType="Brothers_AMSDBModel.T_TimeTap" Width="1.5" PointX="17.375" PointY="6.75" />
+        <EntityTypeShape EntityType="Brothers_AMSDBModel.M_Cost_Center_List" Width="1.5" PointX="7.375" PointY="18.75" />
+        <EntityTypeShape EntityType="Brothers_AMSDBModel.M_Employee_Status" Width="1.5" PointX="0.75" PointY="6.75" />
+        <EntityTypeShape EntityType="Brothers_AMSDBModel.M_Employee_Master_List_Deleted" Width="1.5" PointX="3.375" PointY="18.75" />
+        <EntityTypeShape EntityType="Brothers_AMSDBModel.T_TimeInOut" Width="1.5" PointX="3.375" PointY="6.75" />
+        <EntityTypeShape EntityType="Brothers_AMSDBModel.AF_ChangeSchedulefiling" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="Brothers_AMSDBModel.M_Section_ApproverStatus" Width="1.5" PointX="0.75" PointY="16.75" />
+        <EntityTypeShape EntityType="Brothers_AMSDBModel.Z_SkillRemoverAll" Width="1.5" PointX="9.375" PointY="4.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

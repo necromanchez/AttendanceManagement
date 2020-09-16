@@ -1,15 +1,18 @@
 ﻿$(function () {
+    $("#ALLtbl").hide();
+    $("#OvertimeType").prop("disabled", false);
     $("#checkall_emp").prop("disabled",true);
-    Dropdown_select('BIPH_Agency', "/Helper/GetDropdown_Agency");
-    Dropdown_select('BIPH_Agency2', "/Helper/GetDropdown_Agency");
-   
-    
-    Dropdown_select('Line_Team', "/Helper/GetDropdown_LineProcessTeamLogin");
+    Dropdown_selectMP('BIPH_Agency', "/Helper/GetDropdown_Agency");
+    Dropdown_selectMP('BIPH_Agency2', "/Helper/GetDropdown_Agency");
+    $("#loading_modal").modal("show");
+    Dropdown_selectOT("OvertimeType");
+    Dropdown_selectFileType("FileType");
+    Dropdown_selectMP('Line_Team', "/Helper/GetDropdown_LineProcessTeamLogin");
     GetcurrentSection('Section', "/Helper/GetCurrentSection");
    
-    $('#ConfirmOT').on('hidden.bs.modal', function (e) {
-        setTimeout(function () { location.reload(); }, 2500);
-    })
+    //$('#ConfirmOT').on('hidden.bs.modal', function (e) {
+    //    setTimeout(function () { location.reload(); }, 2500);
+    //})
   
     $("#templateDownload").on("click", function () {
         window.location.href = "../../Correction/Templates/DownloadTemplate?filename=OTForm.xlsx"
@@ -20,7 +23,7 @@
     })
 
     $("#UploadedFile").on("change", function () {
-        $("#loading_modal").modal("show")
+        $("#loading_modal").modal("show");
 
         var files = new FormData();
         var file1 = document.getElementById("UploadedFile").files[0];
@@ -59,15 +62,21 @@
    
     $("#checkall_emp").on("change", function () {
         if (this.checked) {
+            $('.empmod').each(function (i, obj) {
+                chosend_EmpNo.push(obj.id);
+            });
             $('.empmod').prop('checked', true);
         }
-        else {
-            $('.empmod').prop('checked', false);
-        }
+        //else {
+        //    $('.empmod').each(function (i, obj) {
+        //        chosend_EmpNo.remove(obj.id);
+        //    }); $('.empmod').prop('checked', false);
+        //}
     })
     $("#Section").prop('disabled', true);
     $("#Line_Team").prop('disabled', true);
     $("#FileType").on("change", function () {
+        chosend_EmpNo = [];
         if ($("#BIPH_Agency").val() != "") {
             if ($(this).val() == 1) {
                 $("#checkall_emp").prop("disabled", true);
@@ -80,6 +89,7 @@
                 $("#EmployeeNo").val('');
             }
             else {
+                Initializepage();
                 $("#checkall_emp").prop("disabled", false);
                 $.ajax({
                     url: '/Helper/GetSection',
@@ -104,7 +114,7 @@
         else {
             //$("#FileType").trigger("change");
         }
-        $("#btnSearch").trigger("click");
+      //  $("#btnSearch").trigger("click");
     })
     $("#btnSearch").on("click", function () {
         //$("#btnconfirm").prop("disabled", false);
@@ -118,23 +128,25 @@
     })
 
     $("#btnSaveOT").on("click", SaveOT);
-    Initializepage();
+    
 
     $("#DateFrom").datepicker().datepicker("setDate", new Date());
     $("#DateTo").datepicker().datepicker("setDate", new Date());
 
     //AUTOMATIC STARTS HERE
     $("#BIPH_Agency").on("change", function () {
+        $("#loading_modal").modal("show");
         $("#btnSearch").trigger("click");
+        $("#ALLtbl").show();
         //$("#btnDownloadTemplate").prop("disabled", false);
     })
   
     $("#EmployeeNo").focusout(function () {
         $("#btnSearch").trigger("click");
     });
-    $("#Line_Team").on("change", function () {
-        $("#btnSearch").trigger("click");
-    })
+    //$("#Line_Team").on("change", function () {
+    //    $("#btnSearch").trigger("click");
+    //})
 
     $('#EmployeeNo').keypress(function (event) {
         var keycode = (event.keyCode ? event.keyCode : event.which);
@@ -173,6 +185,14 @@
     $("#OTin").val("--SELECT--");
     $("#OTout").val("--SELECT--");
    
+    //$('#OTTable').on('page.dt', function () {
+    //    //var info = table.page.info();
+    //    //$('#pageInfo').html('Showing page: ' + info.page + ' of ' + info.pages);
+       
+    //});
+
+
+    Initializepage();
 })
 
 var chosend_EmpNo = [];
@@ -198,8 +218,6 @@ function GetEmployeeChosen(EmpNo) {
             chosend_EmpNo.push(EmpNo);
         }
     }
-    
-  
 }
 
 
@@ -227,12 +245,17 @@ function Initializepage() {
         lengthMenu: [10, 20, 30, 50],
         pagelength: 10,
         lengthChange: false,
-        lengthChange: false,
         serverSide: "true",
         order: [0, "asc"],
         processing: "true",
         language: {
             "processing": "processing... please wait"
+        }, 
+        drawCallback: function (settings) {
+            
+            if ($("#OTout").val() != "--SELECT--") {
+                //TimeValidator_Nosubmit(chosend_EmpNo);
+            }
         },
         //dom: 'Bfrtip',
         destroy: true,
@@ -256,9 +279,12 @@ function Initializepage() {
               //{ data: "Line" },
         ],
         initComplete: function () {
+            $("#loading_modal").modal("hide");
             if ($("#BIPH_Agency").val() == "") {
                 $(".empmod").prop("disabled", true);
             }
+          
+          
         }
         
     });
@@ -275,6 +301,11 @@ function Initializepage() {
             var str = data.Schedule;
             var res = str.split(" - ");
             $("#OTin").val(res[1]);
+
+            if ($("#OvertimeType").val() == "SundayHoliday") {
+                $("#OTin").val(res[0]);
+            }
+
         }
         else {
             single = true;
@@ -346,13 +377,13 @@ function DownloadTemplate() {
 function Confirmchecker() {
     $(".ipinagbawal").removeClass("ipinagbawal");
     $(".withOTna").removeClass("withOTna");
-    if ($("#OTin").val() < $("#OTout").val()) {
+    //if ($("#OTin").val() < $("#OTout").val()) {
         var EmployeeList = chosend_EmpNo;//$('input[type="checkbox"][name="employchosen"]:checked').map(function () { return this.id; }).get();
         var check = TimeValidator(EmployeeList);
-    }
-    else {
-        swal("Please recheck input fields");
-    }
+    //}
+    //else {
+    //    swal("Please recheck input fields");
+    //}
         
 }
 
@@ -366,6 +397,7 @@ function TimeValidator(data) {
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify({
                 list: data,
+                DateFrom: $("#DateFrom").val(),
                 OTin: $("#OTin").val(),
                 OTOut: $("#OTout").val(),
                 Type: $("#OvertimeType").val()
@@ -457,3 +489,46 @@ function TimeValidator(data) {
 
     return result;
 }
+
+function TimeValidator_Nosubmit(data) {
+    var result = true;
+    var EmployeeList = data;
+    if (EmployeeList.length > 0) {
+        $.ajax({
+            url: '/OT/TimeValidate',
+            type: 'POST',
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({
+                list: data,
+                OTin: $("#OTin").val(),
+                OTOut: $("#OTout").val(),
+                Type: $("#OvertimeType").val()
+            }),
+            datatype: "json",
+            success: function (returnData) {
+             
+            }
+        });
+    }
+    else {
+        swal("Please Choose Employees");
+    }
+
+
+    return result;
+}
+
+function Dropdown_selectOT(id) {
+    var option = '<option value="">--SELECT--' + getlong() + '</option>';
+    var daa = ["Regular", "SundayHoliday", "LegalHoliday", "SpecialHoliday"];
+    $('#' + id).html(option);
+
+    $.each(daa, function (i, x) {
+        option = '<option value="' + x + '">' + x + getlong() + '</option>';
+
+        //$('.selectpicker').selectpicker('refresh');
+        $('#' + id).append(option);
+    });
+
+}
+

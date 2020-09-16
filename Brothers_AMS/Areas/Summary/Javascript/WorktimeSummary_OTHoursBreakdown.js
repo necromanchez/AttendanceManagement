@@ -1,12 +1,45 @@
 ﻿var totalHoursOT = 0;
 var totalOT = 0;
+
+
+function DataConverter(data) {
+    if (data.toLowerCase().indexOf('inc') > -1) {
+        var res = data.split(" ");
+        data = res[0];
+        return (data == "0.0") ? "<p class='text Adjustbrand'>" + data + "</p>" : "<p class='text-red Adjustbrand'>" + data + "</p>"
+        
+    }
+    else if (data.toLowerCase().indexOf('noot') > -1) {
+        var res = data.split(" ");
+        data = res[0];
+        if (data > 0) {
+            totalOT += parseFloat(data);
+        } 
+         return (data == "0.0")?"<p class='text Adjustbrand'>" + data + "</p>":"<p class='text-red Adjustbrand'>" + data + "</p>"
+    }
+    else if (data.toLowerCase().indexOf('wot') > -1) {
+        var res = data.split(" ");
+        data = res[0];
+        if (data > 0) {
+            totalOT += parseFloat(data);
+        }
+        return "<p class='text-green Adjustbrand'>" + data + "</p>"
+    }
+    else {
+        return "<p class='text Adjustbrand'>" + data + "</p>"
+    }
+
+
+}
+
 function Initializedpage_OTHours() {
+    var d = new Date();
     $.ajax({
         url: '../WorkTimeSummary/GeAttendanceMonitoringList_OTBreakDown',
         data: {
             Month: $("#Month").val(),
             Year: $("#Year").val(),
-            Section: $("#Section").val()
+            Section: selectedSection
         },
         type: 'GET',
         dataType: 'JSON',
@@ -17,205 +50,216 @@ function Initializedpage_OTHours() {
                 data: obj,
                 scrollX: true,
                 pageLength: 10,
-                lengthChange: false,
-                scrollY: "600px",
+                //lengthMenu: [10, 100, 500, 1000, 5000],
+                lengthMenu: [[10, 50, 100], [10, 50, 100]],
+
+                lengthChange: true,
+                loadonce: false,
+                dom: 'lBfrtip',
+                buttons: [
+                    {
+                        extend: 'excel',
+                        title: "WorkTimeSummary_OTBreakdown" + formatDate(d) + "_" + selectedSection
+                    }
+                ],
                 scrollCollapse: true,
                 order: [0, "asc"],
                 processing: "true",
-                lengthChange: false,
+                //lengthChange: false,
                 columns: [
-
-                      { data: "EmpNo" ,className: "reloadclass" },
-                      { data: "EmployeeName" },
-                      { data: "Position" },
-                      { data: "CostCenter_AMS" },
+                    { title: "No", data: "Rownum", className: "reloadclass", name: "Rownum"  },
+                    { title: "Employee No", data: "EmpNo", name: "EmpNo" },
+                    { title: "Employee Name", data: "EmployeeName", name: "EmployeeName" },
+                    { title: "Position", data: "Position", name: "Position"  },
+                    { title: "Cost Center", data: "CostCode", name: "CostCode" },
+                    { title: "Schedule", data: "Schedule", name: "Schedule" },
                       //{ data: "Schedule", visible: false },
                       {
-                          data: function (x) {
+                          title: "Process", data: function (x) {
 
-                              return "<button type='button' class='btn btn-xs bg-green' onclick=GetProcess('" + x.EmpNo + "','" + x.CostCenter_AMS + "')>Show Process</button>";
+                              return "<button type='button' class='btn btn-xs bg-green' onclick=GetProcess('" + x.EmpNo + "','" + x.CostCode + "')>Show Process</button>";
 
-                          }, visible:false
+                          },
                       },
-                       {
-                           data: function (x) {
-                               totalOT += parseFloat(x[1]);
-                               return (x[1] != 0) ? "<p class='text-green' style='font-size:16px !important';>" + x[1] + "</p>" : x[1];
+                      {
+                          title: "1", data: function (x) {
+                               
+                               return DataConverter(x[1]);
                            }
                        },
                       {
-                          data: function (x) {
-                              totalOT += parseFloat(x[2]);
-                              return (x[2] != 0) ? "<p class='text-green' style='font-size:16px !important';>" + x[2] + "</p>" : x[2];
+                          title: "2", data: function (x) {
+                             
+                              return DataConverter(x[2]);
                           }
                       },
                       {
-                          data: function (x) {
-                              totalOT += parseFloat(x[3]);
-                              return (x[3] != 0) ? "<p class='text-green' style='font-size:16px !important';>" + x[3] + "</p>" : x[3];
+                          title: "3", data: function (x) {
+                              
+                              return DataConverter(x[3]);
                           }
                       },
                       {
-                          data: function (x) {
-                              totalOT += parseFloat(x[4]);
-                              return (x[4] != 0) ? "<p class='text-green' style='font-size:16px !important';>" + x[4] + "</p>" : x[4];
+                          title: "4", data: function (x) {
+                             
+                              return DataConverter(x[4]);
                           }
                       },
                       {
-                          data: function (x) {
-                              totalOT += parseFloat(x[5]);
-                              return (x[5] != 0) ? "<p class='text-green' style='font-size:16px !important';>" + x[5] + "</p>" : x[5];
+                          title: "5", data: function (x) {
+                            
+                              return DataConverter(x[5]);
                           }
                       },
                       {
-                          data: function (x) {
-                              totalOT += parseFloat(x[6]);
-                              return (x[6] != 0) ? "<p class='text-green' style='font-size:16px !important';>" + x[6] + "</p>" : x[6];
+                          title: "6", data: function (x) {
+                           
+                              return DataConverter(x[6]);
                           }
                       },
                       {
-                          data: function (x) {
-                              totalOT += parseFloat(x[7]);
-                              return (x[7] != 0) ? "<p class='text-green' style='font-size:16px !important';>" + x[7] + "</p>" : x[7];
+                          title: "7", data: function (x) {
+                              
+                              return DataConverter(x[7]);
                           }
                       },
                       {
-                          data: function (x) {
-                              totalOT += parseFloat(x[8]);
-                              return (x[8] != 0) ? "<p class='text-green' style='font-size:16px !important';>" + x[8] + "</p>" : x[8];
+                          title: "8", data: function (x) {
+                             
+                              return DataConverter(x[8]);
                           }
                       },
                       {
-                          data: function (x) {
-                              totalOT += parseFloat(x[9]);
-                              return (x[9] != 0) ? "<p class='text-green' style='font-size:16px !important';>" + x[9] + "</p>" : x[9];
+                          title: "9", data: function (x) {
+                             
+                              return DataConverter(x[9]);
                           }
                       },
                       {
-                          data: function (x) {
-                              totalOT += parseFloat(x[10]);
-                              return (x[10] != 0) ? "<p class='text-green' style='font-size:16px !important';>" + x[10] + "</p>" : x[10];
+                          title: "10", data: function (x) {
+                             
+                              return DataConverter(x[10]);
                           }
                       },
                       {
-                          data: function (x) {
-                              totalOT += parseFloat(x[11]);
-                              return (x[11] != 0) ? "<p class='text-green' style='font-size:16px !important';>" + x[11] + "</p>" : x[11];
+                          title: "11", data: function (x) {
+                             
+                              return DataConverter(x[11]);
                           }
                       },
                       {
-                          data: function (x) {
-                              totalOT += parseFloat(x[12]);
-                              return (x[12] != 0) ? "<p class='text-green' style='font-size:16px !important';>" + x[12] + "</p>" : x[12];
+                          title: "12", data: function (x) {
+                             
+                              return DataConverter(x[12]);
                           }
                       },
                       {
-                          data: function (x) {
-                              totalOT += parseFloat(x[13]);
-                              return (x[13] != 0) ? "<p class='text-green' style='font-size:16px !important';>" + x[13] + "</p>" : x[13];
+                          title: "13", data: function (x) {
+                             
+                              return DataConverter(x[13]);
                           }
                       },
                       {
-                          data: function (x) {
-                              totalOT += parseFloat(x[14]);
-                              return (x[14] != 0) ? "<p class='text-green' style='font-size:16px !important';>" + x[14] + "</p>" : x[14];
+                          title: "14", data: function (x) {
+                             
+                              return DataConverter(x[14]);
                           }
                       },
                       {
-                          data: function (x) {
-                              totalOT += parseFloat(x[15]);
-                              return (x[15] != 0) ? "<p class='text-green' style='font-size:16px !important';>" + x[15] + "</p>" : x[15];
+                          title: "15", data: function (x) {
+                             
+                              return DataConverter(x[15]);
                           }
                       },
                       {
-                          data: function (x) {
-                              totalOT += parseFloat(x[16]);
-                              return (x[16] != 0) ? "<p class='text-green' style='font-size:16px !important';>" + x[16] + "</p>" : x[16];
+                          title: "16", data: function (x) {
+                              
+                              return DataConverter(x[16]);
                           }
                       },
                       {
-                          data: function (x) {
-                              totalOT += parseFloat(x[17]);
-                              return (x[17] != 0) ? "<p class='text-green' style='font-size:16px !important';>" + x[17] + "</p>" : x[17];
+                          title: "17", data: function (x) {
+                            
+                              return DataConverter(x[17]);
                           }
                       },
                       {
-                          data: function (x) {
-                              totalOT += parseFloat(x[18]);
-                              return (x[18] != 0) ? "<p class='text-green' style='font-size:16px !important';>" + x[18] + "</p>" : x[18];
+                          title: "18", data: function (x) {
+                             
+                              return DataConverter(x[18]);
                           }
                       },
                       {
-                          data: function (x) {
-                              totalOT += parseFloat(x[19]);
-                              return (x[19] != 0) ? "<p class='text-green' style='font-size:16px !important';>" + x[19] + "</p>" : x[19];
+                          title: "19", data: function (x) {
+                             
+                              return DataConverter(x[19]);
                           }
                       },
                       {
-                          data: function (x) {
-                              totalOT += parseFloat(x[20]);
-                              return (x[20] != 0) ? "<p class='text-green' style='font-size:16px !important';>" + x[20] + "</p>" : x[20];
+                          title: "20", data: function (x) {
+                              
+                              return DataConverter(x[20]);
                           }
                       },
                       {
-                          data: function (x) {
-                              totalOT += parseFloat(x[21]);
-                              return (x[21] != 0) ? "<p class='text-green' style='font-size:16px !important';>" + x[21] + "</p>" : x[21];
+                          title: "21", data: function (x) {
+                             
+                              return DataConverter(x[21]);
                           }
                       },
                       {
-                          data: function (x) {
-                              totalOT += parseFloat(x[22]);
-                              return (x[22] != 0) ? "<p class='text-green' style='font-size:16px !important';>" + x[22] + "</p>" : x[22];
+                          title: "22", data: function (x) {
+                             
+                              return DataConverter(x[22]);
                           }
                       },
                       {
-                          data: function (x) {
-                              totalOT += parseFloat(x[23]);
-                              return (x[23] != 0) ? "<p class='text-green' style='font-size:16px !important';>" + x[23] + "</p>" : x[23];
+                          title: "23", data: function (x) {
+                             
+                              return DataConverter(x[23]);
                           }
                       },
                       {
-                          data: function (x) {
-                              totalOT += parseFloat(x[24]);
-                              return (x[24] != 0) ? "<p class='text-green' style='font-size:16px !important';>" + x[24] + "</p>" : x[24];
+                          title: "24", data: function (x) {
+                             
+                              return DataConverter(x[24]);
                           }
                       },
                       {
-                          data: function (x) {
-                              totalOT += parseFloat(x[25]);
-                              return (x[25] != 0) ? "<p class='text-green' style='font-size:16px !important';>" + x[25] + "</p>" : x[25];
+                          title: "25", data: function (x) {
+                            
+                              return DataConverter(x[25]);
                           }
                       },
                       {
-                          data: function (x) {
-                              totalOT += parseFloat(x[26]);
-                              return (x[26] != 0) ? "<p class='text-green' style='font-size:16px !important';>" + x[26] + "</p>" : x[26];
+                          title: "26", data: function (x) {
+                             
+                              return DataConverter(x[26]);
                           }
                       },
                       {
-                          data: function (x) {
-                              totalOT += parseFloat(x[27]);
-                              return (x[27] != 0) ? "<p class='text-green' style='font-size:16px !important';>" + x[27] + "</p>" : x[27];
+                          title: "27", data: function (x) {
+                            
+                              return DataConverter(x[27]);
                           }
                       },
                       {
-                          data: function (x) {
-                              totalOT += parseFloat(x[28]);
-                              return (x[28] != 0) ? "<p class='text-green' style='font-size:16px !important';>" + x[28] + "</p>" : x[28];
+                          title: "28", data: function (x) {
+                            
+                              return DataConverter(x[28]);
                           }
                       },
                       {
-                          data: function (x) {
-                              totalOT += parseFloat(x[29]);
-                              return (x[29] != 0) ? "<p class='text-green' style='font-size:16px !important';>" + x[29] + "</p>" : x[29];
+                          title: "29", data: function (x) {
+                              
+                              return DataConverter(x[29]);
                           }
                       },
                       {
-                          data: function (x) {
+                          title: "30", data: function (x) {
                               if (x[30] != null) {
-                                  totalOT += parseFloat(x[30]);
-                                  return "<p class='text-green' style='font-size:16px !important';>" + x[30] + "</p>";
+                                 
+                                  return DataConverter(x[30]);
                               }
                               else {
                                   return "";
@@ -223,10 +267,10 @@ function Initializedpage_OTHours() {
                           }
                       },
                       {
-                          data: function (x) {
+                          title: "31", data: function (x) {
                               if (x[31] != null) {
-                                  totalOT += parseFloat(x[31]);
-                                  return "<p class='text-green' style='font-size:16px !important';>" + x[31] + "</p>";
+                                  
+                                  return DataConverter(x[31]);
                               }
                               else {
                                   return "";
@@ -234,7 +278,7 @@ function Initializedpage_OTHours() {
                           }
                       },
                       {
-                          data: function (x) {
+                          title: "Total OT", data: function (x) {
                               totalHoursOT = totalOT;
                               totalOT = 0;
                               return totalHoursOT;
@@ -242,22 +286,149 @@ function Initializedpage_OTHours() {
                       },
 
                 ],
+                drawCallback: function (settings) {
+                    $("#loading_modal2").modal("hide");
+                    var table = $('#AttenanceTbl_OTHours').DataTable();
+                    table.columns.adjust();
+                },
                 initComplete: function () {
-                    var tables = $('#AttenanceTbl_OTHours').DataTable();
+                   
+                    var table = $('#AttenanceTbl_OTHours').DataTable();
+                    var start = 7;
+
+
                     var numDays = new Date($("#Year").val(), $("#Month").val(), 0).getDate();
                     for (var x = numDays; x < 31; x++) {
-                        tables.column(x + 5).visible(false);
+                        table.column(x + 7).visible(false);
                     }
-                    $('.dataTables_filter input').addClass('form-control form-control-sm');
-                    $("#loading_modal").modal("hide")
+                    for (var x = 1; x <= numDays; x++) {
+                        var daywk = GetResult(x);
+                        $(table.column(start).header()).text(daywk + '\n' + x);
+                        start++;
+                    }
+                    table.columns.adjust();
+                    table = $('#AttenanceTbl_OTHours').DataTable();
+                    table.columns.adjust();
+                    $("#OTV").show();
+                    $("#loading_modal").modal("hide");
                 },
                 fixedColumns: true,
                 fixedColumns: {
-                    leftColumns: 5
+                    leftColumns: 7
                     //rightColumns: 1
                 },
                 destroy: true
             });
+
+            var table = $('#AttenanceTbl_OTHours').DataTable();
+            $('#AttenanceTbl_OTHours').on('length.dt', function (e, settings, len) {
+                console.log('New page length: ' + len);
+                $("#loading_modal2").modal("show");
+            });
         }
     });
 }
+
+
+
+//var rawData = [[1582.3, 0], [28.95, 1], [1603, 2], [774, 3], [1245, 4], [85, 5], [1025, 6]];
+//var dataSet = [{ label: "Precious Metal Price", data: rawData, color: "#E8E800" }];
+//var ticks = [[0, "Gold"], [1, "Silver"], [2, "Platinum"], [3, "Palldium"], [4, "Rhodium"], [5, "Ruthenium"], [6, "Iridium"]];
+
+//var options = {
+//    series: {
+//        bars: {
+//            show: true
+//        }
+//    },
+//    bars: {
+//        align: "center",
+//        barWidth: 0.5,
+//        horizontal: true,
+//        fillColor: { colors: [{ opacity: 0.5 }, { opacity: 1 }] },
+//        lineWidth: 1
+//    },
+//    xaxis: {
+//        axisLabel: "Price (USD/oz)",
+//        axisLabelUseCanvas: true,
+//        axisLabelFontSizePixels: 12,
+//        axisLabelFontFamily: 'Verdana, Arial',
+//        axisLabelPadding: 10,
+//        max: 2000,
+//        tickColor: "#5E5E5E",
+      
+//        color: "black"
+//    },
+//    yaxis: {
+//        axisLabel: "Precious Metals",
+//        axisLabelUseCanvas: true,
+//        axisLabelFontSizePixels: 12,
+//        axisLabelFontFamily: 'Verdana, Arial',
+//        axisLabelPadding: 3,
+//        tickColor: "#5E5E5E",
+//        ticks: ticks,
+//        color: "black"
+//    },
+//    legend: {
+//        noColumns: 0,
+//        labelBoxBorderColor: "#858585",
+//        position: "ne"
+//    },
+//    grid: {
+//        hoverable: true,
+//        borderWidth: 2,
+//        backgroundColor: { colors: ["#171717", "#4F4F4F"] }
+//    }
+//};
+
+//$(document).ready(function () {
+//    $.plot($("#flot-placeholder"), dataSet, options);
+//    $("#flot-placeholder").UseTooltip();
+//});
+
+//var previousPoint = null, previousLabel = null;
+
+//$.fn.UseTooltip = function () {
+//    $(this).bind("plothover", function (event, pos, item) {
+//        if (item) {
+//            if ((previousLabel != item.series.label) ||
+//         (previousPoint != item.dataIndex)) {
+//                previousPoint = item.dataIndex;
+//                previousLabel = item.series.label;
+//                $("#tooltip").remove();
+
+//                var x = item.datapoint[0];
+//                var y = item.datapoint[1];
+
+//                var color = item.series.color;
+//                //alert(color)
+//                //console.log(item.series.xaxis.ticks[x].label);                
+
+//                showTooltip(item.pageX,
+//                item.pageY,
+//                color,
+//                "<strong>" + item.series.label + "</strong><br>" + item.series.yaxis.ticks[y].label +
+//                " : <strong>" + $.formatNumber(x, { format: "#,###", locale: "us" }) + "</strong> USD/oz");
+//            }
+//        } else {
+//            $("#tooltip").remove();
+//            previousPoint = null;
+//        }
+//    });
+//};
+
+//function showTooltip(x, y, color, contents) {
+//    $('<div id="tooltip">' + contents + '</div>').css({
+//        position: 'absolute',
+//        display: 'none',
+//        top: y - 10,
+//        left: x + 10,
+//        border: '2px solid ' + color,
+//        padding: '3px',
+//        'font-size': '9px',
+//        'border-radius': '5px',
+//        'background-color': '#fff',
+//        'font-family': 'Verdana, Arial, Helvetica, Tahoma, sans-serif',
+//        opacity: 0.9
+//    }).appendTo("body").fadeIn(200);
+//}

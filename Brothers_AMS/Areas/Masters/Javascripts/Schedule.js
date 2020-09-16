@@ -1,5 +1,8 @@
-﻿$(function () {
-    Initializepage();
+﻿
+var currentSectionuser = "";
+$(function () {
+    GetUser();
+   
     $('#ScheduleForm').on('submit', function (e) {
         e.preventDefault();
         if ($('#Type').val() != ""
@@ -8,21 +11,36 @@
             && $('#TimeOut').val() != ""
             ) {
             if ($('#ID').val() == "") {
+                $("#Type").val($("#shifttype").val() + ' ' + $("#Type").val());
                 AddSchedule($(this));
             }
             else {
+                $("#Type").val($("#shifttype").val() + ' ' + $("#Type").val());
                 EditSchedule($(this));
             }
         }
     });
     $("#btnAddBreaks").on("click", Addbreaks);
 
-
+   
     //$('#TimeOut22').timepicker({ timeFormat: 'h:mm:ss p' });
     
 
  
 })
+
+function GetUser() {
+    $.ajax({
+        url: '/Helper/GetSection',
+        type: 'POST',
+        datatype: "json",
+        success: function (returnData) {
+            currentSectionuser = returnData.usersection;
+            Initializepage();
+        }
+    });
+}
+
 
 function Initializepage() {
     $("#ScheduleForm")[0].reset();
@@ -33,10 +51,8 @@ function Initializepage() {
             type: "POST",
             datatype: "json"
         },
-        lengthMenu: [100, 200, 300, 500],
-        pagelength: 5000,
-        lengthChange: false,
-        scrollY: "600px",
+        lengthMenu: [[10, 50, 100], [10, 50, 100]],
+        lengthChange: true,
         scrollCollapse: true,
         serverSide: "true",
         order: [0, "asc"],
@@ -48,12 +64,12 @@ function Initializepage() {
         destroy: true,
         columns: [
             { title: "ID", data: "ID", visible: false },
-           
-            { title: "Schedule Name", data: "Type" },
+            { title: "No", data: "Rownum", name: "Rownum" },
+            { title: "Schedule Name", data: "Type", name:"Type" },
             //{ title: "Time In", data: "TimeInData" },
             //{ title: "Time Out", data: "TimeOutData" },
-            { title: "Time In", data: "TimeIn" },
-            { title: "Time Out", data: "TimeOut" },
+            { title: "Time In", data: "TimeIn", name: "TimeIn" },
+            { title: "Time Out", data: "TimeOut", name:"TimeOut" },
             {
                  title: "Breaks", data: function (x) {
                      return "<a class='btn btn-sm bg-blue btnBreaks'>"+
@@ -69,6 +85,18 @@ function Initializepage() {
 
                 }
             },
+            { title: "Create By", data: "CreateID", name:"CreateID" },
+            {
+                title: "Create Date", data: function (x) {
+                    return (x.CreateDate != null) ? moment(x.CreateDate).format("MM/DD/YYYY") : ""
+                }, name: "CreateDate"
+            },
+            { title: "Updated By", data: "Updatedby", name: "Updatedby" },
+            {
+                title: "Update Date", data: function (x) {
+                    return (x.UpdateDate != null) ? moment(x.UpdateDate).format("MM/DD/YYYY") : ""
+                }, name: "UpdateDate"
+            },
             {
                 title: "Action", data: function (x) {
                     return "<button type='button' class='btn btn-sm bg-blue btnedit' id=data" + x.ID + ">" +
@@ -80,7 +108,16 @@ function Initializepage() {
                 }
             },
         ],
+        initComplete: function () {
 
+            if (currentSectionuser != null && currentSectionuser != "Production Engineering" && currentSectionuser != "HR") {
+                var table = $('#ScheduleTable').DataTable();
+                table.column(10).visible(false);
+                $("#ScheduleForm").hide();
+            }
+
+           
+        }
     });
     $('#ScheduleTable tbody').off('click');
     $('#ScheduleTable tbody').on('click', '.btnedit', function () {
@@ -89,7 +126,16 @@ function Initializepage() {
         var data = tabledata.row($(this).parents('tr')).data();
 
         $('#ScheduleCode').val(data.ScheduleCode);
-        $('#Type').val(data.Type);
+        if (data.Type.includes("Day")) {
+            $('#Type').val(data.Type.replace('Day', '').trim());
+            $("#shifttype").val("Day");
+        }
+        else {
+            $('#Type').val(data.Type.replace('Night', ''));
+            $("#shifttype").val("Night");
+        }
+       
+       
         $('#Timein').val(data.TimeIn);
         $('#TimeOut').val(data.TimeOut);
         $('#Status').val(data.Status);
@@ -111,8 +157,7 @@ function Initializepage() {
         var tabledata = $('#ScheduleTable').DataTable();
         var data = tabledata.row($(this).parents('tr')).data();
         $("#ScheduleID").val(data.ID);
-        InitializedBreaks(data.ID)
-       
+        InitializedBreaks(data.ID);
         $("#BreakAdd").modal("show");
     });
 }
@@ -132,7 +177,14 @@ function AddSchedule(data) {
             }
             else if (returnData.msg == "zero") {
                 swal("Please recheck Schedule");
-
+                if ($('#Type').val()) {
+                    $('#Type').val($('#Type').val().replace('Day', ''));
+                    $("#shifttype").val("Day");
+                }
+                else {
+                    $('#Type').val($('#Type').val().replace('Night', ''));
+                    $("#shifttype").val("Night");
+                }
             }
             else {
                 swal("Schedule Already Exist");
@@ -156,6 +208,16 @@ function EditSchedule(data) {
                 notify("Saved!", "Successfully Saved", "success");
             }
             else {
+
+                if ($('#Type').val().indexOf('Day') > -1) {
+                    $('#Type').val($('#Type').val().replace('Day', '').trim());
+                    $("#shifttype").val("Day");
+                }
+                else {
+                    $('#Type').val($('#Type').val().replace('Night', '').trim());
+                    $("#shifttype").val("Night");
+                }
+              
                 swal("Schedule Already Exist");
             }
 
@@ -200,7 +262,7 @@ function InitializedBreaks(ID) {
                 datatype: "json",
                 data: { ID: ID }
             },
-            pagelength: 5000,
+            
             lengthChange: false,
             serverSide: "true",
             order: [0, "asc"],

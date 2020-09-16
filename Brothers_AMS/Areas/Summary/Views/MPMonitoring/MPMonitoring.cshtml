@@ -6,6 +6,18 @@
     HttpContext.Current.Response.AddHeader("Pragma", "no-cache");
     HttpContext.Current.Response.AddHeader("Expires", "0");
 }
+
+<style>
+    .resized {
+        width: 146.813px !important;
+    }
+    table.dataTable tbody th,
+    table.dataTable tbody td {
+        white-space: nowrap;
+    }
+  
+</style>
+
 <style type="text/css">
     #flotcontainer {
         width: 600px;
@@ -30,30 +42,24 @@
         font-size: 16px !important;
     }
 
+    #chartLegend .legendLabel { padding-right:10px; }
 
-    /*.flot-x-axis .flot-tick-label {
-    white-space: nowrap;
-    transform: translate(-9px, 0) rotate(-60deg);
-    text-indent: -100%;
-    transform-origin: top right;
-    text-align: right !important;
+    /*.select2 .dda{
+        width:650px !important;
+    }*/
 
-}*/
+    /*.select2 { 
+        width: 400px !important; 
+        text-align-last:center !important; 
 
+    }*/
 </style>
-<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-<link href="~/Content/assets/vendor_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.css" rel="stylesheet" />
-<link href="~/Content/assets/vendor_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css" rel="stylesheet" />
-<link href="~/Content/assets/vendor_components/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet" />
-<!-- Bootstrap CSS -->
-<link href="~/Content2/css/bootstrap.min.css" rel="stylesheet" media="screen" />
+
 
 <!-- Main CSS -->
 <link href="~/Content2/css/main.css" rel="stylesheet" media="screen" />
 
 
-<!-- Ion Icons -->
-<link href="~/Content2/fonts/icomoon/icomoon.css" rel="stylesheet" />
 
 <!-- Content Header (Page header) -->
 <section class="content-header">
@@ -79,7 +85,7 @@
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">
-                  
+                   
 
                     <div class="row">
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -89,9 +95,15 @@
                                 </div>
                                 <div class="panel-body">
                                     <div id="stacked-vertical-chart" class="chart-height1"></div>
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                        <div id="chartLegend"></div>
+                                    </div>
                                 </div>
+                               
                             </div>
+                           
                         </div>
+                       
                      
 
                     </div>
@@ -129,22 +141,21 @@
 
                     <div class="row">
                        
-                            <div class="col-md-6" id="superuser">
-                                <div class="form-group">
-                                    <div class="input-group">
-                                        <span class="input-group-addon">Section</span>
-                                        <select class="form-control fil" id="Section">
-                                            
-                                        </select>
-                                    </div>
+                        <div class="col-md-6" id="superuser">
+                           
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon">Section</span>
+                                    <select class="form-control fil select2" id="Section"></select>
                                 </div>
                             </div>
+                        </div>
                        
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <div class="input-group">
                                         <span class="input-group-addon">Shift</span>
-                                        <select class="form-control fil" id="Shift">
+                                        <select class="form-control fil select2" id="Shift">
                                        
                                         </select>
                                     </div>
@@ -157,8 +168,8 @@
                             <div class="form-group">
                                 <div class="input-group">
                                     <span class="input-group-addon">Line</span>
-                                    <select class="form-control fil" id="Line">
-                                      
+                                    <select class="form-control fil select2" id="Line">
+                                        <option value="">All Groups &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;</option>
                                     </select>
                                 </div>
                             </div>
@@ -167,13 +178,34 @@
                             <div class="form-group">
                                 <div class="input-group">
                                     <span class="input-group-addon">Process</span>
-                                    <select class="form-control fil" id="Process">
-                                       
+                                    <select class="form-control fil select2" id="Process">
+                                        <option value="">All Process &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;</option>
                                     </select>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon">Certified</span>
+                                    <select class="form-control fil select2" id="Certified"></select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="offset-md-2 col-md-4">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <button type="button" class="btn btn-flat bg-green btn-lg btn-block" id="Search">
+                                        <i class="fa fa-search"></i> Generate
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                  
                    
                             <table id="MPTable" class="table table-bordered table-responsive">
                                 <tbody></tbody>
@@ -196,8 +228,7 @@
 
 @section Scripts{
 
-    <script src="~/Content2/js/bootstrap.min.js"></script>
-
+   
 
     <script src="~/Content2/js/flot/jquery.flot.min.js"></script>
     <script src="~/Content2/js/flot/jquery.flot.time.min.js"></script>
@@ -207,22 +238,11 @@
     <script src="~/Content2/js/flot/jquery.flot.resize.min.js"></script>
 
 
-    <script src="~/Content2/js/flot/custom/line.js"></script>
-    <script src="~/Content2/js/flot/custom/area.js"></script>
-    <script src="~/Content2/js/flot/custom/combine-chart.js"></script>
-    <script src="~/Content2/js/flot/custom/stacked-area.js"></script>
-    <script src="~/Content2/js/flot/custom/vertical.js"></script>
-    <script src="~/Content2/js/flot/custom/horizontal.js"></script>
-    @*<script src="~/Content2/js/flot/custom/stacked-vertical.js"></script>
-    <script src="~/Content2/js/flot/custom/stacked-vertical2.js"></script>*@
-    <script src="~/Content2/js/flot/custom/stacked-horizontal.js"></script>
-    <script src="~/Content2/js/flot/custom/rectangular-pie.js"></script>
-    <script src="~/Content/assets/vendor_components/moment/min/moment.min.js"></script>
-    <script src="~/Content/assets/vendor_components/bootstrap-daterangepicker/daterangepicker.js"></script>
+
 <script src="~/Content/flotrotate.js"></script>
 
 
- 
+
 
     <script src="~/Scripts/pages/Lodash.js"></script>
 <script src="~/Areas/Summary/Javascript/MPMonitoring.js"></script>

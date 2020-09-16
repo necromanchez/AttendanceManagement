@@ -35,5 +35,7 @@ namespace Brothers_WMS.Models
         public string UpdateID { get; set; }
         public System.DateTime UpdateDate { get; set; }
         public string Concerns { get; set; }
+        public Nullable<System.DateTime> EmployeeAccept { get; set; }
+        public string ReasonforDecline { get; set; }
     }
 }

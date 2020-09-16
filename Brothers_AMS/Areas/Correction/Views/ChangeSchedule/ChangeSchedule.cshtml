@@ -68,9 +68,9 @@
                             <div class="input-group">
                                 <span class="input-group-addon">File Type</span>
                                 <select class="form-control autof select2" id="FileType" name="FileType" disabled>
-                                    <option value="">--SELECT--</option>
+                                    @*<option value="">--SELECT--</option>
                                     <option value=1>Individual</option>
-                                    <option value=2>Group</option>
+                                    <option value=2>Group</option>*@
                                 </select>
                             </div>
                         </div>
@@ -110,10 +110,10 @@
                             <div class="input-group">
                                 <span class="input-group-addon">Type</span>
                                 <select class="form-control autof select2" id="CSType" name="CSType" disabled>
-                                    <option value="">--SELECT--</option>
+                                    @*<option value="">--SELECT--</option>
                                     <option value="CS">Change of Shift Schedule</option>
                                     <option value="RD">Change of Rest Day</option>
-                                    <option value="NW">No Work Schedule</option>
+                                    <option value="NW">No Work Schedule</option>*@
                                 </select>                            
                             </div>
                         </div>
@@ -160,7 +160,7 @@
             </div>
 
         </div>
-        <div class="box-body">
+        <div class="box-body" id="ALLtbl">
             <div class="row"><h3 style="margin-left:20px;">Employee List</h3></div>
             <div class="table-responsive">
                 <table id="ChangeScheduleTable" class="table table-bordered table-striped table-responsive">

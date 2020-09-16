@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\EntityFramework.6.4.0\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.4.0\build\EntityFramework.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -22,6 +23,8 @@
     <IISExpressUseClassicPipelineMode />
     <UseGlobalApplicationHostFile />
     <Use64BitIISExpress />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -42,11 +45,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+      <HintPath>..\packages\EntityFramework.6.4.0\lib\net45\EntityFramework.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <HintPath>..\packages\EntityFramework.6.4.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="EPPlus, Version=4.1.0.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
@@ -70,6 +73,11 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>..\packages\Microsoft.Office.Interop.Excel.15.0.4795.1000\lib\net20\Microsoft.Office.Interop.Excel.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.Owin, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Owin.3.0.1\lib\net45\Microsoft.Owin.dll</HintPath>
       <Private>True</Private>
@@ -196,17 +204,13 @@
     <Compile Include="Areas\Correction\Controllers\OTController.cs" />
     <Compile Include="Areas\Correction\Controllers\TemplatesController.cs" />
     <Compile Include="Areas\Correction\CorrectionAreaRegistration.cs" />
-    <Compile Include="Areas\Forecast\Controllers\ForecastController.cs" />
-    <Compile Include="Areas\Forecast\Controllers\ForecastSettingController.cs" />
-    <Compile Include="Areas\Forecast\ForecastAreaRegistration.cs" />
     <Compile Include="Areas\Masters\Controllers\AgencyController.cs" />
-    <Compile Include="Areas\Masters\Controllers\ApproverController.cs" />
     <Compile Include="Areas\Masters\Controllers\CostCenterController.cs" />
     <Compile Include="Areas\Masters\Controllers\EmployeeController.cs" />
+    <Compile Include="Areas\Masters\Controllers\EmployeetapController.cs" />
     <Compile Include="Areas\Masters\Controllers\ErrorLogsController.cs" />
     <Compile Include="Areas\Masters\Controllers\FormatorTemplateController.cs" />
     <Compile Include="Areas\Masters\Controllers\LineController.cs" />
-    <Compile Include="Areas\Masters\Controllers\PositionController.cs" />
     <Compile Include="Areas\Masters\Controllers\ProcessController.cs" />
     <Compile Include="Areas\Masters\Controllers\ScheduleController.cs" />
     <Compile Include="Areas\Masters\Controllers\SectionController.cs" />
@@ -215,6 +219,7 @@
     <Compile Include="Areas\Masters\MastersAreaRegistration.cs" />
     <Compile Include="Areas\Summary\Controllers\ChangeScheduleSummaryController.cs" />
     <Compile Include="Areas\Summary\Controllers\DTRSummaryController.cs" />
+    <Compile Include="Areas\Summary\Controllers\EmployeetapController.cs" />
     <Compile Include="Areas\Summary\Controllers\MPMonitoring.cs" />
     <Compile Include="Areas\Summary\Controllers\OTSummaryController.cs" />
     <Compile Include="Areas\Summary\Controllers\WorkTimeSummaryController.cs" />
@@ -263,19 +268,63 @@
     </Compile>
     <Compile Include="Models\ChangePasswordModel.cs" />
     <Compile Include="Models\ConfigMapper.cs" />
+    <Compile Include="Models\CostCenterM.cs" />
     <Compile Include="Models\DashboardModel\MARModel.cs" />
+    <Compile Include="Models\DashboardModel\MarModelLV.cs" />
+    <Compile Include="Models\Dashboard_AbsentRate_Monthly_Result.cs">
+      <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Dashboard_AbsentRate_Result.cs">
+      <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Dashboard_AbsentRate_Yearly_Result.cs">
+      <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Dashboard_AWOLandResignRate_Monthly_Result.cs">
+      <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Dashboard_AWOLandResignRate_Result.cs">
+      <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Dashboard_AWOLandResignRate_Yearly_Result.cs">
+      <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Dashboard_LeaveBreakDown_Monthly_Result.cs">
+      <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Dashboard_LeaveBreakDown_Result.cs">
+      <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Dashboard_LeaveBreakDown_Yearly_Result.cs">
+      <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Dashboard_ManpowerAttendanceRate_Monthly_Result.cs">
+      <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Dashboard_ManpowerAttendanceRate_Result.cs">
+      <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Dashboard_ManpowerAttendanceRate_Yearly_Result.cs">
+      <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Dashboard_OvertimeRate_Monthly_Result.cs">
+      <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Dashboard_OvertimeRate_Result.cs">
+      <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Dashboard_OvertimeRate_Yearly_Result.cs">
+      <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\EmployeeSkillModel.cs" />
     <Compile Include="Models\Error_Logs.cs">
       <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ExcelMapper.cs" />
-    <Compile Include="Models\FC_EmployeeForecast.cs">
-      <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\FC_ForecastYears.cs">
-      <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\GET_AF_Approver_Result.cs">
+      <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GET_AF_CSExport_Result.cs">
       <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\GET_AF_CSRequest_Detail_Result.cs">
@@ -290,6 +339,9 @@
     <Compile Include="Models\GET_AF_CSSummary_Result.cs">
       <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\GET_AF_DTRExport_Result.cs">
+      <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\GET_AF_DTRRequest_Detail_Result.cs">
       <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
     </Compile>
@@ -302,6 +354,9 @@
     <Compile Include="Models\GET_AF_DTRSummary_Result.cs">
       <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\GET_AF_OTExport_Result.cs">
+      <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\GET_AF_OTRequest_Detail_Result.cs">
       <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
     </Compile>
@@ -312,6 +367,15 @@
       <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\GET_AF_OTSummary_Result.cs">
+      <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GET_CostCenterList_Result.cs">
+      <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GET_DuplicateRFID_Result.cs">
+      <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GET_EmployeeShift_Process_Result.cs">
       <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\GET_Employee_Approver_Result.cs">
@@ -344,6 +408,9 @@
     <Compile Include="Models\GET_Employee_OTFiling_Result.cs">
       <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\GET_Employee_ScheduleList_Result.cs">
+      <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\GET_Employee_Skills_Result.cs">
       <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
     </Compile>
@@ -353,25 +420,49 @@
     <Compile Include="Models\GET_Employee_TimeIns_Result.cs">
       <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\GET_FormatTimeKeeping_Result.cs">
+      <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GET_M_ErrorLogs_Result.cs">
+      <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GET_M_Process_Result.cs">
+      <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\GET_M_Section_Result.cs">
       <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\GET_M_SP_LineTeam_Result.cs">
       <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\GET_RPMonitoringDropDownShift_Result.cs">
+      <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\GET_RPMonitoring_GraphData_Result.cs" />
-    <Compile Include="Models\GET_RPMonitoring_Graph_Result.cs">
+    <Compile Include="Models\GET_RPMonitoring_Graphv2ALLShift_Result.cs">
+      <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GET_RPMonitoring_Graphv2_Result.cs">
       <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\GET_RPMonitoring_Result.cs" />
+    <Compile Include="Models\GET_RP_AbsentDetails_Result.cs">
+      <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\GET_RP_AttendanceMonitoring_Process_Result.cs">
       <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\GET_RP_AttendanceMonitoring_Result.cs" />
-    <Compile Include="Models\GET_RP_MPCMonitoring_Result.cs">
+    <Compile Include="Models\GET_RP_MPCMonitoringv2ALLShift_Result.cs">
+      <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GET_RP_MPCMonitoringv2_Result.cs">
       <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\GET_ScheduleList_Result.cs">
+      <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GET_TT_EmployeeLineView2_Result.cs">
       <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\GET_TT_EmployeeLineViewCount_Result.cs">
@@ -392,6 +483,9 @@
     <Compile Include="Models\GET_UserAccess_Result.cs">
       <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\GET_UserDetails_Export_Result.cs">
+      <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\GET_UserDetails_Result.cs">
       <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
     </Compile>
@@ -404,9 +498,6 @@
     <Compile Include="Models\M_Agency_Email.cs">
       <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\M_Approver.cs">
-      <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\M_Cost_Center_List.cs">
       <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
     </Compile>
@@ -414,6 +505,9 @@
       <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\M_Employee_Master_List.cs">
+      <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\M_Employee_Master_List_Deleted.cs">
       <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\M_Employee_Master_List_Schedule.cs">
@@ -431,9 +525,7 @@
     <Compile Include="Models\M_LineTeam.cs">
       <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\M_Position.cs">
-      <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
-    </Compile>
+    <Compile Include="Models\M_LineTeamModel.cs" />
     <Compile Include="Models\M_Schedule.cs">
       <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
     </Compile>
@@ -464,13 +556,7 @@
     <Compile Include="Models\M_Users.cs">
       <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\PA_Line.cs">
-      <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\PA_Pages.cs">
-      <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\PA_Section.cs">
       <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PA_Users.cs">
@@ -483,12 +569,31 @@
     <Compile Include="Models\RP_AttendanceMonitoring.cs">
       <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\RP_DropdownSchedule_Result.cs">
+      <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\ScheduleModel.cs" />
     <Compile Include="Models\SkillsModel.cs" />
+    <Compile Include="Models\TT_EmployeeTaps_Result.cs">
+      <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TT_GETPendingTimeKeepings_Result.cs">
+      <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TT_GETPendingTimeKeeping_Result.cs">
+      <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\T_TimeInOut.cs">
       <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\T_TimeTap.cs">
+      <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\UploadError.cs" />
+    <Compile Include="Models\WTGlobal.cs" />
+    <Compile Include="Models\Z_SkillRemoverAll.cs">
+      <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -498,7 +603,8 @@
     <Content Include="Areas\Correction\Javascripts\DTR.js" />
     <Content Include="Areas\Correction\Javascripts\DTRApprover.js" />
     <Content Include="Areas\Correction\Javascripts\OTApprover.js" />
-    <Content Include="Areas\Forecast\Javascripts\ForecastSettings.js" />
+    <Content Include="Areas\Masters\Javascripts\ComputerRegistration.js" />
+    <Content Include="Areas\Masters\Javascripts\Employeetap.js" />
     <Content Include="Areas\Masters\Javascripts\ErrorLogs.js" />
     <Content Include="Areas\Masters\Javascripts\FormatorTemplate.js" />
     <Content Include="Areas\Summary\Javascript\ChangeScheduleSummary.js" />
@@ -506,28 +612,11 @@
     <Content Include="Areas\Summary\Javascript\MPMonitoring.js" />
     <Content Include="Areas\Summary\Javascript\OTSummary.js" />
     <Content Include="Areas\Summary\Javascript\WorktimeSummary.js" />
+    <Content Include="Areas\Summary\Javascript\WorktimeSummary_AbsentDetails.js" />
+    <Content Include="Areas\Summary\Javascript\WorktimeSummary_EmployeeShift.js" />
+    <Content Include="Areas\Summary\Javascript\WorktimeSummary_EmployeeTimeinOut.js" />
     <Content Include="Areas\Summary\Javascript\WorktimeSummary_OTHoursBreakdown.js" />
     <Content Include="Areas\Summary\Javascript\WorktimeSummary_WorkingHours.js" />
-    <Content Include="Content\Datatable\js\dataTables.fixedColumns.min.js" />
-    <Content Include="Content\EmailForm\OTEmail.html" />
-    <Content Include="Content\flotrotate.js" />
-    <Content Include="Content\IEcssdatepicker.css" />
-    <Content Include="Content\iziToast.min.css" />
-    <Content Include="Content\iziToast.min.js" />
-    <Content Include="Content\jquery.flot.tooltip.js" />
-    <Content Include="Content\responsive-email.jpg" />
-    <Content Include="Content\TimeIncss.css" />
-    <Content Include="Areas\Correction\Javascripts\OT.js" />
-    <Content Include="Areas\Masters\Javascripts\Agency.js" />
-    <Content Include="Areas\Masters\Javascripts\Approver.js" />
-    <Content Include="Areas\Masters\Javascripts\CostCenter.js" />
-    <Content Include="Areas\Masters\Javascripts\Employee.js" />
-    <Content Include="Areas\Masters\Javascripts\LineProcessTeam.js" />
-    <Content Include="Areas\Masters\Javascripts\Position.js" />
-    <Content Include="Areas\Masters\Javascripts\Schedule.js" />
-    <Content Include="Areas\Masters\Javascripts\Section.js" />
-    <Content Include="Areas\Masters\Javascripts\Skills.js" />
-    <Content Include="Areas\Masters\Javascripts\Users.js" />
     <Content Include="Content2\css\alertify\core.css" />
     <Content Include="Content2\css\alertify\default.css" />
     <Content Include="Content2\css\barIndicator\bar-indicator.html" />
@@ -668,6 +757,7 @@
     <Content Include="Content2\js\flot\jquery.flot.stack.min.js" />
     <Content Include="Content2\js\flot\jquery.flot.time.min.js" />
     <Content Include="Content2\js\flot\jquery.flot.tooltip.min.js" />
+    <Content Include="Content2\js\flot\jquery.flot.tooltip.minOrig.js" />
     <Content Include="Content2\js\g-maps\custom-maps.js" />
     <Content Include="Content2\js\gallery\baguetteBox.js" />
     <Content Include="Content2\js\gallery\custom-gallery.js" />
@@ -716,6 +806,29 @@
     <Content Include="Content2\js\treeview\bootstrap-treeview.js" />
     <Content Include="Content2\js\treeview\custom-treeview.js" />
     <Content Include="Content2\js\wysiwyg-editor\editor.js" />
+    <Content Include="Content\images\BG.png" />
+    <Content Include="Content\images\BG1.png" />
+    <Content Include="Content\Datatable\js\dataTables.fixedColumns.min.js" />
+    <Content Include="Content\EmailForm\OTEmail.html" />
+    <Content Include="Content\flotrotate.js" />
+    <Content Include="Content\IEcssdatepicker.css" />
+    <Content Include="Content\images\BG2.png" />
+    <Content Include="Content\iziToast.min.css" />
+    <Content Include="Content\iziToast.min.js" />
+    <Content Include="Content\jquery.flot.tooltip.js" />
+    <Content Include="Content\responsive-email.jpg" />
+    <Content Include="Content\TimeIncss.css" />
+    <Content Include="Areas\Correction\Javascripts\OT.js" />
+    <Content Include="Areas\Masters\Javascripts\Agency.js" />
+    <Content Include="Areas\Masters\Javascripts\Approver.js" />
+    <Content Include="Areas\Masters\Javascripts\CostCenter.js" />
+    <Content Include="Areas\Masters\Javascripts\Employee.js" />
+    <Content Include="Areas\Masters\Javascripts\LineProcessTeam.js" />
+    <Content Include="Areas\Masters\Javascripts\Position.js" />
+    <Content Include="Areas\Masters\Javascripts\Schedule.js" />
+    <Content Include="Areas\Masters\Javascripts\Section.js" />
+    <Content Include="Areas\Masters\Javascripts\Skills.js" />
+    <Content Include="Areas\Masters\Javascripts\Users.js" />
     <Content Include="Content\assets\vendor_components\bootstrap-colorpicker\dist\css\bootstrap-colorpicker.min.css" />
     <Content Include="Content\assets\vendor_components\bootstrap-colorpicker\dist\img\bootstrap-colorpicker\alpha-horizontal.png" />
     <Content Include="Content\assets\vendor_components\bootstrap-colorpicker\dist\img\bootstrap-colorpicker\alpha.png" />
@@ -2026,14 +2139,6 @@
     <Content Include="Content\plugins\datatables\extensions\TableTools\Readme.md" />
     <Content Include="Content\plugins\input-mask\phone-codes\phone-be.json" />
     <Content Include="Content\plugins\input-mask\phone-codes\phone-codes.json" />
-    <Content Include="Content2\fonts\glyphicons-halflings-regular.eot" />
-    <Content Include="Content2\fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="Content2\fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="Content2\fonts\glyphicons-halflings-regular.woff2" />
-    <Content Include="Content2\fonts\glyphicons-halflings-regulard41d.eot" />
-    <Content Include="Content2\fonts\icomoon\icomoon771e.eot" />
-    <Content Include="Content2\fonts\icomoon\icomoon771e.ttf" />
-    <Content Include="Content2\fonts\icomoon\icomoon771e.woff" />
     <Content Include="Areas\Summary\Views\WorkTimeSummary\WorkTimeSummary.cshtml" />
     <Content Include="Areas\Correction\Views\Templates\Templates.cshtml" />
     <Content Include="Areas\Masters\Views\Approver\Approver.cshtml" />
@@ -2052,14 +2157,27 @@
     <Content Include="Models\Brothers_AMSDB.edmx.diagram">
       <DependentUpon>Brothers_AMSDB.edmx</DependentUpon>
     </Content>
-    <Content Include="Areas\Forecast\Views\web.config" />
-    <Content Include="Areas\Forecast\Views\ForecastSetting\ForecastSetting.cshtml" />
-    <Content Include="Areas\Forecast\Views\Forecast\Forecast.cshtml" />
+    <Content Include="Areas\Masters\Views\ComputerRegistration\ComputerRegistration.cshtml" />
+    <Content Include="Areas\Masters\Views\Employeetap\Employeetap.cshtml" />
+    <Content Include="Areas\Summary\Views\Employeetap\Employeetap.cshtml" />
+    <Content Include="Content2\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content2\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Content2\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Content2\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="Content2\fonts\glyphicons-halflings-regulard41d.eot" />
+    <Content Include="Content2\fonts\icomoon\icomoon771e.eot" />
+    <Content Include="Content2\fonts\icomoon\icomoon771e.ttf" />
+    <Content Include="Content2\fonts\icomoon\icomoon771e.woff" />
     <None Include="Properties\PublishProfiles\BWMS.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\CustomPages\EmailApprover.js" />
-    <Content Include="Scripts\Dashboard\Dashboard_AbsentRate.js" />
-    <Content Include="Scripts\Dashboard\Dashboard_ManpowerAttendanceRate.js" />
+    <Content Include="Scripts\Dashboards\AbsentRate.js" />
+    <Content Include="Scripts\Dashboards\AwolandresignRate.js" />
+    <Content Include="Scripts\Dashboards\LeaveBreakdown.js" />
+    <Content Include="Scripts\Dashboards\ManpowerAttendanceRate.js" />
+    <Content Include="Scripts\Dashboards\MonthlyDashboard.js" />
+    <Content Include="Scripts\Dashboards\OvertimeRate.js" />
+    <Content Include="Scripts\Dashboards\YearlyDashboard.js" />
     <Content Include="Scripts\demo.js" />
     <Content Include="Scripts\helper.js" />
     <Content Include="Scripts\information-board.js" />
@@ -2102,7 +2220,7 @@
     <Content Include="Scripts\_references.js" />
     <Content Include="Scripts\Template\email.html" />
     <Content Include="Template\email.html" />
-    <Content Include="Views\Home\Index2.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -2112,7 +2230,9 @@
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
-    <Content Include="Views\Web.config" />
+    <Content Include="Views\Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
@@ -2139,7 +2259,6 @@
     <Content Include="Views\TimeInandOut\TimeInandOut.cshtml" />
     <Content Include="Views\LineView\LineView.cshtml" />
     <Content Include="Views\EmailApprover\EmailApprover.cshtml" />
-    <Content Include="TemplateFiles\SkillsTemplate.xlsx" />
     <Content Include="TemplateFiles\EmployeeSkillTemplate.xlsx" />
     <Content Include="TemplateFiles\StandardTemplate\StandardizeCS_template.xlsx" />
     <Content Include="TemplateFiles\StandardTemplate\StandardizeDTR_template.xlsx" />
@@ -2155,18 +2274,23 @@
     <Content Include="TemplateFiles\EmployeePosition.xlsx" />
     <Content Include="TemplateFiles\AttendanceMonitoring.xlsx" />
     <Content Include="TemplateFiles\ActiveInactiveReport.xlsx" />
-    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Home\IndexOrig.cshtml" />
+    <Content Include="TemplateFiles\ProcessTemplate.xlsx" />
+    <Content Include="TemplateFiles\UploadEmployeeSchedule.xlsx" />
+    <Content Include="TemplateFiles\UploadExprod.xlsx" />
+    <Content Include="TemplateFiles\ExportReports\ManPowerMonitoring.xlsx" />
+    <Content Include="TemplateFiles\ExportReports\WorkTimeSummary.xlsx" />
+    <Content Include="TemplateFiles\ExportReports\AbsentDetails.xlsx" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\Correction\Models\" />
     <Folder Include="Areas\Correction\Views\Shared\" />
-    <Folder Include="Areas\Forecast\Models\" />
-    <Folder Include="Areas\Forecast\Views\Shared\" />
     <Folder Include="Areas\Masters\Models\" />
     <Folder Include="Areas\Masters\Views\Shared\" />
     <Folder Include="Areas\Summary\Models\" />
     <Folder Include="Areas\Summary\Views\Shared\" />
+    <Folder Include="Areas\Summary\Views\WorktimeEmployeeShift\" />
     <Folder Include="TemplateFiles\OTBatchfiles\" />
     <Folder Include="Uploads\" />
     <Folder Include="Views\Helper\" />
@@ -2215,6 +2339,14 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.0\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.0\build\EntityFramework.props'))" />
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.0\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.0\build\EntityFramework.targets'))" />
+  </Target>
+  <Import Project="..\packages\EntityFramework.6.4.0\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.4.0\build\EntityFramework.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

@@ -39,147 +39,173 @@ namespace Brothers_WMS.Controllers
         {
             int Quantity { get; set; }
         }
-        
+
+
         public ActionResult GetLineperSection(string Section, string Shift)
         {
-            try
-            {
-                Shift = (Shift.Contains("Day")) ? "Day" : "Night";
+            Shift = (Shift.Contains("Day")) ? "Day" : "Night";
+            List<GET_TT_EmployeeLineView2_Result> list = db.GET_TT_EmployeeLineView2(Section,Shift).ToList();
+            return Json(new {  theLineList = list }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetEmployees(long Line, long ProcessID, string Shift)
+        {
+            Shift = (Shift.Contains("Day")) ? "Day" : "Night";
+            List<GET_TT_EmployeeLineView_Result> Employees = db.GET_TT_EmployeeLineView(Line,ProcessID, Shift).ToList();
+            return Json(new { Employees = Employees }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetLineprocesses(long LineID, string Shift)
+        {
+            Shift = (Shift.Contains("Day")) ? "Day" : "Night";
+            List<GET_TT_EmployeeLineViewCount_Result> Process = db.GET_TT_EmployeeLineViewCount(LineID, Shift).ToList();
+            return Json(new { Process = Process }, JsonRequestBehavior.AllowGet);
+        }
+
+        #region rr
+        //public ActionResult GetLineperSection2(string Section, string Shift)
+        //{
+        //    try
+        //    {
+        //        Shift = (Shift.Contains("Day")) ? "Day" : "Night";
                
-                List<string> costcode = (from c in db.M_Cost_Center_List where c.GroupSection == Section select c.Cost_Center).ToList();
+        //        List<string> costcode = (from c in db.M_Cost_Center_List where c.GroupSection == Section select c.Cost_Center).ToList();
                
                
 
-                #region FOR SUPER USER
+        //        #region FOR SUPER USER
                
-                    List<Line_Process> theLineList = new List<Line_Process>();
-                    List<List<GET_TT_EmployeeLineView_Result>> Employeesperprocess = new List<List<GET_TT_EmployeeLineView_Result>>();
-                    List<M_LineTeam> Line = new List<M_LineTeam>();
-                    List<M_Cost_Center_List> SectionList = new List<M_Cost_Center_List>();
+        //            List<Line_Process> theLineList = new List<Line_Process>();
+        //            List<List<GET_TT_EmployeeLineView_Result>> Employeesperprocess = new List<List<GET_TT_EmployeeLineView_Result>>();
+        //            List<M_LineTeam> Line = new List<M_LineTeam>();
+        //            List<M_Cost_Center_List> SectionList = new List<M_Cost_Center_List>();
 
-                    if(costcode.Count == 0)
-                    {
-                        
-                        SectionList = (from c in db.M_Cost_Center_List select c).Where(x => costcode.Contains(x.Cost_Center)).ToList();
-                }
-                    else
-                    {
-                        SectionList = (from c in db.M_Cost_Center_List select c).Where(x => costcode.Contains(x.Cost_Center)).ToList();
-                    }
+        //            if(costcode.Count == 0)
+        //            {
+        //                SectionList = (from c in db.M_Cost_Center_List select c).Where(x => costcode.Contains(x.Cost_Center)).ToList();
+        //            }
+        //            else
+        //            {
+        //                SectionList = (from c in db.M_Cost_Center_List select c).Where(x => costcode.Contains(x.Cost_Center)).ToList();
+        //            }
                    
-                    List<string> Sectionpart = new List<string>();
-                    foreach (M_Cost_Center_List sectionhere in SectionList)
-                    {
-                        Line = (from c in db.M_LineTeam
-                                where c.Section == sectionhere.Cost_Center
-                                && c.IsDeleted != true
-                                select c).ToList();
+        //            List<string> Sectionpart = new List<string>();
+        //            foreach (M_Cost_Center_List sectionhere in SectionList)
+        //            {
+        //                Line = (from c in db.M_LineTeam
+        //                        where c.Section == sectionhere.Cost_Center
+        //                        && c.IsDeleted != true
+                               
+        //                        select c).ToList();
 
-                        if (Line.Count > 0)
-                        {
+        //                if (Line.Count > 0)
+        //                {
                         
-                            Sectionpart.Add(sectionhere.Section);
-                            foreach (M_LineTeam line in Line)
-                            {
-                                Employeesperprocess = new List<List<GET_TT_EmployeeLineView_Result>>();
-                                Line_Process LineEmployee = new Line_Process();
-                                LineEmployee.Line = line.Line;
-                                long? lineid = line.ID;
-                                LineEmployee.IdealMPperLine = db.GET_TT_EmployeeLineViewCount(lineid, Shift).ToList();
+        //                    Sectionpart.Add(sectionhere.Section);
+        //                    foreach (M_LineTeam line in Line)
+        //                    {
+        //                        Employeesperprocess = new List<List<GET_TT_EmployeeLineView_Result>>();
+        //                        Line_Process LineEmployee = new Line_Process();
+        //                        LineEmployee.Line = line.Line;
+        //                        long? lineid = line.ID;
+        //                        LineEmployee.IdealMPperLine = db.GET_TT_EmployeeLineViewCount(lineid, Shift).ToList();
 
-                                foreach (GET_TT_EmployeeLineViewCount_Result process in LineEmployee.IdealMPperLine)
-                                {
-                                    List<GET_TT_EmployeeLineView_Result> emp = db.GET_TT_EmployeeLineView(lineid, Shift).ToList().Where(x => x.Process == process.Skill).ToList();
+        //                        foreach (GET_TT_EmployeeLineViewCount_Result process in LineEmployee.IdealMPperLine)
+        //                        {
+        //                            List<GET_TT_EmployeeLineView_Result> emp = db.GET_TT_EmployeeLineView(lineid, Shift).ToList().Where(x => x.Process == process.Skill).ToList();
+        //                            emp.OrderBy(x => x.Position).ToList();
+        //                            Employeesperprocess.Add(emp);
 
-                                    Employeesperprocess.Add(emp);
+        //                        }
+        //                        LineEmployee.Employeeperline = Employeesperprocess;
+        //                        LineEmployee.SM = 0;
+        //                        LineEmployee.CM = 0;
+        //                    //foreach (GET_TT_EmployeeLineViewCount_Result c in LineEmployee.IdealMPperLine)
+        //                    //{
+        //                    //    LineEmployee.SM += c.Count;
+        //                    //}
+        //                    LineEmployee.SM = LineEmployee.IdealMPperLine.Sum(x => x.Count);
 
-                                }
-                                LineEmployee.Employeeperline = Employeesperprocess;
-                                LineEmployee.SM = 0;
-                                LineEmployee.CM = 0;
-                                foreach (GET_TT_EmployeeLineViewCount_Result c in LineEmployee.IdealMPperLine)
-                                {
-                                    LineEmployee.SM += c.Count;
-                                }
-                                foreach (GET_TT_EmployeeLineViewCount_Result c in LineEmployee.IdealMPperLine)
-                                {
-                                    LineEmployee.CM += c.CurrentCount;
-                                }
-                                LineEmployee.Section = sectionhere.GroupSection;
-                                theLineList.Add(LineEmployee);
-                            }
-                        }
+        //                    //foreach (GET_TT_EmployeeLineViewCount_Result c in LineEmployee.IdealMPperLine)
+        //                    //{
+        //                    //    LineEmployee.CM += c.CurrentCount;
+        //                    //}
+        //                    LineEmployee.CM += LineEmployee.IdealMPperLine.Sum(x=>x.CurrentCount);
+        //                        LineEmployee.Section = sectionhere.GroupSection;
+        //                        theLineList.Add(LineEmployee);
+        //                    }
+        //                }
 
-                    }
+        //            }
 
-                   return Json(new { Line = Line, theLineList = theLineList }, JsonRequestBehavior.AllowGet);
+        //           return Json(new { Line = Line, theLineList = theLineList }, JsonRequestBehavior.AllowGet);
                
-                #endregion
+        //        #endregion
 
 
-                #region FOR USER
-                //else
-                //{
-                //    List<Line_Process> theLineList = new List<Line_Process>();
-                //    List<List<GET_TT_EmployeeLineView_Result>> Employeesperprocess = new List<List<GET_TT_EmployeeLineView_Result>>();
-                //    List<M_LineTeam> Line = new List<M_LineTeam>();
+        //        #region FOR USER
+        //        //else
+        //        //{
+        //        //    List<Line_Process> theLineList = new List<Line_Process>();
+        //        //    List<List<GET_TT_EmployeeLineView_Result>> Employeesperprocess = new List<List<GET_TT_EmployeeLineView_Result>>();
+        //        //    List<M_LineTeam> Line = new List<M_LineTeam>();
 
-                //    Line = (from c in db.M_LineTeam
-                //            where c.Section == user.CostCode
-                //            && c.IsDeleted != true
-                //            select c).ToList();
+        //        //    Line = (from c in db.M_LineTeam
+        //        //            where c.Section == user.CostCode
+        //        //            && c.IsDeleted != true
+        //        //            select c).ToList();
 
                 
 
-                //    foreach (M_LineTeam line in Line)
-                //    {
-                //        Employeesperprocess = new List<List<GET_TT_EmployeeLineView_Result>>();
-                //        Line_Process LineEmployee = new Line_Process();
-                //        LineEmployee.Line = line.Line;
-                //        long? lineid = line.ID;
-                //        LineEmployee.IdealMPperLine = db.GET_TT_EmployeeLineViewCount(lineid).ToList();
+        //        //    foreach (M_LineTeam line in Line)
+        //        //    {
+        //        //        Employeesperprocess = new List<List<GET_TT_EmployeeLineView_Result>>();
+        //        //        Line_Process LineEmployee = new Line_Process();
+        //        //        LineEmployee.Line = line.Line;
+        //        //        long? lineid = line.ID;
+        //        //        LineEmployee.IdealMPperLine = db.GET_TT_EmployeeLineViewCount(lineid).ToList();
 
-                //        foreach (GET_TT_EmployeeLineViewCount_Result process in LineEmployee.IdealMPperLine)
-                //        {
-                //            List<GET_TT_EmployeeLineView_Result> emp = db.GET_TT_EmployeeLineView(lineid).ToList().Where(x => x.Process == process.Skill).ToList();
+        //        //        foreach (GET_TT_EmployeeLineViewCount_Result process in LineEmployee.IdealMPperLine)
+        //        //        {
+        //        //            List<GET_TT_EmployeeLineView_Result> emp = db.GET_TT_EmployeeLineView(lineid).ToList().Where(x => x.Process == process.Skill).ToList();
 
-                //            Employeesperprocess.Add(emp);
+        //        //            Employeesperprocess.Add(emp);
 
-                //        }
-                //        LineEmployee.Employeeperline = Employeesperprocess;
-                //        LineEmployee.SM = 0;
-                //        LineEmployee.CM = 0;
-                //        foreach (GET_TT_EmployeeLineViewCount_Result c in LineEmployee.IdealMPperLine)
-                //        {
-                //            LineEmployee.SM += c.Count;
-                //        }
-                //        foreach (GET_TT_EmployeeLineViewCount_Result c in LineEmployee.IdealMPperLine)
-                //        {
-                //            LineEmployee.CM += c.CurrentCount;
-                //        }
-                //        theLineList.Add(LineEmployee);
-                //    }
+        //        //        }
+        //        //        LineEmployee.Employeeperline = Employeesperprocess;
+        //        //        LineEmployee.SM = 0;
+        //        //        LineEmployee.CM = 0;
+        //        //        foreach (GET_TT_EmployeeLineViewCount_Result c in LineEmployee.IdealMPperLine)
+        //        //        {
+        //        //            LineEmployee.SM += c.Count;
+        //        //        }
+        //        //        foreach (GET_TT_EmployeeLineViewCount_Result c in LineEmployee.IdealMPperLine)
+        //        //        {
+        //        //            LineEmployee.CM += c.CurrentCount;
+        //        //        }
+        //        //        theLineList.Add(LineEmployee);
+        //        //    }
 
-                //    return Json(new { Line = Line, theLineList = theLineList }, JsonRequestBehavior.AllowGet);
-                //}
-                #endregion
+        //        //    return Json(new { Line = Line, theLineList = theLineList }, JsonRequestBehavior.AllowGet);
+        //        //}
+        //        #endregion
 
               
 
-            }
-            catch (Exception err)
-            {
-                Error_Logs error = new Error_Logs();
-                error.PageModule = "Master - Agency";
-                error.ErrorLog = err.Message;
-                error.DateLog = DateTime.Now;
-                error.Username = user.UserName;
-                db.Error_Logs.Add(error);
-                db.SaveChanges();
-                return Json(new { msg = err.Message }, JsonRequestBehavior.AllowGet);
-            }
-        }
-
+        //    }
+        //    catch (Exception err)
+        //    {
+        //        Error_Logs error = new Error_Logs();
+        //        error.PageModule = "Master - Agency";
+        //        error.ErrorLog = err.Message;
+        //        error.DateLog = DateTime.Now;
+        //        error.Username = user.UserName;
+        //        db.Error_Logs.Add(error);
+        //        db.SaveChanges();
+        //        return Json(new { msg = err.Message }, JsonRequestBehavior.AllowGet);
+        //    }
+        //}
+        #endregion
         public ActionResult GetCurrentUser()
         {
             try
@@ -202,6 +228,7 @@ namespace Brothers_WMS.Controllers
             {
                 GroupSection = user.CostCode;
             }
+            Name = Name.ToLower();
             List<GET_Employee_NameAutocompletes_Result> list = db.GET_Employee_NameAutocompletes(Name, GroupSection).ToList();
           
             return Json(new { list = list }, JsonRequestBehavior.AllowGet);
@@ -213,10 +240,14 @@ namespace Brothers_WMS.Controllers
             return Json(new { Employee = Employee }, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult Getusersession()
+        {
+            return Json(new { user = user }, JsonRequestBehavior.AllowGet);
+        }
+    
         public ActionResult RemoveEmployee(string Name)
         { 
-            db.LineView_RemoveEmployee(Name);
-
+            db.LineView_RemoveEmployee(Name, user.UserName);
             return Json(new { Employee = "success" }, JsonRequestBehavior.AllowGet);
         }
     }

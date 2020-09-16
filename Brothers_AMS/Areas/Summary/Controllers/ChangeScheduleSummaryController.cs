@@ -32,7 +32,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
         public ActionResult GetApproverCSSummaryList(string Refno, string Section, DateTime? DateFrom, DateTime? DateTo, string Status)
         {
             DateFrom = (DateFrom == null) ? new DateTime(1990, 1, 1) : DateFrom;
-            DateTo = (DateTo == null) ? DateTime.Now : DateTo;
+            DateTo = (DateTo == null) ? db.TT_GETTIME().FirstOrDefault() : DateTo;
             int start = Convert.ToInt32(Request["start"]);
             int length = Convert.ToInt32(Request["length"]);
             string searchValue = (Session["RNO"] != null) ? Session["RNO"].ToString() : Request["search[value]"];
@@ -104,7 +104,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
             {
                 string templateFilename = "CS_template.xlsx";
                 string dir = Path.GetTempPath();
-                string datetimeToday = DateTime.Now.ToString("yyMMddhhmmss");
+                string datetimeToday = db.TT_GETTIME().FirstOrDefault().ToString();//DateTime.Now;.ToString("yyMMddhhmmss");
                 string filename = string.Format("CS_template{0}.xlsx", datetimeToday);
                 FileInfo newFile = new FileInfo(Path.Combine(dir, filename));
                 string apptemplatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"TemplateFiles\StandardTemplate\", templateFilename);

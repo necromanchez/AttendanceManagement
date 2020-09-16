@@ -74,11 +74,10 @@ function Initializepage() {
             type: "POST",
             datatype: "json"
         },
-        lengthMenu: [100, 200, 300, 500],
-        pagelength: 5000,
-        lengthChange: false,
-        scrollY: "600px",
-        scrollCollapse: true,
+        lengthMenu: [10, 50, 100],
+        
+        lengthChange: true,
+       
         serverSide: "true",
         order: [0, "asc"],
         processing: "true",
@@ -88,14 +87,18 @@ function Initializepage() {
         //dom: 'Bfrtip',
         destroy: true,
         columns: [
+            
+           
+         
             { title: "ID", data: "ID", visible: false },
-            { title: "AgencyCode", data: "AgencyCode" },
-            { title: "Agency", data: "AgencyName" },
-            { title: "Address", data: "Address" },
-            { title: "Telephone No", data: "TelNo" },
-            { title: "ISO Details (OT)", data: "ISO_OT" },
-            { title: "ISO Details (CS)", data: "ISO_CS" },
-            { title: "ISO Details (DTR)", data: "ISO_DTR" },
+            { title: "No", data: "Rownum", name:"Rownum" },
+            { title: "AgencyCode", data: "AgencyCode", name: "AgencyCode" },
+            { title: "Agency", data: "AgencyName", name: "AgencyName" },
+            { title: "Address", data: "Address", name: "Address" },
+            { title: "Telephone No", data: "TelNo", name:"TelNo" },
+            { title: "ISO Details (OT)", data: "ISO_OT", name: "ISO_OT" },
+            { title: "ISO Details (CS)", data: "ISO_CS", name: "ISO_CS" },
+            { title: "ISO Details (DTR)", data: "ISO_DTR", name: "ISO_DTR" },
             {
                     title: "Email", data: function (x) {
                         return "<button type='button' class='btn btn-sm' onclick=getAgencyEmail('" + x.AgencyCode + "') style='background-color:#039a8c; color:white' alt='alert' class='model_img img-fluid'>" +

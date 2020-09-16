@@ -20,5 +20,6 @@ namespace Brothers_WMS.Models
         public string Line { get; set; }
         public string Skill { get; set; }
         public string ModifiedStatus { get; set; }
+        public int OrderPrio { get; set; }
     }
 }

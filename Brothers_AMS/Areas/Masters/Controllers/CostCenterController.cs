@@ -34,11 +34,11 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                 Error_Logs error = new Error_Logs();
                 error.PageModule = "Master - Employee";
                 error.ErrorLog = err.Message;
-                error.DateLog = DateTime.Now;
+                error.DateLog = db.TT_GETTIME().FirstOrDefault();//DateTime.Now;;
                 error.Username = user.UserName;
                 db.Error_Logs.Add(error);
                 db.SaveChanges();
-                return Json(new { msg = err.Message }, JsonRequestBehavior.AllowGet);
+                return Json(new { msg = err.Message, msgs=err.InnerException }, JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -51,14 +51,28 @@ namespace Brothers_WMS.Areas.Masters.Controllers
             string sortColumnName = Request["columns[" + Request["order[0][column]"] + "][name]"];
             string sortDirection = Request["order[0][dir]"];
 
-            List<M_Cost_Center_List> list = new List<M_Cost_Center_List>();
-            list = (from c in db.M_Cost_Center_List
-                    select c).ToList();
+            List<GET_CostCenterList_Result> list = new List<GET_CostCenterList_Result>();
+            if (user.CostCode != null)
+            {
+                string co = (from c in db.M_Cost_Center_List where c.Cost_Center == user.CostCode select c.GroupSection).FirstOrDefault();
+                List<string> GroupSec = (from c in db.M_Cost_Center_List where c.GroupSection == co select c.Cost_Center).ToList();
+
+                list = (from c in db.GET_CostCenterList().ToList()
+                        where GroupSec.Contains(c.Cost_Center)
+                        select c).ToList();
+                list = list.OrderBy(x => x.GroupSection).ToList();
+            }
+            else
+            {
+                list = (from c in db.GET_CostCenterList()
+                        orderby c.GroupSection
+                        select c).ToList();
+            }
 
             if (!string.IsNullOrEmpty(searchValue))//filter
             {
                 list = list.Where(x => x.Cost_Center.ToLower().Contains(searchValue.ToLower())
-                || x.Section.ToLower().Contains(searchValue.ToLower())).ToList<M_Cost_Center_List>();
+                || x.Section.ToLower().Contains(searchValue.ToLower())).ToList<GET_CostCenterList_Result>();
             }
             if (sortColumnName != "" && sortColumnName != null)
             {
@@ -76,7 +90,7 @@ namespace Brothers_WMS.Areas.Masters.Controllers
 
 
             //paging
-            list = list.Skip(start).Take(length).ToList<M_Cost_Center_List>();
+            list = list.Skip(start).Take(length).ToList<GET_CostCenterList_Result>();
             return Json(new { data = list, draw = Request["draw"], recordsTotal = totalrows, recordsFiltered = totalrowsafterfiltering }, JsonRequestBehavior.AllowGet);
         }
 
@@ -89,8 +103,30 @@ namespace Brothers_WMS.Areas.Masters.Controllers
             cost.GroupSection = (SectionGroup == "")?null: SectionGroup;
             db.Entry(cost).State = EntityState.Modified;
             db.SaveChanges();
+
+            List<CostCenterM> newCostCode = (from c in db.M_Cost_Center_List
+                                             where c.GroupSection == "" || c.GroupSection == null
+                                             select new CostCenterM
+                                             {
+                                                 CostCodenew = c.Cost_Center,
+                                                 CostCodenewname = c.Section
+                                             }).ToList();
+            System.Web.HttpContext.Current.Session["newCostCode"] = newCostCode;
+
             return Json(new { }, JsonRequestBehavior.AllowGet);
         }
 
+
+        public ActionResult UpdateGroupDept(string CostCode, string DepartmentGroup)
+        {
+            M_Cost_Center_List cost = (from c in db.M_Cost_Center_List
+                                       where c.Cost_Center == CostCode
+                                       select c).FirstOrDefault();
+
+            cost.DepartmentGroup = (DepartmentGroup == "") ? null : DepartmentGroup;
+            db.Entry(cost).State = EntityState.Modified;
+            db.SaveChanges();
+            return Json(new { }, JsonRequestBehavior.AllowGet);
+        }
     }
 }

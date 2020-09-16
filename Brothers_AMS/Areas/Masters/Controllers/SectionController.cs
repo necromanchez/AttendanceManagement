@@ -31,7 +31,7 @@ namespace Brothers_WMS.Areas.Masters.Controllers
             string sortDirection = Request["order[0][dir]"];
             supersection = (supersection == null) ? "" : supersection;
             List<GET_M_Section_Result> list = new List<GET_M_Section_Result>();
-            if (user.CostCode != "")
+            if (user.CostCode != "" && user.CostCode != null)
             {
                 list = db.GET_M_Section(user.CostCode).ToList(); //List<M_Section> list = new List<M_Section>();
 

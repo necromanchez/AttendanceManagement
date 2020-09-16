@@ -1,7 +1,8 @@
 ﻿$(function () {
-    Dropdown_select('Section', "/Helper/GetDropdown_SectionAMS");
-
-    Initializepage();
+    //Dropdown_select('Section', "/Helper/GetDropdown_SectionAMS");
+    Dropdown_selectMPMain2('Section', "/Helper/GetDropdown_SectionAMS?Dgroup=");
+    GetUser();
+   
     $('#UsersForm').on('submit', function (e) {
         e.preventDefault();
     
@@ -65,7 +66,11 @@
 
     $("#downloadbtnusers").on("click", function () { window.open('../Users/ExportUsers?Section=' + $("#Section").val()); });
 
-    $("#Section").on("change", Initializepage);
+    $("#Section").on("change", function () {
+
+        Initializepage();
+        Initializepage_Normal();
+    });
     $("#closepagemodal").on("click", function () {
         var changes = SavePageAccessChecker();
         if (changes) {
@@ -76,7 +81,45 @@
         }
        
     })
+
+
+    $('#tabs').on('shown.bs.tab', function (event) {
+        var x = $(event.target)[0].id;         // active tab
+        $(".padhider").hide();
+            switch (x) {
+                case "SuperUser":
+                  
+                    $("#NormalUsertab").hide();
+                    $("#SuperUsertab").show();
+                    break;
+                case "NormalUser":
+                    
+                    $("#NormalUsertab").show();
+                    $("#SuperUsertab").hide();
+                    
+                    break;
+               
+            }
+     
+
+        //var y = $(event.relatedTarget).text();  // previous tab
+
+    });
 })
+var currentSectionuser = "";
+function GetUser() {
+    $.ajax({
+        url: '/Helper/GetSection',
+        type: 'POST',
+        datatype: "json",
+        success: function (returnData) {
+            currentSectionuser = returnData.usersection;
+            Initializepage();
+            Initializepage_Normal();
+        }
+    });
+}
+
 var currentuser;
 var GoodCount;
 var SaveGoodCount = 0;
@@ -91,8 +134,14 @@ function Initializepage() {
             datatype: "json",
             data:{supersection:$("#Section").val()}
         },
-        displayStart: pagecount,
-        lengthChange: false,
+        lengthMenu: [[10, 50, 100], [10, 50, 100]],
+
+        lengthChange: true,
+
+        scrollCollapse: true,
+        serverSide: "true",
+        order: [0, "asc"],
+        processing: "true",
         serverSide: "true",
         order: [0, "asc"],
         processing: "true",
@@ -101,12 +150,23 @@ function Initializepage() {
         },
         //dom: 'Bfrtip',
         destroy: true,
-        columns: [
-            //{ title: "ID", data: "ID", visible: false },
-            { title: "UserName", data: "UserName" },
-            { title: "First Name", data: "FirstName" },
-            { title: "Last Name", data: "LastName" },
+        initComplete: function () {
 
+            if (currentSectionuser == "Production Engineering") {
+                var table = $('#UsersTable').DataTable();
+                table.column(10).visible(true);
+            }
+
+
+        },
+        columns: [
+            { title: "No", data: "Rownum", name: "Rownum" },
+            { title: "ID", data: "ID", name: "ID", visible: false },
+           
+            { title: "UserName", data: "UserName", name: "UserName" },
+            { title: "First Name", data: "FirstName", name: "UserName" },
+            { title: "Last Name", data: "LastName", name: "UserName" },
+            { title: "Email", data: "Email", name: "UserName" },
             //{
             //       title: "Section", data: function (x) {
             //           return "<button type='button' data-toggle='modal' data-target='#SectionAdd' class='btn bg-blue btnsection' id=data" + x.ID + ">" +
@@ -115,7 +175,7 @@ function Initializepage() {
             //       }
             //},
             {
-                title: "Section", data: "SectionGroup"
+                title: "Section", data: "SectionGroup", name: "SectionGroup"
                 
             },
             //{
@@ -134,22 +194,31 @@ function Initializepage() {
             },
             {
                 title: "Status", data: function (x) {
-                    var label = (x.Status.toLowerCase() == "active") ? "<button type='button' class='btn btn-xs bg-green'>Active</button>" : "<button type='button' class='btn btn-xs bg-red'>Inactive</button>"
-                    return label
+                    if (x.Status != null) {
+                        var label = (x.Status.toLowerCase() == "active") ? "<button type='button' class='btn btn-xs bg-green'>Active</button>" : "<button type='button' class='btn btn-xs bg-red'>Inactive</button>"
+                        return label
+                    }
+                    else {
+                        return "";
+                    }
                 }
             },
             {
-                title: "Action", data: function (x) {
-                    //return "<button type='button' class='btn bg-blue btnedit' id=data" + x.ID + ">" +
-                    //            "<i class='fa fa-edit ' ></i> Edit" +
-                    //        "</button>" +
-                    //        "<button type='button' class='btn bg-red btndelete' alt='alert' class='model_img img-fluid'>" +
-                    //            "<i class='fa fa-trash '></i> Delete" +
-                    //        "</button>"
+                title: "Delete", data: function (x) {
+                  
                     return "<button type='button' class='btn bg-red btndelete' alt='alert' class='model_img img-fluid'>" +
-                               "<i class='fa fa-trash '></i> Delete" +
-                           "</button>"
+                        "<i class='fa fa-trash '></i> Delete" +
+                        "</button>"
+                       
                 }
+            },
+            {
+                title: "Reset", data: function (x) {
+                  
+                    return "<button type='button' class='btn bg-blue btnreset' alt='alert' class='model_img img-fluid'>" +
+                            "<i class='fa fa-refresh '></i> Reset Password" +
+                            "</button>"
+                }, visible: false
             },
         ],
 
@@ -174,7 +243,7 @@ function Initializepage() {
         var tabledata = $('#UsersTable').DataTable();
         var data = tabledata.row($(this).parents('tr')).data();
         $('#ID').val(data.UserName);
-        Deletionheres('../Users/DeleteUsers', data.UserName, data.Users);
+        Deletionheres('../Users/DeleteUsers', data.ID, data.Users);
 
     });
     $('#UsersTable tbody').on('click', '.btnsection', function () {
@@ -191,7 +260,13 @@ function Initializepage() {
         GetLineAccess(data.UserName, data.Section);
 
     });
-    
+    $('#UsersTable tbody').on('click', '.btnreset', function () {
+        var tabledata = $('#UsersTable').DataTable();
+        var data = tabledata.row($(this).parents('tr')).data();
+        $('#ID').val(data.UserName);
+        Resetheres('../Users/ResetPassUsers', data.ID, data.Users);
+
+    });
 
     $('#UsersTable tbody').on('click', '.btnPageAccess', function () {
         $('#ModalPageAccess').modal({
@@ -300,6 +375,246 @@ function Initializepage() {
     pagecount = 0;
 }
 
+function Initializepage_Normal() {
+    //$("#UsersForm")[0].reset();
+    //$("#ID").val("");
+    $('#NormalUserTable').DataTable({
+        ajax: {
+            url: '../Users/GetUsersList_Normal',
+            type: "POST",
+            datatype: "json",
+            data: { supersection: $("#Section").val() }
+        },
+        lengthMenu: [[10, 50, 100], [10, 50, 100]],
+
+        lengthChange: true,
+
+        scrollCollapse: true,
+        serverSide: "true",
+        order: [0, "asc"],
+        processing: "true",
+        serverSide: "true",
+        order: [0, "asc"],
+        processing: "true",
+        language: {
+            "processing": "processing... please wait"
+        },
+        //dom: 'Bfrtip',
+        destroy: true,
+        initComplete: function () {
+
+            if (currentSectionuser == "Production Engineering") {
+                var table = $('#NormalUserTable').DataTable();
+                table.column(10).visible(true);
+            }
+
+
+        },
+        columns: [
+            { title: "No", data: "Rownum", name: "Rownum" },
+            { title: "ID", data: "ID", name: "ID", visible: false },
+
+            { title: "UserName", data: "UserName", name: "UserName" },
+            { title: "First Name", data: "FirstName", name: "UserName" },
+            { title: "Last Name", data: "LastName", name: "UserName" },
+            { title: "Email", data: "Email", name: "UserName" },
+            
+            {
+                title: "Section", data: "SectionGroup", name: "SectionGroup"
+
+            },
+            
+            {
+                title: "Page Access", data: function (x) {
+                    return "<button type='button' class='btn bg-blue btnPageAccess' id=data" + x.ID + ">" +
+                        "<i class='fa fa-newspaper-o' ></i> Pages" +
+                        "</button>"
+                }
+            },
+            {
+                title: "Status", data: function (x) {
+                    if (x.Status != null) {
+                        var label = (x.Status.toLowerCase() == "active") ? "<button type='button' class='btn btn-xs bg-green'>Active</button>" : "<button type='button' class='btn btn-xs bg-red'>Inactive</button>"
+                        return label
+                    }
+                    else {
+                        return "";
+                    }
+                }
+            },
+            {
+                title: "Delete", data: function (x) {
+
+                    return "<button type='button' class='btn bg-red btndelete' alt='alert' class='model_img img-fluid'>" +
+                        "<i class='fa fa-trash '></i> Delete" +
+                        "</button>"
+
+                }
+            },
+            {
+                title: "Reset", data: function (x) {
+
+                    return "<button type='button' class='btn bg-blue btnreset' alt='alert' class='model_img img-fluid'>" +
+                        "<i class='fa fa-refresh '></i> Reset Password" +
+                        "</button>"
+                }, visible:false
+            },
+        ],
+
+    });
+    $('#NormalUserTable tbody').off('click');
+    $('#NormalUserTable tbody').on('click', '.btnedit', function () {
+
+        var tabledata = $('#NormalUserTable').DataTable();
+        var data = tabledata.row($(this).parents('tr')).data();
+
+        $('#UserName').val(data.UserName);
+        $('#FirstName').val(data.FirstName);
+        $('#LastName').val(data.LastName);
+        $('#Status').val(data.Status);
+        $('#Status option[value=' + data.Status + ']').prop('selected', true);
+        $('#ID').val(data.ID);
+        $("tr").removeClass("row_selected");
+        $(this).parents('tr').addClass("row_selected");
+
+    });
+    $('#NormalUserTable tbody').on('click', '.btndelete', function () {
+        var tabledata = $('#NormalUserTable').DataTable();
+        var data = tabledata.row($(this).parents('tr')).data();
+        $('#ID').val(data.UserName);
+        Deletionheres('../Users/DeleteUsers', data.ID, data.Users);
+
+    });
+    $('#NormalUserTable tbody').on('click', '.btnreset', function () {
+        var tabledata = $('#NormalUserTable').DataTable();
+        var data = tabledata.row($(this).parents('tr')).data();
+        $('#ID').val(data.UserName);
+        Resetheres('../Users/ResetPassUsers', data.ID, data.Users);
+
+    });
+    $('#NormalUserTable tbody').on('click', '.btnsection', function () {
+        var tabledata = $('#NormalUserTable').DataTable();
+        var data = tabledata.row($(this).parents('tr')).data();
+        currentuser = data.UserName;
+        GetSectionAccess(data.UserName);
+
+    });
+    $('#NormalUserTable tbody').on('click', '.btnline', function () {
+        var tabledata = $('#NormalUserTable').DataTable();
+        var data = tabledata.row($(this).parents('tr')).data();
+        currentuser = data.UserName;
+        GetLineAccess(data.UserName, data.Section);
+
+    });
+
+
+    $('#NormalUserTable tbody').on('click', '.btnPageAccess', function () {
+        $('#ModalPageAccess').modal({
+            backdrop: 'static',
+            keyboard: false
+        })
+        $("#ModalPageAccess").modal("show");
+        var tabledata = $('#NormalUserTable').DataTable();
+        var data = tabledata.row($(this).parents('tr')).data();
+        currentuser = data.UserName;
+        $.ajax({
+            url: '../Users/GetPageAccess',
+            data: { UserName: data.UserName },
+            type: 'POST',
+            datatype: "json",
+            success: function (returnData) {
+                GoodCount = returnData.GoodCount;
+                SaveGoodCount = 0;
+                //--Master
+                $('#tbl_PageAccess_Master').DataTable({
+                    destroy: true,
+                    searching: false,
+                    paging: false,
+                    data: returnData.MasterPageList,
+                    columns: [
+                        { data: "PageName" },
+                        {
+                            data: function (data, type, row, meta) {
+                                var checked = (data.AccessType == true) ? ' checked ' : '';
+                                return " <input type='checkbox' id=Master_" + data.ID + " class='mastermod filled-in chk-col-light-blue' " + checked + " name=PageView_" + data.ID + "/>" +
+                                    " <label class=checker for=Master_" + data.ID + "></label>"
+
+                            }, orderable: false, searchable: false
+                        },
+                    ]
+                });
+
+                //--END of Master
+
+
+                //--Application Form
+                $('#tbl_PageAccess_ApplicationForm').DataTable({
+                    destroy: true,
+                    searching: false,
+                    paging: false,
+                    data: returnData.ApplicationFormPageList,
+                    columns: [
+                        { data: "PageName" },
+                        {
+                            data: function (data, type, row, meta) {
+                                var checked = (data.AccessType == true) ? ' checked ' : '';
+                                return " <input type='checkbox' id=ApplicationForm_" + data.ID + " class='afmod filled-in chk-col-light-blue' " + checked + " name=PageView_" + data.ID + "/>" +
+                                    " <label class=checker for=ApplicationForm_" + data.ID + "></label>"
+
+                            }, orderable: false, searchable: false
+                        },
+                    ]
+                });
+                //--END of Application Form
+
+
+                //--Application Form
+                $('#tbl_PageAccess_Reports').DataTable({
+                    destroy: true,
+                    searching: false,
+                    paging: false,
+                    data: returnData.SummaryPageList,
+                    columns: [
+                        { data: "PageName" },
+                        {
+                            data: function (data, type, row, meta) {
+                                var checked = (data.AccessType == true) ? ' checked ' : '';
+                                return " <input type='checkbox' id=Reports_" + data.ID + " class='reportsmod filled-in chk-col-light-blue' " + checked + " name=PageView_" + data.ID + "/>" +
+                                    " <label class=checker for=Reports_" + data.ID + "></label>"
+
+                            }, orderable: false, searchable: false
+                        },
+                    ]
+                });
+                //--END of Application Form
+
+                //--Application Form
+                $('#tbl_PageAccess_Forecast').DataTable({
+                    destroy: true,
+                    searching: false,
+                    paging: false,
+                    data: returnData.ForeCastList,
+                    columns: [
+                        { data: "PageName" },
+                        {
+                            data: function (data, type, row, meta) {
+                                var checked = (data.AccessType == true) ? ' checked ' : '';
+                                return " <input type='checkbox' id=Forecast_" + data.ID + " class='reportsmod filled-in chk-col-light-blue' " + checked + " name=PageView_" + data.ID + "/>" +
+                                    " <label class=checker for=Forecast_" + data.ID + "></label>"
+
+                            }, orderable: false, searchable: false
+                        },
+                    ]
+                });
+                //--END of Application Form
+
+            }
+        });
+    });
+
+    pagecount = 0;
+}
+
 function AddUsers(data) {
     var datanow = data.serialize();
     $.ajax({
@@ -313,6 +628,7 @@ function AddUsers(data) {
                 var tabledata = $('#UsersTable').DataTable();
                 var info = tabledata.page.info();
                 pagecount = pagecount + (info.page * 10);
+                $('#UsersForm').trigger("reset");
                 Initializepage();
             }
             else {

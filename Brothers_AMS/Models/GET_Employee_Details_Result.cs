@@ -13,6 +13,7 @@ namespace Brothers_WMS.Models
     
     public partial class GET_Employee_Details_Result
     {
+        public Nullable<long> Rownum { get; set; }
         public long ID { get; set; }
         public string REFID { get; set; }
         public string ADID { get; set; }
@@ -35,13 +36,16 @@ namespace Brothers_WMS.Models
         public string Department { get; set; }
         public string Company { get; set; }
         public string CostCode { get; set; }
-        public string SectionGroup { get; set; }
         public string ModifiedStatus { get; set; }
         public string ModifiedPosition { get; set; }
         public string CostCenter_AMS { get; set; }
         public string CostCenter_IT { get; set; }
         public string CostCenter_EXPROD { get; set; }
-        public Nullable<int> SkillCount { get; set; }
         public string Schedule { get; set; }
+        public int OrderPrio { get; set; }
+        public string ModifiedSection { get; set; }
+        public Nullable<int> SkillCount { get; set; }
+        public string ScheduleName { get; set; }
+        public string MainRFID { get; set; }
     }
 }

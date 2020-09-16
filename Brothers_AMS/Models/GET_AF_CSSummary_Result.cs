@@ -15,10 +15,10 @@ namespace Brothers_WMS.Models
     {
         public string CS_RefNo { get; set; }
         public string Section { get; set; }
-        public Nullable<System.DateTime> CreateDate { get; set; }
+        public string CreateDate { get; set; }
         public int Status { get; set; }
+        public int StatusMax { get; set; }
         public string ApprovedSupervisor { get; set; }
         public string ApprovedManager { get; set; }
-        public string ApprovedGeneralManager { get; set; }
     }
 }

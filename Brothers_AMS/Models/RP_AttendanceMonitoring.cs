@@ -17,6 +17,7 @@ namespace Brothers_WMS.Models
         public long ID { get; set; }
         public string EmployeeNo { get; set; }
         public string LeaveType { get; set; }
+        public string Reason { get; set; }
         public System.DateTime Date { get; set; }
         public System.DateTime UpdateDate { get; set; }
         public string UpdateID { get; set; }

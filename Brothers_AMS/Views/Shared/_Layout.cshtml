@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    
+
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title</title>
@@ -14,12 +14,13 @@
     <link href="~/Content/css/skins/_all-skins.css" rel="stylesheet" />
     <link href="~/Content/css/custom.css" rel="stylesheet" />
     <link href="~/Content/css/master_style.css" rel="stylesheet" />
+    <link href="~/Content/assets/vendor_components/select2/dist/css/select2.min.css" rel="stylesheet" />
     <link href="~/Content/assets/vendor_components/jquery-toast-plugin-master/src/jquery.toast.css" rel="stylesheet" />
     <link href="~/Content/assets/vendor_components/sweetalert/sweetalert.css" rel="stylesheet" />
-    <link href="~/Content/assets/vendor_components/select2/dist/css/select2.min.css" rel="stylesheet" />
+
     <link href="~/Content/assets/vendor_plugins/timepicker/bootstrap-timepicker.min.css" rel="stylesheet" />
     <link href="~/Content/IEcssdatepicker.css" rel="stylesheet" />
-
+  
 
     @Styles.Render("~/Content/DataTablesCss")
     @RenderSection("styles", required: false)
@@ -81,7 +82,7 @@
 
 
                 $('.select2').select2();
-                $(".select2").addClass("form-control input-sm");
+                $(".select2").addClass("form-control");
                 $(".select2").css("width", '146.813px');
                 $('.timepicker').timepicker({
                     showInputs: false,
@@ -90,7 +91,10 @@
                 });
                 $("input").attr('autocomplete', 'off');
 
-               
+                $("#goCost").on("click", function () {
+                    window.location = "/Masters/CostCenter/CostCenter"
+
+                })
                 $("#Dashboard").on("click", function () {
                     window.location = "/Home/Index"
                 })

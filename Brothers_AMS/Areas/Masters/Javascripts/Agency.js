@@ -89,18 +89,18 @@ function Initializepage() {
         destroy: true,
         columns: [
             { title: "ID", data: "ID", visible: false },
-            { title: "AgencyCode", data: "AgencyCode" },
-            { title: "Agency", data: "AgencyName" },
-            { title: "Address", data: "Address" },
-            { title: "ISO Details (OT)", data: "ISO_OT" },
-            { title: "ISO Details (CS)", data: "ISO_CS" },
-            { title: "ISO Details (DTR)", data: "ISO_DTR" },
+            { title: "AgencyCode", data: "AgencyCode", name: "AgencyCode" },
+            { title: "Agency", data: "AgencyName", name: "AgencyName" },
+            { title: "Address", data: "Address", name: "Address"},
+            { title: "ISO Details (OT)", data: "ISO_OT", name: "ISO_OT" },
+            { title: "ISO Details (CS)", data: "ISO_CS", name: "ISO_CS" },
+            { title: "ISO Details (DTR)", data: "ISO_DTR", name: "ISO_DTR" },
             {
                     title: "Email", data: function (x) {
                         return "<button type='button' class='btn btn-sm' onclick=getAgencyEmail('" + x.AgencyCode + "') style='background-color:#039a8c; color:white' alt='alert' class='model_img img-fluid'>" +
                                 "<i class='fa fa-envelope'></i> Email" +
                             "</button> "
-                    }
+                }, name: "Email"
             },
             {
                 title: "Logo", data: function (x) {
@@ -174,7 +174,7 @@ function AddAgency(data) {
             if (returnData.msg == "Success") {
                 Initializepage();
                 //swal("Agency Saved");
-                msg("Agency Saved", "success");
+                notify("Saved!", "Successfully Saved", "success");
             }
             else {
                 swal("Agency Already Exist");
@@ -195,7 +195,7 @@ function EditAgency(data) {
             if (returnData.msg == "Success") {
                 Initializepage();
                 //swal("Agency Saved");
-                msg("Agency Saved", "success");
+                notify("Saved!", "Successfully Saved", "success");
             }
             else {
                 swal("Agency Already Exist");

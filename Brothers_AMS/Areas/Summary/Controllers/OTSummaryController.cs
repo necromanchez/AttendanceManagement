@@ -31,7 +31,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
         public ActionResult GetApproverOTSummaryList(string Refno, string Section, DateTime? DateFrom, DateTime? DateTo, string Type, string Status)
         {
             DateFrom = (DateFrom == null) ? new DateTime(1990, 1, 1) : DateFrom;
-            DateTo = (DateTo == null) ? DateTime.Now : DateTo;
+            DateTo = (DateTo == null) ? db.TT_GETTIME().FirstOrDefault() : DateTo;
             int start = Convert.ToInt32(Request["start"]);
             int length = Convert.ToInt32(Request["length"]);
             string searchValue = (Session["RNO"] != null) ? Session["RNO"].ToString() : Request["search[value]"];

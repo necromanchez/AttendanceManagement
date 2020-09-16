@@ -18,5 +18,6 @@ namespace Brothers_WMS.Models
         public string Cost_Center { get; set; }
         public string Section { get; set; }
         public string GroupSection { get; set; }
+        public string DepartmentGroup { get; set; }
     }
 }

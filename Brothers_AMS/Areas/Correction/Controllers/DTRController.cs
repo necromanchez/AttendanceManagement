@@ -23,9 +23,7 @@ namespace Brothers_WMS.Areas.Correction.Controllers
         {
             return View();
         }
-
-
-
+        
         public ActionResult SaveDTR(AF_DTRfiling Filing, string Reasons, string EmployeeNos, string DTRType, string concerns)
         {
             List<string> concernsList = concerns.Split(',').ToList();
@@ -44,11 +42,11 @@ namespace Brothers_WMS.Areas.Correction.Controllers
                 dtrfile.EmployeeNo = EmploNos;
                 dtrfile.FileType = Filing.FileType;
                 dtrfile.Section = (from c in db.M_Employee_CostCenter where c.EmployNo == EmploNos orderby c.ID descending select c.CostCenter_AMS).FirstOrDefault();
-                Section = dtrfile.Section;
+                Section = (from c in db.M_Cost_Center_List where c.Cost_Center == dtrfile.Section orderby c.ID descending select c.GroupSection).FirstOrDefault();//otfile.Section;//dtrfile.Section;
                 //dtrfile.Line_Team = 1;// (from c in db.M_Employee_Master_List where c.EmpNo == EmploNos select c.LineID).FirstOrDefault();
                 dtrfile.OvertimeType = Filing.OvertimeType;
-                dtrfile.DateFrom = Filing.DateFrom;
-                dtrfile.DateTo = Filing.DateTo;
+                dtrfile.DateFrom = Filing.DateFrom.Date;
+                dtrfile.DateTo = Filing.DateTo.AddHours(23).AddMinutes(59).AddSeconds(59);
                 dtrfile.OTin = Filing.OTin;
                 dtrfile.OTout = Filing.OTout;
                 dtrfile.Timein = Filing.Timein;
@@ -56,6 +54,10 @@ namespace Brothers_WMS.Areas.Correction.Controllers
                 dtrfile.Reason = reason;
                 dtrfile.Concerns = Concern;
                 dtrfile.Status = 0;
+                //if (EmploNos.Contains("BIPH"))
+                //{
+                    dtrfile.EmployeeAccept = db.TT_GETTIME().FirstOrDefault();//DateTime.Now;;
+                //}
                 if (DTRType == "HR")
                 {
                     dtrfile.StatusMax = (Filing.OvertimeType == "SundayHoliday") ? 4 : 2;
@@ -88,10 +90,12 @@ namespace Brothers_WMS.Areas.Correction.Controllers
             }
 
             #region GET approver & Email
-            string SectionID = (from c in db.M_Cost_Center_List
-                                where c.Cost_Center == Section
-                                select c.ID).FirstOrDefault().ToString();
-            List<M_Section_Approver> approver = (from c in db.M_Section_Approver where c.Section == SectionID select c).ToList();
+           
+            List<M_Section_Approver> approver = (from c in db.M_Section_Approver
+                                                 where c.Section == Section
+                                                 && c.Position != "GeneralManager"
+                                                 && c.Position != "FactoryGeneralManager"
+                                                 select c).ToList();
 
 
             #endregion
@@ -102,7 +106,7 @@ namespace Brothers_WMS.Areas.Correction.Controllers
                 M_Section_ApproverStatus approverstat = new M_Section_ApproverStatus();
                 approverstat.Position = approv.Position;
                 approverstat.EmployeeNo = approv.EmployeeNo;
-                approverstat.Section = SectionID;
+                approverstat.Section = Section;
                 approverstat.RefNo = DTRRefNo;
                 approverstat.Approved = 0;
                 approverstat.OverTimeType = Filing.OvertimeType;
@@ -163,11 +167,14 @@ namespace Brothers_WMS.Areas.Correction.Controllers
                     }
                     int start = 12;
                     ExcelWorksheet ExportData = package.Workbook.Worksheets["DTR Correction"];
-                    for (int i = 0; i < list.Count; i++)
+                    if (list.Count < 30)
                     {
-                        ExportData.Cells["B" + start].Value = list[i].EmpNo;
-                        ExportData.Cells["C" + start].Value = list[i].Family_Name + ", " + list[i].First_Name;
-                        start++;
+                        for (int i = 0; i < list.Count; i++)
+                        {
+                            ExportData.Cells["B" + start].Value = list[i].EmpNo;
+                            ExportData.Cells["C" + start].Value = list[i].Family_Name + ", " + list[i].First_Name;
+                            start++;
+                        }
                     }
                     ExportData.Cells["C5"].Value = current.Department;
                     ExportData.Cells["C6"].Value = user.Section;
@@ -199,7 +206,7 @@ namespace Brothers_WMS.Areas.Correction.Controllers
                 Error_Logs error = new Error_Logs();
                 error.PageModule = "Application Form - DTR";
                 error.ErrorLog = err.Message;
-                error.DateLog = DateTime.Now;
+                error.DateLog = db.TT_GETTIME().FirstOrDefault();//DateTime.Now;
                 error.Username = user.UserName;
                 db.Error_Logs.Add(error);
                 db.SaveChanges();
@@ -245,12 +252,14 @@ namespace Brothers_WMS.Areas.Correction.Controllers
                                 if (bemodify == null)
                                 {
                                     #region Creating via upload
-                                    Section = user.Section;//Employee.Section;
+                                    //Section = user.Section;//Employee.Section;
                                     AF_DTRfiling DTRrequest = new AF_DTRfiling();
                                     DTRrequest.DTR_RefNo = TodayRefno;
                                     DTRrequest.BIPH_Agency = Employee.Company;
                                     DTRrequest.FileType = 3; //Upload
-                                    DTRrequest.Section = Employee.CostCode;
+                                    DTRrequest.Section = (from c in db.M_Employee_CostCenter where c.EmployNo == Empno orderby c.ID descending select c.CostCenter_AMS).FirstOrDefault();
+                                    Section = (from c in db.M_Cost_Center_List where c.Cost_Center == DTRrequest.Section orderby c.ID descending select c.GroupSection).FirstOrDefault();//otfile.Section;
+
                                     DTRrequest.EmployeeNo = Employee.EmpNo;
                                     DTRrequest.OvertimeType = "";
                                     DTRrequest.DateFrom = Convert.ToDateTime(worksheet.Cells[startRowForTable, 6].Value);
@@ -259,7 +268,10 @@ namespace Brothers_WMS.Areas.Correction.Controllers
                                     DTRrequest.TimeOut = worksheet.Cells[startRowForTable, 9].Value.ToString();
                                     DTRrequest.OTin = "";
                                     DTRrequest.OTout = "";
-
+                                    //if (Employee.EmpNo.Contains("BIPH"))
+                                    //{
+                                        DTRrequest.EmployeeAccept = db.TT_GETTIME().FirstOrDefault();//DateTime.Now;
+                                    //}
 
                                     DTRrequest.Reason = worksheet.Cells[startRowForTable, 5].Value.ToString();
                                     DTRrequest.Status = 0;
@@ -280,7 +292,7 @@ namespace Brothers_WMS.Areas.Correction.Controllers
                                         Error_Logs error = new Error_Logs();
                                         error.PageModule = "Application Form - OT Request";
                                         error.ErrorLog = err.Message;
-                                        error.DateLog = DateTime.Now;
+                                        error.DateLog = db.TT_GETTIME().FirstOrDefault();//DateTime.Now;
                                         error.Username = user.UserName;
                                         db.Error_Logs.Add(error);
                                         db.SaveChanges();
@@ -290,11 +302,12 @@ namespace Brothers_WMS.Areas.Correction.Controllers
                                 else
                                 {
                                     #region modifying via upload
-                                    Section = Employee.Section;
+                                    //Section = Employee.Section;
                                     bemodify.DTR_RefNo = TodayRefno;
                                     bemodify.BIPH_Agency = Employee.Company;
                                     bemodify.FileType = 3; //Upload
-                                    bemodify.Section = Employee.CostCode;
+                                    bemodify.Section = (from c in db.M_Employee_CostCenter where c.EmployNo == Empno orderby c.ID descending select c.CostCenter_AMS).FirstOrDefault();
+                                    Section = (from c in db.M_Cost_Center_List where c.Cost_Center == bemodify.Section orderby c.ID descending select c.GroupSection).FirstOrDefault();//otfile.Section;
                                     bemodify.EmployeeNo = Employee.EmpNo;
                                     bemodify.OvertimeType = "";
                                     bemodify.DateFrom = Convert.ToDateTime(worksheet.Cells[startRowForTable, 6].Value);
@@ -303,12 +316,15 @@ namespace Brothers_WMS.Areas.Correction.Controllers
                                     bemodify.TimeOut = worksheet.Cells[startRowForTable, 9].Value.ToString();
                                     bemodify.OTin = "";
                                     bemodify.OTout = "";
-
+                                    //if (Employee.EmpNo.Contains("BIPH"))
+                                    //{
+                                        bemodify.EmployeeAccept = db.TT_GETTIME().FirstOrDefault();//DateTime.Now;
+                                    //}
                                     bemodify.Reason = worksheet.Cells[startRowForTable, 5].Value.ToString();
                                     bemodify.Status = 0;
                                     bemodify.StatusMax = 2;
                                     bemodify.UpdateID = user.UserName;
-                                    bemodify.UpdateDate = DateTime.Now;
+                                    bemodify.UpdateDate =DateTime.Now;
 
                                     try
                                     {
@@ -318,9 +334,9 @@ namespace Brothers_WMS.Areas.Correction.Controllers
                                     catch (Exception err)
                                     {
                                         Error_Logs error = new Error_Logs();
-                                        error.PageModule = "Application Form - CS Request";
+                                        error.PageModule = "Application Form - DTR Request";
                                         error.ErrorLog = err.Message;
-                                        error.DateLog = DateTime.Now;
+                                        error.DateLog = db.TT_GETTIME().FirstOrDefault();//DateTime.Now;
                                         error.Username = user.UserName;
                                         db.Error_Logs.Add(error);
                                         db.SaveChanges();
@@ -352,10 +368,10 @@ namespace Brothers_WMS.Areas.Correction.Controllers
                     if (checker == null)
                     {
                         #region GET approver & Email
-                        string SectionID = (from c in db.M_Cost_Center_List
-                                            where c.Section == Section
-                                            select c.ID).FirstOrDefault().ToString();
-                        List<M_Section_Approver> approver = (from c in db.M_Section_Approver where c.Section == SectionID select c).ToList();
+                        //string SectionID = (from c in db.M_Cost_Center_List
+                        //                    where c.Section == Section
+                        //                    select c.ID).FirstOrDefault().ToString();
+                        List<M_Section_Approver> approver = (from c in db.M_Section_Approver where c.Section == Section select c).ToList();
 
 
                         #endregion
@@ -365,7 +381,7 @@ namespace Brothers_WMS.Areas.Correction.Controllers
                             M_Section_ApproverStatus approverstat = new M_Section_ApproverStatus();
                             approverstat.Position = approv.Position;
                             approverstat.EmployeeNo = approv.EmployeeNo;
-                            approverstat.Section = SectionID;
+                            approverstat.Section = Section;
                             approverstat.RefNo = TodayRefno;
                             approverstat.Approved = 0;
                             approverstat.OverTimeType = "";

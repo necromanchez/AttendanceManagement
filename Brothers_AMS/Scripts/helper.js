@@ -1,4 +1,287 @@
-﻿function Deletionheres(link, ID, Name) {
+﻿
+function formatDate(date) {
+    var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) month = '0' + month;
+    if (day.length < 2) day = '0' + day;
+
+    return [year, month, day].join('');
+}
+
+function Dropdown_selectEmpSection(id, url) {
+    var option = '<option value="">All Sections' + getlongadjWorktimeSelect() + '</option>';
+    $('#' + id).html(option);
+    $.ajax({
+        url: url,
+        type: 'GET',
+        dataType: 'JSON',
+    }).done(function (data, textStatus, xhr) {
+        $.each(data.list, function (i, x) {
+            option = '<option value="' + x.value + '">' + x.text + getlongadjWorktimeSelect() + '</option>';
+
+            //$('.selectpicker').selectpicker('refresh');
+            $('#' + id).append(option);
+        });
+        var idd = "select2-" + id + "-container";
+        document.getElementById(idd).style.whiteSpace = "nowrap";
+        document.getElementById(id).style.whiteSpace = "nowrap";
+
+    }).fail(function (xhr, textStatus, errorThrown) {
+        console.log(errorThrown, textStatus);
+    });
+}
+
+function Dropdown_selectMPMain2(id, url) {
+    var option = '<option value="">All Sections' + getlongadj2() + '</option>';
+    $('#' + id).html(option);
+    $.ajax({
+        url: url,
+        type: 'GET',
+        dataType: 'JSON',
+    }).done(function (data, textStatus, xhr) {
+        $.each(data.list, function (i, x) {
+            option = '<option value="' + x.value + '">' + x.text + getlongadj2() + '</option>';
+
+            //$('.selectpicker').selectpicker('refresh');
+            $('#' + id).append(option);
+        });
+        var idd = "select2-" + id + "-container";
+        try {
+            document.getElementById(idd).style.whiteSpace = "nowrap";
+            document.getElementById(id).style.whiteSpace = "nowrap";
+        }
+        catch (err) {
+          
+        }
+
+    }).fail(function (xhr, textStatus, errorThrown) {
+        console.log(errorThrown, textStatus);
+    });
+}
+
+
+function Dropdown_selectMPMain22(id, url) {
+    var option = '<option value="">All Sections' + getlongadjLineView() + '</option>';
+    $('#' + id).html(option);
+    $.ajax({
+        url: url,
+        type: 'GET',
+        dataType: 'JSON',
+    }).done(function (data, textStatus, xhr) {
+        $.each(data.list, function (i, x) {
+            option = '<option value="' + x.value + '">' + x.text + '</option>';
+
+            //$('.selectpicker').selectpicker('refresh');
+            $('#' + id).append(option);
+        });
+        var idd = "select2-" + id + "-container";
+        document.getElementById(idd).style.whiteSpace = "nowrap";
+        document.getElementById(id).style.whiteSpace = "nowrap";
+    }).fail(function (xhr, textStatus, errorThrown) {
+        console.log(errorThrown, textStatus);
+    });
+}
+
+function Dropdown_selectMPMain_Dept(id, url) {
+    var option = '<option value="">All Department' + getlongadjWorktimeSelect() + '</option>';
+    $('#' + id).html(option);
+    $.ajax({
+        url: url,
+        type: 'GET',
+        dataType: 'JSON',
+    }).done(function (data, textStatus, xhr) {
+        $.each(data.list, function (i, x) {
+            option = '<option value="' + x.value + '">' + x.text + '</option>';
+
+            //$('.selectpicker').selectpicker('refresh');
+            $('#' + id).append(option);
+        });
+        var idd = "select2-" + id + "-container";
+        document.getElementById(idd).style.whiteSpace = "nowrap";
+        document.getElementById(id).style.whiteSpace = "nowrap";
+
+    }).fail(function (xhr, textStatus, errorThrown) {
+        console.log(errorThrown, textStatus);
+    });
+}
+
+
+
+
+function Dropdown_selectMPMainLine(id, url) {
+    var option = '<option value="">All Groups' + getlong() + '</option>';
+    $('#' + id).html(option);
+    $.ajax({
+        url: url,
+        type: 'GET',
+        dataType: 'JSON',
+    }).done(function (data, textStatus, xhr) {
+        $.each(data.list, function (i, x) {
+            option = '<option value="' + x.value + '">' + x.text + getlongadjWorktimeSelect() + '</option>';
+
+            //$('.selectpicker').selectpicker('refresh');
+            $('#' + id).append(option);
+        });
+        var idd = "select2-" + id + "-container";
+        document.getElementById(idd).style.whiteSpace = "nowrap";
+        document.getElementById(id).style.whiteSpace = "nowrap";
+
+    }).fail(function (xhr, textStatus, errorThrown) {
+        console.log(errorThrown, textStatus);
+    });
+}
+
+
+function Dropdown_selectMPMainProcess(id, url) {
+    var option = '<option value="">All Process' + getlong() + '</option>';
+    $('#' + id).html(option);
+    $.ajax({
+        url: url,
+        type: 'GET',
+        dataType: 'JSON',
+    }).done(function (data, textStatus, xhr) {
+        $.each(data.list, function (i, x) {
+            option = '<option value="' + x.value + '">' + x.text + getlong() + '</option>';
+
+            //$('.selectpicker').selectpicker('refresh');
+            $('#' + id).append(option);
+        });
+        var idd = "select2-" + id + "-container";
+        document.getElementById(idd).style.whiteSpace = "nowrap";
+        document.getElementById(id).style.whiteSpace = "nowrap";
+
+    }).fail(function (xhr, textStatus, errorThrown) {
+        console.log(errorThrown, textStatus);
+    });
+}
+
+function Dropdown_selectMPMainShift(id, url) {
+    var option = '<option value="">All Shifts' + getlong() + '</option>';
+    $('#' + id).html(option);
+    $.ajax({
+        url: url,
+        type: 'GET',
+        dataType: 'JSON',
+    }).done(function (data, textStatus, xhr) {
+        $.each(data.list, function (i, x) {
+            option = '<option value="' + x.value + '">' + x.text + '</option>';
+
+            //$('.selectpicker').selectpicker('refresh');
+            $('#' + id).append(option);
+        });
+        var idd = "select2-" + id + "-container";
+        document.getElementById(idd).style.whiteSpace = "nowrap";
+        document.getElementById(id).style.whiteSpace = "nowrap";
+
+    }).fail(function (xhr, textStatus, errorThrown) {
+        console.log(errorThrown, textStatus);
+    });
+}
+
+
+
+function getlong() {
+    var lo = "";
+    for (var x = 0; x < 60; x++) {
+        lo += "&ensp;";
+    }
+    return lo;
+}
+
+function getlongOver() {
+    var lo = "";
+    for (var x = 0; x < 40; x++) {
+        lo += " ";
+    }
+    return lo;
+}
+
+
+function getlongadj2() {
+    var lo = "";
+    for (var x = 0; x < 48; x++) {
+        lo += "&ensp;";
+    }
+    return lo;
+}
+
+function getlongadj() {
+    var lo = "";
+    for (var x = 0; x < 37; x++) {
+        lo += "&ensp;";
+    }
+    return lo;
+}
+
+function getlongadjWorktimeSelect() {
+    var lo = "";
+    for (var x = 0; x < 20; x++) {
+        lo += "&ensp;";
+    }
+    return lo;
+}
+
+
+function getlongadjLineView() {
+    var lo = "";
+    for (var x = 0; x < 17; x++) {
+        lo += "&ensp;";
+    }
+    return lo;
+}
+
+function getshort() {
+    var lo = "";
+    for (var x = 0; x < 12; x++) {
+        lo += "&ensp;";
+    }
+    return lo;
+}
+
+function Resetheres(link, ID, Name) {
+    swal({
+        title: "Are you sure?",
+        //text: "You will not be able to recover this imaginary file!",   
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Yes",
+        cancelButtonText: "No",
+        closeOnConfirm: true,
+        closeOnCancel: true
+    }, function (isConfirm) {
+        if (isConfirm) {
+
+            $.ajax({
+                url: link,
+                data: { ID: ID },
+                type: 'POST',
+                datatype: "json",
+                success: function (returnData) {
+                    if (returnData.msg == "Success") {
+                        //swal("Deleted!", "Data has been deleted.", "success");
+                        notify("Reset Password!", "Password Reset", "success");
+                        //Initializepage();
+                        //Clearall();
+                    }
+                    else {
+                        swal("Cannot be Reset " + Name);
+                    }
+
+                }
+            });
+
+
+        } else {
+            swal("Cancelled", "Reset Cancelled", "error");
+        }
+    });
+}
+
+function Deletionheres(link, ID, Name) {
     swal({
         title: "Are you sure?",
         //text: "You will not be able to recover this imaginary file!",   
@@ -38,6 +321,91 @@
     });
 }
 
+function Dropdown_selectFileType(id) {
+    var option = '<option value="">--SELECT--' + getshort() + '</option>';
+    var daa = ["Individual", "Group"];
+    $('#' + id).html(option);
+    var counterID = 1;
+    $.each(daa, function (i, x) {
+        option = '<option value="' + counterID + '">' + x + getshort() + '</option>';
+        counterID++;
+        //$('.selectpicker').selectpicker('refresh');
+        $('#' + id).append(option);
+    });
+
+}
+
+function Dropdown_selectOT(id) {
+    var option = '<option value="">--SELECT--' + getlong() + '</option>';
+    var daa = ["Regular", "SundayHoliday", "LegalHoliday", "SpecialHoliday"];
+    $('#' + id).html(option);
+
+    $.each(daa, function (i, x) {
+        option = '<option value="' + x + '">' + x + getlong() + '</option>';
+
+        //$('.selectpicker').selectpicker('refresh');
+        $('#' + id).append(option);
+    });
+
+}
+
+function Dropdown_selectApp(id) {
+    var option = '<option value="">--SELECT--' + getlong() + '</option>';
+    var daa = ["Cancelled", "Rejected", "Pending", "Supervisor approved", "Manager approved", "General approved", "Factory General Manager approved"];
+    var data = ["-2", "-1", "0", "1", "2", "3", "4"];
+    $('#' + id).html(option);
+
+    $.each(daa, function (i, x) {
+        option = '<option value="' + data[i] + '">' + x + getlongadj2() + '</option>';
+
+        //$('.selectpicker').selectpicker('refresh');
+        $('#' + id).append(option);
+    });
+
+}
+
+function Dropdown_selectMP(id, url) {
+    var option = '<option value="">--SELECT--' + getlong() + '</option>';
+    $('#' + id).html(option);
+    $.ajax({
+        url: url,
+        type: 'GET',
+        dataType: 'JSON',
+    }).done(function (data, textStatus, xhr) {
+        $.each(data.list, function (i, x) {
+            option = '<option value="' + x.value + '">' + x.text + getlongadj() + '</option>';
+
+            //$('.selectpicker').selectpicker('refresh');
+            $('#' + id).append(option);
+        });
+        //GetUser();
+
+    }).fail(function (xhr, textStatus, errorThrown) {
+        console.log(errorThrown, textStatus);
+    });
+}
+
+function Dropdown_selectWT(id, url) {
+    var option = '<option value="">--SELECT--' + getlongadj() + '</option>';
+    $('#' + id).html(option);
+    $.ajax({
+        url: url,
+        type: 'GET',
+        dataType: 'JSON',
+    }).done(function (data, textStatus, xhr) {
+        $.each(data.list, function (i, x) {
+            option = '<option value="' + x.value + '">' + x.text + getlongadjWorktimeSelect() + '</option>';
+
+            //$('.selectpicker').selectpicker('refresh');
+            $('#' + id).append(option);
+        });
+        GetUser();
+
+    }).fail(function (xhr, textStatus, errorThrown) {
+        console.log(errorThrown, textStatus);
+    });
+}
+
 function SuccessTap() {
 
     swal({
@@ -47,18 +415,27 @@ function SuccessTap() {
         showConfirmButton: false
     });
 }
+function SuccessTap_confirm() {
+
+    swal({
+        title: "Time Keeping Confirm",
+        text: "Data Saved",
+        timer: 400,
+        showConfirmButton: false
+    });
+}
 
 function ContinueApproved() {
     swal({
-        title: "Reject uncheck Employees?",
+        title: "Uncheck Employees will not be approve",
         //text: "You will not be able to recover this imaginary file!",   
         type: "warning",
         showCancelButton: true,
         confirmButtonColor: "#DD6B55",
         confirmButtonText: "Yes",
         cancelButtonText: "No",
-        closeOnConfirm: false,
-        closeOnCancel: false
+        closeOnConfirm: true,
+        closeOnCancel: true
     }, function (isConfirm) {
         if (isConfirm) {
             GlobalAcceptance = true;
@@ -80,6 +457,98 @@ function validateForm(data) {
     return isValid;
 }
 
+function Dropdown_selectD(id, url) {
+    var option = '<option value="">--SELECT--</option>';
+    $('#' + id).html(option);
+    $.ajax({
+        url: url,
+        type: 'GET',
+        dataType: 'JSON',
+    }).done(function (data, textStatus, xhr) {
+        $.each(data.list, function (i, x) {
+            option = '<option value="' + x.value + '">' + x.text + '</option>';
+
+            //$('.selectpicker').selectpicker('refresh');
+            $('#' + id).append(option);
+        });
+       //var optionadd = '<option value="Agency">Agency</option>';
+
+       // //$('.selectpicker').selectpicker('refresh');
+       // $('#' + id).append(optionadd);
+
+        $("#FileType").trigger("change");
+    }).fail(function (xhr, textStatus, errorThrown) {
+        console.log(errorThrown, textStatus);
+    });
+}
+
+function Dropdown_selectD_all(id, url) {
+    var option = '<option value="">All Employees</option>';
+    $('#' + id).html(option);
+    $.ajax({
+        url: url,
+        type: 'GET',
+        dataType: 'JSON',
+    }).done(function (data, textStatus, xhr) {
+       
+        $.each(data.list, function (i, x) {
+            option = '<option value="' + x.value + '">' + x.text + '</option>';
+            
+            $('#' + id).append(option);
+        });
+      
+      
+    }).fail(function (xhr, textStatus, errorThrown) {
+        console.log(errorThrown, textStatus);
+    });
+
+}
+
+function Dropdown_selectD_Line(id, url) {
+    var option = '<option value="">All Groups</option>';
+    $('#' + id).html(option);
+    $.ajax({
+        url: url,
+        type: 'GET',
+        dataType: 'JSON',
+    }).done(function (data, textStatus, xhr) {
+
+        $.each(data.list, function (i, x) {
+            option = '<option value="' + x.value + '">' + x.text + '</option>';
+
+            $('#' + id).append(option);
+        });
+
+
+    }).fail(function (xhr, textStatus, errorThrown) {
+        console.log(errorThrown, textStatus);
+    });
+
+}
+
+
+
+function Dropdown_selectL(id, url) {
+    var option = '<option value="">--SELECT-- ' + getlongadjLineView() + '</option>';
+    $('#' + id).html(option);
+    $.ajax({
+        url: url,
+        type: 'GET',
+        dataType: 'JSON',
+    }).done(function (data, textStatus, xhr) {
+        $.each(data.list, function (i, x) {
+            option = '<option value="' + x.value + '">' + x.text + getshort() + '</option>';
+
+            //$('.selectpicker').selectpicker('refresh');
+            $('#' + id).append(option);
+        });
+
+        $("#FileType").trigger("change");
+    }).fail(function (xhr, textStatus, errorThrown) {
+        console.log(errorThrown, textStatus);
+    });
+}
+
 function Dropdown_select(id, url) {
     var option = '<option value="">--SELECT--</option>';
     $('#' + id).html(option);
@@ -96,6 +565,7 @@ function Dropdown_select(id, url) {
         });
 
         $("#FileType").trigger("change");
+       
     }).fail(function (xhr, textStatus, errorThrown) {
         console.log(errorThrown, textStatus);
     });

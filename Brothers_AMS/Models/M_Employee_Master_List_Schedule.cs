@@ -17,9 +17,8 @@ namespace Brothers_WMS.Models
         public long ID { get; set; }
         public string EmployeeNo { get; set; }
         public Nullable<long> ScheduleID { get; set; }
-        public Nullable<long> ScheduleID_CSTemp { get; set; }
-        public string CSRefNo { get; set; }
         public string UpdateID { get; set; }
         public Nullable<System.DateTime> UpdateDate { get; set; }
+        public Nullable<System.DateTime> EffectivityDate { get; set; }
     }
 }

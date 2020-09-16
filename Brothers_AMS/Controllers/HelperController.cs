@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 
@@ -45,7 +46,18 @@ namespace Brothers_WMS.Controllers
 
         public ActionResult GetSuperSection(string section)
         {
-            M_Cost_Center_List usersection = (from c in db.M_Cost_Center_List where c.GroupSection == section select c).FirstOrDefault();
+
+            M_Cost_Center_List usersection = new M_Cost_Center_List();
+                
+            if(section == "")
+            {
+                usersection = new M_Cost_Center_List();
+            }
+            else
+            {
+                usersection = (from c in db.M_Cost_Center_List where c.GroupSection == section select c).FirstOrDefault();
+
+            }
             return Json(new { usersection = usersection, usercostcode = usersection.Cost_Center }, JsonRequestBehavior.AllowGet);
         }
 
@@ -90,12 +102,27 @@ namespace Brothers_WMS.Controllers
             return Json(new { list = list }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult GetDropdown_EmployeeStatus()
+        public ActionResult GetDropdown_EmployeeStatus(string Sectiongroup, bool Mstatus)
         {
-            List<GET_Employee_Status_Result> listmain = db.GET_Employee_Status(user.CostCode).ToList();
-            var list = (from w in listmain
-                        select new { text = w.Status, value = w.Status }).Distinct().ToList();
-            return Json(new { list = list }, JsonRequestBehavior.AllowGet);
+            Sectiongroup = (user.CostCode == null) ? Sectiongroup : user.CostCode;
+            string GroupSection = (user.CostCode != Sectiongroup) ? Sectiongroup : (from c in db.M_Cost_Center_List where c.Cost_Center == Sectiongroup select c.GroupSection).FirstOrDefault();
+
+            List<GET_Employee_Status_Result> listmain = db.GET_Employee_Status(GroupSection).ToList();
+
+            if (Mstatus)
+            {
+                var list = (from w in listmain
+                            where w.Status != "&NBSP;"
+                            select new { text = w.ModifiedStatus, value = w.ModifiedStatus }).Distinct().ToList();
+                return Json(new { list = list }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                var list = (from w in listmain
+                            where w.Status != "&NBSP;"
+                            select new { text = w.Status, value = w.Status }).Distinct().ToList();
+                return Json(new { list = list }, JsonRequestBehavior.AllowGet);
+            }
         }
 
         public ActionResult GetDropdown_EmployeeModStatus()
@@ -106,9 +133,9 @@ namespace Brothers_WMS.Controllers
             return Json(new { list = list }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult GetDropdown_EmployeePosition()
+        public ActionResult GetDropdown_EmployeePosition(string Sectiongroup)
         {
-            List<GET_Employee_Status_Result> listmain = db.GET_Employee_Status(user.CostCode).ToList();
+            List<GET_Employee_Details_Result> listmain = db.GET_Employee_Details(Sectiongroup).ToList();
             var list = (from w in listmain
                         select new { text = w.Position, value = w.Position }).Distinct().ToList();
             return Json(new { list = list }, JsonRequestBehavior.AllowGet);
@@ -121,20 +148,56 @@ namespace Brothers_WMS.Controllers
             return Json(new { list = list }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult GetDropdown_SectionAMS()
+        public ActionResult GetDropdown_SectionAMS(string Dgroup)
         {
             var list = (from w in db.M_Cost_Center_List.ToList()
-                        select new { text = w.GroupSection, value = w.GroupSection }).Distinct().ToList();
+                    where w.GroupSection != null && w.GroupSection != ""
+                    orderby w.GroupSection ascending
+                    select new { text = w.GroupSection, value = w.GroupSection }).Distinct().ToList();
+            if (Dgroup != "" && Dgroup != null && Dgroup != "null")
+            {
+                 list = (from w in db.M_Cost_Center_List.ToList()
+                            where w.DepartmentGroup == Dgroup 
+                            &&  w.GroupSection != null && w.GroupSection != ""
+                            orderby w.GroupSection ascending
+                            select new { text = w.GroupSection, value = w.GroupSection }).Distinct().ToList();
+
+            }
+
+            return Json(new { list = list }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetDropdown_DepartmentAMS()
+        {
+            var list = (from w in db.M_Cost_Center_List.ToList()
+                        where w.DepartmentGroup != null && w.DepartmentGroup != ""
+                        orderby w.DepartmentGroup ascending
+                        select new { text = w.DepartmentGroup, value = w.DepartmentGroup }).Distinct().ToList();
             return Json(new { list = list }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult GetDropdown_Agency()
         {
-            var list = (from w in db.M_Agency.ToList()
+            List<M_Agency> a = (from c in db.M_Agency where c.AgencyCode == "BIPH" select c).ToList();
+            List<M_Agency> b = (from c in db.M_Agency where c.AgencyCode != "BIPH" orderby c.AgencyName ascending select c).ToList();
+            List<M_Agency> li = new List<M_Agency>();
+            foreach(M_Agency i in a)
+            {
+                li.Add(i);
+            }
+            foreach (M_Agency i in b)
+            {
+                li.Add(i);
+            }
+            var list = (from w in li
                         where w.IsDeleted == false && w.Status == true
                         select new { text = w.AgencyCode +" - "+ w.AgencyName, value = w.AgencyCode }).Distinct().ToList();
             return Json(new { list = list }, JsonRequestBehavior.AllowGet);
         }
+
+       
+
+        
 
         public ActionResult GetDropdown_EmployeeNo()
         {
@@ -147,7 +210,7 @@ namespace Brothers_WMS.Controllers
         public ActionResult GetDropdown_LineProcessTeam()
         {
             var list = (from w in db.M_LineTeam.ToList()
-                        where w.IsDeleted == false && w.Status == true
+                        where w.IsDeleted == false && w.Status == true orderby w.Line ascending
                         select new { text = w.Line, value = w.ID }).Distinct().ToList();
             return Json(new { list = list }, JsonRequestBehavior.AllowGet);
         }
@@ -155,9 +218,26 @@ namespace Brothers_WMS.Controllers
         public ActionResult GetDropdown_LineProcessTeamLogin()
         {
             var list = (from w in db.M_LineTeam.ToList()
-                        where w.IsDeleted == false && w.Status == true
+                        where w.IsDeleted == false && w.Status == true 
                         && w.Section == user.CostCode
+                        orderby w.Line ascending
                         select new { text = w.Line, value = w.ID }).Distinct().ToList();
+
+            return Json(new { list = list }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetDropdown_LineProcessTeamLoginV2(string CostCode)
+        {
+            string LineGroup = (from c in db.M_Cost_Center_List where c.Cost_Center == CostCode select c.GroupSection).FirstOrDefault();
+            List<string> GroupLine = (from c in db.M_Cost_Center_List where c.GroupSection == LineGroup select c.Cost_Center).ToList();
+
+            var list = (from w in db.M_LineTeam.ToList()
+                        where w.IsDeleted == false && w.Status == true
+                        //&& w.Section == user.CostCode
+                        && GroupLine.Contains(w.Section)
+                        orderby w.Line ascending
+                        select new { text = w.Line, value = w.ID }).Distinct().ToList();
+
             return Json(new { list = list }, JsonRequestBehavior.AllowGet);
         }
 
@@ -170,7 +250,7 @@ namespace Brothers_WMS.Controllers
         public ActionResult GetDropdown_LineProcessTeamwithSection(string CostCode, string RFID, string GroupSection)
         {
             long removezero = (RFID != "") ? Convert.ToInt64(RFID) : 0;
-            if(CostCode == "undefined")
+            if(CostCode == "undefined" || CostCode == "" || CostCode == "null")
             {
                 CostCode = (from c in db.M_Cost_Center_List where c.GroupSection == GroupSection select c.Cost_Center).FirstOrDefault();
             }
@@ -183,14 +263,17 @@ namespace Brothers_WMS.Controllers
 
             if(list.Count == 0)
             {
-                string SourceValue = dec2Hex(Convert.ToInt64(RFID));
-                string Hexvalue = SourceValue.Substring(SourceValue.Length - 4);
-                string Prefix = SourceValue.Remove(SourceValue.Length - 4).ToUpper();
-                string THERFID = hex2Dec(Hexvalue).ToString();
-                list = (from w in db.GET_M_SP_LineTeam(CostCode, THERFID).ToList()
-                        where w.IsDeleted == false
-                        && w.Status == true
-                        select new { text = w.Line, value = w.ID }).Distinct().ToList();
+                if (RFID != "")
+                {
+                    string SourceValue = dec2Hex(Convert.ToInt64(RFID));
+                    string Hexvalue = SourceValue.Substring(SourceValue.Length - 4);
+                    string Prefix = SourceValue.Remove(SourceValue.Length - 4).ToUpper();
+                    string THERFID = hex2Dec(Hexvalue).ToString();
+                    list = (from w in db.GET_M_SP_LineTeam(CostCode, THERFID).ToList()
+                            where w.IsDeleted == false
+                            && w.Status == true
+                            select new { text = w.Line, value = w.ID }).Distinct().ToList();
+                }
             }
             
             return Json(new { list = list }, JsonRequestBehavior.AllowGet);
@@ -215,12 +298,30 @@ namespace Brothers_WMS.Controllers
         {
             var list = (from w in db.M_Schedule.ToList()
                         where w.IsDeleted == false && w.Status == true
-                        select new { text = w.Timein +" - "+w.TimeOut + " ("+w.Type+")" , value = w.ID }).Distinct().ToList();
+                        orderby w.Type ascending
+                        select new { text = w.Timein + " - " + w.TimeOut + " (" + w.Type + ")", value = w.ID }).Distinct().ToList();
+            
             return Json(new { list = list }, JsonRequestBehavior.AllowGet);
         }
 
 
-       
+        public ActionResult GetDropdown_ScheduleReports()
+        {
+            var list = (from w in db.GET_RPMonitoringDropDownShift()
+                        select new { text = w.SchedName, value = w.ID }).Distinct().ToList();
+
+            return Json(new { list = list }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetDropdown_Schedule_Reports()
+        {
+            var list = (from w in db.RP_DropdownSchedules().ToList()
+                        select new { text = w.ScheduleName, value = w.ID }).Distinct().ToList();
+            return Json(new { list = list }, JsonRequestBehavior.AllowGet);
+        }
+
+
+
 
         #region Transaction CODE Generator
         public string GenerateDTRRef()
@@ -228,7 +329,7 @@ namespace Brothers_WMS.Controllers
             //DateTime startDateTime = DateTime.Today;
             //DateTime endDateTime = DateTime.Today.AddDays(1).AddTicks(-1);
             //string DTRRefNo = "";
-            //DateTime dt = DateTime.Now;
+            //DateTime dt = db.TT_GETTIME().FirstOrDefault();//DateTime.Now;;
             //string datenow = String.Format("{0:yyyyMMdd}", dt);
             //int todayOT = (from c in db.AF_DTRfiling where c.CreateDate >= startDateTime && c.CreateDate <= endDateTime select c).ToList().GroupBy(i => i.DTR_RefNo).Count();
             //todayOT++;
@@ -236,7 +337,7 @@ namespace Brothers_WMS.Controllers
             //return DTRRefNo;
 
             string DTRRefNo = "";
-            DateTime dt = DateTime.Now;
+            DateTime? dt = db.TT_GETTIME().FirstOrDefault();//DateTime.Now;;
             string datenow = String.Format("{0:yyyyMMdd}", dt);
             DTRRefNo = "DTR-" + user.Section + "_" + datenow;
             return DTRRefNo;
@@ -245,7 +346,7 @@ namespace Brothers_WMS.Controllers
         public string GenerateOTRef()
         {
             string OTRefNo = "";
-            DateTime dt = DateTime.Now;
+            DateTime? dt = db.TT_GETTIME().FirstOrDefault();//DateTime.Now;;
             string datenow = String.Format("{0:yyyyMMdd}", dt);
             //int todayOT = (from c in db.AF_OTfiling where c.CreateDate >= startDateTime && c.CreateDate <= endDateTime select c).ToList().GroupBy(i => i.OT_RefNo).Count();
             //todayOT++;
@@ -259,7 +360,7 @@ namespace Brothers_WMS.Controllers
             //DateTime startDateTime = DateTime.Today;
             //DateTime endDateTime = DateTime.Today.AddDays(1).AddTicks(-1);
             //string CSRefNo = "";
-            //DateTime dt = DateTime.Now;
+            //DateTime dt = db.TT_GETTIME().FirstOrDefault();//DateTime.Now;;
             //string datenow = String.Format("{0:yyyyMMdd}", dt);
             //int todayOT = (from c in db.AF_ChangeSchedulefiling where c.CreateDate >= startDateTime && c.CreateDate <= endDateTime select c).ToList().GroupBy(i => i.CS_RefNo).Count();
             //todayOT++;
@@ -267,9 +368,11 @@ namespace Brothers_WMS.Controllers
             //return CSRefNo;
             #endregion
             string CSRefNo = "";
-            DateTime dt = DateTime.Now;
-            string datenow = String.Format("{0:yyyyMMdd}", dt);
-            CSRefNo = "CS-" + user.Section + "_" + datenow;
+            DateTime? dt = db.TT_GETTIME().FirstOrDefault();//DateTime.Now;;
+            string datenow = String.Format("{0:yyyyMMddHHmmss}", dt);
+            string str = user.Section;
+            str = Regex.Replace(str, @"\s", "");
+            CSRefNo = "CS-" + str + "_" + datenow;
             return CSRefNo;
         }
 

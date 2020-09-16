@@ -13,13 +13,13 @@ namespace Brothers_WMS.Models
     
     public partial class GET_RP_AttendanceMonitoring_Result
     {
-        public string MainRFID { get; set; }
+        public int Rownum { get; set; }
         public string EmpNo { get; set; }
         public string EmployeeName { get; set; }
         public string Position { get; set; }
         public string Schedule { get; set; }
-        public string CostCenter_AMS { get; set; }
-        public string Status { get; set; }
+        public string CostCode { get; set; }
+        //public string Status { get; set; }
         public string RFID { get; set; }
         public string C1 { get; set; }
         public string C2 { get; set; }
@@ -52,5 +52,10 @@ namespace Brothers_WMS.Models
         public string C29 { get; set; }
         public string C30 { get; set; }
         public string C31 { get; set; }
+        public double Pcount { get; set; }
+        public double Bcount { get; set; }
+        public double Ycount { get; set; }
+        public int MLcount { get; set; }
+        public int WD { get; set; }
     }
 }

@@ -13,9 +13,11 @@ namespace Brothers_WMS.Models
     
     public partial class GET_M_Section_Result
     {
+        public Nullable<long> Rownum { get; set; }
         public long ID { get; set; }
         public string Cost_Center { get; set; }
         public string Section { get; set; }
         public string GroupSection { get; set; }
+        public string DepartmentGroup { get; set; }
     }
 }

@@ -19,5 +19,7 @@ namespace Brothers_WMS.Models
         public string Line { get; set; }
         public string Skill { get; set; }
         public string SkillLogo { get; set; }
+        public string UpdateBy { get; set; }
+        public Nullable<System.DateTime> UpdateDate { get; set; }
     }
 }

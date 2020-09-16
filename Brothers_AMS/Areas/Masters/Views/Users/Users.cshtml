@@ -38,35 +38,36 @@
         <div class="box-header">
             <i class="fa fa-user"></i>
             <h3 class="box-title">User Details</h3>
+
         </div>
         <div class="box-body pad">
-            <form action="" method="POST" role="form" id="UsersForm" >
+            <form action="" method="POST" role="form" id="UsersForm">
                 <input type="hidden" class="form-control input-sm" name="ID" id="ID" readonly="">
-@if (@UserSection == null)
-{
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <div class="input-group">
-                                <span class="input-group-addon">Section</span>
-                                <select class="form-control" name="Section" id="Section"></select>
+                @if (@UserSection == null)
+                {
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon">Section</span>
+                                    <select class="form-control select2" name="Section" id="Section"></select>
+                                </div>
                             </div>
                         </div>
+                        <div class="col-md-6">
+
+                        </div>
                     </div>
-                    <div class="col-md-6">
-                       
-                    </div>
-                </div>
 
 
-}
+                }
 
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
                             <div class="input-group">
                                 <span class="input-group-addon">User Name</span>
-                                <input type="text" class="form-control input-sm" name="UserName" id="UserName">
+                                <input type="text" class="form-control input-sm" name="UserName" id="UserName" required>
                             </div>
                         </div>
                     </div>
@@ -74,7 +75,7 @@
                         <div class="form-group">
                             <div class="input-group">
                                 <span class="input-group-addon">Email Address</span>
-                                <input type="text" class="form-control input-sm" name="Email" id="Email">
+                                <input type="text" class="form-control input-sm" name="Email" id="Email" required>
                             </div>
                         </div>
                     </div>
@@ -85,7 +86,7 @@
                         <div class="form-group">
                             <div class="input-group">
                                 <span class="input-group-addon">First Name</span>
-                                <input type="text" class="form-control input-sm" name="FirstName" id="FirstName">
+                                <input type="text" class="form-control input-sm" name="FirstName" id="FirstName" required>
                             </div>
                         </div>
                     </div>
@@ -93,7 +94,7 @@
                         <div class="form-group">
                             <div class="input-group">
                                 <span class="input-group-addon">Last Name</span>
-                                <input type="text" class="form-control input-sm" name="LastName" id="LastName">
+                                <input type="text" class="form-control input-sm" name="LastName" id="LastName" required>
                             </div>
                         </div>
                     </div>
@@ -117,9 +118,9 @@
                     </div>
 
                 </div>
-             
+
                 <div class="row">
-                   
+
                     <div class="offset-md-9 col-md-3">
                         <button type="submit" class="btn btn-flat bg-green btn-lg btn-block" id="Add_btn">
                             <i class="fa fa-save"></i> Save
@@ -133,13 +134,41 @@
 
         </div>
         <div class="box-body">
-            <table class="table table-striped table-no-bordered table-hover" id="UsersTable">
-                <thead>
 
-                </thead>
-            </table>
-            <br><br>
-            
+            <ul class="nav nav-tabs" role="tablist" id="tabs">
+                <li class="nav-item"> <a class="nav-link active" href="#NormalUsertab" data-toggle="tab" id="NormalUser">Users</a></li>
+                <li class="nav-item"> <a class="nav-link " href="#SuperUsertab" data-toggle="tab" id="SuperUser">Super Users</a></li>
+
+
+            </ul>
+
+            <div class="tab-content">
+                <div class="tab-pane padhider active" id="NormalUsertab">
+                    <table class="table table-striped table-no-bordered table-hover" id="NormalUserTable" width="100%">
+                        <thead>
+
+                        </thead>
+                    </table>
+                    <br><br>
+
+                </div>
+                <div class="tab-pane padhider" id="SuperUsertab">
+                    <table class="table table-striped table-no-bordered table-hover" id="UsersTable" width="100%">
+                        <thead>
+
+                        </thead>
+                    </table>
+                    <br><br>
+
+                </div>
+
+                
+            </div>
+
+         
+
+
+           
         </div>
     </div>
 </section>

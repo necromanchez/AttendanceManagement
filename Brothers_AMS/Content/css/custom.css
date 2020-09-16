@@ -114,7 +114,8 @@ select:not(:disabled){
 }
 
  .modalsizer{
-        width:1200px !important;
+        padding-left:10px;
+        width:1350px !important;
     }
 .tableadjustermodal{
     font-size: 10px !important;

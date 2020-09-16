@@ -1,9 +1,11 @@
 ﻿using Brothers_WMS.Controllers;
 using Brothers_WMS.Models;
 using Brothers_WMS.Models.AFModel;
+using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -26,7 +28,7 @@ namespace Brothers_WMS.Areas.Correction.Controllers
                 List<string> result = db.EmailPrompter(RefNo, "Regular", user.UserName,"DTR").ToList();
                 if (result.Count > 0)
                 {
-                    return Redirect("http://apbiphap05:2020/Correction/ApproverDTR/ApproverDTR?Approved=" + result[0]);
+                    return Redirect("http://apbiphwb08:2020/Correction/ApproverDTR/ApproverDTR?Approved=" + result[0]);
                     //return Redirect("http://localhost:49710/Correction/ApproverDTR/ApproverDTR?Approved=" + result[0]);
                 }
             }
@@ -177,20 +179,41 @@ namespace Brothers_WMS.Areas.Correction.Controllers
             OTType = (OTType == null) ? "Regular":OTType;
             string[] Position = {"Supervisor", "Manager", "GeneralManager" };
             int currentstatus = 0;
+            int stat = 0, statmax = 0;
             foreach (AF_DTRModel csrequest in GetApproved)
             {
-                AF_DTRfiling dtrfile = new AF_DTRfiling();
-                dtrfile = (from c in db.AF_DTRfiling where c.DTR_RefNo == csrequest.DTR_RefNo && c.EmployeeNo == csrequest.EmployeeNo && c.OvertimeType == OTType select c).FirstOrDefault();
-                currentstatus = dtrfile.Status + 1;
-                dtrfile.Status = (csrequest.Approved == true) ? currentstatus : currentstatus - (currentstatus * 2);
-                db.Entry(dtrfile).State = EntityState.Modified;
-               
-                if (dtrfile.Status > 0)
+                if (csrequest.Approved == true)
                 {
-                    db.AF_EmailDTRRequest(dtrfile.DTR_RefNo);
+                    AF_DTRfiling dtrfile = new AF_DTRfiling();
+                    dtrfile = (from c in db.AF_DTRfiling where c.Status > -1 && c.DTR_RefNo == csrequest.DTR_RefNo && c.EmployeeNo == csrequest.EmployeeNo && c.OvertimeType == OTType select c).FirstOrDefault();
+                    currentstatus = dtrfile.Status + 1;
+                    dtrfile.Status = (csrequest.Approved == true) ? currentstatus : currentstatus - (currentstatus * 2);
+                    db.Entry(dtrfile).State = EntityState.Modified;
+
+                 
+                    db.SaveChanges();
+                    stat = dtrfile.Status;
+                    statmax = dtrfile.StatusMax;
                 }
-                db.SaveChanges();
+                else
+                {
+                    AF_DTRfiling dtrfile = new AF_DTRfiling();
+                    dtrfile = (from c in db.AF_DTRfiling where c.Status > -1 && c.DTR_RefNo == csrequest.DTR_RefNo && c.EmployeeNo == csrequest.EmployeeNo && c.OvertimeType == OTType select c).FirstOrDefault();
+                    currentstatus = dtrfile.Status + 1;
+                    dtrfile.Status = (csrequest.Approved == true) ? currentstatus : currentstatus - (currentstatus * 2);
+                    db.Entry(dtrfile).State = EntityState.Modified;
+                    
+                    db.SaveChanges();
+                }
             }
+            
+             
+
+            if (stat == statmax)
+            {
+                SendTheMail(GetApproved[0].DTR_RefNo);
+            }
+
             #region update Approver Status
             string refno = GetApproved[0].DTR_RefNo;
             string pos = (ifalter == "alter") ? "Alternative " + Position[currentstatus - 1] : Position[currentstatus - 1];
@@ -208,6 +231,7 @@ namespace Brothers_WMS.Areas.Correction.Controllers
 
             #endregion
 
+            db.AF_EmailDTRRequest(refno);
             return Json(new { }, JsonRequestBehavior.AllowGet);
         }
 
@@ -221,26 +245,26 @@ namespace Brothers_WMS.Areas.Correction.Controllers
                 {
                     AF_DTRfiling otfile = new AF_DTRfiling();
                     otfile = (from c in db.AF_DTRfiling where c.DTR_RefNo == dtrrequest.DTR_RefNo && c.EmployeeNo == dtrrequest.EmployeeNo select c).FirstOrDefault();
-                    currentstatus = otfile.Status + 1;
-                    otfile.Status = (dtrrequest.Approved == true) ? currentstatus - (currentstatus * 2): currentstatus;
+                    currentstatus = (otfile.Status + 1) *-1;
+                    otfile.Status =  currentstatus;
                     db.Entry(otfile).State = EntityState.Modified;
                     db.SaveChanges();
                 }
 
             }
             #region update Approver Status
-            string refno = GetApproved[0].DTR_RefNo;
-            string pos = (ifalter == "alter") ? "Alternative " + Position[currentstatus] : Position[currentstatus];
-            M_Section_ApproverStatus approverstatus = (from c in db.M_Section_ApproverStatus
-                                                       where c.RefNo == refno
-                                                       && c.EmployeeNo == user.UserName
-                                                       && c.Position == pos
-                                                       select c).FirstOrDefault();
+            //string refno = GetApproved[0].DTR_RefNo;
+            //string pos = (ifalter == "alter") ? "Alternative " + Position[currentstatus] : Position[currentstatus];
+            //M_Section_ApproverStatus approverstatus = (from c in db.M_Section_ApproverStatus
+            //                                           where c.RefNo == refno
+            //                                           && c.EmployeeNo == user.UserName
+            //                                           && c.Position == pos
+            //                                           select c).FirstOrDefault();
 
 
-            approverstatus.Approved = -1;
-            db.Entry(approverstatus).State = EntityState.Modified;
-            db.SaveChanges();
+            //approverstatus.Approved = -1;
+            //db.Entry(approverstatus).State = EntityState.Modified;
+            //db.SaveChanges();
 
             #endregion
 
@@ -281,5 +305,113 @@ namespace Brothers_WMS.Areas.Correction.Controllers
             }
             return Json(new { EmpnoCannotCancel = EmpnoCannotCancel }, JsonRequestBehavior.AllowGet);
         }
+
+        public void SendTheMail(string RefNo)
+        {
+            try
+            {
+                List<string> AgencyList = new List<string>();
+                AgencyList = (from c in db.AF_DTRfiling where c.DTR_RefNo == RefNo select c.BIPH_Agency).ToList();
+                AgencyList = AgencyList.Distinct().ToList();
+                foreach (string Agency in AgencyList)
+                {
+
+                    long? lineID, a;
+                    string lineid = "";
+                    if (System.Web.HttpContext.Current.Session["lINEID"] == null)
+                    {
+                        lineID = null;
+                    }
+                    else
+                    {
+                        a = null;
+                        lineid = System.Web.HttpContext.Current.Session["lINEID"].ToString();
+                        lineID = (lineid == "") ? a : Convert.ToInt64(lineid);
+                    }
+                    string Agencycode = (Agency == "") ? "BIPH" : Agency;
+                    M_Agency AgencyDetails = (from c in db.M_Agency where c.AgencyCode == Agencycode select c).FirstOrDefault();
+                    string templateFilename = "";
+
+                    templateFilename = "StandardizeDTR_template.xlsx";
+
+                    string dir = Path.GetTempPath();
+                    string datetimeToday = DateTime.Now.ToString("yyMMddhhmmss");
+                    string filename = string.Format("StandardizeDTR_template{0}.xlsx", datetimeToday);
+                    FileInfo newFile = new FileInfo(Path.Combine(dir, filename));
+                    FileInfo newFilecopy = new FileInfo(Path.Combine(dir, filename));
+                    string apptemplatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"TemplateFiles\StandardTemplate\", templateFilename);
+                    FileInfo templateFile = new FileInfo(apptemplatePath);
+                    M_Employee_Master_List current = (from c in db.M_Employee_Master_List where c.EmpNo == user.UserName select c).FirstOrDefault();
+                    using (ExcelPackage package = new ExcelPackage(newFile, templateFile))  //-- With template.
+                    {
+                        List<GET_AF_DTRExport_Result> list = db.GET_AF_DTRExport(RefNo, Agency).ToList();
+                        int start = 12;
+                        ExcelWorksheet ExportData = package.Workbook.Worksheets["Standardized-DTR Form"];
+                        for (int i = 0; i < list.Count; i++)
+                        {
+                            ExportData.Cells["B" + start].Value = list[i].EmployeeNo;
+                            ExportData.Cells["C" + start].Value = list[i].Family_Name + ", " + list[i].First_Name;
+                            ExportData.Cells["D" + start].Value = list[i].Concerns;
+                            ExportData.Cells["E" + start].Value = list[i].Reason;
+                            ExportData.Cells["F" + start].Value = list[i].DateFrom;
+                            ExportData.Cells["G" + start].Value = list[i].DateTo;
+                            ExportData.Cells["H" + start].Value = list[i].Timein;
+                            ExportData.Cells["I" + start].Value = list[i].TimeOut;
+                            ExportData.Cells["J" + start].Value = list[i].EmployeeAccept;
+                            start++;
+                        }
+
+
+
+
+                        ExportData.Cells["C5"].Value = current.Department;
+                        ExportData.Cells["J6"].Value = user.Section;
+                        ExportData.Cells["J5"].Value = DateTime.Now.ToShortDateString();
+                        ExportData.Cells["C1"].Value = AgencyDetails.AgencyName;
+                        ExportData.Cells["C2"].Value = AgencyDetails.Address;
+                        ExportData.Cells["C3"].Value = AgencyDetails.TelNo;
+                        ExportData.Cells["I51"].Value = AgencyDetails.ISO_DTR;
+
+                        string path = Server.MapPath(@"/PictureResources/AgencyLogo/" + AgencyDetails.Logo);
+
+
+                        #region IMAGE
+                        using (System.Drawing.Image image = System.Drawing.Image.FromFile(path))
+                        {
+                            var excelImage = ExportData.Drawings.AddPicture("logohere", image);
+                            excelImage.SetSize(140, 69);
+                            excelImage.SetPosition(0, 0, 1, 1);
+
+                        }
+
+                        #endregion
+
+
+
+                        //string paths = @"\\192.168.200.100\Published Files\Brothers_AMS\" + filename;
+                        //Stream stream = System.IO.File.Create(paths);
+                        //package.SaveAs(stream);
+                        //stream.Close();
+                        //try
+                        //{
+                        //    db.AF_SendAgency("ce.ragas@seiko-it.com.ph", filename);
+                        //}
+                        //catch (Exception err) { }
+                    }
+                }
+            }
+            catch (Exception err)
+            {
+                Error_Logs error = new Error_Logs();
+                error.PageModule = "Application Form - CS";
+                error.ErrorLog = err.Message;
+                error.DateLog = DateTime.Now;
+                error.Username = user.UserName;
+                db.Error_Logs.Add(error);
+                db.SaveChanges();
+            }
+
+        }
+
     }
 }

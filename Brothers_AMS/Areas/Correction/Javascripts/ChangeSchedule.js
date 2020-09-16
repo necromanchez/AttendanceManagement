@@ -1,14 +1,17 @@
 ﻿$(function () {
-    Dropdown_select('BIPH_Agency', "/Helper/GetDropdown_Agency");
+    $("#ALLtbl").hide();
+    $("#checkall_emp").prop("disabled", true);
+    Dropdown_selectEmpSection('BIPH_Agency', "/Helper/GetDropdown_Agency");
     //Dropdown_select('Section', "/Helper/GetDropdown_Section");
-    Dropdown_select('Line_Team', "/Helper/GetDropdown_LineProcessTeamLogin");
+    Dropdown_selectMP('Line_Team', "/Helper/GetDropdown_LineProcessTeamLogin");
     GetcurrentSection('Section', "/Helper/GetCurrentSection");
-
-    Dropdown_select('Schedule', "/Helper/GetDropdown_Schedule");
-    Dropdown_select('ScheduleSum', "/Helper/GetDropdown_Schedule");
-    $('#ConfirmChangeSchedule').on('hidden.bs.modal', function (e) {
-        setTimeout(function () { location.reload(); }, 2500);
-    })
+    Dropdown_selectFileType("FileType");
+    Dropdown_selectCS("CSType");
+    Dropdown_selectMP('Schedule', "/Helper/GetDropdown_Schedule");
+    Dropdown_selectMP('ScheduleSum', "/Helper/GetDropdown_Schedule");
+    //$('#ConfirmChangeSchedule').on('hidden.bs.modal', function (e) {
+    //    setTimeout(function () { location.reload(); }, 2500);
+    //})
     
     initDatePicker('DateFrom');
     initDatePicker('DateTo');
@@ -16,7 +19,8 @@
     $("#Schedule").on("change", function () {
         var la = $("#Schedule option:selected").text().split(" - ");
         $("#CSin").val(la[0]);
-        $("#CSout").val(la[1]);
+        var ss = la[1].split(" ");
+        $("#CSout").val(ss[0]);
         
         $.ajax({
             url: '../ChangeSchedule/GetShift',
@@ -33,36 +37,11 @@
     })
     $("#Section").prop('disabled', true);
     $("#Line_Team").prop('disabled', true);
-    //$("#FileType").on("change", function () {
-    //    if ($(this).val() == 1) {
-    //        $("#Section").prop('disabled', true);
-    //        $("#Line_Team").prop('disabled', true);
-    //        $("#EmployeeNo").prop('disabled', false);
-    //        $("#Section").val('');
-    //        $("#Line_Team").val('');
-    //        $("#EmployeeNo").val('');
-    //    }
-    //    else {
-    //        $.ajax({
-    //            url: '/Helper/GetSection',
-    //            type: 'POST',
-    //            datatype: "json",
-    //            success: function (returnData) {
-    //                $('#Section').val(returnData.usersection);
-    //                $("#Section").prop('disabled', true);
-    //                $("#Line_Team").prop('disabled', false);
-    //                $("#EmployeeNo").prop('disabled', true);
-    //                $("#Line_Team").val('');
-    //                $("#EmployeeNo").val('');
-    //            }
-    //        });
-          
-    //    }
-    //})
-
     $("#FileType").on("change", function () {
+        chosend_EmpNo = [];
         if ($("#BIPH_Agency").val() != "") {
             if ($(this).val() == 1) {
+                $("#checkall_emp").prop("disabled", true);
                 $("#Section").prop('disabled', true);
                 $("#Line_Team").prop('disabled', true);
                 $("#EmployeeNo").prop('disabled', false);
@@ -72,6 +51,7 @@
                 $("#EmployeeNo").val('');
             }
             else {
+                $("#checkall_emp").prop("disabled", false);
                 $.ajax({
                     url: '/Helper/GetSection',
                     type: 'POST',
@@ -84,31 +64,42 @@
                         $("#EmployeeNo").css('background-color', "#E9ECEF");
                         $("#Line_Team").val('');
                         $("#EmployeeNo").val('');
+                        single = false;
                         //
                     }
                 });
+
             }
+
         }
         else {
-            $("#FileType").trigger("change");
+            //$("#FileType").trigger("change");
         }
         $("#btnSearch").trigger("click");
     })
+
+
+    
     $("#btnSearch").on("click", function () {
         Initializepage();
     })
     $("#checkall_emp").on("change", function () {
         if (this.checked) {
+            $('.empmod').each(function (i, obj) {
+                chosend_EmpNo.push(obj.id);
+            });
             $('.empmod').prop('checked', true);
         }
-        else {
-            $('.empmod').prop('checked', false);
-        }
+        //else {
+        //    $('.empmod').each(function (i, obj) {
+        //        chosend_EmpNo.remove(obj.id);
+        //    }); $('.empmod').prop('checked', false);
+        //}
     })
 
     $("#btnconfirm").on("click", function () {
         if ($("#DateFrom").val() <= $("#DateTo").val()) {
-            var EmployeeList = $('input[type="checkbox"][name="employchosen"]:checked').map(function () { return this.id; }).get();
+            var EmployeeList = chosend_EmpNo;// $('input[type="checkbox"][name="employchosen"]:checked').map(function () { return this.id; }).get();
             if (EmployeeList.length > 0) {
                 if ($("#DateFrom").val() != ""
                     && $("#DateTo").val()
@@ -118,7 +109,7 @@
                     $("#DateFromSum").val($("#DateFrom").val());
                     $("#DateToSum").val($("#DateTo").val());
                     $("#ScheduleSum").val($("#Schedule").val());
-                    var EmployeeList = $('input[type="checkbox"][name="employchosen"]:checked').map(function () { return this.id; }).get();
+                    var EmployeeList = chosend_EmpNo;//$('input[type="checkbox"][name="employchosen"]:checked').map(function () { return this.id; }).get();
                     $('#ChosenEmployeeTable').DataTable({
                         ajax: {
                             url: '../OT/GetEmployeeList',
@@ -135,8 +126,8 @@
                                 TransType: "CS"
                             }
                         },
-                        lengthMenu: [100, 200, 300, 500],
-                        pagelength: 5000,
+                        lengthMenu: [[10, 50, 100], [10, 50, 100]],
+                        
                         lengthChange: false,
                         scrollY: "600px",
                         scrollCollapse: true,
@@ -189,7 +180,12 @@
     $(".autof").on("change", function () {
         $("#btnSearch").trigger("click");
     })
-   
+    $("#BIPH_Agency").on("change", function () {
+        $("#loading_modal").modal("show");
+        $("#btnSearch").trigger("click");
+        $("#ALLtbl").show();
+        //$("#btnDownloadTemplate").prop("disabled", false);
+    })
 
     $('#EmployeeNo').keypress(function (event) {
         var keycode = (event.keyCode ? event.keyCode : event.which);
@@ -205,7 +201,8 @@
                 datatype: "json",
                 success: function (returnData) {
                     $('#EmployeeNo').val(returnData.empno);
-
+                    var t = $('#ChangeScheduleTable').DataTable();
+                    t.search(returnData.empno);
                 }
             });
         }
@@ -267,6 +264,19 @@
     Initializepage();
 })
 var single = false;
+var chosend_EmpNo = [];
+
+Array.prototype.remove = function () {
+    var what, a = arguments, L = a.length, ax;
+    while (L && this.length) {
+        what = a[--L];
+        while ((ax = this.indexOf(what)) != -1) {
+            this.splice(ax, 1);
+        }
+    }
+    return this;
+}
+
 function Initializepage() {
     $('#ChangeScheduleTable').DataTable({
         ajax: {
@@ -282,12 +292,11 @@ function Initializepage() {
                 TransType: "CS"
             }
         },
-        serverSide: "true",
-        lengthMenu: [100, 200, 300, 500],
-        pagelength: 5000,
+        //ordering:false,
+        lengthMenu: [10, 20, 30, 50],
+        pagelength: 10,
         lengthChange: false,
-        scrollY: "600px",
-        scrollCollapse: true,
+        serverSide: "true",
         order: [0, "asc"],
         processing: "true",
         language: {
@@ -295,11 +304,19 @@ function Initializepage() {
         },
         //dom: 'Bfrtip',
         destroy: true,
+        initComplete: function () {
+            $("#loading_modal").modal("hide");
+            if ($("#BIPH_Agency").val() == "") {
+                $(".empmod").prop("disabled", true);
+            }
+          
+          
+        },
         columns: [
               {
                   data: function (data, type, row, meta) {
-                      var status = (single) ? "checked" : "";
-                      return " <input type='checkbox' id=" + data.EmpNo + " class='empmod filled-in chk-col-light-blue' name='employchosen' " + status + "/>" +
+                      var status = ((chosend_EmpNo.indexOf(data.EmpNo) !== -1)) ? "checked" : "";
+                      return " <input type='checkbox' id=" + data.EmpNo + " class='empmod filled-in chk-col-light-blue' name='employchosen' " + status + " onclick=GetEmployeeChosen('" + data.EmpNo + "') />" +
                               " <label class=checker for=" + data.EmpNo + "></label>"
 
                   }, orderable: false, searchable: false
@@ -317,7 +334,7 @@ function Initializepage() {
 
     });
 
-    $('#ChangeScheduleTable tbody').on('click', 'tr', function () {
+    $('#tbody').on('click', 'tr', function () {
 
         if ($("#EmployeeNo").val() == "" && $("#FileType").val() == 1) {
             var tabledata = $('#ChangeScheduleTable').DataTable();
@@ -331,6 +348,26 @@ function Initializepage() {
         }
 
     });
+
+}
+
+function GetEmployeeChosen(EmpNo) {
+    if ($("#BIPH_Agency").val() != "") {
+        $("#Schedule").prop("disabled", false);
+        $(".empmod").prop("disabled", false);
+        if (chosend_EmpNo.indexOf(EmpNo) !== -1) {
+            chosend_EmpNo.remove(EmpNo);
+        } else {
+            chosend_EmpNo.push(EmpNo);
+        }
+    }
+
+    if ($("#FileType").val() == 1) {
+        $("#EmployeeNo").val(EmpNo);
+        $("#btnSearch").trigger("click");
+    }
+ 
+
 
 }
 
@@ -385,4 +422,19 @@ function DownloadTemplate() {
     else {
         swal("Please choose Agency");
     }
+}
+
+function Dropdown_selectCS(id) {
+    var option = '<option value="">--SELECT--' + getlong() + '</option>';
+    var daa = ["Change of Shift Schedule", "Change of Rest Day", "No Work Schedule"];
+    var data = ["CS", "RD", "NW"];
+    $('#' + id).html(option);
+
+    $.each(daa, function (i, x) {
+        option = '<option value="' + data[i] + '">' + x + '</option>';
+
+        //$('.selectpicker').selectpicker('refresh');
+        $('#' + id).append(option);
+    });
+
 }

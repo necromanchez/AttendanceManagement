@@ -15,6 +15,7 @@ namespace Brothers_WMS.Models
     {
         public string EmpNo { get; set; }
         public string EmployeeName { get; set; }
+        public Nullable<long> LineID { get; set; }
         public string Line { get; set; }
         public string Skill { get; set; }
         public string Schedule { get; set; }

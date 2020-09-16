@@ -73,6 +73,7 @@ namespace Brothers_WMS.Controllers
         public ActionResult Authenticate(UsersLog user)
         {
             string result = "";
+            db.Database.CommandTimeout = 0;
             try
             {
                 string pass = EncodePasswordMd5(user.Password);
@@ -82,6 +83,7 @@ namespace Brothers_WMS.Controllers
                                  && c.IsDeleted == false
                                  select c).FirstOrDefault();
                 check.Section = (from c in db.M_Cost_Center_List where c.Cost_Center == check.CostCode select c.GroupSection).FirstOrDefault();
+                check.CostCode = (from c in db.M_Employee_CostCenter where c.EmployNo == user.UserName orderby c.UpdateDate_AMS descending select c.CostCenter_AMS).FirstOrDefault();
                 if (check != null)
                 {
                     bool rememberme = false;
@@ -89,9 +91,7 @@ namespace Brothers_WMS.Controllers
                     {
                         rememberme = true;
                     }
-
-
-
+                    
                     string emailtemplatepath = Server.MapPath(@"~/Content/EmailForm/OTEmail.html");
                     System.Web.HttpContext.Current.Session["emailpath"] = emailtemplatepath;
                     System.Web.HttpContext.Current.Session["UserName"] = check.FirstName + ' ' + check.LastName;
@@ -105,8 +105,15 @@ namespace Brothers_WMS.Controllers
                              rememberme,
                              user.ToString());
 
-                    RefreshPageAccess(check.UserName);
+                    RefreshPageAccess(check.UserName, check.Section);
 
+                 
+                    List<CostCenterM> newCostCode = (from c in db.M_Cost_Center_List where c.GroupSection == "" || c.GroupSection == null
+                                                     select new CostCenterM {
+                                                         CostCodenew = c.Cost_Center,
+                                                         CostCodenewname = c.Section
+                                                     }).ToList();
+                    System.Web.HttpContext.Current.Session["newCostCode"] = newCostCode;
 
                 }
                 result = (check == null) ? "Failed" : "Success";
@@ -115,7 +122,7 @@ namespace Brothers_WMS.Controllers
                     //Error_Logs error = new Error_Logs();
                     //error.PageModule = "Login";
                     //error.ErrorLog = "Incorrect Username or Password";
-                    //error.DateLog = DateTime.Now;
+                    //error.DateLog = db.TT_GETTIME().FirstOrDefault();//DateTime.Now;;
                     //error.Username = user.UserName;
                     //db.Error_Logs.Add(error);
                     //db.SaveChanges();
@@ -129,7 +136,7 @@ namespace Brothers_WMS.Controllers
                 Error_Logs error = new Error_Logs();
                 error.PageModule = "Login";
                 error.ErrorLog = err.Message;
-                error.DateLog = DateTime.Now;
+                error.DateLog = db.TT_GETTIME().FirstOrDefault();//DateTime.Now;;
                 error.Username = user.UserName;
                 db.Error_Logs.Add(error);
                  db.SaveChanges();
@@ -138,7 +145,7 @@ namespace Brothers_WMS.Controllers
             }
         }
 
-        public void RefreshPageAccess(string UserName)
+        public void RefreshPageAccess(string UserName, string Section)
         {
             #region For Page Access
             M_Users userchosen = (from c in db.M_Users where c.UserName == UserName select c).FirstOrDefault();
@@ -157,6 +164,13 @@ namespace Brothers_WMS.Controllers
             List<M_SP_PageandAccess_Result> SummaryPageList = db.M_SP_PageandAccess(UserName, "Reports").Where(x=>x.AccessType == true).ToList();
             List<M_SP_PageandAccess_Result> ForeCastList = db.M_SP_PageandAccess(UserName, "ForeCast").Where(x => x.AccessType == true).ToList();
 
+
+            #region FORCE REMOVE Form to super user
+            if(Section == null || Section == "")
+            {
+                ApplicationFormPageList = ApplicationFormPageList.Where(x => x.PageIndex != "OT" && x.PageIndex != "ChangeSchedule" && x.PageIndex != "DTR").ToList();
+            }
+            #endregion
 
             System.Web.HttpContext.Current.Session["MasterPageList"] = MasterPageList;
             System.Web.HttpContext.Current.Session["ApplicationFormPageList"] = ApplicationFormPageList;

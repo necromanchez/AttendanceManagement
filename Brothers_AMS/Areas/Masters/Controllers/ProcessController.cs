@@ -23,10 +23,10 @@ namespace Brothers_WMS.Areas.Masters.Controllers
         M_Users user = (M_Users)System.Web.HttpContext.Current.Session["user"];
         public ActionResult Process()
         {
-            //db.M_SP_SectionInsert();
+            db.M_SP_SectionInsert();
             return View();
         }
-        public ActionResult GetLineProcessTeamList()
+        public ActionResult GetLineProcessTeamList(string GroupSection)
         {
             //Server Side Parameter
             int start = Convert.ToInt32(Request["start"]);
@@ -35,13 +35,24 @@ namespace Brothers_WMS.Areas.Masters.Controllers
             string sortColumnName = Request["columns[" + Request["order[0][column]"] + "][name]"];
             string sortDirection = Request["order[0][dir]"];
 
-            List<GET_M_SP_LineTeam_Result> list = db.GET_M_SP_LineTeam(user.CostCode, "").ToList();//List<M_LineTeam> list = new List<M_LineTeam>();
-          
+            string co =(user.CostCode == null)? "" :user.CostCode;
 
+            if (GroupSection != "" && GroupSection != null)
+            {
+                co = (from c in db.M_Cost_Center_List where c.GroupSection == GroupSection select c.Cost_Center).FirstOrDefault();
+            }
+            else if(co != null)
+            {
+                GroupSection = (from c in db.M_Cost_Center_List where c.Cost_Center == co select c.GroupSection).FirstOrDefault();
+            }
+
+            List<GET_M_Process_Result> list = db.GET_M_Process(GroupSection).ToList();//List<M_LineTeam> list = new List<M_LineTeam>();
+
+            //list = list.Where(x => x.SectionName != null).ToList();
             if (!string.IsNullOrEmpty(searchValue))//filter
             {
                 list = list.Where(x => x.SectionName.ToLower().Contains(searchValue.ToLower())
-                || x.Line.ToLower().Contains(searchValue.ToLower())).ToList<GET_M_SP_LineTeam_Result>();
+                || x.Line.ToLower().Contains(searchValue.ToLower())).ToList<GET_M_Process_Result>();
             }
             if (sortColumnName != "" && sortColumnName != null)
             {
@@ -59,7 +70,7 @@ namespace Brothers_WMS.Areas.Masters.Controllers
 
 
             //paging
-            list = list.Skip(start).Take(length).ToList<GET_M_SP_LineTeam_Result>();
+            list = list.Skip(start).Take(length).ToList<GET_M_Process_Result>();
             return Json(new { data = list, draw = Request["draw"], recordsTotal = totalrows, recordsFiltered = totalrowsafterfiltering }, JsonRequestBehavior.AllowGet);
         }
         public ActionResult CreateLineProcessTeam(M_LineTeam data)
@@ -192,12 +203,12 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                         {
                             DataTable dt = new DataTable();
                             cmdExcel.Connection = connExcel;
-                            string sheetName = "Skills";
+                            string sheetName = "Process";
                             try
                             {
                                 connExcel.Open();
                            
-                                cmdExcel.CommandText = "SELECT Skill, IdealManPower FROM [" + sheetName + "$]";//ung * is column name, ung sheetname ay settings
+                                cmdExcel.CommandText = "SELECT Process, IdealManPower FROM [" + sheetName + "$]";//ung * is column name, ung sheetname ay settings
                                 odaExcel.SelectCommand = cmdExcel;
                             
                                 odaExcel.Fill(dt);
@@ -268,7 +279,7 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                                     {
                                         M_Skills Skilltb = new M_Skills();
                                         Skilltb.Line = LineID;
-                                        Skilltb.Skill = dt.Rows[x]["Skill"].ToString();
+                                        Skilltb.Skill = dt.Rows[x]["Process"].ToString();
                                         Skilltb.Count = Convert.ToInt32(dt.Rows[x]["IdealManPower"]);
                                         Skilltb.IsDeleted = false;
                                         Skilltb.CreateDate = DateTime.Now;
@@ -312,6 +323,12 @@ namespace Brothers_WMS.Areas.Masters.Controllers
             }
 
             return Json(new { }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetLineName(long ID)
+        {
+            string linename = (from c in db.M_LineTeam where c.ID == ID select c.Line).FirstOrDefault();
+            return Json(new { linename = linename });
         }
     }
 }

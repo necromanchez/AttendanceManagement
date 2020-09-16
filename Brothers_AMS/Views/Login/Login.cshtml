@@ -14,7 +14,11 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="icon" href="../../images/favicon.ico">
-
+    <style>
+        .bbody {
+         background-image: url("/Content/images/BG1.png") !important;
+        }
+    </style>
     <title>AMS - Log in </title>
 
     <!-- Bootstrap 4.0-->
@@ -45,7 +49,10 @@
     @*<link href="../../../../../../fonts.googleapis.com/css6079.css?family=Poppins:300,400,500,600,700" rel="stylesheet">*@
 
 </head>
-<body class="hold-transition login-page">
+
+<body class="hold-transition login-page" id="bbody">
+
+    @*<img src="~/Content/images/BG.png" alt="Brother" style="height:65px;" />*@
     <div class="login-box">
        
         <!-- /.login-logo -->
@@ -111,7 +118,11 @@
             var obj = document.getElementById('Password');
             obj.type = "password";
         }
+        var bg = ["BG", "BG1", "BG2"];
         $(function () {
+            var nu = Math.floor(Math.random() * 3) + 1;
+            var chosen = bg[nu-1];
+            $('#bbody').css('background-image', 'url(/Content/images/' + chosen + '.png)');
             $("#UserName").focus();
             $('#Password').keypress(function (e) {
                 var key = e.which;

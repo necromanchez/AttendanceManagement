@@ -1,4 +1,24 @@
-﻿
+﻿@using Brothers_WMS.Models;
+@using System.Data.SqlClient;
+@using Brothers_WMS.Controllers;
+@using System.Configuration;
+@{
+    List<CostCenterM> CostCodenew = new List<CostCenterM>();
+    string UserSection = string.Empty;
+    if ((List<CostCenterM>)(Session["newCostCode"]) != null)
+    {
+        CostCodenew = (List<CostCenterM>)(Session["newCostCode"]);
+        M_Users UserInfo = (M_Users)(Session["user"]);
+        UserSection = UserInfo.Section;
+        //UserSection = UserInfo.Section;
+    }
+    else
+    {
+        Url.Action("Logout", "Login");
+    }
+
+
+}
 <header class="main-header">
 
     <!-- Logo -->
@@ -18,56 +38,49 @@
         </a>
 
         <div class="navbar-custom-menu">
-            <ul class="nav navbar-nav">
-                <!-- User Account: style can be found in dropdown.less -->
-                @*<li class="dropdown user user-menu" data-placement="bottom" title="User Profile">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <img src="/Content/images/user2-160x160.jpg" class="user-image rounded" alt="User Image">
-                        <i class=" fa fa-user-circle-o"></i>
-                    </a>
-                    <ul class="dropdown-menu scale-up">
-                        <!-- User image -->
-                        <li class="user-header">
-                            <img src="" class="rounded float-left" alt="User Image">
-                            <p>
-                                Hello do it
-                            </p>
-                        </li>
-                        <!-- Menu Body -->
-                        <li class="user-body" style="display:none;">
-                            <div class="row">
-                                <div class="col text-center">
-                                    <a href="#">Followers</a>
-                                </div>
-                                <div class="col text-center">
-                                    <a href="#">Friends</a>
-                                </div>
-                                <div class="col text-center">
-                                    <a href="#">Sales</a>
-                                </div>
-                            </div>
-                            <!-- /.row -->
-                        </li>
-                        <!-- Menu Footer-->
-                        @*<li class="user-footer">
-                            <div class="row">
-                                <div class="col-md-8">
-                                    <button class="btn btn-block btn-info" id="chngepassbtn" onclick="btnChangePassword_OnClick()">Change Password</button>
-                                </div>
-                                <div class="col-md-12">
-                                    <button class="btn btn-block btn-danger" id="logoutbtn" onclick="LogOff()">Sign out</button>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                </li>*@
-                
-                <!-- Control Sidebar Toggle Button -->
-                <li>
-                    <a href="#" data-toggle="control-sidebar" data-placement="bottom" title="Theme Settings"><i class="fa fa-cog fa-spin"></i></a>
-                </li>
-            </ul>
-        </div>
+        
+            <ul class="nav navbar-nav" style="font-size:26px">
+                @if (UserSection == null)
+                {
+                    <li class="dropdown messages-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <i class="fa fa-bell"></i>
+                            <span class="label label-success" style="font-size:15px">@CostCodenew.Count()</span>
+                        </a>
+                        <ul class="dropdown-menu scale-up">
+                            <li>
+                                <!-- inner menu: contains the actual data -->
+                                <ul class="menu inner-content-div">
+                                    @foreach (CostCenterM a in CostCodenew)
+                                    {
+                                        <li>
+                                            <!-- start message -->
+                                            <a href="#">
+
+                                                <div class="mail-contnet">
+                                                    <h4>
+                                                        @a.CostCodenew
+                                                        <small><i class="fa fa-cogs"></i>  @a.CostCodenewname</small>
+                                                    </h4>
+
+                                                </div>
+                                            </a>
+                                        </li>
+                                    }
+                                    <!-- end message -->
+
+                                </ul>
+                            </li>
+                            <li class="footer"><a href="#" id="goCost">See Cost Center</a></li>
+                        </ul>
+                    </li>
+
+                }
+                    <li>
+                        <a href="#" data-toggle="control-sidebar" data-placement="bottom" title="Theme Settings"><i class="fa fa-cog fa-spin"></i></a>
+                    </li>
+                </ul>
+            </div>
     </nav>
 </header>
 

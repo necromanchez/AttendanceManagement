@@ -69,9 +69,14 @@ namespace Brothers_WMS.Areas.Masters.Controllers
 
                 DateTime start = DateTime.Parse(startTime);
                 DateTime end = DateTime.Parse(endTime);
-              
-                TimeSpan duration = end.Subtract(start);
 
+                TimeSpan duration = end.Subtract(start);
+                if (duration.TotalHours < 0)
+                {
+                    end = end.AddDays(1);
+                    duration = end.Subtract(start);
+                }
+               
                 //if (duration.TotalHours != 0)
                 if (duration.TotalHours > 0) //change to military time
                 {
@@ -81,8 +86,7 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                     data.UpdateDate = DateTime.Now;
 
                     M_Schedule checker = (from c in db.M_Schedule
-                                          where c.Type == data.Type
-                                          && c.Timein == data.Timein
+                                          where c.Timein == data.Timein
                                           && c.TimeOut == data.TimeOut
                                           && c.Status == data.Status
                                           && c.IsDeleted == false
@@ -129,6 +133,8 @@ namespace Brothers_WMS.Areas.Masters.Controllers
             db.SaveChanges();
             return Json(new { msg = "Success" }, JsonRequestBehavior.AllowGet);
         }
+
+
         public ActionResult EditSchedule(M_Schedule data)
         {
             try
@@ -146,8 +152,8 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                 schedule.UpdateDate = DateTime.Now;
 
                 M_Schedule checker = (from c in db.M_Schedule
-                                      where c.Type == data.Type
-                                      && c.Timein == data.Timein
+                                      where c.Timein == data.Timein
+                                      && c.Type == data.Type
                                       && c.TimeOut == data.TimeOut
                                       && c.Status == data.Status
                                       && c.IsDeleted == false

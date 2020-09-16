@@ -25,5 +25,6 @@ namespace Brothers_WMS.Models
         public System.DateTime CreateDate { get; set; }
         public string UpdateID { get; set; }
         public System.DateTime UpdateDate { get; set; }
+        public Nullable<System.DateTime> ApprovedDate { get; set; }
     }
 }

@@ -18,8 +18,6 @@ namespace Brothers_WMS.Models
         public string First_Name { get; set; }
         public string Agency { get; set; }
         public string CostCenter_AMS { get; set; }
-        public string CostCenter_IT { get; set; }
-        public string CostCenter_EXPROD { get; set; }
         public string Section { get; set; }
         public string Schedule { get; set; }
         public Nullable<decimal> CumulativeOT { get; set; }

@@ -1,20 +1,21 @@
 ﻿$(function(){
 
     Initializepage();
+    $("#DateFilter").datepicker().datepicker("setDate", new Date());
+    $("#DateFilter").on("change", Initializepage)
 })
 
 function Initializepage() {
     $('#ErrorLogTable').DataTable({
         ajax: {
             url: '../ErrorLogs/GetErrorList',
-            type: "POST",
+            type: "GET",
+            data: { searchdate: $("#DateFilter").val()},
             datatype: "json"
         },
-        lengthMenu: [5000, 200, 300, 500],
-        pagelength: 5000,
-        lengthChange: false,
-        scrollY: "600px",
-        scrollCollapse: true,
+       
+        lengthMenu: [[10, 50, 100], [10, 50, 100]],
+        lengthChange: true,
         serverSide: "true",
         order: [0, "asc"],
         processing: "true",
@@ -25,14 +26,18 @@ function Initializepage() {
         destroy: true,
         columns: [
             { title: "ID", data: "ID", visible: false },
-            { title: "Module", data: "PageModule" },
-            { title: "ErrorLog", data: "ErrorLog" },
-            {
-            title: "Date Occured", data: function (x) {
-                return (x.DateLog != null) ? moment(x.DateLog).format("MM/DD/YYYY hh:mm:ss") : ""
-            }
-            },
-            { title: "User", data: "Username" },
+            { title: "No", data: "Rownum", name: "Rownum" },
+            { title: "Module", data: "PageModule",  name: "PageModule" },
+            { title: "ErrorLog", data: "ErrorLog", name: "ErrorLog" },
+            { title: "Date Occured", data: "DateLog", name: "DateLog" },
+            //{
+            //    title: "Date Occured", data: function (x) {
+            //        var ss = (x.DateLog != null) ? moment(x.DateLog).format("MM/DD/YYYY") : "";
+            //        return (x.DateLog != null) ? moment(x.DateLog).format("MM/DD/YYYY") : ""
+            //    }, data: "DateLog", name: "DateLog"
+            //},
+            { title: "User", data: "Username", data: "Username", name: "Username"},
+            { title: "Employee Name", data: "EmployeeName", data: "EmployeeName", name: "EmployeeName" },
         ],
 
     });

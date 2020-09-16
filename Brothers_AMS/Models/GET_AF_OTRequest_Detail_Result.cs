@@ -28,5 +28,6 @@ namespace Brothers_WMS.Models
         public string Schedule { get; set; }
         public Nullable<decimal> CumulativeOT { get; set; }
         public string Requestor { get; set; }
+        public string ActualOut { get; set; }
     }
 }

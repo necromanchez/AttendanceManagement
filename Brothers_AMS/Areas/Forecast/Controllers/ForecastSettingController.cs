@@ -63,9 +63,9 @@ namespace Brothers_WMS.Areas.Forecast.Controllers
         {
             FC_ForecastYears forecast = new FC_ForecastYears();
             forecast.Year = Year;
-            forecast.CreateDate = DateTime.Now;
+            forecast.CreateDate = DateTime.Now;;
             forecast.CreateID = user.UserName;
-            forecast.UpdateDate = DateTime.Now;
+            forecast.UpdateDate = DateTime.Now;;
             forecast.UpdateID = user.UserName;
             db.FC_ForecastYears.Add(forecast);
             db.SaveChanges();
@@ -87,7 +87,7 @@ namespace Brothers_WMS.Areas.Forecast.Controllers
             forecast.Jan = data.Jan;
             forecast.Feb = data.Feb;
             forecast.Mar = data.Mar;
-            forecast.UpdateDate = DateTime.Now;
+            forecast.UpdateDate = DateTime.Now;;
             forecast.UpdateID = user.UserName;
             db.Entry(forecast).State = EntityState.Modified;
             db.SaveChanges();
@@ -143,9 +143,9 @@ namespace Brothers_WMS.Areas.Forecast.Controllers
             try
             {
                 data.CreateID = user.UserName;
-                data.CreateDate = DateTime.Now;
+                data.CreateDate = DateTime.Now;;
                 data.UpdateID = user.UserName;
-                data.UpdateDate = DateTime.Now;
+                data.UpdateDate = DateTime.Now;;
 
                 FC_EmployeeForecast checker = (from c in db.FC_EmployeeForecast
                                             where c.Position == data.Position
@@ -170,7 +170,7 @@ namespace Brothers_WMS.Areas.Forecast.Controllers
                 Error_Logs error = new Error_Logs();
                 error.PageModule = "Master - Agency";
                 error.ErrorLog = err.Message;
-                error.DateLog = DateTime.Now;
+                error.DateLog = db.TT_GETTIME().FirstOrDefault();//DateTime.Now;;
                 error.Username = user.UserName;
                 db.Error_Logs.Add(error);
                 db.SaveChanges();
@@ -191,7 +191,7 @@ namespace Brothers_WMS.Areas.Forecast.Controllers
                 agency.Unit = data.Unit;
 
                 agency.UpdateID = user.UserName;
-                agency.UpdateDate = DateTime.Now;
+                agency.UpdateDate = DateTime.Now;;
 
                 FC_EmployeeForecast checker = (from c in db.FC_EmployeeForecast
                                                where c.Position == data.Position
@@ -216,7 +216,7 @@ namespace Brothers_WMS.Areas.Forecast.Controllers
                 Error_Logs error = new Error_Logs();
                 error.PageModule = "Master - Agency";
                 error.ErrorLog = err.Message;
-                error.DateLog = DateTime.Now;
+                error.DateLog = db.TT_GETTIME().FirstOrDefault();//DateTime.Now;;
                 error.Username = user.UserName;
                 db.Error_Logs.Add(error);
                 db.SaveChanges();

@@ -27,7 +27,7 @@ namespace Brothers_WMS.Models
         public string OTin { get; set; }
         public string OTout { get; set; }
         public string Purpose { get; set; }
-        public Nullable<bool> EmployeeAccept { get; set; }
+        public Nullable<System.DateTime> EmployeeAccept { get; set; }
         public string ReasonforDecline { get; set; }
         public int Status { get; set; }
         public int StatusMax { get; set; }

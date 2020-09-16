@@ -1,16 +1,19 @@
 ﻿$(function () {
-    Dropdown_select('BIPH_Agency', "/Helper/GetDropdown_Agency");
+    $("#ALLtbl").hide();
+    $("#checkall_emp").prop("disabled", true);
+    Dropdown_selectMP('BIPH_Agency', "/Helper/GetDropdown_Agency");
     //Dropdown_select('Section', "/Helper/GetDropdown_Section");
     GetcurrentSection('Section', "/Helper/GetCurrentSection");
-
-    Dropdown_select('Line_Team', "/Helper/GetDropdown_LineProcessTeamLogin");
+    $("#loading_modal").modal("show");
+    Dropdown_selectFileType("FileType");
+    Dropdown_selectMP('Line_Team', "/Helper/GetDropdown_LineProcessTeamLogin");
     initDatePicker('DateFrom');
     initDatePicker('DateTo');
     $("#DateFrom").datepicker().datepicker("setDate", new Date());
     $("#DateTo").datepicker().datepicker("setDate", new Date());
-    $('#ConfirmDTR').on('hidden.bs.modal', function (e) {
-       setTimeout(function () { location.reload(); }, 2500);
-    })
+    //$('#ConfirmDTR').on('hidden.bs.modal', function (e) {
+    //   setTimeout(function () { location.reload(); }, 2500);
+    //})
     $("#templateDownload").on("click", function () {
         window.location.href = "../../Correction/Templates/DownloadTemplate?filename=OTForm.xlsx"
     })
@@ -58,18 +61,60 @@
 
     $("#checkall_emp").on("change", function () {
         if (this.checked) {
+            $('.empmod').each(function (i, obj) {
+                chosend_EmpNo.push(obj.id);
+            });
             $('.empmod').prop('checked', true);
         }
-        else {
-            $('.empmod').prop('checked', false);
-        }
+        //else {
+        //    $('.empmod').each(function (i, obj) {
+        //        chosend_EmpNo.remove(obj.id);
+        //    }); $('.empmod').prop('checked', false);
+        //}
     })
     $("#Section").prop('disabled', true);
     $("#Line_Team").prop('disabled', true);
   
+    //$("#FileType").on("change", function () {
+    //    if ($("#BIPH_Agency").val() != "") {
+    //        if ($(this).val() == 1) {
+    //            $("#Section").prop('disabled', true);
+    //            $("#Line_Team").prop('disabled', true);
+    //            $("#EmployeeNo").prop('disabled', false);
+    //            $("#EmployeeNo").css('background-color', "#F6F9D3");
+    //            //background-color:#F6F9D3;
+    //            $("#Line_Team").val('');
+    //            $("#EmployeeNo").val('');
+    //        }
+    //        else {
+    //            $.ajax({
+    //                url: '/Helper/GetSection',
+    //                type: 'POST',
+    //                datatype: "json",
+    //                success: function (returnData) {
+    //                    $('#Section').val(returnData.usersection);
+    //                    $("#Section").prop('disabled', true);
+    //                    $("#Line_Team").prop('disabled', false);
+    //                    $("#EmployeeNo").prop('disabled', true);
+    //                    $("#EmployeeNo").css('background-color', "#E9ECEF");
+    //                    $("#Line_Team").val('');
+    //                    $("#EmployeeNo").val('');
+    //                    //
+    //                }
+    //            });
+
+    //        }
+    //    }
+    //    else {
+    //        //$("#FileType").trigger("change");
+    //    }
+    //    $("#btnSearch").trigger("click");
+    //})
     $("#FileType").on("change", function () {
+        chosend_EmpNo = [];
         if ($("#BIPH_Agency").val() != "") {
             if ($(this).val() == 1) {
+                $("#checkall_emp").prop("disabled", true);
                 $("#Section").prop('disabled', true);
                 $("#Line_Team").prop('disabled', true);
                 $("#EmployeeNo").prop('disabled', false);
@@ -79,6 +124,7 @@
                 $("#EmployeeNo").val('');
             }
             else {
+                $("#checkall_emp").prop("disabled", false);
                 $.ajax({
                     url: '/Helper/GetSection',
                     type: 'POST',
@@ -91,17 +137,20 @@
                         $("#EmployeeNo").css('background-color', "#E9ECEF");
                         $("#Line_Team").val('');
                         $("#EmployeeNo").val('');
+                        single = false;
                         //
                     }
                 });
 
             }
+
         }
         else {
             //$("#FileType").trigger("change");
         }
         $("#btnSearch").trigger("click");
     })
+
     $("#btnSearch").on("click", function () {
         Initializepage();
     })
@@ -109,7 +158,7 @@
     $("#btnconfirm").on("click", function () {
         if ($("#DateFrom").val() <= $("#DateTo").val()) {
             if ($("#Timein").val() < $("#TimeOut").val()) {
-                var EmployeeList = $('input[type="checkbox"][name="employchosen"]:checked').map(function () { return this.id; }).get();
+                var EmployeeList = chosend_EmpNo;// $('input[type="checkbox"][name="employchosen"]:checked').map(function () { return this.id; }).get();
                 if (EmployeeList.length > 0) {
 
                     if ($("#DateFrom").val() != "" && $("#OTin").val() && $("#DateTo").val() && $("#OTout").val()) {
@@ -121,7 +170,7 @@
                         $("#TimeOutsum").val($("#TimeOut").val());
 
 
-                        var EmployeeList = $('input[type="checkbox"][name="employchosen"]:checked').map(function () { return this.id; }).get();
+                        var EmployeeList = chosend_EmpNo;// $('input[type="checkbox"][name="employchosen"]:checked').map(function () { return this.id; }).get();
                         $('#ChosenEmployeeTable').DataTable({
                             ajax: {
                                 url: '../OT/GetEmployeeList',
@@ -139,8 +188,8 @@
                                 }
                             },
                             serverSide: "true",
-                            lengthMenu: [100, 200, 300, 500],
-                            pagelength: 5000,
+                            lengthMenu: [[10, 50, 100], [10, 50, 100]],
+                            
                             searching:false,
                             lengthChange: false,
                             scrollY: "600px",
@@ -159,17 +208,18 @@
                                   { title: "Agency", data: "Agency" },
                                   { title: "Cost Center", data: "CostCenter_AMS" },
                                   { title: "Section", data: "Section" },
+                                   {
+                                        title: "Concern", data: function (x) {
+                                        return "<input type='text' class='form-control PPos2' id='P_" + x.EmpNo + "' name='P_2" + x.EmpNo + "'>"
+                                        }
+                                    },
                                   //{ title: "Line", data: "Line" },
                                   {
                                       title: "Reason", data: function (x) {
                                           return "<input type='text' class='form-control PPos' id='P_" + x.EmpNo + "' name='P_" + x.EmpNo + "'>"
                                       }
                                   },
-                                    {
-                                        title: "Concern", data: function (x) {
-                                        return "<input type='text' class='form-control PPos2' id='P_" + x.EmpNo + "' name='P_2" + x.EmpNo + "'>"
-                                    }
-                                }
+                                   
                             ],
 
                         });
@@ -193,7 +243,7 @@
         }
     })
 
-    $("#Pposgroup").on("keyup", function () {
+    $("#Pposgroup").on("change", function () {
         $(".PPos").val($(this).val());
     })
 
@@ -205,6 +255,7 @@
 
     //AUTOMATIC STARTS HERE
     $("#BIPH_Agency").on("change", function () {
+        $("#loading_modal").modal("show");
         $("#btnSearch").trigger("click");
     })
     $("#EmployeeNo").focusout(function () {
@@ -239,7 +290,13 @@
     //STEP BY STEP procedure
     $("#EmployeeNo").on("focusout", function () { $("#DateFrom").prop("disabled", false); $("#DateTo").prop("disabled", false); })
 
-    $("#BIPH_Agency").on("change", function () { $("#FileType").prop("disabled", false);  })
+  
+    $("#BIPH_Agency").on("change", function () {
+        $("#FileType").prop("disabled", false);
+        $("#btnSearch").trigger("click");
+        $("#ALLtbl").show();
+        //$("#btnDownloadTemplate").prop("disabled", false);
+    })
     //$("#FileType").on("change", function () { $("#Line_Team").prop("disabled", false); })
     $("#Line_Team").on("change", function () { $("#DateFrom").prop("disabled", false); $("#DateTo").prop("disabled", false); })
     $("#DateTo").on("change", function () { $("#Timein").prop("disabled", false); $("#TimeOut").prop("disabled", false); })
@@ -254,6 +311,18 @@
 
 
 var single = false;
+var chosend_EmpNo = [];
+
+Array.prototype.remove = function () {
+    var what, a = arguments, L = a.length, ax;
+    while (L && this.length) {
+        what = a[--L];
+        while ((ax = this.indexOf(what)) != -1) {
+            this.splice(ax, 1);
+        }
+    }
+    return this;
+}
 function Initializepage() {
     $('#DTREmployeeTable').DataTable({
         ajax: {
@@ -268,14 +337,21 @@ function Initializepage() {
                 TransType : "DTR"
             }
         },
-        lengthMenu: [100, 200, 300, 500],
-        pagelength: 5000,
+        //ordering:false,
+        lengthMenu: [10, 20, 30, 50],
+        pagelength: 10,
         lengthChange: false,
-        scrollY: "600px",
-        scrollCollapse: true,
         serverSide: "true",
         order: [0, "asc"],
         processing: "true",
+        initComplete: function () {
+            $("#loading_modal").modal("hide");
+            if ($("#BIPH_Agency").val() == "") {
+                $(".empmod").prop("disabled", true);
+            }
+          
+          
+        },
         language: {
             "processing": "processing... please wait"
         },
@@ -284,8 +360,8 @@ function Initializepage() {
         columns: [
               {
                   data: function (data, type, row, meta) {
-                      var status = (single) ? "checked" : "";
-                      return " <input type='checkbox' id=" + data.EmpNo + " class='empmod filled-in chk-col-light-blue' name='employchosen' "+status+"/>" +
+                      var status = ((chosend_EmpNo.indexOf(data.EmpNo) !== -1)) ? "checked" : "";
+                      return " <input type='checkbox' id=" + data.EmpNo + " class='empmod filled-in chk-col-light-blue' name='employchosen' " + status + " onclick=GetEmployeeChosen('" + data.EmpNo + "') />" +
                               " <label class=checker for=" + data.EmpNo + "></label>"
 
                   }, orderable: false, searchable: false
@@ -310,6 +386,13 @@ function Initializepage() {
             getEmployeeNo();
             $("#DateFrom").prop("disabled", false);
             $("#DateTo").prop("disabled", false);
+
+            var Sched = data.Schedule;
+            var str = data.Schedule;
+            var res = str.split(" - ");
+            $("#Timein").val(res[0]);
+            $("#TimeOut").val(res[1]);
+            
         }
         else {
             single = true;
@@ -320,6 +403,19 @@ function Initializepage() {
         }
 
     });
+}
+
+function GetEmployeeChosen(EmpNo) {
+    if ($("#BIPH_Agency").val() != "") {
+        $(".empmod").prop("disabled", false);
+        if (chosend_EmpNo.indexOf(EmpNo) !== -1) {
+            chosend_EmpNo.remove(EmpNo);
+        } else {
+            chosend_EmpNo.push(EmpNo);
+        }
+    }
+
+
 }
 
 function initDatePicker(dp) {

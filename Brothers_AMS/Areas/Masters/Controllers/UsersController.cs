@@ -27,11 +27,13 @@ namespace Brothers_WMS.Areas.Masters.Controllers
         M_Users user = (M_Users)System.Web.HttpContext.Current.Session["user"];
         public ActionResult Users()
         {
+            db.Database.CommandTimeout = 0;
+            db.M_SP_UserInsert();
             return View();
         }
 
         public ActionResult GetUsersList(string supersection)
-       {
+        {
             System.Web.HttpContext.Current.Session["SearchvalueUser"] = Request["search[value]"];
 
             //Server Side Parameter
@@ -68,8 +70,9 @@ namespace Brothers_WMS.Areas.Masters.Controllers
 
             string superusercost = (from d in db.M_Cost_Center_List where d.GroupSection == supersection select d.Cost_Center).FirstOrDefault();
 
-            user.CostCode = (superusercost !=  null) ? superusercost : user.CostCode;
-            List<GET_UserDetails_Result> list = db.GET_UserDetails(user.CostCode).ToList();
+            superusercost = (superusercost !=  null) ? superusercost : user.CostCode;
+            List<GET_UserDetails_Result> list = db.GET_UserDetails(null,true).ToList();
+           
             if (!string.IsNullOrEmpty(searchValue))//filter
             {
                 try
@@ -78,9 +81,67 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                     list = list.Where(xx => xx.UserName != null).ToList();
                     list = list.Where(xx => xx.FirstName != null).ToList();
                     list = list.Where(xx => xx.LastName != null).ToList();
+                   
                     #endregion
                     //list = list.Where(x => x.UserName.ToLower().Contains(searchValue.ToLower()) || x.FirstName.ToLower().Contains(searchValue.ToLower())).ToList<M_Users>();
-                    list = list.Where(x => x.FirstName.ToLower().Contains(searchValue.ToLower()) || x.LastName.ToLower().Contains(searchValue.ToLower())).ToList<GET_UserDetails_Result>();
+                    list = list.Where(x => x.FirstName.ToLower().Contains(searchValue.ToLower()) 
+                                        || x.LastName.ToLower().Contains(searchValue.ToLower())
+                                        || x.UserName.ToLower().Contains(searchValue.ToLower())).ToList<GET_UserDetails_Result>();
+                }
+                catch (Exception err) { }
+            }
+            if (sortColumnName != "" && sortColumnName != null)
+            {
+                if (sortDirection == "asc")
+                {
+                    list = list.OrderBy(x => TypeHelper.GetPropertyValue(x, sortColumnName)).ToList();
+                }
+                else
+                {
+                    list = list.OrderByDescending(x => TypeHelper.GetPropertyValue(x, sortColumnName)).ToList();
+                }
+            }
+            int totalrows = list.Count;
+            int totalrowsafterfiltering = list.Count;
+
+
+            //paging
+            list = list.Skip(start).Take(length).ToList<GET_UserDetails_Result>();
+            return Json(new { data = list, draw = Request["draw"], recordsTotal = totalrows, recordsFiltered = totalrowsafterfiltering }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetUsersList_Normal(string supersection)
+        {
+            System.Web.HttpContext.Current.Session["SearchvalueUser"] = Request["search[value]"];
+
+            //Server Side Parameter
+            int start = Convert.ToInt32(Request["start"]);
+            int length = Convert.ToInt32(Request["length"]);
+            string searchValue = Request["search[value]"];
+            string sortColumnName = Request["columns[" + Request["order[0][column]"] + "][name]"];
+            string sortDirection = Request["order[0][dir]"];
+
+         
+
+            string superusercost = (from d in db.M_Cost_Center_List where d.GroupSection == supersection select d.Cost_Center).FirstOrDefault();
+
+            superusercost = (superusercost != null) ? superusercost : user.CostCode;
+            List<GET_UserDetails_Result> list = db.GET_UserDetails(superusercost,false).ToList();
+            
+            if (!string.IsNullOrEmpty(searchValue))//filter
+            {
+                try
+                {
+                    #region null remover
+                    list = list.Where(xx => xx.UserName != null).ToList();
+                    list = list.Where(xx => xx.FirstName != null).ToList();
+                    list = list.Where(xx => xx.LastName != null).ToList();
+
+                    #endregion
+                    //list = list.Where(x => x.UserName.ToLower().Contains(searchValue.ToLower()) || x.FirstName.ToLower().Contains(searchValue.ToLower())).ToList<M_Users>();
+                    list = list.Where(x => x.FirstName.ToLower().Contains(searchValue.ToLower())
+                                        || x.LastName.ToLower().Contains(searchValue.ToLower())
+                                        || x.UserName.ToLower().Contains(searchValue.ToLower())).ToList<GET_UserDetails_Result>();
                 }
                 catch (Exception err) { }
             }
@@ -152,13 +213,26 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                 return Json(new { msg = err.Message }, JsonRequestBehavior.AllowGet);
             }
         }
-        public ActionResult DeleteUsers(string ID)
+        public ActionResult DeleteUsers(long ID)
         {
             M_Users users = new M_Users();
             users = (from u in db.M_Users.ToList()
-                        where u.UserName == ID
+                        where u.ID == ID
                      select u).FirstOrDefault();
             users.IsDeleted = true;
+            users.UpdateDate = DateTime.Now;
+            users.UpdateID = user.UserName;
+            db.Entry(users).State = EntityState.Modified;
+            db.SaveChanges();
+            return Json(new { msg = "Success" }, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult ResetPassUsers(long ID)
+        {
+            M_Users users = new M_Users();
+            users = (from u in db.M_Users.ToList()
+                     where u.ID == ID
+                     select u).FirstOrDefault();
+            users.Password = "1720CBD703C35A55B0003809B67B1877";
             users.UpdateDate = DateTime.Now;
             users.UpdateID = user.UserName;
             db.Entry(users).State = EntityState.Modified;
@@ -247,7 +321,10 @@ namespace Brothers_WMS.Areas.Masters.Controllers
             List<M_SP_PageandAccess_Result> ApplicationFormPageList = db.M_SP_PageandAccess(UserName, "Application Form").ToList();
             List<M_SP_PageandAccess_Result> SummaryPageList = db.M_SP_PageandAccess(UserName, "Reports").ToList();
             List<M_SP_PageandAccess_Result> ForeCastList = db.M_SP_PageandAccess(UserName, "ForeCast").ToList();
-
+            if (userchosen.Section == null || userchosen.Section == "")
+            {
+                ApplicationFormPageList = ApplicationFormPageList.Where(x => x.PageIndex != "OT" && x.PageIndex != "ChangeSchedule" && x.PageIndex != "DTR").ToList();
+            }
             int MasterGoodcount = MasterPageList.Where(x => x.AccessType == true).Count();
             int AFGoodcount = ApplicationFormPageList.Where(x => x.AccessType == true).Count();
             int REGoodcount = SummaryPageList.Where(x => x.AccessType == true).Count();
@@ -266,7 +343,7 @@ namespace Brothers_WMS.Areas.Masters.Controllers
            
             foreach (PA_Users u in PA_userpage)
             {
-                db.M_PA_UserDuplicateRemover(u.UserName);
+                db.M_PA_UserDuplicateRemover();
                 PA_Users userp = new PA_Users();
                 userp = (from c in db.PA_Users where c.PageID == u.PageID && c.UserName == u.UserName select c).FirstOrDefault();
                 if (userp != null)
@@ -287,7 +364,7 @@ namespace Brothers_WMS.Areas.Masters.Controllers
             }
 
             LoginController a = new LoginController();
-            a.RefreshPageAccess(PA_userpage[0].UserName);
+            a.RefreshPageAccess(PA_userpage[0].UserName, user.Section);
             return Json(new { msg = "Success" }, JsonRequestBehavior.AllowGet);
         }
         public ActionResult GetSectionAccess(string UserName)
@@ -298,32 +375,34 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                 SectionList = SectionList,
             }, JsonRequestBehavior.AllowGet);
         }
-        public ActionResult UpdateSectionAccess(List<PA_Section> PA_section)
-        {
 
-            foreach (PA_Section u in PA_section)
-            {
-                PA_Section section = new PA_Section();
-                section = (from c in db.PA_Section where c.SectionID == u.SectionID && c.UserName == u.UserName select c).FirstOrDefault();
-                if (section != null)
-                {
-                    section.SectionAccess = u.SectionAccess;
-                    db.Entry(section).State = EntityState.Modified;
-                    db.SaveChanges();
-                }
-                else
-                {
-                    section = new PA_Section();
-                    section.UserName = u.UserName;
-                    section.SectionID = u.SectionID;
-                    section.SectionAccess = u.SectionAccess;
-                    db.PA_Section.Add(section);
-                    db.SaveChanges();
-                }
-            }
-            return Json(new { msg = "Success" }, JsonRequestBehavior.AllowGet);
-        }
+        #region PA_section
+        //public ActionResult UpdateSectionAccess(List<PA_Section> PA_section)
+        //{
 
+        //    foreach (PA_Section u in PA_section)
+        //    {
+        //        PA_Section section = new PA_Section();
+        //        section = (from c in db.PA_Section where c.SectionID == u.SectionID && c.UserName == u.UserName select c).FirstOrDefault();
+        //        if (section != null)
+        //        {
+        //            section.SectionAccess = u.SectionAccess;
+        //            db.Entry(section).State = EntityState.Modified;
+        //            db.SaveChanges();
+        //        }
+        //        else
+        //        {
+        //            section = new PA_Section();
+        //            section.UserName = u.UserName;
+        //            section.SectionID = u.SectionID;
+        //            section.SectionAccess = u.SectionAccess;
+        //            db.PA_Section.Add(section);
+        //            db.SaveChanges();
+        //        }
+        //    }
+        //    return Json(new { msg = "Success" }, JsonRequestBehavior.AllowGet);
+        //}
+        #endregion
         public ActionResult GetLineAccess(string UserName, string Section)
         {
             List<M_SP_LineAccess_Result> LineList = new List<M_SP_LineAccess_Result>();
@@ -347,32 +426,33 @@ namespace Brothers_WMS.Areas.Masters.Controllers
             }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult UpdateLineAccess(List<PA_Line> PA_line)
-        {
+        #region PA_Line
+        //public ActionResult UpdateLineAccess(List<PA_Line> PA_line)
+        //{
 
-            foreach (PA_Line u in PA_line)
-            {
-                PA_Line line = new PA_Line();
-                line = (from c in db.PA_Line where c.LineID == u.LineID && c.UserName == u.UserName select c).FirstOrDefault();
-                if (line != null)
-                {
-                    line.LineAccess = u.LineAccess;
-                    db.Entry(line).State = EntityState.Modified;
-                    db.SaveChanges();
-                }
-                else
-                {
-                    line = new PA_Line();
-                    line.UserName = u.UserName;
-                    line.LineID = u.LineID;
-                    line.LineAccess = u.LineAccess;
-                    db.PA_Line.Add(line);
-                    db.SaveChanges();
-                }
-            }
-            return Json(new { msg = "Success" }, JsonRequestBehavior.AllowGet);
-        }
-
+        //    foreach (PA_Line u in PA_line)
+        //    {
+        //        PA_Line line = new PA_Line();
+        //        line = (from c in db.PA_Line where c.LineID == u.LineID && c.UserName == u.UserName select c).FirstOrDefault();
+        //        if (line != null)
+        //        {
+        //            line.LineAccess = u.LineAccess;
+        //            db.Entry(line).State = EntityState.Modified;
+        //            db.SaveChanges();
+        //        }
+        //        else
+        //        {
+        //            line = new PA_Line();
+        //            line.UserName = u.UserName;
+        //            line.LineID = u.LineID;
+        //            line.LineAccess = u.LineAccess;
+        //            db.PA_Line.Add(line);
+        //            db.SaveChanges();
+        //        }
+        //    }
+        //    return Json(new { msg = "Success" }, JsonRequestBehavior.AllowGet);
+        //}
+        #endregion
         [HttpPost]
         public ActionResult UploadEmployeePhoto()
         {
@@ -408,6 +488,7 @@ namespace Brothers_WMS.Areas.Masters.Controllers
 
         public ActionResult UploadPageAccess()
         {
+            int theX=0, theY=0;
             try
             {
                 var postedFile = Request.Files[0] as HttpPostedFileBase;
@@ -473,13 +554,9 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                                              "ChangeScheduleRequest," +
                                              "DTRCorrection," +
                                              "DTRCorrectionRequest," +
-                                             "OTSummary," +
-                                             "ChangeScheduleSummary," +
-                                             "DTRSummary," +
-                                             "ManPowerSkills," +
-                                             "WorkTimeSummary," +
-                                             "Forecast,"+
-                                             "ForecastSetting";
+                                             "ManPowerMonitoring," +
+                                             "AttendanceSummary," +
+                                             "RequestSummary";
 
                                 cmdExcel.CommandText = qry + " FROM [" + sheetName + "$]";//ung * is column name, ung sheetname ay settings
                                 odaExcel.SelectCommand = cmdExcel;
@@ -487,6 +564,7 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                                 connExcel.Close();
                                 for (int x = 0; x < dt.Rows.Count; x++)
                                 {
+                                    theX = x;
                                     List<bool> result = new List<bool>();
                                     try
                                     {
@@ -505,13 +583,10 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                                         bool ChangeScheduleRequest = (dt.Rows[x]["ChangeScheduleRequest"].ToString() == "1") ? true : false; result.Add(ChangeScheduleRequest);
                                         bool DTRCorrection = (dt.Rows[x]["DTRCorrection"].ToString() == "1") ? true : false; result.Add(DTRCorrection);
                                         bool DTRCorrectionRequest = (dt.Rows[x]["DTRCorrectionRequest"].ToString() == "1") ? true : false; result.Add(DTRCorrectionRequest);
-                                        bool OTSummary = (dt.Rows[x]["OTSummary"].ToString() == "1") ? true : false; result.Add(OTSummary);
-                                        bool ChangeScheduleSummary = (dt.Rows[x]["ChangeScheduleSummary"].ToString() == "1") ? true : false; result.Add(ChangeScheduleSummary);
-                                        bool DTRSummary = (dt.Rows[x]["DTRSummary"].ToString() == "1") ? true : false; result.Add(DTRSummary);
-                                        bool ManPowerSkills = (dt.Rows[x]["ManPowerSkills"].ToString() == "1") ? true : false; result.Add(ManPowerSkills);
-                                        bool WorkTimeSummary = (dt.Rows[x]["WorkTimeSummary"].ToString() == "1") ? true : false; result.Add(WorkTimeSummary);
-                                        bool Forecast = (dt.Rows[x]["Forecast"].ToString() == "1") ? true : false; result.Add(Forecast);
-                                        bool ForecastSetting = (dt.Rows[x]["ForecastSetting"].ToString() == "1") ? true : false; result.Add(ForecastSetting);
+                                        bool OTSummary = (dt.Rows[x]["RequestSummary"].ToString() == "1") ? true : false; result.Add(OTSummary);
+                                        bool ManPowerMonitoring = (dt.Rows[x]["ManPowerMonitoring"].ToString() == "1") ? true : false; result.Add(ManPowerMonitoring);
+                                        bool AttendanceSummary = (dt.Rows[x]["AttendanceSummary"].ToString() == "1") ? true : false; result.Add(AttendanceSummary);
+                                       
 
 
                                         string[] Pages = {  "Employee",
@@ -529,29 +604,42 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                                                             "DTR",
                                                             "ApproverDTR",
                                                             "OTSummary",
-                                                            "ChangeScheduleSummary",
-                                                            "DTRSummary",
-                                                            "MPCertificate",
-                                                            "WorkTimeSummary",
-                                                            "Forecast",
-                                                            "ForecastSetting"
-
+                                                            "MPMonitoring",
+                                                            "WorkTimeSummary"
                                                           };
-                                        for (int y = 0; y < 20; y++)
+                                        for (int y = 0; y < 17; y++)
                                         {
+                                            theY = y;
                                             string currentpage = Pages[y];
                                             long pageid = (from c in db.PA_Pages where c.PageIndex == currentpage select c.ID).FirstOrDefault();
                                             PA_Users employee = (from c in db.PA_Users
                                                                  where c.UserName == EmployeeNo
                                                                  && c.PageID == pageid
                                                                  select c).FirstOrDefault();
-                                            employee.PageAccess = result[y];
-                                            db.Entry(employee).State = EntityState.Modified;
-                                            db.SaveChanges();
+                                           
+                                            if(employee == null)
+                                            {
+                                                employee = new PA_Users();
+                                                employee.PageAccess = result[y];
+                                                employee.PageID = pageid;
+                                                employee.UserName = EmployeeNo;
+
+                                                db.PA_Users.Add(employee);
+                                                db.SaveChanges();
+                                            }
+                                            else
+                                            {
+                                                employee.PageAccess = result[y];
+                                                db.Entry(employee).State = EntityState.Modified;
+                                                db.SaveChanges();
+                                            }
+                                          
                                         }
                                     }
                                     catch (Exception err)
                                     {
+                                        int theXX = theX;
+                                        int theYY = theY;
                                         Error_Logs error = new Error_Logs();
                                         error.PageModule = "Master - Employee";
                                         error.ErrorLog = err.Message;
@@ -580,7 +668,7 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                 return Json(new { result = "failed" }, JsonRequestBehavior.AllowGet);
             }
             LoginController a = new LoginController();
-            a.RefreshPageAccess(user.UserName);
+            a.RefreshPageAccess(user.UserName, user.Section);
             return Json(new { result = "success" }, JsonRequestBehavior.AllowGet);
         }
 
@@ -590,7 +678,8 @@ namespace Brothers_WMS.Areas.Masters.Controllers
             {
                 string searchnow = System.Web.HttpContext.Current.Session["SearchvalueUser"].ToString();
 
-                Section = (Section == "undefined") ? user.Section : Section;
+                Section = (Section == "undefined") ? user.Section : (from c in db.M_Cost_Center_List where c.GroupSection == Section select c.Cost_Center).FirstOrDefault();
+                Section = (Section == null) ? "" : Section;
                 string templateFilename = "PageAccessTemplate.xlsx";
                 string dir = Path.GetTempPath();
                 string datetimeToday = DateTime.Now.ToString("yyMMddhhmmss");
@@ -603,8 +692,8 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                 {
 
                     //List<M_Users> list = (from c in db.M_Users select c).ToList();
-                   
-                    List<GET_UserDetails_Result> list = db.GET_UserDetails(user.CostCode).Where(x => x.UserName.ToLower().Contains("biph") && x.Status.ToLower() == "active").ToList();
+
+                    List<GET_UserDetails_Export_Result> list = db.GET_UserDetails_Export(Section).ToList();//Where(x => x.UserName.ToLower().Contains("biph")).ToList();
                     ExcelWorksheet ExportData = package.Workbook.Worksheets["Modules"];
                     int start = 2;
                     if (!string.IsNullOrEmpty(searchnow))//filter
@@ -612,23 +701,42 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                         #region null remover
                         list = list.Where(xx => xx.UserName != null).ToList();
                         list = list.Where(xx => xx.FirstName != null).ToList();
-                        list = list.Where(xx => xx.LastName != null).ToList();
+                        list = list.Where(xx => xx.LastNAme != null).ToList();
                         #endregion
                         list = list.Where(x => x.FirstName.ToLower().Contains(searchnow.ToLower())
-                        || x.LastName.ToLower().Contains(searchnow.ToLower())
+                        || x.LastNAme.ToLower().Contains(searchnow.ToLower())
                         || x.UserName.Contains(searchnow)
-                        ).ToList<GET_UserDetails_Result>();
-                        list = list.Where(x => x.Section == Section).ToList();
+                        ).ToList<GET_UserDetails_Export_Result>();
+                     
 
                     }
                     else
                     {
-                        list = db.GET_UserDetails(user.CostCode).ToList();//(from c in db.M_Users where c.Section == Section select c).ToList();
+                        list = db.GET_UserDetails_Export(Section).ToList();//(from c in db.M_Users where c.Section == Section select c).ToList();
                     }
                     for (int i = 0; i < list.Count; i++)
                     {
                         ExportData.Cells["A" + start].Value = list[i].UserName;
-                        ExportData.Cells["B" + start].Value = list[i].FirstName + ", " + list[i].LastName;
+                        ExportData.Cells["B" + start].Value = list[i].FirstName + ", " + list[i].LastNAme;
+                        ExportData.Cells["C" + start].Value = list[i].SectionGroup;
+                        ExportData.Cells["D" + start].Value = (list[i].Employee != null && list[i].Employee > 0)?1:0;
+                        ExportData.Cells["E" + start].Value = (list[i].FormatorTemplate != null && list[i].FormatorTemplate > 0) ? 1 : 0;
+                        ExportData.Cells["F" + start].Value = (list[i].Section != null && list[i].Section > 0) ? 1 : 0;
+                        ExportData.Cells["G" + start].Value = (list[i].CostCenter != null && list[i].CostCenter > 0) ? 1 : 0;
+                        ExportData.Cells["H" + start].Value = (list[i].Process != null && list[i].Process > 0) ? 1 : 0;
+                        ExportData.Cells["I" + start].Value = (list[i].Schedule != null && list[i].Schedule > 0) ? 1 : 0;
+                        ExportData.Cells["J" + start].Value = (list[i].Users != null && list[i].Users > 0) ? 1 : 0;
+                        ExportData.Cells["K" + start].Value = (list[i].ErrorLogs != null && list[i].ErrorLogs > 0) ? 1 : 0;
+                        ExportData.Cells["L" + start].Value = (list[i].OT != null && list[i].OT > 0) ? 1 : 0; 
+                        ExportData.Cells["M" + start].Value = (list[i].Approval_OT != null && list[i].Approval_OT > 0) ? 1 : 0;
+                        ExportData.Cells["N" + start].Value = (list[i].ChangeSchedule != null && list[i].ChangeSchedule > 0) ? 1 : 0;
+                        ExportData.Cells["O" + start].Value = (list[i].ApproverChangeSchedule != null && list[i].ApproverChangeSchedule > 0) ? 1 : 0;
+                        ExportData.Cells["P" + start].Value = (list[i].DTR != null && list[i].DTR > 0) ? 1 : 0;
+                        ExportData.Cells["Q" + start].Value = (list[i].ApproverDTR != null && list[i].ApproverDTR > 0) ? 1 : 0;
+                        ExportData.Cells["R" + start].Value = (list[i].MPMonitoring != null && list[i].MPMonitoring > 0) ? 1 : 0;
+                        ExportData.Cells["S" + start].Value = (list[i].WorkTimeSummary != null && list[i].WorkTimeSummary > 0) ? 1 : 0;
+                        ExportData.Cells["T" + start].Value = (list[i].OTSummary != null && list[i].OTSummary > 0) ? 1 : 0;
+
                         start++;
                     }
                     return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename);
@@ -637,8 +745,6 @@ namespace Brothers_WMS.Areas.Masters.Controllers
             catch (Exception err) { }
             return Json(new { }, JsonRequestBehavior.AllowGet);
         }
-
-
 
     }
 }

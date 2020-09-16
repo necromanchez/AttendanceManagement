@@ -1,61 +1,90 @@
-﻿$(function () {
+﻿var d = new Date();
 
-    var d = new Date();
+var date = d.getDate();
+var month = d.getMonth() + 1;
+var year = d.getFullYear();
+var lastDay = new Date(year, month, 0).getDate();
+var dateStr = month + "/1/" + year;
+var dTo = month + "/" + date + "/" + year;
+var selectedSection = "";
 
-    var date = d.getDate();
-    var month = d.getMonth() + 1; // Since getMonth() returns month from 0-11 not 1-12
-    var year = d.getFullYear();
-    var lastDay = new Date(year, month, 0).getDate();
 
-    var dateStr = month + "/1/" + year;
-    var dTo = month + "/" + lastDay + "/" + year;
+$(function () {
+    
     $("#DateFrom").datepicker().datepicker("setDate", dateStr);
     $("#DateTo").datepicker().datepicker("setDate", dTo);
-    
-    Dropdown_select('Shift', "/Helper/GetDropdown_Schedule");
-    Dropdown_select('Section', "/Helper/GetDropdown_SectionAMS");
-    
-    $(".fil").on("change", function () {
-
+    //Initializepage();
+    Dropdown_selectCertified('Certified');
+    Dropdown_selectMPMainShift('Shift', "/Helper/GetDropdown_ScheduleReports");
+    Dropdown_selectMPMain2('Section', "/Helper/GetDropdown_SectionAMS");
+    GetUser()
+    //$("#Generatech").on("click", function () {
+    $(".fil").on("change",function(){
+        //$("#loading_modal").modal("show");
         var start = Date.parse($("#DateFrom").val());
         var end = Date.parse($("#DateTo").val());
         var days = (end - start) / 1000 / 60 / 60 / 24;
         if (days > 62) {
             swal("Graph limit exceeded");
+            $("#loading_modal").modal("hide")
         }
         else {
-            Initializepage();
+            //Initializepage();
         }
 
     });
 
+    $("#Search").on("click", function () {
+
+        $.ajax({
+            url: '/MPMonitoring/RemoveCache',
+            type: 'POST',
+            datatype: "json",
+            success: function (returnData) {
+
+                Initializepage();
+
+            }
+
+        });
+
+
+    });
 
     //graphstart();
-    
+
     $('#Line').on('change', function (e) {
-        Dropdown_select("Process", "/Helper/GetDropdown_Skills?LineProcessTeam=" + $('#Line').val());
+
+        //$("#select2-Line-container").text($("#Line").val());
+        
+        Dropdown_selectMPMainProcess("Process", "/Helper/GetDropdown_Skills?LineProcessTeam=" + $('#Line').val());
     });
 
     $("#Section").on('change', function () {
         $.ajax({
-            url: '/Helper/GetSuperSection?section='+$("#Section").val(),
+            url: '/Helper/GetSuperSection?section=' + $("#Section").val(),
             type: 'POST',
             datatype: "json",
             success: function (returnData) {
-             
-                    $('#Section').val(returnData.usersection.GroupSection);
-                    Dropdown_select('Line', "/Helper/GetDropdown_LineProcessTeamwithSection?CostCode=" + returnData.CostCode + "&RFID=" + "&GroupSection=" + $('#Section').val());
-            
+
+                $('#Section').val(returnData.usersection.GroupSection);
+                selectedSection = returnData.usersection.GroupSection;
+                //$("#select2-Section-container").text(returnData.usersection);
+                Dropdown_selectMPMainLine('Line', "/Helper/GetDropdown_LineProcessTeamwithSection?CostCode=" + returnData.CostCode + "&RFID=" + "&GroupSection=" + $('#Section').val());
+
+              
             }
         });
+        //document.getElementById("select2-Section-container").style.whiteSpace = "nowrap";
+
+     
+            //$("#select2-Section-container").text($("#Section").val());
+
+
     })
 
-    setTimeout(function () { GetUser(); }, 1500);
-    
+  
 })
-
-
-
 
 function GetUser() {
     $.ajax({
@@ -63,86 +92,123 @@ function GetUser() {
         type: 'POST',
         datatype: "json",
         success: function (returnData) {
-            $('#Section').val(returnData.usersection);
-            Dropdown_select('Line', "/Helper/GetDropdown_LineProcessTeamwithSection?CostCode=" + returnData.usercost + "&RFID=" + "&GroupSection=" + $('#Section').val());
-            Initializepage();
+            if (returnData.usersection != null && returnData.usercost != null) {
+                $('#Section').val(returnData.usersection);
+                $("#select2-Section-container").text(returnData.usersection);
+                Dropdown_selectMPMainLine('Line', "/Helper/GetDropdown_LineProcessTeamwithSection?CostCode=" + returnData.usercost + "&RFID=" + "&GroupSection=" + $('#Section').val());
+                selectedSection = returnData.usersection;
+                Initializepage();
+            }
+           
         }
     });
 }
 
 function Initializepage() {
     // GraphData();
+    $("#loading_modal").modal("show")
     var Filter = {
         DateFrom: $("#DateFrom").val(),
         DateTo: $("#DateTo").val(),
-        Section: $("#Section").val(),
+        Section: selectedSection,// $("#Section").val(),
         Shift: $("#Shift").val(),
         Line: $("#Line").val(),
-        Process: $("#Process").val()
+        Process: $("#Process").val(),
+        Certified: $("#Certified").val()
     }
-    $('#MPTable').DataTable({
-        ajax: {
-            url: '../MPMonitoring/GetManPowerList',
-            type: "POST",
-            datatype: "json",
-            data: Filter 
-        },
-        dom: 'Bfrtip',
-        buttons: [
-            'copy', 'csv', 'excel', 'pdf', 'print'
-        ],
-        lengthMenu: [6000, 200, 300, 500],
-        //pagelength: 1000,
-        //lengthChange: false,
-        scrollY: "600px",
-        scrollCollapse: true,
-        lengthChange: false,
-        serverSide: "true",
-        order: [0, "asc"],
-        processing: "true",
-        initComplete: function () {
-            GetManPowerGraph();
-        },
-        language: {
-            "processing": "processing... please wait"
-        },
-        destroy: true,
-        columns: [
-            {
-                title: "Date", data: function (x) {
-                     return (x.InDate != null) ? moment(x.InDate).format("MM/DD/YYYY") : ""
-                 }, name: "InDate"
-            },
-            { title: "Time In", data: "TimeInNew" },
-            { title: "Time Out", data: "TimeOutNew" },
-            { title: "Shift", data: "ShiftNew" },
-            { title: "Line", data: "LineNew" },
-            { title: "Process", data: "Skill" },
-            {
-                title: "Employee Name", data: function (x) {
-                    var certified = "";
-                    if (x.NEWCOLOR == "Green") {
-                        certified = 'Certified';
-                    }
-                    else if (x.NEWCOLOR == "Black") {
-                        certified = "Orig";
-                    }
-                    else {
-                        certified = 'NotCertified';
-                    }
-                    return "<label class= '" + certified + "' style='16px !important'>" + x.EmployeeName + "</label>"
-                }},
-            { title: "Date Hired", data: "DateHired" },
-            {
-                title: "Date Certified", data: function (x) {
-                    return (x.DateCertified != null) ? moment(x.DateCertified).format("MM/DD/YYYY") : "-"
-                }, name: "DateCertified"
-            },
-          
-        ],
 
-    });
     
+        $('#MPTable').DataTable({
+            ajax: {
+                url: '/Summary/MPMonitoring/GetManPowerList',
+                type: "POST",
+                datatype: "json",
+                data: Filter
+            },
+            dom: 'lBfrtip',
+            buttons: [
+                {
+                    text: "Excel",
+                    action: function () {
+                        window.open('/Summary/MPMonitoring/ExportMP?Section=' + selectedSection);
+                       
+                    }
+                },
+            ],
+            //lengthMenu: [10, 100, 500, 1000, 5000, 10000, "All"],
+            lengthMenu: [[10, 50, 100], [10, 50, 100]],
+            lengthChange: true,
+            scrollX: true,
+            //scrollCollapse: true,
+            serverSide: "true",
+            order: [0, "asc"],
+            sorting:true,
+            initComplete: function () {
+             
+                $('.dataTables_filter input').addClass('form-control form-control-sm');
+                //$("#loading_modal").modal("hide");
+                GetManPowerGraph();
+            },
+            processing: "true",
+            language: {
+                "processing": "processing... please wait"
+            },
+            destroy: true,
+            columns: [
+                {   title: "No", data: "Rownum", name: "Rownum" },
+                {
+                    title: "Date", data: function (x) {
+                        return (x.InDate != null) ? moment(x.InDate).format("MM/DD/YYYY") : ""
+                    }, name: "InDate"
+                },
+                {   title: "Time In", data: "TimeIn", name: "TimeIn" },
+                {
+                    title: "Date Out", data: function (x) {
+                        return (x.InDateOut != null) ? moment(x.InDateOut).format("MM/DD/YYYY") : ""
+                    }, name: "InDateOut"
+                },
+                {   title: "Time Out", data: "TimeOut", name: "TimeOut" },
+                {   title: "Shift", data: "Shift", name: "Shift" },
+                {   title: "Line", data: "Line", name: "Line" },
+                {   title: "Process", data: "Skill", name: "Skill" },
+                {   title: "Employee No", data: "EmpNo", name: "EmpNo" },
+                {
+                    title: "Employee Name", data: function (x) {
+                        var certified = "";
+                        if (x.TrueColor == "Green") {
+                            certified = 'Certified';
+                        }
+                        else if (x.TrueColor == "Black") {
+                            certified = "Orig";
+                        }
+                        else {
+                            certified = 'NotCertified';
+                        }
+                        return "<label class= '" + certified + "' style='16px !important'>" + x.EmployeeName + "</label>"
+                    }
+                },
+                {   title: "Date Hired", data: "Date_Hired", name: "Date_Hired"},
+                {
+                    title: "Date Registered", data: function (x) {
+                        return (x.DateCertified != null) ? moment(x.DateCertified).format("MM/DD/YYYY") : "-"
+                    }, name: "DateCertified"
+                },
+                {   title: "Status", data: "Status", name: "Status" },
+            ],
+            drawCallback: function (settings) {
+                $("#loading_modal").modal("hide");
+                var table = $('#MPTable').DataTable();
+                table.columns.adjust();
+            },
+
+        });
+    var table = $('#MPTable').DataTable();
+    $('#MPTable').on('length.dt', function (e, settings, len) {
+        console.log('New page length: ' + len);
+        $("#loading_modal").modal("show");
+    });
+
+   
 }
 
 
@@ -150,16 +216,17 @@ function GetManPowerGraph() {
     var Filter = {
         DateFrom: $("#DateFrom").val(),
         DateTo: $("#DateTo").val(),
-        Section: $("#Section").val(),
+        Section: selectedSection,// $("#Section").val(),
         Shift: $("#Shift").val(),
         Line: $("#Line").val(),
-        Process: $("#Process").val()
+        Process: $("#Process").val(),
+         Certified: $("#Certified").val()
     }
 
     $.ajax({
         url: '/MPMonitoring/GetManPowerGraph',
         type: 'POST',
-        data:Filter,
+        data: Filter,
         datatype: "json",
         success: function (returnData) {
             for (var x = 0; x < returnData.graphlist.length; x++) {
@@ -171,14 +238,15 @@ function GetManPowerGraph() {
 
             ////console.log(groupedDate);
             graphstart(groupedDate);
+            $("#loading_modal").modal("hide");
+           
         }
     });
 
 }
 
-
 function formatDate(date) {
-   date = new Date(date);
+    date = new Date(date);
     var monthNames = [
       "Jan", "Feb", "Mar",
       "Apr", "May", "Jun", "Jul",
@@ -199,34 +267,38 @@ function graphstart(groupedDate) {
     var UnCertified = [];
     var Blacked = [];
     var Hybrid = [];
+    var OverallCount = [];
     var finalticks = [];
     var nonelist = [];
     var Iterator = 0;
     $.each(groupedDate, function (i, arrdata) {
         i = formatDate(i);
         var Tickshere = [Iterator, i];
-      
-        console.log(Tickshere);
+
         finalticks.push(Tickshere);
-       
+        var overallcounter = 0;
         $.each(arrdata, function (ii, value) {
-           
+
             switch (value.TrueColor) {
                 case "Black":
                     var Black = [Iterator, value.HeadCount];
                     Blacked.push(Black);
+                    overallcounter += value.HeadCount;
                     break;
                 case "Red":
                     var Red = [Iterator, value.HeadCount];
                     UnCertified.push(Red);
+                    overallcounter += value.HeadCount;
                     break;
                 case "Yellow":
                     var Yellow = [Iterator, value.HeadCount];
                     Hybrid.push(Yellow);
+                    overallcounter += value.HeadCount;
                     break;
                 case "Green":
                     var Green = [Iterator, value.HeadCount];
                     Certified.push(Green);
+                    overallcounter += value.HeadCount;
                     break;
                 default:
                     var none = [Iterator, value.HeadCount];
@@ -236,40 +308,89 @@ function graphstart(groupedDate) {
 
 
         })
-
+        var fin = [Iterator, overallcounter];
+        OverallCount.push(fin);
         Iterator++;
     });
 
-    var  data, chartOptions;
-    data = [
-        {
-            label: 'Certified',
-            data: Certified
-        },
-        {
-            label: 'Not Certified',
-            data: UnCertified
-        },
-        {
-            label: 'Original Operator',
-            data: Blacked
-        },
-        {
-            label: 'Transfered',
-            data: Hybrid
+    var line_options = {
+        show: true,
+        lineWidth: 0,
+        fill: false,
+        fillColor: {
+            colors: [{
+                opacity: 0.0
+            }, {
+                opacity: 0.0
+            }]
         }
+    };
 
-    ];
-    console.log(finalticks);
-    
+    var bar_options = {
+        show: true,
+        align: 'center',
+        lineWidth: 0,
+        fill: true,
+        barWidth: 0.6,
+        fillColor: { colors: [{ opacity: 1 }, { opacity: 1 }] },
+    };
+    var data, chartOptions;
+
+    var stack1 = {
+        label: 'Certified',
+        data: Certified,
+        stack: true,
+        fill: true,
+        bars: bar_options
+    };
+    var stack2 = {
+        label: 'UnCertified',
+        data: UnCertified,
+        stack: true,
+        fill: true,
+        bars: bar_options
+    };
+
+    var stack3 = {
+        label: 'Original Operator',
+        data: Blacked,
+        stack: true,
+        fill: true,
+        bars: bar_options
+    };
+    var stack4 = {
+        label: 'Transfer',
+        data: Hybrid,
+        stack: true,
+        fill: true,
+        bars: bar_options,
+        fillColor: { colors: [{ opacity: 0 }, { opacity: 0 }] }
+    };
+
+    var line = {
+        label: '',
+        data: OverallCount,
+        xaxis: 1,
+        stack: false,
+        lines: line_options,
+        points: {
+            radius: 0,
+            show: true
+        },
+        fillColor: { colors: [{ opacity: 1 }, { opacity: 1 }] }
+    };
+    var dataset = [stack1, stack2, stack3, stack4, line];
+
+
     chartOptions = {
-       
+
         xaxis: {
-           
+
             ticks: finalticks,
             rotateTicks: 0
         },
-        grid:{
+
+        grid: {
             hoverable: true,
             clickable: false,
             borderWidth: 1,
@@ -279,27 +400,101 @@ function graphstart(groupedDate) {
         series: {
             stack: true
         },
-        bars: {
-            show: true,
-            barWidth: .4,
-            fill: true,
-            align: 'center',
-            fillColor: { colors: [ { opacity: 1 }, { opacity: 1 } ] }
-        },
-        shadowSize: 100,
+        shadowSize: 0,
         tooltip: true,
         tooltipOpts: {
             content: '%s: %y'
         },
+
         content: function (label, xval, yval, flotItem) {
             return label + ' x:' + xval + ' y: ' + yval;
         },
-        colors: ['#00F033', '#FF0000', '#C1C1C1', '#FEFB6B'],
+        colors: ['#00F033', '#FF0000', '#C1C1C1', '#FEFB6B', '#000000'],
+        //legend: {
+        //    //position: "ne" or "nw" or "se" or "sw"
+        //    position:"se"
+        //}
+        legend: {
+            noColumns: 4,
+            container: $("#chartLegend")
+        }
     }
 
     var holder = $('#stacked-vertical-chart');
 
+
     if (holder.length) {
-        $.plot(holder, data, chartOptions);
+        var p =$.plot(holder, dataset, chartOptions); 
+        $.each(p.getData()[4].data, function (i, el) {
+            var o = p.pointOffset({ x: el[0], y: el[1] });
+            $('<div class="data-point-label">' + el[1] + '</div>').css({
+                position: 'absolute',
+                left: o.left- 20,
+                top: o.top - 20,
+                display: 'none'
+            }).appendTo(p.getPlaceholder()).fadeIn('slow');
+        });
     }
+    
+
+    
+
+}
+
+
+function Dropdown_selectMPMain(id, url) {
+    var option = '<option value="">--SELECT--' + getlong() + '</option>';
+    $('#' + id).html(option);
+    $.ajax({
+        url: url,
+        type: 'GET',
+        dataType: 'JSON',
+    }).done(function (data, textStatus, xhr) {
+        $.each(data.list, function (i, x) {
+            option = '<option value="' + x.value + '">' + x.text + getlongadj2() + '</option>';
+
+            //$('.selectpicker').selectpicker('refresh');
+            $('#' + id).append(option);
+        });
+        GetUser();
+
+    }).fail(function (xhr, textStatus, errorThrown) {
+        console.log(errorThrown, textStatus);
+    });
+
+
+    //var option = '<option value="">--SELECT--</option>';
+    //$('#' + id).html(option);
+    //$.ajax({
+    //    url: url,
+    //    type: 'GET',
+    //    dataType: 'JSON',
+    //}).done(function (data, textStatus, xhr) {
+    //    $.each(data.list, function (i, x) {
+    //        option = '<option value="' + x.value + '">' + x.text +'</option>';
+
+    //        //$('.selectpicker').selectpicker('refresh');
+    //        $('#' + id).append(option);
+    //    });
+    //    GetUser();
+
+    //}).fail(function (xhr, textStatus, errorThrown) {
+    //    console.log(errorThrown, textStatus);
+    //});
+}
+
+
+
+function Dropdown_selectCertified(id) {
+    var option = '<option value="">All' + getlong() + '</option>';
+    var daa = ["Certified", "Uncertified"];
+    $('#' + id).html(option);
+   
+        $.each(daa, function (i, x) {
+            option = '<option value="' + x + '">' + x + getlong() + '</option>';
+
+            //$('.selectpicker').selectpicker('refresh');
+            $('#' + id).append(option);
+        });
+    
 }

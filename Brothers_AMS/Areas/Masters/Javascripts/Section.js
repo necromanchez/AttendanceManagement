@@ -13,8 +13,8 @@
             }
         }
     });
-    Dropdown_select('Section', "/Helper/GetDropdown_SectionAMS");
-
+    //Dropdown_select('Section', "/Helper/GetDropdown_SectionAMS");
+    Dropdown_selectMPMain22('Section', "/Helper/GetDropdown_SectionAMS?Dgroup=");
   
     $("#Manager").focusout(function () {
         $.ajax({
@@ -63,7 +63,7 @@ function Initializepage() {
             datatype: "json",
             data: { supersection: $("#Section").val() }
         },
-        dom: 'Bfrtip',
+        dom: 'Blfrtip',
         buttons: [
             {
                 text: 'Approvers',
@@ -81,10 +81,10 @@ function Initializepage() {
                 $(".Approvebtn").show();
             }
         },
-        lengthMenu: [100, 200, 300, 500],
-        pagelength: 5000,
-        lengthChange: false,
-        scrollY: "600px",
+        lengthMenu: [[10, 50, 100], [10, 50, 100]],
+        
+        lengthChange: true,
+        
         scrollCollapse: true,
         serverSide: "true",
         order: [0, "asc"],
@@ -96,8 +96,9 @@ function Initializepage() {
         //dom: 'Bfrtip',
         destroy: true,
         columns: [
-            { title: "Section", data: "GroupSection" },
-            { title: "Cost Code Name", data: "Section" },
+            { title: "No", data: "Rownum", name: "Rownum" },
+            { title: "Section", data: "GroupSection", name:"GroupSection" },
+            { title: "Cost Code Name", data: "Section", name: "Section" },
             {
                 title: "PureSection", visible:false ,data: function (x) {
                     $("#SectionIDhere").val(x.GroupSection);

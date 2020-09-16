@@ -57,7 +57,7 @@ namespace Brothers_WMS.Controllers
                 Error_Logs error = new Error_Logs();
                 error.PageModule = "Mail";
                 error.ErrorLog = err.Message;
-                error.DateLog = DateTime.Now;
+                error.DateLog = db.TT_GETTIME().FirstOrDefault();//DateTime.Now;;
                 error.Username = "Test";
                 db.Error_Logs.Add(error);
                 db.SaveChanges();

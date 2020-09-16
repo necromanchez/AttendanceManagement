@@ -21,5 +21,12 @@ namespace Brothers_WMS.Models
         public Nullable<System.DateTime> TimeOut { get; set; }
         public long LineID { get; set; }
         public long ProcessID { get; set; }
+        public Nullable<System.DateTime> DTR_TimeIn { get; set; }
+        public Nullable<System.DateTime> DTR_TimeOut { get; set; }
+        public string DTR_RefNo { get; set; }
+        public string CSRef_No { get; set; }
+        public Nullable<long> CS_ScheduleID { get; set; }
+        public string EmployeeRemover { get; set; }
+        public string EmpNo { get; set; }
     }
 }

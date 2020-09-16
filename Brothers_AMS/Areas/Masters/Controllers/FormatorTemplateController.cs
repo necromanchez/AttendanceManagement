@@ -30,8 +30,8 @@ namespace Brothers_WMS.Areas.Masters.Controllers
             string sortColumnName = Request["columns[" + Request["order[0][column]"] + "][name]"];
             string sortDirection = Request["order[0][dir]"];
 
-            List<M_Agency> list = new List<M_Agency>();
-            list = (from c in db.M_Agency
+            List<GET_FormatTimeKeeping_Result> list = new List<GET_FormatTimeKeeping_Result>();
+            list = (from c in db.GET_FormatTimeKeeping()
                     where c.IsDeleted == false
                     select c).ToList();
 
@@ -39,7 +39,7 @@ namespace Brothers_WMS.Areas.Masters.Controllers
             {
                 list = list.Where(x =>  x.AgencyName.ToLower().Contains(searchValue.ToLower()) || 
                                         x.AgencyCode.ToLower().Contains(searchValue.ToLower()) ||
-                                        x.Address.ToLower().Contains(searchValue.ToLower())).ToList<M_Agency>();
+                                        x.Address.ToLower().Contains(searchValue.ToLower())).ToList<GET_FormatTimeKeeping_Result>();
             }
             if (sortColumnName != "" && sortColumnName != null)
             {
@@ -57,7 +57,7 @@ namespace Brothers_WMS.Areas.Masters.Controllers
 
 
             //paging
-            list = list.Skip(start).Take(length).ToList<M_Agency>();
+            list = list.Skip(start).Take(length).ToList<GET_FormatTimeKeeping_Result>();
             return Json(new { data = list, draw = Request["draw"], recordsTotal = totalrows, recordsFiltered = totalrowsafterfiltering }, JsonRequestBehavior.AllowGet);
         }
         public ActionResult CreateAgency(M_Agency data)

@@ -21,6 +21,7 @@ namespace Brothers_WMS.Areas.Correction.Controllers
     {
         // GET: Correction/OT
         Brothers_AMSDBEntities db = new Brothers_AMSDBEntities();
+        
         M_Users user = (M_Users)System.Web.HttpContext.Current.Session["user"];
         HelperController helper = new HelperController();
         public ActionResult OT()
@@ -54,7 +55,7 @@ namespace Brothers_WMS.Areas.Correction.Controllers
                 case "OT":
                     currentRefno = helper.GenerateOTRef();
                     list = db.GET_Employee_OTFiling(Agency, user.CostCode, lINEID, employeeNo).ToList();
-                   
+                    list = list.OrderBy(x => x.EmpNo).ToList();
                     //list = list.Where(x => x.Section == user.CostCode).ToList();
                     //List<AF_OTfiling> AlreadyApplied = (from c in db.AF_OTfiling where c.OT_RefNo == currentRefno && c.Status >= 0 select c).ToList();
                     //list = list.Where(p => !AlreadyApplied.Any(p2 => p2.EmployeeNo == p.EmpNo)).ToList();
@@ -62,6 +63,7 @@ namespace Brothers_WMS.Areas.Correction.Controllers
                 case "CS":
                     currentRefno = helper.GenerateCSRef();
                     list = db.GET_Employee_OTFiling(Agency, user.CostCode, lINEID, employeeNo).ToList();
+                    list = list.OrderBy(x => x.EmpNo).ToList();
                     //if (Schedule != null)
                     //{
                     //    string Schedulename = (from c in db.M_Schedule where c.ID == Schedule select c.Timein + " - " + c.TimeOut).FirstOrDefault();
@@ -74,9 +76,10 @@ namespace Brothers_WMS.Areas.Correction.Controllers
                 case "DTR":
                     currentRefno = helper.GenerateDTRRef();
                     list = db.GET_Employee_OTFiling(Agency, user.CostCode, lINEID, employeeNo).ToList();
-                   // list = list.Where(x => x.Section == user.Section).ToList();
-                   // List<AF_DTRfiling> AlreadyApplieddtr = (from c in db.AF_DTRfiling where c.DTR_RefNo == currentRefno && c.Status >= 0 select c).ToList();
-                   // list = list.Where(p => !AlreadyApplieddtr.Any(p2 => p2.EmployeeNo == p.EmpNo)).ToList();
+                    list = list.OrderBy(x => x.EmpNo).ToList();
+                    // list = list.Where(x => x.Section == user.Section).ToList();
+                    // List<AF_DTRfiling> AlreadyApplieddtr = (from c in db.AF_DTRfiling where c.DTR_RefNo == currentRefno && c.Status >= 0 select c).ToList();
+                    // list = list.Where(p => !AlreadyApplieddtr.Any(p2 => p2.EmployeeNo == p.EmpNo)).ToList();
                     break;
             }
            
@@ -102,17 +105,17 @@ namespace Brothers_WMS.Areas.Correction.Controllers
                 || x.Family_Name.ToLower().Contains(searchValue.ToLower())
                 || x.First_Name.ToLower().Contains(searchValue.ToLower())).ToList<GET_Employee_OTFiling_Result>();
             }
-            if (sortColumnName != "" && sortColumnName != null)
-            {
-                if (sortDirection == "asc")
-                {
-                    list = list.OrderBy(x => TypeHelper.GetPropertyValue(x, sortColumnName)).ToList();
-                }
-                else
-                {
-                    list = list.OrderByDescending(x => TypeHelper.GetPropertyValue(x, sortColumnName)).ToList();
-                }
-            }
+            //if (sortColumnName != "" && sortColumnName != null)
+            //{
+            //    if (sortDirection == "asc")
+            //    {
+            //        list = list.OrderBy(x => TypeHelper.GetPropertyValue(x, sortColumnName)).ToList();
+            //    }
+            //    else
+            //    {
+            //        list = list.OrderByDescending(x => TypeHelper.GetPropertyValue(x, sortColumnName)).ToList();
+            //    }
+            //}
             int totalrows = list.Count;
             int totalrowsafterfiltering = list.Count;
 
@@ -139,29 +142,28 @@ namespace Brothers_WMS.Areas.Correction.Controllers
                     otfile.BIPH_Agency = Filing.BIPH_Agency;
                     otfile.EmployeeNo = EmploNos;
                     otfile.FileType = Filing.FileType;
-                    long? Schedule_current = (from c in db.M_Employee_Master_List_Schedule where c.EmployeeNo == EmploNos orderby c.ID descending select c.ScheduleID_CSTemp).FirstOrDefault();
-                    if(Schedule_current == null)
-                    {
-                        Schedule_current = (from c in db.M_Employee_Master_List_Schedule where c.EmployeeNo == EmploNos orderby c.ID descending select c.ScheduleID).FirstOrDefault();
-                    }
+                    long? Schedule_current = (from c in db.M_Employee_Master_List_Schedule where c.EmployeeNo == EmploNos orderby c.ID descending select c.ScheduleID).FirstOrDefault();
+              
                     otfile.ScheduleID = Schedule_current;
                     otfile.Section = (from c in db.M_Employee_CostCenter where c.EmployNo == EmploNos orderby c.ID descending select c.CostCenter_AMS).FirstOrDefault();
                     //SectionID = otfile.Section;
-                    Section = otfile.Section;
+                    Section = (from c in db.M_Cost_Center_List where c.Cost_Center == otfile.Section orderby c.ID descending select c.GroupSection).FirstOrDefault();//otfile.Section;
                     otfile.OvertimeType = Filing.OvertimeType;
-                    otfile.DateFrom = Filing.DateFrom;
-                    otfile.DateTo = DateTime.Now;
+                    otfile.DateFrom = Filing.DateFrom.Date;
+                    otfile.DateTo = Filing.DateFrom.Date;
                     otfile.OTin = Filing.OTin;
                     otfile.OTout = Filing.OTout;
                     otfile.Purpose = purpose;
                     otfile.Status = 0;
                     otfile.StatusMax = (otfile.OvertimeType == "SundayHoliday") ? 4 : 2;
-
-
+                    //if (EmploNos.Contains("BIPH"))
+                    //{
+                        otfile.EmployeeAccept = db.TT_GETTIME().FirstOrDefault();//DateTime.Now;;
+                    //}
                     otfile.CreateID = user.UserName;
                     otfile.CreateDate = DateTime.Now;
                     otfile.UpdateID = user.UserName;
-                    otfile.UpdateDate = DateTime.Now;
+                    otfile.UpdateDate = DateTime.Now;;
 
                     try
                     {
@@ -174,7 +176,7 @@ namespace Brothers_WMS.Areas.Correction.Controllers
                         Error_Logs error = new Error_Logs();
                         error.PageModule = "Application Form - OT Request";
                         error.ErrorLog = err.Message;
-                        error.DateLog = DateTime.Now;
+                        error.DateLog = db.TT_GETTIME().FirstOrDefault();//DateTime.Now;;
                         error.Username = user.UserName;
                         db.Error_Logs.Add(error);
                         db.SaveChanges();
@@ -188,10 +190,10 @@ namespace Brothers_WMS.Areas.Correction.Controllers
                 if (checker == null)
                 {
                     #region GET approver & Email
-                    string SectionID = (from c in db.M_Cost_Center_List
-                                        where c.Cost_Center == Section
-                                        select c.ID).FirstOrDefault().ToString();
-                    List<M_Section_Approver> approver = (from c in db.M_Section_Approver where c.Section == SectionID select c).ToList();
+                    //string SectionID = (from c in db.M_Cost_Center_List
+                    //                    where c.Cost_Center == Section
+                    //                    select c.ID).FirstOrDefault().ToString();
+                    List<M_Section_Approver> approver = (from c in db.M_Section_Approver where c.Section == Section select c).ToList();
 
                     #region EMAIL FUNCTION TRANSFER TO SERVER JOBS
                     //try
@@ -203,7 +205,7 @@ namespace Brothers_WMS.Areas.Correction.Controllers
                     //    Error_Logs error = new Error_Logs();
                     //    error.PageModule = "Application Form - OT Request";
                     //    error.ErrorLog = err.Message;
-                    //    error.DateLog = DateTime.Now;
+                    //    error.DateLog = db.TT_GETTIME().FirstOrDefault();//DateTime.Now;;
                     //    error.Username = user.UserName;
                     //    db.Error_Logs.Add(error);
                     //    db.SaveChanges();
@@ -222,14 +224,14 @@ namespace Brothers_WMS.Areas.Correction.Controllers
                         M_Section_ApproverStatus approverstat = new M_Section_ApproverStatus();
                         approverstat.Position = approv.Position;
                         approverstat.EmployeeNo = approv.EmployeeNo;
-                        approverstat.Section = SectionID;
+                        approverstat.Section = Section;
                         approverstat.RefNo = OTRefnow;
                         approverstat.Approved = 0;
                         approverstat.OverTimeType = Filing.OvertimeType;
                         approverstat.CreateID = user.UserName;
-                        approverstat.CreateDate = DateTime.Now;
+                        approverstat.CreateDate = DateTime.Now;;
                         approverstat.UpdateID = user.UserName;
-                        approverstat.UpdateDate = DateTime.Now;
+                        approverstat.UpdateDate = DateTime.Now;;
                         db.M_Section_ApproverStatus.Add(approverstat);
                         db.SaveChanges();
                     }
@@ -244,7 +246,7 @@ namespace Brothers_WMS.Areas.Correction.Controllers
                 Error_Logs error = new Error_Logs();
                 error.PageModule = "Application Form - OT Request";
                 error.ErrorLog = err.Message;
-                error.DateLog = DateTime.Now;
+                error.DateLog = db.TT_GETTIME().FirstOrDefault();//DateTime.Now;;
                 error.Username = user.UserName;
                 db.Error_Logs.Add(error);
                 db.SaveChanges();
@@ -285,6 +287,7 @@ namespace Brothers_WMS.Areas.Correction.Controllers
                 string dir = Path.GetTempPath();
                 string filename = string.Format("StandardizeOT_template.xlsx");
                 FileInfo newFile = new FileInfo(Path.Combine(dir, filename));
+                FileInfo newFilecopy = new FileInfo(Path.Combine(dir, filename));
                 string apptemplatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"TemplateFiles\StandardTemplate\", templateFilename);
                 FileInfo templateFile = new FileInfo(apptemplatePath);
                 M_Employee_Master_List current = (from c in db.M_Employee_Master_List where c.EmpNo == user.UserName select c).FirstOrDefault();
@@ -306,11 +309,14 @@ namespace Brothers_WMS.Areas.Correction.Controllers
                     }
                     int start = 16;
                     ExcelWorksheet ExportData = package.Workbook.Worksheets["Standardized-OT Form"];
-                    for (int i = 0; i < list.Count; i++)
+                    if (list.Count < 25)
                     {
-                        ExportData.Cells["C" + start].Value = list[i].EmpNo;
-                        ExportData.Cells["D" + start].Value = list[i].Family_Name + ", " + list[i].First_Name;
-                        start++;
+                        for (int i = 0; i < list.Count; i++)
+                        {
+                            ExportData.Cells["C" + start].Value = list[i].EmpNo;
+                            ExportData.Cells["D" + start].Value = list[i].Family_Name + ", " + list[i].First_Name;
+                            start++;
+                        }
                     }
 
 
@@ -318,7 +324,7 @@ namespace Brothers_WMS.Areas.Correction.Controllers
 
                     ExportData.Cells["D5"].Value = current.Department;
                     ExportData.Cells["D6"].Value = user.Section;
-                    ExportData.Cells["I5"].Value = DateTime.Now.ToShortDateString();
+                    ExportData.Cells["I5"].Value = db.TT_GETTIME().FirstOrDefault();//DateTime.Now;.ToShortDateString();
                     ExportData.Cells["D1"].Value = AgencyDetails.AgencyName;
                     ExportData.Cells["D2"].Value = AgencyDetails.Address;
                     ExportData.Cells["D3"].Value = AgencyDetails.TelNo;
@@ -335,9 +341,16 @@ namespace Brothers_WMS.Areas.Correction.Controllers
                             excelImage.SetPosition(0, 0, 1, 1);
                             
                     }
-                    
+
                     #endregion
 
+
+                    //package.SaveAs(newFilecopy);
+
+                    string paths = @"\\192.168.200.100\Published Files\Brothers_AMS\" + filename;
+                    Stream stream = System.IO.File.Create(paths);
+                    package.SaveAs(stream);
+                    stream.Close();
 
 
                     return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename);
@@ -347,7 +360,7 @@ namespace Brothers_WMS.Areas.Correction.Controllers
                 Error_Logs error = new Error_Logs();
                 error.PageModule = "Application Form - OT";
                 error.ErrorLog = err.Message;
-                error.DateLog = DateTime.Now;
+                error.DateLog = db.TT_GETTIME().FirstOrDefault();//DateTime.Now;;
                 error.Username = user.UserName;
                 db.Error_Logs.Add(error);
                 db.SaveChanges();
@@ -355,7 +368,7 @@ namespace Brothers_WMS.Areas.Correction.Controllers
             return Json(new { }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult TimeValidate(List<string> list, string OTin,string OTOut, string Type)
+        public ActionResult TimeValidate(List<string> list,DateTime DateFrom, string OTin,string OTOut, string Type)
         {
             bool Allow = true;
             List<string> EmpConflict = new List<string>();
@@ -363,17 +376,30 @@ namespace Brothers_WMS.Areas.Correction.Controllers
             long? GetSchedID;
             if (Type != "Regular")
             {
-                Allow = true;
+                foreach (string emp in list)
+                {
+                    string currentRefno = helper.GenerateOTRef();
+                    DateTime a = DateFrom.Date;
+                    AF_OTfiling otnow = (from c in db.AF_OTfiling where c.DateFrom == a && c.EmployeeNo == emp select c).FirstOrDefault();
+                    //AF_OTfiling otnow2 = (from c in db.AF_OTfiling where c.OT_RefNo == currentRefno && c.OTout == OTOut && c.Status >= 0 && c.EmployeeNo == emp select c).FirstOrDefault();
+
+                    if (otnow != null)// || otnow2 != null)
+                    {
+                        EmpAlready.Add(list[0]);
+                        Allow = false;
+                    }
+                    else
+                    {
+                        Allow = true;
+                    }
+                }
             }
             else
             {
                 foreach (string emp in list) {
                     M_Employee_Master_List Employee = (from c in db.M_Employee_Master_List where c.EmpNo == emp select c).FirstOrDefault();
-                    GetSchedID = (from c in db.M_Employee_Master_List_Schedule where c.EmployeeNo == emp orderby c.ID descending select c.ScheduleID_CSTemp).FirstOrDefault();
-                    if (GetSchedID == null)
-                    {
-                        GetSchedID = (from c in db.M_Employee_Master_List_Schedule where c.EmployeeNo == emp orderby c.ID descending select c.ScheduleID).FirstOrDefault();
-                    }
+                    GetSchedID = (from c in db.M_Employee_Master_List_Schedule where c.EmployeeNo == emp orderby c.ID descending select c.ScheduleID).FirstOrDefault();
+                   
                     string Schedule = (from c in db.M_Schedule where c.ID == GetSchedID select c.Type).FirstOrDefault();
 
                     M_Schedule schedcheck = (from c in db.M_Schedule where c.Type == Schedule select c).FirstOrDefault();
@@ -401,11 +427,11 @@ namespace Brothers_WMS.Areas.Correction.Controllers
                         //break;
                     }
                     string currentRefno = helper.GenerateOTRef();
-                   
-                    AF_OTfiling otnow = (from c in db.AF_OTfiling where c.OT_RefNo == currentRefno && c.OTin == OTin && c.EmployeeNo == emp select c).FirstOrDefault();
-                    AF_OTfiling otnow2 = (from c in db.AF_OTfiling where c.OT_RefNo == currentRefno && c.OTout == OTOut && c.EmployeeNo == emp select c).FirstOrDefault();
+                    DateTime a = DateFrom.Date;
+                    AF_OTfiling otnow = (from c in db.AF_OTfiling where c.OT_RefNo == currentRefno && c.OTin == OTin && c.Status >= 0 && c.DateFrom == a && c.EmployeeNo == emp select c).FirstOrDefault();
+                    //AF_OTfiling otnow2 = (from c in db.AF_OTfiling where c.OT_RefNo == currentRefno && c.OTout == OTOut && c.Status >= 0 && c.EmployeeNo == emp select c).FirstOrDefault();
 
-                    if (otnow != null || otnow2 != null)
+                    if (otnow != null)// || otnow2 != null)
                     {
                         EmpAlready.Add(list[0]);
                         Allow = false;
@@ -475,12 +501,13 @@ namespace Brothers_WMS.Areas.Correction.Controllers
                                 if (bemodify == null)
                                 {
                                     #region Creating via upload
-                                    Section = user.CostCode;// Employee.Section;
                                     AF_OTfiling OTrequest = new AF_OTfiling();
                                     OTrequest.OT_RefNo = TodayRefno;
                                     OTrequest.BIPH_Agency = Employee.Company;
                                     OTrequest.FileType = 3; //Upload
-                                    OTrequest.Section = Employee.CostCode;
+                                    OTrequest.Section = (from c in db.M_Employee_CostCenter where c.EmployNo == Empno orderby c.ID descending select c.CostCenter_AMS).FirstOrDefault();
+                                    Section = (from c in db.M_Cost_Center_List where c.Cost_Center == OTrequest.Section orderby c.ID descending select c.GroupSection).FirstOrDefault();//otfile.Section;
+
                                     OTrequest.EmployeeNo = Employee.EmpNo;
                                     OTrequest.OvertimeType = OTType;
                                     OTrequest.DateFrom = Convert.ToDateTime(worksheet.Cells[6, 9].Value);
@@ -488,18 +515,17 @@ namespace Brothers_WMS.Areas.Correction.Controllers
 
                                     OTrequest.OTin = worksheet.Cells[startRowForTable, 5].Value.ToString();
                                     OTrequest.OTout = worksheet.Cells[startRowForTable, 6].Value.ToString();
-
-
-
-
+                                    
                                     OTrequest.Purpose = worksheet.Cells[startRowForTable, 8].Value.ToString();
                                     OTrequest.Status = 0;
-                                    OTrequest.StatusMax = (OTrequest.OvertimeType == "SundayHoliday") ? 3 : 2;
+                                    OTrequest.StatusMax = (OTrequest.OvertimeType == "SundayHoliday") ? 4 : 2;
+
+                                    OTrequest.EmployeeAccept = db.TT_GETTIME().FirstOrDefault();
 
                                     OTrequest.CreateID = user.UserName;
-                                    OTrequest.CreateDate = DateTime.Now;
+                                    OTrequest.CreateDate = DateTime.Now;;
                                     OTrequest.UpdateID = user.UserName;
-                                    OTrequest.UpdateDate = DateTime.Now;
+                                    OTrequest.UpdateDate = DateTime.Now;;
 
                                     try
                                     {
@@ -511,7 +537,7 @@ namespace Brothers_WMS.Areas.Correction.Controllers
                                         Error_Logs error = new Error_Logs();
                                         error.PageModule = "Application Form - OT Request";
                                         error.ErrorLog = err.Message;
-                                        error.DateLog = DateTime.Now;
+                                        error.DateLog = db.TT_GETTIME().FirstOrDefault();//DateTime.Now;;
                                         error.Username = user.UserName;
                                         db.Error_Logs.Add(error);
                                         db.SaveChanges();
@@ -521,11 +547,13 @@ namespace Brothers_WMS.Areas.Correction.Controllers
                                 else
                                 {
                                     #region modifying via upload
-                                    Section = Employee.CostCode;
+                                    //Section = Employee.CostCode;
                                     bemodify.OT_RefNo = TodayRefno;
                                     bemodify.BIPH_Agency = Employee.Company;
                                     bemodify.FileType = 3; //Upload
-                                    bemodify.Section = Employee.CostCode;
+                                    bemodify.Section = (from c in db.M_Employee_CostCenter where c.EmployNo == Empno orderby c.ID descending select c.CostCenter_AMS).FirstOrDefault();
+                                    Section = (from c in db.M_Cost_Center_List where c.Cost_Center == bemodify.Section orderby c.ID descending select c.GroupSection).FirstOrDefault();//otfile.Section;
+
                                     bemodify.EmployeeNo = Employee.EmpNo;
                                     bemodify.OvertimeType = OTType;
                                     bemodify.DateFrom = Convert.ToDateTime(worksheet.Cells[6, 8].Value);
@@ -534,10 +562,12 @@ namespace Brothers_WMS.Areas.Correction.Controllers
                                     bemodify.OTout = worksheet.Cells[startRowForTable, 5].Value.ToString();
                                     bemodify.Purpose = worksheet.Cells[startRowForTable, 7].Value.ToString();
                                     bemodify.Status = 0;
-                                    bemodify.StatusMax = (bemodify.OvertimeType == "SundayHoliday") ? 3 : 2;
+                                    bemodify.StatusMax = (bemodify.OvertimeType == "SundayHoliday") ? 4 : 2;
+
+                                    bemodify.EmployeeAccept = db.TT_GETTIME().FirstOrDefault();
 
                                     bemodify.UpdateID = user.UserName;
-                                    bemodify.UpdateDate = DateTime.Now;
+                                    bemodify.UpdateDate = DateTime.Now;;
 
                                     try
                                     {
@@ -549,7 +579,7 @@ namespace Brothers_WMS.Areas.Correction.Controllers
                                         Error_Logs error = new Error_Logs();
                                         error.PageModule = "Application Form - OT Request";
                                         error.ErrorLog = err.Message;
-                                        error.DateLog = DateTime.Now;
+                                        error.DateLog = db.TT_GETTIME().FirstOrDefault();//DateTime.Now;;
                                         error.Username = user.UserName;
                                         db.Error_Logs.Add(error);
                                         db.SaveChanges();
@@ -574,7 +604,7 @@ namespace Brothers_WMS.Areas.Correction.Controllers
                             Error_Logs error = new Error_Logs();
                             error.PageModule = "Application Form - OT Request";
                             error.ErrorLog = err.Message;
-                            error.DateLog = DateTime.Now;
+                            error.DateLog = db.TT_GETTIME().FirstOrDefault();//DateTime.Now;;
                             error.Username = user.UserName;
                             db.Error_Logs.Add(error);
                             db.SaveChanges();
@@ -588,10 +618,10 @@ namespace Brothers_WMS.Areas.Correction.Controllers
                     M_Section_ApproverStatus checker = (from c in db.M_Section_ApproverStatus where c.RefNo == TodayRefno select c).FirstOrDefault();
                     if (checker == null) {
                         #region GET approver & Email
-                        string SectionID = (from c in db.M_Cost_Center_List
-                                            where c.Cost_Center == Section
-                                            select c.ID).FirstOrDefault().ToString();
-                        List<M_Section_Approver> approver = (from c in db.M_Section_Approver where c.Section == SectionID select c).ToList();
+                        //string SectionID = (from c in db.M_Cost_Center_List
+                        //                    where c.Cost_Center == Section
+                        //                    select c.ID).FirstOrDefault().ToString();
+                        List<M_Section_Approver> approver = (from c in db.M_Section_Approver where c.Section == Section select c).ToList();
 
 
                         #endregion
@@ -601,14 +631,14 @@ namespace Brothers_WMS.Areas.Correction.Controllers
                             M_Section_ApproverStatus approverstat = new M_Section_ApproverStatus();
                             approverstat.Position = approv.Position;
                             approverstat.EmployeeNo = approv.EmployeeNo;
-                            approverstat.Section = SectionID;
+                            approverstat.Section = Section;
                             approverstat.RefNo = helper.GenerateOTRef();
                             approverstat.Approved = 0;
                             approverstat.OverTimeType = OTType;
                             approverstat.CreateID = user.UserName;
-                            approverstat.CreateDate = DateTime.Now;
+                            approverstat.CreateDate = DateTime.Now;;
                             approverstat.UpdateID = user.UserName;
-                            approverstat.UpdateDate = DateTime.Now;
+                            approverstat.UpdateDate = DateTime.Now;;
                             db.M_Section_ApproverStatus.Add(approverstat);
                             db.SaveChanges();
                         }

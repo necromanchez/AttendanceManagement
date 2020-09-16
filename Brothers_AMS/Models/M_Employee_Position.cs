@@ -19,5 +19,7 @@ namespace Brothers_WMS.Models
         public string Position { get; set; }
         public Nullable<System.DateTime> UpdateDate { get; set; }
         public string Update_ID { get; set; }
+        public string HRPosition { get; set; }
+        public Nullable<System.DateTime> HRUpdateDate { get; set; }
     }
 }

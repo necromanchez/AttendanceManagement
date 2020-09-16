@@ -79,9 +79,9 @@
                             <div class="input-group">
                                 <span class="input-group-addon">File Type</span>
                                 <select class="form-control select2" id="FileType" name="FileType" disabled>
-                                    <option value="">--SELECT--</option>
+                                    @*<option value="">--SELECT--</option>
                                     <option value=1>Individual</option>
-                                    <option value=2>Group</option>
+                                    <option value=2>Group</option>*@
                                 </select>
                             </div>
                         </div>
@@ -207,7 +207,7 @@
             </form>
 
         </div>
-        <div class="box-body">
+        <div class="box-body" id="ALLtbl">
             <table id="DTREmployeeTable" class="table table-bordered table-striped table-responsive">
                 <thead>
                     <tr>
@@ -318,20 +318,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <div class="input-group">
-                                    <span class="input-group-addon">Group Reason</span>
-                                    <select class="form-control select2" id="PposgroupConcern">
-                                        <option value="ForgottoTap">Forgot to Tap</option>
-                                        <option value="ForgotID">Forgot ID</option>
-                                        <option value="LostID">Lost ID</option>
-                                        <option value="OfficialBusiness">Official Business</option>
-                                        <option value="BusinessTrip">Business Trip</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
+                        
                         <div class="col-md-6">
                             <div class="form-group">
                                 <div class="input-group">
@@ -340,6 +327,21 @@
                                         <option value="NoIn">No In</option>
                                         <option value="NoOut">No Out</option>
                                         <option value="NoInOut">No In and Out</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon">Group Reason</span>
+                                    <select class="form-control select2" id="Pposgroup">
+                                        <option value="ForgottoTap">Forgot to Tap</option>
+                                        <option value="ForgotID">Forgot ID</option>
+                                        <option value="LostID">Lost ID</option>
+                                        <option value="OfficialBusiness">Official Business</option>
+                                        <option value="BusinessTrip">Business Trip</option>
                                     </select>
                                 </div>
                             </div>

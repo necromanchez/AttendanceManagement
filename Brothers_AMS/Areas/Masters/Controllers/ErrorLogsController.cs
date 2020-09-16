@@ -20,7 +20,7 @@ namespace Brothers_WMS.Areas.Masters.Controllers
             return View();
         }
 
-        public ActionResult GetErrorList()
+        public ActionResult GetErrorList(DateTime? searchdate)
         {
             //Server Side Parameter
             int start = Convert.ToInt32(Request["start"]);
@@ -28,15 +28,16 @@ namespace Brothers_WMS.Areas.Masters.Controllers
             string searchValue = Request["search[value]"];
             string sortColumnName = Request["columns[" + Request["order[0][column]"] + "][name]"];
             string sortDirection = Request["order[0][dir]"];
-
-            List<Error_Logs> list = new List<Error_Logs>();
-            list = (from c in db.Error_Logs
+            searchdate = (searchdate == null) ? DateTime.Now : searchdate;
+            List<GET_M_ErrorLogs_Result> list = new List<GET_M_ErrorLogs_Result>();
+            db.Database.CommandTimeout = 0;
+            list = (from c in db.GET_M_ErrorLogs(searchdate)
                     orderby c.ID descending
                     select c).ToList();
 
             if (!string.IsNullOrEmpty(searchValue))//filter
             {
-                list = list.Where(x => x.PageModule.ToLower().Contains(searchValue.ToLower())).ToList<Error_Logs>();
+                list = list.Where(x => x.PageModule.ToLower().Contains(searchValue.ToLower())).ToList<GET_M_ErrorLogs_Result>();
             }
             if (sortColumnName != "" && sortColumnName != null)
             {
@@ -54,7 +55,7 @@ namespace Brothers_WMS.Areas.Masters.Controllers
 
 
             //paging
-            list = list.Skip(start).Take(length).ToList<Error_Logs>();
+            list = list.Skip(start).Take(length).ToList<GET_M_ErrorLogs_Result>();
             return Json(new { data = list, draw = Request["draw"], recordsTotal = totalrows, recordsFiltered = totalrowsafterfiltering }, JsonRequestBehavior.AllowGet);
         }
     }

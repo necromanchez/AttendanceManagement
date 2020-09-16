@@ -93,10 +93,10 @@
                             </span>
                         </a>
                         <ul class="treeview-menu" style="">
-                            @foreach (M_SP_PageandAccess_Result x in ApplicationFormPageList)
-                    {
-                        if (x.AccessType == true)
+                        @foreach (M_SP_PageandAccess_Result x in ApplicationFormPageList)
                         {
+                            if (x.AccessType == true)
+                            {
                                     <li class=""><a href="@Url.Action(x.PageIndex, x.PageIndex, new { area = "Correction" })"><i class="fa fa-circle-o"></i> @x.PageName </a></li>
                                 }
                             }
@@ -128,9 +128,8 @@
                         <i class="fa fa-area-chart"></i> <span> Forecast Setting</span>
                     </a>
                 </li>*@
-                @*@if (ForeCastList.Count > 0)
-                {
-                    <li class="treeview" id="Forecastmodule">
+             
+                    @*<li class="treeview" id="Forecastmodule">
                         <a href="#">
                             <i class="fa fa-newspaper-o"></i> <span>Forecast</span>
                             <span class="pull-right-container">
@@ -138,16 +137,13 @@
                             </span>
                         </a>
                         <ul class="treeview-menu" style="">
-                            @foreach (M_SP_PageandAccess_Result x in ForeCastList)
-                    {
-                        if (x.AccessType == true)
-                        {
-                                    <li class=""><a href="@Url.Action(x.PageIndex, x.PageIndex, new { area = "Forecast" })"><i class="fa fa-circle-o"></i> @x.PageName </a></li>
-                                }
-                            }
+                       
+                     
+                             <li class=""><a href="@Url.Action("Forecast", "Forecast", new { area = "Forecast" })"><i class="fa fa-circle-o"></i> The forecast </a></li>
+                              
                         </ul>
-                    </li>
-                }*@
+                    </li>*@
+              
                 <li class="treeview" id="timin">
                     <a id="TimeIn" onclick="goTime()">
                         <i class="fa fa-id-badge"></i> <span> Time In and Out</span>

@@ -24,7 +24,73 @@ namespace Brothers_WMS.Areas.Masters.Controllers
         // GET: Masters/Employee
         public ActionResult Employee()
         {
+            //db.M_SP_ImportEmployeeStatus();
+
+            List<GET_DuplicateRFID_Result> dup = db.GET_DuplicateRFID().ToList();
+
+            System.Web.HttpContext.Current.Session["DupRFID"] = dup;
+
             return View();
+        }
+
+        public ActionResult GetDuplicateRFIDList()
+        {
+            //Server Side Parameter
+            int start = Convert.ToInt32(Request["start"]);
+            int length = Convert.ToInt32(Request["length"]);
+            string searchValue = Request["search[value]"];
+            string sortColumnName = Request["columns[" + Request["order[0][column]"] + "][name]"];
+            string sortDirection = Request["order[0][dir]"];
+            List<GET_DuplicateRFID_Result> list = (List<GET_DuplicateRFID_Result>)System.Web.HttpContext.Current.Session["DupRFID"];
+            if (!string.IsNullOrEmpty(searchValue))//filter
+            {
+                #region null remover
+                list = list.Where(xx => xx.EmpNo != null).ToList();
+                list = list.Where(xx => xx.RFID != null).ToList();
+                list = list.Where(xx => xx.EmployeeName != null).ToList();
+                list = list.Where(xx => xx.CostCode != null).ToList();
+                list = list.Where(xx => xx.Section != null).ToList();
+                #endregion
+                list = list.Where(x => x.RFID.ToLower().Contains(searchValue.ToLower())
+                                   || x.EmpNo.ToLower().Contains(searchValue.ToLower())
+                                   || x.EmployeeName.ToLower().Contains(searchValue.ToLower())
+                                   || x.CostCode.ToLower().Contains(searchValue.ToLower())
+                                   || x.Section.ToLower().Contains(searchValue.ToLower())
+
+                ).ToList<GET_DuplicateRFID_Result>();
+
+            }
+          
+
+            if (sortColumnName != "" && sortColumnName != null)
+            {
+                if (sortDirection == "asc")
+                {
+                    list = list.OrderBy(x => TypeHelper.GetPropertyValue(x, sortColumnName)).ToList();
+                }
+                else
+                {
+                    list = list.OrderByDescending(x => TypeHelper.GetPropertyValue(x, sortColumnName)).ToList();
+                }
+            }
+            int totalrows = list.Count;
+            int totalrowsafterfiltering = list.Count;
+
+
+            //paging
+            list = list.Skip(start).Take(length).ToList<GET_DuplicateRFID_Result>();
+            // return Json(new { data = list, draw = Request["draw"], recordsTotal = totalrows, recordsFiltered = totalrowsafterfiltering }, JsonRequestBehavior.AllowGet);
+            var jsonResult = Json(new { data = list, draw = Request["draw"], recordsTotal = totalrows, recordsFiltered = totalrowsafterfiltering }, JsonRequestBehavior.AllowGet);
+            jsonResult.MaxJsonLength = int.MaxValue;
+            return jsonResult;
+
+        }
+
+        public ActionResult GetEmployee_StatusProcessShift(string Section)
+        {
+            Section = (Section == null) ? (from c in db.M_Cost_Center_List where c.Cost_Center == user.CostCode select c.GroupSection).FirstOrDefault() : Section;
+            GET_EmployeeShift_Process_Result EmployeeCount = db.GET_EmployeeShift_Process(Section).FirstOrDefault();
+            return Json(new { EmployeeCount= EmployeeCount }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult SyncIT()
@@ -36,17 +102,18 @@ namespace Brothers_WMS.Areas.Masters.Controllers
             }
             catch (Exception err)
             {
-                //Error_Logs error = new Error_Logs();
-                //error.PageModule = "Master - Employee";
-                //error.ErrorLog = err.InnerException.Message;
-                //error.DateLog = DateTime.Now;
-                //error.Username = user.UserName;
-                //db.Error_Logs.Add(error);
-                //db.SaveChanges();
+                Error_Logs error = new Error_Logs();
+                error.PageModule = "Master - Employee";
+                error.ErrorLog = err.InnerException.Message;
+                error.DateLog = DateTime.Now;
+                error.Username = user.UserName;
+                db.Error_Logs.Add(error);
+                db.SaveChanges();
                 return Json(new { msg = "Failed" }, JsonRequestBehavior.AllowGet);
             }
         }
         public ActionResult GetEmployeeList(string supersection, string Status, string MStatus)
+
         {
             System.Web.HttpContext.Current.Session["Searchvaluenow"] = Request["search[value]"];
 
@@ -58,39 +125,38 @@ namespace Brothers_WMS.Areas.Masters.Controllers
             string sortDirection = Request["order[0][dir]"];
 
             List<GET_Employee_Details_Result> list = new List<GET_Employee_Details_Result>();
-            supersection = (supersection == null) ? "" : supersection;
-            list = db.GET_Employee_Details(user.CostCode, supersection).ToList();
-
-
-
-
+            supersection = (supersection == null) ? (from c in db.M_Cost_Center_List where c.Cost_Center == user.CostCode select c.GroupSection).FirstOrDefault() : supersection;
+            list = db.GET_Employee_Details(supersection).ToList();
+            
             if (!string.IsNullOrEmpty(searchValue))//filter
             {
                 #region null remover
-                list = list.Where(xx => xx.EmpNo != null).ToList();
-                list = list.Where(xx => xx.First_Name != null).ToList();
-                list = list.Where(xx => xx.Family_Name != null).ToList();
-                list = list.Where(xx => xx.CostCenter_AMS != null).ToList();
+                //list = list.Where(xx => xx.EmpNo != null).ToList();
+                //list = list.Where(xx => xx.First_Name != null).ToList();
+                //list = list.Where(xx => xx.Family_Name != null).ToList();
+                //list = list.Where(xx => xx.CostCenter_AMS != null).ToList();
+                //list = list.Where(xx => xx.RFID != null).ToList();
                 #endregion
                 list = list.Where(x => x.First_Name.ToLower().Contains(searchValue.ToLower())
                 || x.Family_Name.ToLower().Contains(searchValue.ToLower())
                 || x.EmpNo.ToLower().Contains(searchValue.ToLower())
-                || x.CostCenter_AMS.Contains(searchValue)
+                //|| x.CostCenter_AMS.Contains(searchValue)
+                || x.MainRFID.Contains(searchValue)
                 ).ToList<GET_Employee_Details_Result>();
-
-
-
-
+                
             }
             if (!string.IsNullOrEmpty(MStatus))
             {
-                list = list.Where(xx => xx.ModifiedStatus != null).ToList();
-                list = list.Where(x => x.ModifiedStatus.ToLower() == MStatus.ToLower()).ToList();
+               
+                    list = list.Where(x => x.ModifiedStatus.ToLower() == MStatus.ToLower()).ToList();
+                
             }
-
+           
             if (!string.IsNullOrEmpty(Status))
             {
-                list = list.Where(x => x.Status.ToLower() == Status.ToLower()).ToList();
+                
+                    list = list.Where(x => x.Status.ToLower() == Status.ToLower()).ToList();
+               
             }
 
 
@@ -113,7 +179,10 @@ namespace Brothers_WMS.Areas.Masters.Controllers
 
             //paging
             list = list.Skip(start).Take(length).ToList<GET_Employee_Details_Result>();
-            return Json(new { data = list, draw = Request["draw"], recordsTotal = totalrows, recordsFiltered = totalrowsafterfiltering }, JsonRequestBehavior.AllowGet);
+           // return Json(new { data = list, draw = Request["draw"], recordsTotal = totalrows, recordsFiltered = totalrowsafterfiltering }, JsonRequestBehavior.AllowGet);
+            var jsonResult = Json(new { data = list, draw = Request["draw"], recordsTotal = totalrows, recordsFiltered = totalrowsafterfiltering }, JsonRequestBehavior.AllowGet);
+            jsonResult.MaxJsonLength = int.MaxValue;
+            return jsonResult;
         }
         public ActionResult GetEmployeeSkill(string EmployeeNo)
         {
@@ -234,15 +303,18 @@ namespace Brothers_WMS.Areas.Masters.Controllers
         {
             try
             {
-                M_Employee_CostCenter oldCostCenter = (from c in db.M_Employee_CostCenter where c.EmployNo == EmployCostCenter.EmployNo orderby c.UpdateDate_AMS descending select c).FirstOrDefault();
+                M_Employee_CostCenter oldCostCenterIT = (from c in db.M_Employee_CostCenter where c.EmployNo == EmployCostCenter.EmployNo orderby c.UpdateDate_IT descending select c).FirstOrDefault();
+                M_Employee_CostCenter oldCostCenterAMS = (from c in db.M_Employee_CostCenter where c.EmployNo == EmployCostCenter.EmployNo orderby c.UpdateDate_AMS descending select c).FirstOrDefault();
+
+
 
                 M_Employee_CostCenter newCostCenter = new M_Employee_CostCenter();
-                if (oldCostCenter != null)
+                if (oldCostCenterIT != null && oldCostCenterAMS != null)
                 {
                     newCostCenter.EmployNo = EmployCostCenter.EmployNo;
 
-                    newCostCenter.UpdateDate_IT = oldCostCenter.UpdateDate_IT;
-                    newCostCenter.CostCenter_IT = oldCostCenter.CostCenter_IT;
+                    newCostCenter.UpdateDate_IT = oldCostCenterIT.UpdateDate_IT;
+                    newCostCenter.CostCenter_IT = oldCostCenterIT.CostCenter_IT;
 
                     //Only update this
                     newCostCenter.UpdateDate_AMS = DateTime.Now;
@@ -338,7 +410,7 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                                     db.Error_Logs.Add(error);
                                     db.SaveChanges();
                                 }
-                                cmdExcel.CommandText = "SELECT EmployeeNumber, EXPROD_CostCenter, AMS_CostCenter FROM [" + sheetName + "$]";//ung * is column name, ung sheetname ay settings
+                                cmdExcel.CommandText = "SELECT EmployeeNumber, AMS_CostCenter FROM [" + sheetName + "$]";//ung * is column name, ung sheetname ay settings
                                 odaExcel.SelectCommand = cmdExcel;
                                 odaExcel.Fill(dt);
                                 connExcel.Close();
@@ -347,18 +419,37 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                                     try
                                     {
                                         string EmployeeNo = dt.Rows[x]["EmployeeNumber"].ToString();
-                                        string CostCenter_EXPROD = dt.Rows[x]["EXPROD_CostCenter"].ToString();
+                                        //string CostCenter_EXPROD = dt.Rows[x]["EXPROD_CostCenter"].ToString();
                                         string CostCenter_AMS = dt.Rows[x]["AMS_CostCenter"].ToString();
                                         M_Employee_CostCenter employee = (from c in db.M_Employee_CostCenter
-                                                                          where c.EmployNo == EmployeeNo
+                                                                          where c.EmployNo == EmployeeNo && c.CostCenter_AMS == CostCenter_AMS
+                                                                          && c.UpdateDate_AMS.Value < DateTime.Now
                                                                           select c).FirstOrDefault();
-                                        employee.CostCenter_EXPROD = CostCenter_EXPROD;
-                                        employee.CostCenter_AMS = CostCenter_AMS;
+                                        if (employee != null)
+                                        {
+                                            employee.CostCenter_EXPROD = "";
+                                            employee.CostCenter_AMS = CostCenter_AMS;
 
-                                        employee.UpdateDate_IT = DateTime.Now;
-                                        employee.Update_ID = user.UserName;
-                                        db.Entry(employee).State = EntityState.Modified;
-                                        db.SaveChanges();
+                                            employee.UpdateDate_AMS = db.TT_GETTIME().FirstOrDefault();
+                                            employee.UpdateDate_IT = db.TT_GETTIME().FirstOrDefault();
+                                            employee.Update_ID = user.UserName;
+                                            db.Entry(employee).State = EntityState.Modified;
+                                            db.SaveChanges();
+                                        }
+                                        else
+                                        {
+                                            employee = new M_Employee_CostCenter();
+                                            employee.EmployNo = EmployeeNo;
+                                            employee.CostCenter_AMS = CostCenter_AMS;
+                                            employee.CostCenter_EXPROD = "";
+                                            employee.CostCenter_IT = "";
+                                            employee.UpdateDate_AMS = db.TT_GETTIME().FirstOrDefault();
+                                            employee.UpdateDate_IT = db.TT_GETTIME().FirstOrDefault();
+                                            employee.UpdateDate_EXPROD = db.TT_GETTIME().FirstOrDefault();
+                                            employee.Update_ID = user.UserName;
+                                            db.M_Employee_CostCenter.Add(employee);
+                                            db.SaveChanges();
+                                        }
                                     }
                                     catch (Exception err)
                                     {
@@ -443,7 +534,7 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                                     db.Error_Logs.Add(error);
                                     db.SaveChanges();
                                 }
-                                cmdExcel.CommandText = "SELECT EmployeeNumber, Skills FROM [" + sheetName + "$]";//ung * is column name, ung sheetname ay settings
+                                cmdExcel.CommandText = "SELECT EmployeeNumber, Process FROM [" + sheetName + "$]";//ung * is column name, ung sheetname ay settings
                                 odaExcel.SelectCommand = cmdExcel;
                                 odaExcel.Fill(dt);
                                 connExcel.Close();
@@ -456,7 +547,7 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                                     {
                                         ROWcount++;
                                         string EmployeeNo = dt.Rows[x]["EmployeeNumber"].ToString();
-                                        string Skill = dt.Rows[x]["Skills"].ToString();
+                                        string Skill = dt.Rows[x]["Process"].ToString();
                                         long SkillID = (from c in db.M_Skills
                                                         where c.Line == LineID
                                                         && c.Skill == Skill
@@ -532,7 +623,9 @@ namespace Brothers_WMS.Areas.Masters.Controllers
             }
             return Json(new { result = "success", uploaderror = uploaderror }, JsonRequestBehavior.AllowGet);
         }
-        public ActionResult UploadSchedule()
+
+
+        public ActionResult UploadSchedule(string EffectivitySched)
         {
             try
             {
@@ -594,15 +687,18 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                                         string EmployeeNo = dt.Rows[x]["EmployeeNumber"].ToString();
                                         string ScheduleName = dt.Rows[x]["ScheduleName"].ToString();
                                         long ScheduleID = (from c in db.M_Schedule where c.Type == ScheduleName && c.IsDeleted == false select c.ID).FirstOrDefault();
-
-                                        M_Employee_Master_List_Schedule employeesched = new M_Employee_Master_List_Schedule();
-                                        employeesched.EmployeeNo = EmployeeNo;
-                                        employeesched.ScheduleID = ScheduleID;
-                                        employeesched.UpdateDate = DateTime.Now;
-                                        employeesched.UpdateID = user.UserName;
-
-                                        db.M_Employee_Master_List_Schedule.Add(employeesched);
-                                        db.SaveChanges();
+                                       
+                                        if (ScheduleName != "" && ScheduleID != 0)
+                                        {
+                                            M_Employee_Master_List_Schedule employeesched = new M_Employee_Master_List_Schedule();
+                                            employeesched.EmployeeNo = EmployeeNo;
+                                            employeesched.ScheduleID = ScheduleID;
+                                            employeesched.UpdateDate = db.TT_GETTIME().FirstOrDefault();
+                                            employeesched.UpdateID = user.UserName;
+                                            employeesched.EffectivityDate = Convert.ToDateTime(EffectivitySched);
+                                            db.M_Employee_Master_List_Schedule.Add(employeesched);
+                                            db.SaveChanges();
+                                        }
                                     }
                                     catch (Exception err)
                                     {
@@ -786,7 +882,7 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                                     db.Error_Logs.Add(error);
                                     db.SaveChanges();
                                 }
-                                cmdExcel.CommandText = "SELECT EmployeeNumber, Position FROM [" + sheetName + "$]";//ung * is column name, ung sheetname ay settings
+                                cmdExcel.CommandText = "SELECT EmployeeNumber, PositionName FROM [" + sheetName + "$]";//ung * is column name, ung sheetname ay settings
                                 odaExcel.SelectCommand = cmdExcel;
                                 odaExcel.Fill(dt);
                                 connExcel.Close();
@@ -795,12 +891,12 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                                     try
                                     {
                                         string EmployeeNo = dt.Rows[x]["EmployeeNumber"].ToString();
-                                        string Status = dt.Rows[x]["Position"].ToString();
+                                        string Status = dt.Rows[x]["PositionName"].ToString();
 
                                         M_Employee_Position EmpStatus = new M_Employee_Position();
                                         EmpStatus.EmployNo = EmployeeNo;
                                         EmpStatus.Position = Status;
-                                        EmpStatus.UpdateDate = DateTime.Now;
+                                        EmpStatus.UpdateDate = db.TT_GETTIME().FirstOrDefault();
                                         EmpStatus.Update_ID = user.UserName;
 
                                         db.M_Employee_Position.Add(EmpStatus);
@@ -811,7 +907,7 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                                         Error_Logs error = new Error_Logs();
                                         error.PageModule = "Master - Employee";
                                         error.ErrorLog = err.Message;
-                                        error.DateLog = DateTime.Now;
+                                        error.DateLog = db.TT_GETTIME().FirstOrDefault();
                                         error.Username = user.UserName;
                                         db.Error_Logs.Add(error);
                                         db.SaveChanges();
@@ -835,9 +931,16 @@ namespace Brothers_WMS.Areas.Masters.Controllers
             }
             return Json(new { result = "success" }, JsonRequestBehavior.AllowGet);
         }
-        public ActionResult RemoveSkillAll()
+        public ActionResult RemoveSkillAll(string Section)
         {
-            db.M_SP_SkillSectionDeletion(user.Section);
+            Z_SkillRemoverAll usernow = new Z_SkillRemoverAll();
+            usernow.Username = user.UserName;
+            usernow.DatePerform = db.TT_GETTIME().FirstOrDefault();
+            usernow.Section = Section;
+            db.Z_SkillRemoverAll.Add(usernow);
+            db.SaveChanges();
+
+            db.M_SP_SkillSectionDeletion(Section);
             return Json(new { msg = "Success" }, JsonRequestBehavior.AllowGet);
         }
 
@@ -847,12 +950,14 @@ namespace Brothers_WMS.Areas.Masters.Controllers
             try
             {
                 string searchnow = System.Web.HttpContext.Current.Session["Searchvaluenow"].ToString();
-                CostCode = (user.CostCode == "") ? CostCode : "";
-                CostCode = (CostCode == "undefined") ? "" : CostCode;
+                CostCode = (user.CostCode == null) ? CostCode : user.CostCode;
+                //CostCode = (CostCode == "undefined") ? "" : CostCode;
                 string templateFilename = "UploadExprod_AMSTemplate.xlsx";
                 string dir = Path.GetTempPath();
                 string datetimeToday = DateTime.Now.ToString("yyMMddhhmmss");
-                string filename = string.Format("UploadExprod_AMSTemplate{0}_{1}.xlsx", datetimeToday, CostCode);
+                string GroupSection = (user.CostCode != CostCode) ? CostCode : (from c in db.M_Cost_Center_List where c.Cost_Center == CostCode && c.GroupSection != "" select c.GroupSection).FirstOrDefault();
+
+                string filename = string.Format("UploadExprod_AMSTemplate{0}_{1}.xlsx", datetimeToday, GroupSection);
                 FileInfo newFile = new FileInfo(Path.Combine(dir, filename));
                 string apptemplatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"TemplateFiles\", templateFilename);
                 FileInfo templateFile = new FileInfo(apptemplatePath);
@@ -860,10 +965,12 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                 using (ExcelPackage package = new ExcelPackage(newFile, templateFile))  //-- With template.
                 {
                     List<GET_Employee_Details_Result> list = new List<GET_Employee_Details_Result>();
-                    list = db.GET_Employee_Details(user.CostCode, CostCode).ToList();
+                    CostCode = (user.CostCode == CostCode) ? "" : CostCode;
+                    list = db.GET_Employee_Details(GroupSection).ToList();
                     list = list.Where(xx => xx.ModifiedStatus != null).ToList();
                     list = list.Where(x => x.ModifiedStatus.ToLower() == "active").ToList();
                     ExcelWorksheet ExportData = package.Workbook.Worksheets["Sheet1"];
+                    ExcelWorksheet ExportData2 = package.Workbook.Worksheets["Instructions"];
                     int start = 2;
                     if (!string.IsNullOrEmpty(searchnow))//filter
                     {
@@ -885,9 +992,19 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                     //}
                     for (int i = 0; i < list.Count; i++)
                     {
-                        ExportData.Cells["A" + start].Value = list[i].EmpNo;
+                        ExportData.Cells["A"+start].Value = list[i].EmpNo;
                         ExportData.Cells["B" + start].Value = list[i].Family_Name + ", " + list[i].First_Name;
+                        ExportData.Cells["C" + start].Value = list[i].CostCenter_AMS;
                         start++;
+                    }
+
+                    List<string> costcodelist = (from c in db.M_Cost_Center_List
+                                                 select c.Cost_Center).Distinct().ToList();
+                    int d = 1;
+                    for (int i = 0; i < costcodelist.Count; i++)
+                    {
+                        ExportData2.Cells["Z" + d].Value = costcodelist[i];
+                        d++;
                     }
                     return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename);
                 }
@@ -941,8 +1058,8 @@ namespace Brothers_WMS.Areas.Masters.Controllers
         //            //}
         //            for (int i = 0; i < list.Count; i++)
         //            {
-        //                ExportData.Cells["A" + start].Value = list[i].EmpNo;
-        //                ExportData.Cells["B" + start].Value = list[i].Family_Name + ", " + list[i].First_Name;
+        //                ExportData.Cells["A1"].Value = list[i].EmpNo;
+        //                ExportData.Cells["B1"].Value = list[i].Family_Name + ", " + list[i].First_Name;
         //                start++;
         //            }
         //            return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename);
@@ -959,12 +1076,14 @@ namespace Brothers_WMS.Areas.Masters.Controllers
             try
             {
                 string searchnow = System.Web.HttpContext.Current.Session["Searchvaluenow"].ToString();
-                CostCode = (user.CostCode == "") ? CostCode : "";
-                CostCode = (CostCode == "undefined") ? "" : CostCode;
+                CostCode = (user.CostCode == null) ? CostCode : user.CostCode;
+                //CostCode = (CostCode == "undefined") ? "" : CostCode;
                 string templateFilename = "EmployeeSkillTemplate.xlsx";
                 string dir = Path.GetTempPath();
                 string datetimeToday = DateTime.Now.ToString("yyMMddhhmmss");
-                string filename = string.Format("EmployeeSkillTemplate{0}_{1}.xlsx", datetimeToday, CostCode);
+                string GroupSection = (user.CostCode != CostCode) ? CostCode : (from c in db.M_Cost_Center_List where c.Cost_Center == CostCode select c.GroupSection).FirstOrDefault();
+
+                string filename = string.Format("EmployeeSkillTemplate{0}_{1}.xlsx", datetimeToday, GroupSection);
                 FileInfo newFile = new FileInfo(Path.Combine(dir, filename));
                 string apptemplatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"TemplateFiles\", templateFilename);
                 FileInfo templateFile = new FileInfo(apptemplatePath);
@@ -973,8 +1092,9 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                 {
 
                     List<GET_Employee_Details_Skill_Result> list = new List<GET_Employee_Details_Skill_Result>();
-                    list = db.GET_Employee_Details_Skill(user.CostCode, CostCode).ToList();
-                    list = list.Where(xx => xx.ModifiedStatus != null).ToList();
+                    CostCode = (user.CostCode == CostCode) ? "" : CostCode;
+                    list = db.GET_Employee_Details_Skill(GroupSection).ToList();
+                 
                     list = list.Where(x => x.ModifiedStatus.ToLower() == "active").ToList();
                     ExcelWorksheet ExportData = package.Workbook.Worksheets["Sheet1"];
                     int start = 2;
@@ -1010,18 +1130,19 @@ namespace Brothers_WMS.Areas.Masters.Controllers
             return Json(new { }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult ExportSchedule(string CostCode)
+        public ActionResult ExportNOSkillEmployee(string CostCode)
         {
             try
             {
                 string searchnow = System.Web.HttpContext.Current.Session["Searchvaluenow"].ToString();
-                CostCode = (user.CostCode == "") ? CostCode : "";
-                CostCode = (CostCode == "undefined") ? "" : CostCode;
-
-                string templateFilename = "EmployeeSchedule.xlsx";
+                CostCode = (user.CostCode == null) ? CostCode : user.CostCode;
+                //CostCode = (CostCode == "undefined") ? "" : CostCode;
+                string templateFilename = "EmployeeSkillTemplate.xlsx";
                 string dir = Path.GetTempPath();
                 string datetimeToday = DateTime.Now.ToString("yyMMddhhmmss");
-                string filename = string.Format("EmployeeSchedule{0}_{1}.xlsx", datetimeToday, CostCode);
+                string GroupSection = (user.CostCode != CostCode) ? CostCode : (from c in db.M_Cost_Center_List where c.Cost_Center == CostCode select c.GroupSection).FirstOrDefault();
+
+                string filename = string.Format("EmployeeSkillTemplate{0}_{1}.xlsx", datetimeToday, GroupSection);
                 FileInfo newFile = new FileInfo(Path.Combine(dir, filename));
                 string apptemplatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"TemplateFiles\", templateFilename);
                 FileInfo templateFile = new FileInfo(apptemplatePath);
@@ -1030,9 +1151,68 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                 {
 
                     List<GET_Employee_Details_Result> list = new List<GET_Employee_Details_Result>();
-                    list = db.GET_Employee_Details(user.CostCode, CostCode).ToList();
-                    list = list.Where(xx => xx.ModifiedStatus != null).ToList();
+                    CostCode = (user.CostCode == CostCode) ? "" : CostCode;
+                    list = db.GET_Employee_Details(GroupSection).ToList();
+                    list = list.Where(x => x.SkillCount == 0).ToList();
                     list = list.Where(x => x.ModifiedStatus.ToLower() == "active").ToList();
+                    ExcelWorksheet ExportData = package.Workbook.Worksheets["Sheet1"];
+                    int start = 2;
+                    if (!string.IsNullOrEmpty(searchnow))//filter
+                    {
+                        #region null remover
+                        list = list.Where(xx => xx.EmpNo != null).ToList();
+                        list = list.Where(xx => xx.First_Name != null).ToList();
+                        list = list.Where(xx => xx.Family_Name != null).ToList();
+
+                        #endregion
+                        list = list.Where(x => x.First_Name.ToLower().Contains(searchnow.ToLower())
+                        || x.Family_Name.ToLower().Contains(searchnow.ToLower())
+                        || x.EmpNo.Contains(searchnow)
+                        ).ToList<GET_Employee_Details_Result>();
+
+                    }
+                    //else
+                    //{
+                    //    list = (from c in list where c.CostCode == CostCode select c).ToList();
+                    //}
+                    for (int i = 0; i < list.Count; i++)
+                    {
+                        ExportData.Cells["A" + start].Value = list[i].EmpNo;
+                        ExportData.Cells["B" + start].Value = list[i].Family_Name + ", " + list[i].First_Name;
+                        
+                        start++;
+                    }
+                    return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename);
+                }
+            }
+            catch (Exception err) { }
+            return Json(new { }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult ExportSchedule(string CostCode)
+        {
+            try
+            {
+                string searchnow = System.Web.HttpContext.Current.Session["Searchvaluenow"].ToString();
+                CostCode = (user.CostCode == null) ? CostCode : user.CostCode;
+                //CostCode = (CostCode == "undefined") ? "" : CostCode;
+
+                string templateFilename = "EmployeeSchedule.xlsx";
+                string dir = Path.GetTempPath();
+                string datetimeToday = DateTime.Now.ToString("yyMMddhhmmss");
+                string GroupSection = (user.CostCode != CostCode)? CostCode : (from c in db.M_Cost_Center_List where c.Cost_Center == CostCode select c.GroupSection).FirstOrDefault();
+                string filename = string.Format("EmployeeSchedule{0}_{1}.xlsx", datetimeToday, GroupSection);
+                FileInfo newFile = new FileInfo(Path.Combine(dir, filename));
+                string apptemplatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"TemplateFiles\", templateFilename);
+                FileInfo templateFile = new FileInfo(apptemplatePath);
+
+                using (ExcelPackage package = new ExcelPackage(newFile, templateFile))  //-- With template.
+                {
+
+                    List<GET_Employee_Details_Result> list = new List<GET_Employee_Details_Result>();
+                    CostCode = (user.CostCode == CostCode) ? "" : CostCode;
+                    list = db.GET_Employee_Details(GroupSection).ToList();
+                    list = list.Where(x => x.Status.ToLower() == "active").ToList();
                     ExcelWorksheet ExportData = package.Workbook.Worksheets["Sheet1"];
                     int start = 2;
                     if (!string.IsNullOrEmpty(searchnow))//filter
@@ -1055,17 +1235,34 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                     //}
                     for (int i = 0; i < list.Count; i++)
                     {
-                        ExportData.Cells["A" + start].Value = list[i].EmpNo;
-                        ExportData.Cells["B" + start].Value = list[i].Family_Name + ", " + list[i].First_Name;
+                        ExportData.Cells["A"+start].Value = list[i].EmpNo;
+                        ExportData.Cells["B"+start].Value = list[i].Family_Name + ", " + list[i].First_Name;
+                        ExportData.Cells["C" + start].Value = list[i].ScheduleName;
                         start++;
                     }
+
+
+                    //GET ALL Schedule
+                    ExcelWorksheet ExportData2 = package.Workbook.Worksheets["Instructions"];
+                    List<M_Schedule> SchedList = (from c in db.M_Schedule
+                                                  where c.IsDeleted != true
+                                                  orderby c.Type ascending 
+                                                  select c).ToList();
+                    int d = 8;
+                    for (int i = 0; i < SchedList.Count; i++)
+                    {
+                        ExportData2.Cells["A" + d].Value = SchedList[i].Type;
+                        ExportData2.Cells["B" + d].Value = SchedList[i].Timein + " - " + SchedList[i].TimeOut;
+                        d++;
+                    }
+
                     return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename);
                 }
             }
             catch (Exception err)
             {
                 Error_Logs error = new Error_Logs();
-                error.PageModule = "Application Form - OT";
+                error.PageModule = "Master - Employee";
                 error.ErrorLog = err.Message;
                 error.DateLog = DateTime.Now;
                 error.Username = user.UserName;
@@ -1080,13 +1277,15 @@ namespace Brothers_WMS.Areas.Masters.Controllers
             try
             {
                 string searchnow = System.Web.HttpContext.Current.Session["Searchvaluenow"].ToString();
-                CostCode = (user.CostCode == "") ? CostCode : "";
-                CostCode = (CostCode == "undefined") ? "" : CostCode;
+                CostCode = (user.CostCode == null) ? CostCode : user.CostCode;
+                //CostCode = (CostCode == "undefined") ? "" : CostCode;
 
                 string templateFilename = "EmployeeStatus.xlsx";
                 string dir = Path.GetTempPath();
                 string datetimeToday = DateTime.Now.ToString("yyMMddhhmmss");
-                string filename = string.Format("EmployeeStatus{0}_{1}.xlsx", datetimeToday, CostCode);
+                string GroupSection = (user.CostCode != CostCode) ? CostCode : (from c in db.M_Cost_Center_List where c.Cost_Center == CostCode select c.GroupSection).FirstOrDefault();
+
+                string filename = string.Format("EmployeeStatus{0}_{1}.xlsx", datetimeToday, GroupSection);
                 FileInfo newFile = new FileInfo(Path.Combine(dir, filename));
                 string apptemplatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"TemplateFiles\", templateFilename);
                 FileInfo templateFile = new FileInfo(apptemplatePath);
@@ -1095,8 +1294,12 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                 {
 
                     List<GET_Employee_Details_Result> list = new List<GET_Employee_Details_Result>();
-                    list = db.GET_Employee_Details(user.CostCode, CostCode).Where(x => x.Status.ToLower() == "active").ToList();
+                    CostCode = (user.CostCode == CostCode) ? "" : CostCode;
+                    list = db.GET_Employee_Details(GroupSection).ToList();
+                    list = list.Where(x => x.Status.ToLower() == "active").ToList();
                     ExcelWorksheet ExportData = package.Workbook.Worksheets["Sheet1"];
+                    ExcelWorksheet ExportData2 = package.Workbook.Worksheets["Instructions"];
+
                     int start = 2;
                     if (!string.IsNullOrEmpty(searchnow))//filter
                     {
@@ -1118,9 +1321,23 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                     //}
                     for (int i = 0; i < list.Count; i++)
                     {
-                        ExportData.Cells["A" + start].Value = list[i].EmpNo;
-                        ExportData.Cells["B" + start].Value = list[i].Family_Name + ", " + list[i].First_Name;
+                        ExportData.Cells["A"+start].Value = list[i].EmpNo;
+                        ExportData.Cells["B"+start].Value = list[i].Family_Name + ", " + list[i].First_Name;
+                        ExportData.Cells["C" + start].Value = list[i].ModifiedStatus;
                         start++;
+                    }
+
+                    List<string> statuslist = (from c in db.M_Employee_Master_List
+                                               where c.Status != "&nbsp;"
+                                               && c.Status != ""
+                                               && c.Status != null
+                                               select c.Status).Distinct().ToList();
+                    int d = 1;
+                    for (int i = 0; i < statuslist.Count; i++)
+                    {
+                        ExportData2.Cells["Z" + d].Value = statuslist[i];
+                       
+                        d++;
                     }
                     return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename);
                 }
@@ -1128,7 +1345,7 @@ namespace Brothers_WMS.Areas.Masters.Controllers
             catch (Exception err)
             {
                 Error_Logs error = new Error_Logs();
-                error.PageModule = "Application Form - OT";
+                error.PageModule = "Master - Employee";
                 error.ErrorLog = err.Message;
                 error.DateLog = DateTime.Now;
                 error.Username = user.UserName;
@@ -1143,13 +1360,14 @@ namespace Brothers_WMS.Areas.Masters.Controllers
             try
             {
                 string searchnow = System.Web.HttpContext.Current.Session["Searchvaluenow"].ToString();
-                CostCode = (user.CostCode == "") ? CostCode : "";
-                CostCode = (CostCode == "undefined") ? "" : CostCode;
+                CostCode = (user.CostCode == null) ? CostCode : user.CostCode;
+                //CostCode = (CostCode == "undefined") ? "" : CostCode;
+                string GroupSection = (user.CostCode != CostCode) ? CostCode : (from c in db.M_Cost_Center_List where c.Cost_Center == CostCode select c.GroupSection).FirstOrDefault();
 
                 string templateFilename = "EmployeePosition.xlsx";
                 string dir = Path.GetTempPath();
                 string datetimeToday = DateTime.Now.ToString("yyMMddhhmmss");
-                string filename = string.Format("EmployeePosition{0}_{1}.xlsx", datetimeToday, CostCode);
+                string filename = string.Format("EmployeePosition{0}_{1}.xlsx", datetimeToday, GroupSection);
                 FileInfo newFile = new FileInfo(Path.Combine(dir, filename));
                 string apptemplatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"TemplateFiles\", templateFilename);
                 FileInfo templateFile = new FileInfo(apptemplatePath);
@@ -1158,8 +1376,10 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                 {
 
                     List<GET_Employee_Details_Result> list = new List<GET_Employee_Details_Result>();
-                    list = db.GET_Employee_Details(user.CostCode, CostCode).Where(x => x.Status.ToLower() == "active").ToList();
+                    list = db.GET_Employee_Details(GroupSection).ToList();
+                    list = list.Where(x => x.Status.ToLower() == "active").ToList();
                     ExcelWorksheet ExportData = package.Workbook.Worksheets["Sheet1"];
+                    ExcelWorksheet ExportData2 = package.Workbook.Worksheets["Instructions"];
                     int start = 2;
                     if (!string.IsNullOrEmpty(searchnow))//filter
                     {
@@ -1181,9 +1401,22 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                     //}
                     for (int i = 0; i < list.Count; i++)
                     {
-                        ExportData.Cells["A" + start].Value = list[i].EmpNo;
-                        ExportData.Cells["B" + start].Value = list[i].Family_Name + ", " + list[i].First_Name;
+                        ExportData.Cells["A"+start].Value = list[i].EmpNo;
+                        ExportData.Cells["B"+start].Value = list[i].Family_Name + ", " + list[i].First_Name;
+                        ExportData.Cells["C" + start].Value = list[i].ModifiedPosition;
                         start++;
+                    }
+                    List<string> positionlist = (from c in db.M_Employee_Master_List
+                                               where c.Position != "&nbsp;"
+                                               && c.Position != ""
+                                               && c.Position != null
+                                               select c.Position).Distinct().ToList();
+                    int d = 1;
+                    for (int i = 0; i < positionlist.Count; i++)
+                    {
+                        ExportData2.Cells["Z" + d].Value = positionlist[i];
+
+                        d++;
                     }
                     return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename);
                 }
@@ -1191,7 +1424,7 @@ namespace Brothers_WMS.Areas.Masters.Controllers
             catch (Exception err)
             {
                 Error_Logs error = new Error_Logs();
-                error.PageModule = "Application Form - OT";
+                error.PageModule = "Master - Employee";
                 error.ErrorLog = err.Message;
                 error.DateLog = DateTime.Now;
                 error.Username = user.UserName;
@@ -1236,6 +1469,42 @@ namespace Brothers_WMS.Areas.Masters.Controllers
             return Json(new { data = list, draw = Request["draw"], recordsTotal = totalrows, recordsFiltered = totalrowsafterfiltering }, JsonRequestBehavior.AllowGet);
         }
 
+
+        public ActionResult GetEmployeeScheduleList(string EmployeeNo)
+        {
+            //Server Side Parameter
+
+            int start = Convert.ToInt32(Request["start"]);
+            int length = Convert.ToInt32(Request["length"]);
+            string searchValue = Request["search[value]"];
+            string sortColumnName = Request["columns[" + Request["order[0][column]"] + "][name]"];
+            string sortDirection = Request["order[0][dir]"];
+
+            List<GET_Employee_ScheduleList_Result> list = db.GET_Employee_ScheduleList(EmployeeNo).ToList();
+
+            if (!string.IsNullOrEmpty(searchValue))//filter
+            {
+                list = list.Where(x => x.ScheduleName.ToLower().Contains(searchValue.ToLower())).ToList<GET_Employee_ScheduleList_Result>();
+            }
+            if (sortColumnName != "" && sortColumnName != null)
+            {
+                if (sortDirection == "asc")
+                {
+                    list = list.OrderBy(x => TypeHelper.GetPropertyValue(x, sortColumnName)).ToList();
+                }
+                else
+                {
+                    list = list.OrderByDescending(x => TypeHelper.GetPropertyValue(x, sortColumnName)).ToList();
+                }
+            }
+            int totalrows = list.Count;
+            int totalrowsafterfiltering = list.Count;
+
+            //paging
+            list = list.Skip(start).Take(length).ToList<GET_Employee_ScheduleList_Result>();
+            return Json(new { data = list, draw = Request["draw"], recordsTotal = totalrows, recordsFiltered = totalrowsafterfiltering }, JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult GetEmployeePosition(string EmployeeNo)
         {
             //Server Side Parameter
@@ -1270,10 +1539,12 @@ namespace Brothers_WMS.Areas.Masters.Controllers
             list = list.Skip(start).Take(length).ToList<GET_Employee_ModifiedPosition_Result>();
             return Json(new { data = list, draw = Request["draw"], recordsTotal = totalrows, recordsFiltered = totalrowsafterfiltering }, JsonRequestBehavior.AllowGet);
         }
+
         public ActionResult UpdateStatus(string EmpNo, string Status)
         {
             M_Employee_Status EmpStatus = new M_Employee_Status();
             EmpStatus.EmployNo = EmpNo;
+            EmpStatus.HRStatus = (from c in db.M_Employee_Master_List where c.EmpNo == EmpNo select c.Status).FirstOrDefault();
             EmpStatus.Status = Status;
             EmpStatus.Update_ID = user.UserName;
             EmpStatus.UpdateDate = DateTime.Now;
@@ -1287,6 +1558,7 @@ namespace Brothers_WMS.Areas.Masters.Controllers
             M_Employee_Position EmpPos = new M_Employee_Position();
             EmpPos.EmployNo = EmpNo;
             EmpPos.Position = Position;
+            EmpPos.HRPosition = (from c in db.M_Employee_Master_List where c.EmpNo == EmpNo select c.Position).FirstOrDefault();
             EmpPos.Update_ID = user.UserName;
             EmpPos.UpdateDate = DateTime.Now;
             db.M_Employee_Position.Add(EmpPos);
@@ -1294,14 +1566,17 @@ namespace Brothers_WMS.Areas.Masters.Controllers
             return Json(new { }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult ActiveInactiveReport(string Status)
+        public ActionResult ActiveInactiveReport(string Status, string CostCode)
         {
             try
             {
+                CostCode = (user.CostCode == null) ? CostCode : user.CostCode;
                 string templateFilename = "ActiveInactiveReport.xlsx";
                 string dir = Path.GetTempPath();
                 string datetimeToday = DateTime.Now.ToString("yyMMddhhmmss");
-                string filename = string.Format("ActiveInactiveReport{0}.xlsx", datetimeToday);
+                string GroupSection = (user.CostCode != CostCode) ? CostCode : (from c in db.M_Cost_Center_List where c.Cost_Center == CostCode select c.GroupSection).FirstOrDefault();
+
+                string filename = string.Format("ActiveInactiveReport{0}_{1}.xlsx", datetimeToday, GroupSection);
                 FileInfo newFile = new FileInfo(Path.Combine(dir, filename));
                 string apptemplatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"TemplateFiles\", templateFilename);
                 FileInfo templateFile = new FileInfo(apptemplatePath);
@@ -1309,11 +1584,47 @@ namespace Brothers_WMS.Areas.Masters.Controllers
 
                 using (ExcelPackage package = new ExcelPackage(newFile, templateFile))  //-- With template.
                 {
-
                     ExcelWorksheet ExportData = package.Workbook.Worksheets["Employee List"];
-                    List<Report_ActiveInactive_Employee_Result> list = db.Report_ActiveInactive_Employee(Status).ToList();
+                    List<GET_Employee_Details_Result> list = db.GET_Employee_Details(GroupSection).ToList();
+                    list = list.Where(x => x.ModifiedStatus != null).ToList();
+                    if (Status == "Active")
+                    {
+                        list = list.Where(x => x.ModifiedStatus.ToUpper() == "ACTIVE").ToList();
+                    }
+                    else if(Status == "Inactive")
+                    {
+                        list = list.Where(x => x.ModifiedStatus.ToUpper() != "ACTIVE").ToList();
+                    }
+                    
+                    //= db.GET_Employee_Details(Status).ToList();
+                    ExportData.Cells["A1"].Value = "REFID";
+                    ExportData.Cells["B1"].Value = "ADID";
+                    ExportData.Cells["C1"].Value = "EmpNo";
+                    ExportData.Cells["D1"].Value = "Family_Name_Suffix";
+                    ExportData.Cells["E1"].Value = "Family_Name";
+                    ExportData.Cells["F1"].Value = "First_Name";
+                    ExportData.Cells["G1"].Value = "Middle_Name";
+                    ExportData.Cells["H1"].Value = "Date_Hired";
+                    ExportData.Cells["I1"].Value = "Status";
+                    ExportData.Cells["J1"].Value = "Emp_Category";
+                    ExportData.Cells["K1"].Value = "Date_Regularized";
+                    ExportData.Cells["L1"].Value = "Position";
+                    ExportData.Cells["M1"].Value = "Email";
+                    ExportData.Cells["N1"].Value = "Gender";
+                    ExportData.Cells["O1"].Value = "RFID";
+                    ExportData.Cells["P1"].Value = "Section";
+                    ExportData.Cells["Q1"].Value = "Department";
+                    ExportData.Cells["R1"].Value = "Company";
+                    ExportData.Cells["S1"].Value = "CostCode";
+                    ExportData.Cells["T1"].Value = "SectionGroup";
+                    ExportData.Cells["U1"].Value = "AMS Status";
+                    ExportData.Cells["V1"].Value = "AMS Position";
+                    ExportData.Cells["W1"].Value = "CostCenter_AMS";
+                    ExportData.Cells["X1"].Value = "CostCenter_IT";
+                    ExportData.Cells["Y1"].Value = "CostCenter_EXPROD";
+                    ExportData.Cells["Z1"].Value = "Date_Resigned";
                     int start = 2;
-                    foreach (Report_ActiveInactive_Employee_Result item in list)
+                    foreach (GET_Employee_Details_Result item in list)
                     {
                         ExportData.Cells["A" + start].Value = item.REFID;
                         ExportData.Cells["B" + start].Value = item.ADID;
@@ -1334,12 +1645,13 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                         ExportData.Cells["Q" + start].Value = item.Department;
                         ExportData.Cells["R" + start].Value = item.Company;
                         ExportData.Cells["S" + start].Value = item.CostCode;
-                        ExportData.Cells["T" + start].Value = item.SectionGroup;
+                        ExportData.Cells["T" + start].Value = GroupSection;
                         ExportData.Cells["U" + start].Value = item.ModifiedStatus;
                         ExportData.Cells["V" + start].Value = item.ModifiedPosition;
                         ExportData.Cells["W" + start].Value = item.CostCenter_AMS;
                         ExportData.Cells["X" + start].Value = item.CostCenter_IT;
                         ExportData.Cells["Y" + start].Value = item.CostCenter_EXPROD;
+                        ExportData.Cells["Z" + start].Value = item.Date_Resigned;
                         start++;
                     }
 
@@ -1351,6 +1663,106 @@ namespace Brothers_WMS.Areas.Masters.Controllers
             catch (Exception err) { }
             return Json(new { }, JsonRequestBehavior.AllowGet);
 
+        }
+
+        public ActionResult DeleteEmp(string EmpNo)
+        {
+            bool result = true;
+            try
+            {
+                db.M_SP_DeleteEmployee(EmpNo, user.UserName);
+            }
+            catch(Exception err)
+            {
+                result =false;
+            }
+            return Json(new { result = result }, JsonRequestBehavior.AllowGet);
+        }
+
+
+
+        public ActionResult ExportNOSchedule(string CostCode)
+        {
+            try
+            {
+                string searchnow = System.Web.HttpContext.Current.Session["Searchvaluenow"].ToString();
+                CostCode = (user.CostCode == null) ? CostCode : user.CostCode;
+                //CostCode = (CostCode == "undefined") ? "" : CostCode;
+
+                string templateFilename = "EmployeeNOSchedule.xlsx";
+                string dir = Path.GetTempPath();
+                string datetimeToday = DateTime.Now.ToString("yyMMddhhmmss");
+                string GroupSection = (user.CostCode != CostCode) ? CostCode : (from c in db.M_Cost_Center_List where c.Cost_Center == CostCode select c.GroupSection).FirstOrDefault();
+                string filename = string.Format("EmployeeNOSchedule{0}_{1}.xlsx", datetimeToday, GroupSection);
+                FileInfo newFile = new FileInfo(Path.Combine(dir, filename));
+                string apptemplatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"TemplateFiles\", templateFilename);
+                FileInfo templateFile = new FileInfo(apptemplatePath);
+
+                using (ExcelPackage package = new ExcelPackage(newFile, templateFile))  //-- With template.
+                {
+
+                    List<GET_Employee_Details_Result> list = new List<GET_Employee_Details_Result>();
+                    CostCode = (user.CostCode == CostCode) ? "" : CostCode;
+                    list = db.GET_Employee_Details(GroupSection).ToList();
+                    list = list.Where(x => x.Schedule == null).ToList();
+                    list = list.Where(x => x.Status.ToLower() == "active").ToList();
+                    ExcelWorksheet ExportData = package.Workbook.Worksheets["Sheet1"];
+                    int start = 2;
+                    if (!string.IsNullOrEmpty(searchnow))//filter
+                    {
+                        #region null remover
+                        list = list.Where(xx => xx.EmpNo != null).ToList();
+                        list = list.Where(xx => xx.First_Name != null).ToList();
+                        list = list.Where(xx => xx.Family_Name != null).ToList();
+                        #endregion
+                        list = list.Where(x => x.First_Name.ToLower().Contains(searchnow.ToLower())
+                        || x.Family_Name.ToLower().Contains(searchnow.ToLower())
+                        || x.EmpNo.Contains(searchnow)
+                        ).ToList<GET_Employee_Details_Result>();
+                        //list = list.Where(x => x.CostCode == CostCode).ToList();
+
+                    }
+                    //else
+                    //{
+                    //    list = (from c in list where c.CostCode == CostCode select c).ToList();
+                    //}
+                    for (int i = 0; i < list.Count; i++)
+                    {
+                        ExportData.Cells["A" + start].Value = list[i].EmpNo;
+                        ExportData.Cells["B" + start].Value = list[i].Family_Name + ", " + list[i].First_Name;
+                        ExportData.Cells["C" + start].Value = list[i].ScheduleName;
+                        start++;
+                    }
+
+
+                    //GET ALL Schedule
+                    ExcelWorksheet ExportData2 = package.Workbook.Worksheets["Instructions"];
+                    List<M_Schedule> SchedList = (from c in db.M_Schedule
+                                                  where c.IsDeleted != true
+                                                  orderby c.Type ascending
+                                                  select c).ToList();
+                    int d = 8;
+                    for (int i = 0; i < SchedList.Count; i++)
+                    {
+                        ExportData2.Cells["A" + d].Value = SchedList[i].Type;
+                        ExportData2.Cells["B" + d].Value = SchedList[i].Timein + " - " + SchedList[i].TimeOut;
+                        d++;
+                    }
+
+                    return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename);
+                }
+            }
+            catch (Exception err)
+            {
+                Error_Logs error = new Error_Logs();
+                error.PageModule = "Master - Employee";
+                error.ErrorLog = err.Message;
+                error.DateLog = DateTime.Now;
+                error.Username = user.UserName;
+                db.Error_Logs.Add(error);
+                db.SaveChanges();
+            }
+            return Json(new { }, JsonRequestBehavior.AllowGet);
         }
     }
 }

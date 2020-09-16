@@ -4,7 +4,13 @@ var selectedemployee;
 var mode = "IN";
 var currentSection = "";
 var all = false;
+var val;
+var timer;
 (function () {
+  
+    $("#empDetails").hide();
+    $("#requestrow").hide();
+    GetComip();
     $("#loading_modal2").modal("show")
 
     $("#togBtn").trigger("click");
@@ -21,6 +27,21 @@ var all = false;
       
     })
 
+    var delay = (function () {
+        var timer = 0;
+        return function (callback, ms) {
+            clearTimeout(timer);
+            timer = setTimeout(callback, ms);
+        };
+    })();
+
+    $("#IDno").on("input", function () {
+        delay(function () {
+            if ($("#IDno").val().length < 4) {
+                $("#IDno").val("");
+            }
+        }, 20);
+    });
 
     $("#INN").click();
     $(".sidebar-mini").addClass("sidebar-collapse");
@@ -32,21 +53,36 @@ var all = false;
 
     $("#IDno").focus();
 
-
     var clock = function () {
         clearTimeout(timer);
 
-        date = new Date();
-        hours = date.getHours();
-        minutes = date.getMinutes();
-        seconds = date.getSeconds();
-        dd = (hours >= 12) ? 'PM' : 'AM';
-        hours = (hours > 12) ? (hours - 12) : hours
-        var timer = setTimeout(clock, 1000);
-        var minut = (Math.floor(minutes) < 10) ? "0" + Math.floor(minutes) : Math.floor(minutes);
-        $('#Timehere').html(Math.floor(hours) + ':' + minut + ' ' + dd)
+        $.ajax({
+            url: '/TimeInandOut/GetServerDate',
+            type: "POST",
+            datatype: "json",
+            success: function (returnData) {
+                date = moment(returnData.thed).format("MM/DD/YYYY HH:mm:ss");//returnData.thed;//new Date();
+                date = new Date(date);
+                hours = date.getHours();
+                minutes = date.getMinutes();
+                seconds = date.getSeconds();
+                dd = (hours >= 12) ? 'PM' : 'AM';
+                hours = (hours > 12) ? (hours - 12) : hours
+                timer = setTimeout(clock, 1000);
+                var minut = (Math.floor(minutes) < 10) ? "0" + Math.floor(minutes) : Math.floor(minutes);
+                $('#Timehere').html(Math.floor(hours) + ':' + minut + ' ' + dd)
 
-        thetime = Math.floor(hours) + ':' + minut + ' ' + dd;
+                var dateStr = date;
+                var day = getDayName(dateStr, "en-US");
+                $('#WeekDay').html(day)
+               
+                thetime = Math.floor(hours) + ':' + minut + ' ' + dd;
+                val = date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
+                $('#datess').html(formatDate(date));
+            }
+        });
+
+        
     };
     clock();
     $document.bind('contextmenu', function (e) {
@@ -55,16 +91,8 @@ var all = false;
     $(".logo-mini").on("click", function () {
         location.href = "/Home/Index";
     })
-    var val = date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
-    $('#datess').html(formatDate(new Date()))
-    var delay = (function () {
-        var timer = 0;
-        return function (callback, ms) {
-            clearTimeout(timer);
-            timer = setTimeout(callback, ms);
-        };
-    })();
-
+   
+    
     $('#IDno').keypress(function (event) {
         var keycode = (event.keyCode ? event.keyCode : event.which);
         if (keycode == '13') {
@@ -80,7 +108,11 @@ var all = false;
                 datatype: "json",
                 success: function (returnData) {
                     if (returnData.employee != null && returnData.employee != "") {
-                        console.log(returnData);
+                        
+                        if (returnData.HRInactive) {
+                            swal("Employee HR Status Inactive, Please contact your Section's PIC");
+                        }
+
 
                         if (all == false) {
                             Dropdown_select2('Line', "/Helper/GetDropdown_LineProcessTeamwithSection?CostCode=" + returnData.CostCode + "&RFID=" + $("#IDno").val());
@@ -92,13 +124,28 @@ var all = false;
                         }
                         //$("#Line").trigger("change");
                         currentSection = returnData.CostCode;
-                        GetAttendanceDetail();
+                        GetAttendanceDetail("go");
                         selectedemployee = returnData.employee;
                         console.log(returnData.employee);
                         var photo = (returnData.employee.EmployeePhoto == '') ? '/Content/images/2014-09-16-Anoynmous-The-Rise-of-Personal-Networks.jpg' : "/PictureResources/EmployeePhoto/" + returnData.employee.EmployeePhoto;
                         $("#employeephoto").attr({ "src": photo });
                         $("#namae").text(returnData.employee.First_Name + " " + returnData.employee.Family_Name);
                         $("#Position").text(returnData.employee.Position);
+                        $("#Status").text(returnData.employee.Status);
+                        $("#EmpNumber").text(returnData.employee.EmpNo);
+                        $("#Section").text(returnData.employee.Section);
+                        $("#Company").text(returnData.employee.Company);
+
+                        var Schedulename = "";
+                        if (returnData.ScheduleName == null) {
+                            Schedulename = "No Schedule Assigned";
+                            $("#Schedulename").css('color', 'red');
+                        }
+                        else {
+                            Schedulename = returnData.ScheduleName;
+                        }
+                        $("#Schedulename").text(Schedulename);
+                        $("#empDetails").show();
                         $("#TimeIns").text(thetime);
                         if (mode == "OUT") {
                             selectprocess(0);
@@ -113,12 +160,17 @@ var all = false;
                             
                         }
 
+                        setTimeout(function () {
+                            location.reload();
+                        }, 300000);
+
                     }
                     else {
                         swal("Employee does not exist");
                         $("#IDno").val("");
                         $("#namae").text("");
                         $("#Position").text("");
+                        $("#Status").text("");
                         $("#TimeIns").text("");
                         $("#employeephoto").attr({ "src": "/Content/images/2014-09-16-Anoynmous-The-Rise-of-Personal-Networks.jpg" });
 
@@ -220,6 +272,24 @@ var all = false;
 
 })();
 
+function getDayName(dateStr, locale) {
+    var date = new Date(dateStr);
+    return date.toLocaleDateString(locale, { weekday: 'long' });
+}
+
+function GetComip() {
+    $.ajax({
+        url: '/TimeInandOut/GetComIP',
+        type: "POST",
+        datatype: "json",
+        success: function (returnData) {
+            //alert(returnData.comip);
+            $("#comip").html(returnData.comip[1]);
+        }
+    });
+
+}
+
 function readURL(input) {
     if (input.files && input.files[0]) {
         var reader = new FileReader();
@@ -231,19 +301,18 @@ function readURL(input) {
 }
 
 
-function GetAttendanceDetail() {
+function GetAttendanceDetail(re) {
     $('#AttendanceDetails').DataTable({
         ajax: {
             url: '/TimeInandOut/GetAttendanceDetailsList?RFID=' + $("#IDno").val(),
             type: "POST",
             datatype: "json"
         },
-        scrollX: true,
-        lengthchange:false,
         serverSide: "true",
         order: [0, "asc"],
-        searching:false,
         processing: "true",
+        searching: false,
+        lengthChange: false,
         language: {
             "processing": "processing... please wait"
         },
@@ -259,7 +328,7 @@ function GetAttendanceDetail() {
                 }, name: "Date" },
             {
                 title: "Time In", data: function (x) {
-                    return (x.TimeIn == null) ? "" : moment(x.TimeIn).format("LT")
+                    return (x.TimeIn == null) ? "" : moment(x.TimeIn).format("HH:mm")
                 }, name: "TimeIn"
             },
             {
@@ -271,7 +340,7 @@ function GetAttendanceDetail() {
                         return "No Out";
                     }
                     else {
-                        return moment(x.TimeOut).format("LT");
+                        return moment(x.TimeOut).format("HH:mm");
                     }
                 }, name: "TimeOut"
             },
@@ -282,7 +351,11 @@ function GetAttendanceDetail() {
             //trs[0].className = "currentRow";
             var row = $("#AttendanceDetails_wrapper tr:first-child");
             $(row).addClass("firstrowhere");
-            
+            //GetPendinOT();
+            if (re == "go") {
+                GetPendingTimekeeping();
+            }
+           
         }
     });
 }
@@ -308,7 +381,7 @@ function selectprocess(processID) {
                 //msg("Recorded.", "center");
                 
                 $('#Line').trigger("change");
-                GetAttendanceDetail();
+                GetAttendanceDetail("stop");
                 //$('#theprocessList').html('');
                 //$('#theprocessList_Active').html('');
                 $("#IDno").val("");
@@ -336,14 +409,16 @@ function modeassign(mod) {
     mode = mod;
 
     if (mod == "IN") {
-        $("#theIN").css("font-size", "0.83rem");
-        $("#theOut").css("font-size", "9px");
-        //alert("theIn");//0.83rem
+        $("#theIN").css("font-size", "2.2rem");
+        $("#theOut").css("font-size", "14px");
+        $(".innto").css("background-color", "#079ad9");
+        $(".outto").css("background-color", "#9d9e9e");
     }
     else {
-        $("#theIN").css("font-size", "9px");
-        $("#theOut").css("font-size", "0.83rem");
-        //alert("Out");
+        $("#theIN").css("font-size", "14px");
+        $("#theOut").css("font-size", "2.2rem");
+        $(".outto").css("background-color", "#079ad9");
+        $(".innto").css("background-color", "#9d9e9e");
     }
     $("#IDno").focus();
 }
@@ -363,3 +438,87 @@ function formatDate(date) {
 
     return monthNames[monthIndex] + ' ' + day + ', ' + year;
 }
+
+
+
+//Timekeeping
+
+function GetPendingTimekeeping() {
+    $('#Pentbl').DataTable({
+        ajax: {
+            url: '/TimeInandOut/GetPendingTK?RFID=' + $("#IDno").val(),
+            type: "POST",
+            datatype: "json"
+        },
+        scrollX: true,
+        lengthChange: false,
+        serverSide: "true",
+        order: [0, "asc"],
+        searching: false,
+        processing: "true",
+        language: {
+            "processing": "processing... please wait"
+        },
+        //dom: 'Bfrtip',
+        destroy: true,
+        columns: [
+             { title: "ID", data: "ID", visible:false },
+            { title: "Type", data: "Type" },
+            {
+                title: "DateFrom", data: function (x) {
+                    return (x.DateFrom == null) ? moment(x.DateFrom).format("L") : moment(x.DateFrom).format("L")
+                }, name: "DateFrom"
+            },
+            {
+                title: "DateTo", data: function (x) {
+                    return (x.DateTo == null) ? moment(x.DateTo).format("L") : moment(x.DateTo).format("L")
+                }, name: "DateTo"
+            },
+            { title: "IN", data: "TimeIn" },
+            { title: "OUT", data: "TimeOut" },
+            {
+                  title: "Action", data: function (x) {
+                      return "<button type='button' class='btn btn-lg' style='background-color:#039a8c; color:white' alt='alert' class='model_img img-fluid' onclick=TTResult("+x.ID+",'"+x.Type+"')>" +
+                                  "<i class='fa fa-thumbs-o-up'></i> Yes" +
+                              "</button> " +
+                              "<button type='button' class='btn btn-lg bg-blue btnedit' onclick=TTResult(" + x.ID + ",'" + x.Type + "')>" +
+                                  "<i class='fa fa-thumbs-o-down' ></i> No" +
+                              "</button> "
+                     
+
+                  }
+             },
+        ],
+        initComplete: function () {
+            var table = $('#Pentbl').DataTable();
+            if (!table.data().any()) {
+                $("#requestrow").hide();
+            }
+            else {
+                $("#requestrow").show();
+                table.columns.adjust();
+            }
+        }
+    });
+}
+
+function TTResult(ID,Type) {
+    $.ajax({
+        url: '/TimeInandOut/SaveOTResult',
+        data: {
+            ID: ID,
+            Type:Type,
+            msg: ""
+           
+        },
+        type: 'GET',
+        dataType: 'JSON',
+        success: function (returnData) {
+            GetPendingTimekeeping();
+            SuccessTap_confirm();
+        }
+
+    });
+}
+
+

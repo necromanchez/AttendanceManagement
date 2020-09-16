@@ -1,11 +1,21 @@
 ﻿$(function () {
-    Dropdown_select('Section', "/Helper/GetDropdown_SectionAMS");
+    Dropdown_selectMP('Section', "/Helper/GetDropdown_SectionAMS");
     initDatePicker('DateFrom');
     initDatePicker('DateTo');
-    Initializedpage();
+    Dropdown_selectApp("Status");
+    var d = new Date();
+
+    var date = d.getDate();
+    var month = d.getMonth() + 1;
+    var year = d.getFullYear();
+    var lastDay = new Date(year, month, 0).getDate();
+    var dateStr = month + "/1/" + year;
+    var dTo = month + "/" + lastDay + "/" + year;
+    $("#DateFrom").datepicker().datepicker("setDate", dateStr);
+    $("#DateTo").datepicker().datepicker("setDate", dTo);
+    GetUser();
     $("#btnFilter").on("click", Initializedpage);
-    $("#DateFrom").datepicker().datepicker("setDate", new Date());
-    $("#DateTo").datepicker().datepicker("setDate", new Date());
+    
     $("#checkall_emp").on("change", function () {
         if (this.checked) {
             $('.empmod').prop('checked', true);
@@ -28,6 +38,18 @@
 var currentRefNo;
 var currentStatus;
 var datacounter = 0;
+function GetUser() {
+    $.ajax({
+        url: '/Helper/GetSection',
+        type: 'POST',
+        datatype: "json",
+        success: function (returnData) {
+            $('#Section').val(returnData.usersection).trigger('change');
+            $("#Search").trigger("click");
+        }
+    });
+}
+
 function GetCSReflist() {
     var options = '';
     var datas = document.getElementsByName("CSRefno")[0].value;
@@ -105,15 +127,15 @@ function Initializedpage() {
         loadonce: true,
         destroy: true,
         columns: [
-              {
-                 data: function (data, type, row, meta) {
-                     var checked = (data.AccessType == true) ? ' checked ' : '';
-                     datacounter++;
-                     return " <input type='checkbox' id=CS_here_" + datacounter + " class='empmod filled-in chk-col-light-blue' " + checked + " name=PageView_" + datacounter + "/>" +
-                             " <label class=checker for=CS_here_" + datacounter + "></label>"
+              //{
+              //   data: function (data, type, row, meta) {
+              //       var checked = (data.AccessType == true) ? ' checked ' : '';
+              //       datacounter++;
+              //       return " <input type='checkbox' id=CS_here_" + datacounter + " class='empmod filled-in chk-col-light-blue' " + checked + " name=PageView_" + datacounter + "/>" +
+              //               " <label class=checker for=CS_here_" + datacounter + "></label>"
 
-                 }, orderable: false, searchable: false
-              },
+              //   }, orderable: false, searchable: false
+              //},
               {
                   className: "refnoe", data: function (x) {
                       return data = "<button type='button' class='btn btn-s bg-green'>" + x.CS_RefNo + "</button>"
@@ -251,10 +273,10 @@ function GetDetails(data, status) {
         },
         dom: 'Bfrtip',
         buttons: [
-            'copy', 'csv', 'excel', 'pdf', 'print'
+          'csv', 'excel'
         ],
-        lengthMenu: [100, 200, 300, 500],
-        pagelength: 5000,
+        lengthMenu: [[10, 50, 100], [10, 50, 100]],
+        
         lengthChange: false,
         scrollY: "600px",
         scrollCollapse: true,

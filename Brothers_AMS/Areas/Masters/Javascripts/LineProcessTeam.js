@@ -1,7 +1,9 @@
 ﻿$(function () {
-    $('#Skillmodal').on('hidden.bs.modal', function (e) {
-        setTimeout(function () { location.reload(); }, 1000);
-    })
+    Dropdown_selectMPMain2('SectionGroup', "/Helper/GetDropdown_SectionAMS");
+    $("#SectionGroup").on("change", Initializepage);
+    //$('#Skillmodal').on('hidden.bs.modal', function (e) {
+    //    setTimeout(function () { location.reload(); }, 1000);
+    //})
 
     //Dropdown_select('Section', "/Helper/GetDropdown_Section");
     $("#btnskillsave").on("click", saveskill);
@@ -37,9 +39,9 @@
     Initializepage();
     $('#LineProcessTeamForm').on('submit', function (e) {
         e.preventDefault();
-        if ($('#Section').val() != ""
-            && $('#LineProcessTeam').val() != ""
+        if ($('#LineProcessTeam').val() != ""
             && $('#Status').val() != ""
+            && ($('#Section').val() != "" || $('#SectionGroup').val() != "")
             ) {
             if ($('#ID').val() == "") {
                 AddLineProcessTeam($(this));
@@ -76,12 +78,13 @@ function Initializepage() {
         ajax: {
             url: '../Process/GetLineProcessTeamList',
             type: "POST",
+            data:{GroupSection:$("#SectionGroup").val()},
             datatype: "json"
         },
-        lengthMenu: [100, 200, 300, 500],
-        pagelength: 5000,
-        lengthChange: false,
-        scrollY: "600px",
+        lengthMenu: [[10, 50, 100], [10, 50, 100]],
+
+        lengthChange: true,
+
         scrollCollapse: true,
         serverSide: "true",
         order: [0, "asc"],
@@ -89,26 +92,30 @@ function Initializepage() {
         language: {
             "processing": "processing... please wait"
         },
-        //dom: 'Bfrtip',
+        destroy: true,
+        language: {
+            "processing": "processing... please wait"
+        },
         destroy: true,
         columns: [
             { title: "ID", data: "ID", visible: false },
-            { title: "Section", data: "SectionName" },
-            { title: "Line/Team", data: "Line" },
+            { title: "No", data: "Rownum", name: "Rownum" },
+            { title: "Section", data: "SectionName", name: "SectionName" },
+            { title: "Line/Team", data: "Line", name: "Line" },
             //{ title: "Ideal Man Power Count", data: "Manpower" },
             {
                 title: "Process", data: function (x) {
                     var label = "<button type='button' class='btn btn-xs bg-blue' onclick=ShowSkills('" + x.SectionID + "','" + x.ID + "')>Process</button>"
                     return label
 
-                }
+                }, name:"Process"
             },
             {
                 title: "Status", data: function (x) {
                     var label = (x.Status == true) ? "<button type='button' class='btn btn-xs bg-green'>Active</button>" : "<button type='button' class='btn btn-xs bg-red'>Inactive</button>"
                     return label
 
-                }
+                }, name:"Status"
             },
             {
                 title: "Action", data: function (x) {
@@ -181,7 +188,17 @@ function UploadSkill() {
 function ShowSkills(Section, Line) {
     $("#LineID").val(Line);
     GetSkilltable(Line);
-    $("#Skillmodal").modal("show");
+    $.ajax({
+        type: 'POST',
+        url: '../Process/GetLineName',
+        data: {ID:Line},
+        success: function (response) {
+            var data= "Line Name: " + response.linename;
+            $("#myModalLabelProcess").text(data);
+            $("#Skillmodal").modal("show");
+        }
+    });
+   
 }
 
 function GetSkilltable(Line) {
@@ -191,7 +208,7 @@ function GetSkilltable(Line) {
             type: "POST",
             datatype: "json"
         },
-        pagelength: 5000,
+        
         lengthChange: false,
        
         serverSide: "true",
@@ -211,7 +228,7 @@ function GetSkilltable(Line) {
           ],
         columns: [
             { title: "ID", data: "ID", visible: false },
-            { title: "Skill", data: "Skill" },
+            { title: "Process", data: "Skill" },
             {
                 title: "Logo", data: function (x) {
                     var logO = (x.Logo == null) ? "no-logop.png" : x.Logo;
@@ -385,7 +402,8 @@ function confirmnow(re) {
 }
 
 function AddLineProcessTeam(data) {
-    var datanow = $("#LineProcessTeamForm").serialize() + '&Section=' + $("#Section").val();
+    var Sectionchosen = ($("#Section").val() == "") ? "'"+$("#SectionGroup").val()+"'" : $("#Section").val()
+    var datanow = $("#LineProcessTeamForm").serialize() + '&Section=' + Sectionchosen;
     
     $.ajax({
         url: '../Process/CreateLineProcessTeam',
@@ -407,7 +425,8 @@ function AddLineProcessTeam(data) {
 }
 
 function EditLineProcessTeam(data) {
-    var datanow = data.serialize() + '&Section=' + $("#Section").val();
+    var Sectionchosen = ($("#Section").val() == "") ? $("#SectionGroup").val() : $("#Section").val()
+    var datanow = data.serialize() + '&Section=' + Sectionchosen;
     $.ajax({
         url: '../Process/EditLineProcessTeam',
         data: datanow,

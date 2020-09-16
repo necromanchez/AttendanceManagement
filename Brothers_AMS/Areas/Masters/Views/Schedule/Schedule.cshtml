@@ -29,7 +29,23 @@
         <div class="box-body pad">
             <form action="" method="POST" role="form" id="ScheduleForm" autocomplete="off">
                 <input type="hidden" class="form-control input-sm" name="ID" id="ID" readonly="">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group" id="remarks_group">
+                            <div class="input-group">
+                                <span class="input-group-addon">Shift Type</span>
+                                <select class="form-control" id="shifttype" name="shifttype">
+                                    <option value="Day">Day</option>
+                                    <option value="Night">Night</option>
+                                </select>
+                            </div>
+                        </div>
 
+                    </div>
+                    <div class="col-md-6">
+                        
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group" id="remarks_group">
@@ -52,24 +68,7 @@
                         </div>
                     </div>
                 </div>
-                @*<div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group" id="item_code_group">
-                            <div class="input-group">
-                                <span class="input-group-addon">Time In</span>
-                                <input type="time" class="form-control input-sm" name="TimeIn" id="TimeIn">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group" id="remarks_group">
-                            <div class="input-group">
-                                <span class="input-group-addon">Time Out</span>
-                                <input type="time" class="form-control input-sm" name="TimeOut" id="TimeOut">
-                            </div>
-                        </div>
-                    </div>
-                </div>*@
+                
                 <div class="row">
                     <div class="col-md-6">
                         <div class="bootstrap-timepicker">

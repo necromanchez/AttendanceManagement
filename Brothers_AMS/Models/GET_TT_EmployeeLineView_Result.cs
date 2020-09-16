@@ -13,6 +13,7 @@ namespace Brothers_WMS.Models
     
     public partial class GET_TT_EmployeeLineView_Result
     {
+        public string EmpNo { get; set; }
         public string EmployeePhoto { get; set; }
         public string EmployeeName { get; set; }
         public string Position { get; set; }

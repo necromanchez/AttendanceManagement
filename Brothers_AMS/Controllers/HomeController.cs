@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
@@ -16,10 +17,10 @@ namespace Brothers_WMS.Controllers
     public class HomeController : Controller
     {
         Brothers_AMSDBEntities db = new Brothers_AMSDBEntities();
-
+        M_Users user = (M_Users)System.Web.HttpContext.Current.Session["user"];
         public ActionResult Index()
         {
-           
+            System.Web.HttpContext.Current.Session["chosendashgroup"] = "";
             return View();
         }
 
@@ -43,316 +44,200 @@ namespace Brothers_WMS.Controllers
             return View();
         }
 
-
-        private List<MARModel> GetAttendanceRate_data(int Month, int Year, string Agency, string Shift)
+        public ActionResult ChangeSection(string Section)
         {
-
-            SqlConnection conn = new SqlConnection(Connection_String.AMSDB);
-            SqlCommand cmdSql = new SqlCommand();
-            cmdSql.Connection = conn;
-            cmdSql.CommandType = CommandType.StoredProcedure;
-            cmdSql.CommandText = @"dbo.GET_Dashboard_AttendanceRate";
-
-            cmdSql.Parameters.Clear();
-            cmdSql.Parameters.Add("@Month", SqlDbType.Int).Value = Month;
-            cmdSql.Parameters.Add("@Year", SqlDbType.Int).Value = Year;
-            cmdSql.Parameters.Add("@Agency", SqlDbType.NVarChar).Value = Agency;
-            cmdSql.Parameters.Add("@Shift", SqlDbType.NVarChar).Value = Shift;
-            cmdSql.CommandTimeout = 180;
-            conn.Open();
-          
-
-            SqlDataReader sdr = cmdSql.ExecuteReader();
-            var dt = new DataTable();
-            dt.Load(sdr);
-            cmdSql.Dispose();
-            conn.Close();
-
-            List<MARModel> convertedList = new List<MARModel>();
-
-            try
-            {
-                convertedList = (from rw in dt.AsEnumerable()
-                                 select new MARModel()
-                                 {
-                                  
-                                     C1 = Convert.ToString(rw["1"]),
-                                     C2 = Convert.ToString(rw["2"]),
-                                     C3 = Convert.ToString(rw["3"]),
-                                     C4 = Convert.ToString(rw["4"]),
-                                     C5 = Convert.ToString(rw["5"]),
-                                     C6 = Convert.ToString(rw["6"]),
-                                     C7 = Convert.ToString(rw["7"]),
-                                     C8 = Convert.ToString(rw["8"]),
-                                     C9 = Convert.ToString(rw["9"]),
-                                     C10 = Convert.ToString(rw["10"]),
-                                     C11 = Convert.ToString(rw["11"]),
-                                     C12 = Convert.ToString(rw["12"]),
-                                     C13 = Convert.ToString(rw["13"]),
-                                     C14 = Convert.ToString(rw["14"]),
-                                     C15 = Convert.ToString(rw["15"]),
-                                     C16 = Convert.ToString(rw["16"]),
-                                     C17 = Convert.ToString(rw["17"]),
-                                     C18 = Convert.ToString(rw["18"]),
-                                     C19 = Convert.ToString(rw["19"]),
-                                     C20 = Convert.ToString(rw["20"]),
-                                     C21 = Convert.ToString(rw["21"]),
-                                     C22 = Convert.ToString(rw["22"]),
-                                     C23 = Convert.ToString(rw["23"]),
-                                     C24 = Convert.ToString(rw["24"]),
-                                     C25 = Convert.ToString(rw["25"]),
-                                     C26 = Convert.ToString(rw["26"]),
-                                     C27 = Convert.ToString(rw["27"]),
-                                     C28 = Convert.ToString(rw["28"]),
-                                     C29 = Convert.ToString(rw["29"]),
-                                     C30 = Convert.ToString(rw["30"]),
-                                     C31 = Convert.ToString(rw["31"]),
-
-                                 }).ToList();
-            }
-            catch (Exception err)
-            {
-                try
-                {
-                    convertedList = (from rw in dt.AsEnumerable()
-                                     select new MARModel()
-                                     {
-                                        
-                                         C1 = Convert.ToString(rw["1"]),
-                                         C2 = Convert.ToString(rw["2"]),
-                                         C3 = Convert.ToString(rw["3"]),
-                                         C4 = Convert.ToString(rw["4"]),
-                                         C5 = Convert.ToString(rw["5"]),
-                                         C6 = Convert.ToString(rw["6"]),
-                                         C7 = Convert.ToString(rw["7"]),
-                                         C8 = Convert.ToString(rw["8"]),
-                                         C9 = Convert.ToString(rw["9"]),
-                                         C10 = Convert.ToString(rw["10"]),
-                                         C11 = Convert.ToString(rw["11"]),
-                                         C12 = Convert.ToString(rw["12"]),
-                                         C13 = Convert.ToString(rw["13"]),
-                                         C14 = Convert.ToString(rw["14"]),
-                                         C15 = Convert.ToString(rw["15"]),
-                                         C16 = Convert.ToString(rw["16"]),
-                                         C17 = Convert.ToString(rw["17"]),
-                                         C18 = Convert.ToString(rw["18"]),
-                                         C19 = Convert.ToString(rw["19"]),
-                                         C20 = Convert.ToString(rw["20"]),
-                                         C21 = Convert.ToString(rw["21"]),
-                                         C22 = Convert.ToString(rw["22"]),
-                                         C23 = Convert.ToString(rw["23"]),
-                                         C24 = Convert.ToString(rw["24"]),
-                                         C25 = Convert.ToString(rw["25"]),
-                                         C26 = Convert.ToString(rw["26"]),
-                                         C27 = Convert.ToString(rw["27"]),
-                                         C28 = Convert.ToString(rw["28"]),
-                                         C29 = Convert.ToString(rw["29"]),
-                                         C30 = Convert.ToString(rw["30"]),
-
-                                     }).ToList();
-                }
-                catch (Exception err2)
-                {
-                    convertedList = (from rw in dt.AsEnumerable()
-                                     select new MARModel()
-                                     {
-                                         C1 = Convert.ToString(rw["1"]),
-                                         C2 = Convert.ToString(rw["2"]),
-                                         C3 = Convert.ToString(rw["3"]),
-                                         C4 = Convert.ToString(rw["4"]),
-                                         C5 = Convert.ToString(rw["5"]),
-                                         C6 = Convert.ToString(rw["6"]),
-                                         C7 = Convert.ToString(rw["7"]),
-                                         C8 = Convert.ToString(rw["8"]),
-                                         C9 = Convert.ToString(rw["9"]),
-                                         C10 = Convert.ToString(rw["10"]),
-                                         C11 = Convert.ToString(rw["11"]),
-                                         C12 = Convert.ToString(rw["12"]),
-                                         C13 = Convert.ToString(rw["13"]),
-                                         C14 = Convert.ToString(rw["14"]),
-                                         C15 = Convert.ToString(rw["15"]),
-                                         C16 = Convert.ToString(rw["16"]),
-                                         C17 = Convert.ToString(rw["17"]),
-                                         C18 = Convert.ToString(rw["18"]),
-                                         C19 = Convert.ToString(rw["19"]),
-                                         C20 = Convert.ToString(rw["20"]),
-                                         C21 = Convert.ToString(rw["21"]),
-                                         C22 = Convert.ToString(rw["22"]),
-                                         C23 = Convert.ToString(rw["23"]),
-                                         C24 = Convert.ToString(rw["24"]),
-                                         C25 = Convert.ToString(rw["25"]),
-                                         C26 = Convert.ToString(rw["26"]),
-                                         C27 = Convert.ToString(rw["27"]),
-                                         C28 = Convert.ToString(rw["28"]),
-                                         C29 = Convert.ToString(rw["29"]),
-                                     }).ToList();
-                }
-            }
-
-
-            return convertedList;
-        }
-
-        private List<MARModel> GetAttendanceRate_AbsentRatedata(int Month, int Year, string Agency)
-        {
-
-            SqlConnection conn = new SqlConnection(Connection_String.AMSDB);
-            SqlCommand cmdSql = new SqlCommand();
-            cmdSql.Connection = conn;
-            cmdSql.CommandType = CommandType.StoredProcedure;
-            cmdSql.CommandText = @"dbo.GET_Dashboard_AbsentRate";
-
-            cmdSql.Parameters.Clear();
-            cmdSql.Parameters.Add("@Month", SqlDbType.Int).Value = Month;
-            cmdSql.Parameters.Add("@Year", SqlDbType.Int).Value = Year;
-            cmdSql.Parameters.Add("@Agency", SqlDbType.NVarChar).Value = Agency;
-
-            conn.Open();
-            SqlDataReader sdr = cmdSql.ExecuteReader();
-            var dt = new DataTable();
-            dt.Load(sdr);
-            cmdSql.Dispose();
-            conn.Close();
-
-            List<MARModel> convertedList = new List<MARModel>();
-
-            try
-            {
-                convertedList = (from rw in dt.AsEnumerable()
-                                 select new MARModel()
-                                 {
-
-                                     C1 = Convert.ToString(rw["1"]),
-                                     C2 = Convert.ToString(rw["2"]),
-                                     C3 = Convert.ToString(rw["3"]),
-                                     C4 = Convert.ToString(rw["4"]),
-                                     C5 = Convert.ToString(rw["5"]),
-                                     C6 = Convert.ToString(rw["6"]),
-                                     C7 = Convert.ToString(rw["7"]),
-                                     C8 = Convert.ToString(rw["8"]),
-                                     C9 = Convert.ToString(rw["9"]),
-                                     C10 = Convert.ToString(rw["10"]),
-                                     C11 = Convert.ToString(rw["11"]),
-                                     C12 = Convert.ToString(rw["12"]),
-                                     C13 = Convert.ToString(rw["13"]),
-                                     C14 = Convert.ToString(rw["14"]),
-                                     C15 = Convert.ToString(rw["15"]),
-                                     C16 = Convert.ToString(rw["16"]),
-                                     C17 = Convert.ToString(rw["17"]),
-                                     C18 = Convert.ToString(rw["18"]),
-                                     C19 = Convert.ToString(rw["19"]),
-                                     C20 = Convert.ToString(rw["20"]),
-                                     C21 = Convert.ToString(rw["21"]),
-                                     C22 = Convert.ToString(rw["22"]),
-                                     C23 = Convert.ToString(rw["23"]),
-                                     C24 = Convert.ToString(rw["24"]),
-                                     C25 = Convert.ToString(rw["25"]),
-                                     C26 = Convert.ToString(rw["26"]),
-                                     C27 = Convert.ToString(rw["27"]),
-                                     C28 = Convert.ToString(rw["28"]),
-                                     C29 = Convert.ToString(rw["29"]),
-                                     C30 = Convert.ToString(rw["30"]),
-                                     C31 = Convert.ToString(rw["31"]),
-
-                                 }).ToList();
-            }
-            catch (Exception err)
-            {
-                try
-                {
-                    convertedList = (from rw in dt.AsEnumerable()
-                                     select new MARModel()
-                                     {
-
-                                         C1 = Convert.ToString(rw["1"]),
-                                         C2 = Convert.ToString(rw["2"]),
-                                         C3 = Convert.ToString(rw["3"]),
-                                         C4 = Convert.ToString(rw["4"]),
-                                         C5 = Convert.ToString(rw["5"]),
-                                         C6 = Convert.ToString(rw["6"]),
-                                         C7 = Convert.ToString(rw["7"]),
-                                         C8 = Convert.ToString(rw["8"]),
-                                         C9 = Convert.ToString(rw["9"]),
-                                         C10 = Convert.ToString(rw["10"]),
-                                         C11 = Convert.ToString(rw["11"]),
-                                         C12 = Convert.ToString(rw["12"]),
-                                         C13 = Convert.ToString(rw["13"]),
-                                         C14 = Convert.ToString(rw["14"]),
-                                         C15 = Convert.ToString(rw["15"]),
-                                         C16 = Convert.ToString(rw["16"]),
-                                         C17 = Convert.ToString(rw["17"]),
-                                         C18 = Convert.ToString(rw["18"]),
-                                         C19 = Convert.ToString(rw["19"]),
-                                         C20 = Convert.ToString(rw["20"]),
-                                         C21 = Convert.ToString(rw["21"]),
-                                         C22 = Convert.ToString(rw["22"]),
-                                         C23 = Convert.ToString(rw["23"]),
-                                         C24 = Convert.ToString(rw["24"]),
-                                         C25 = Convert.ToString(rw["25"]),
-                                         C26 = Convert.ToString(rw["26"]),
-                                         C27 = Convert.ToString(rw["27"]),
-                                         C28 = Convert.ToString(rw["28"]),
-                                         C29 = Convert.ToString(rw["29"]),
-                                         C30 = Convert.ToString(rw["30"]),
-
-                                     }).ToList();
-                }
-                catch (Exception err2)
-                {
-                    convertedList = (from rw in dt.AsEnumerable()
-                                     select new MARModel()
-                                     {
-                                         C1 = Convert.ToString(rw["1"]),
-                                         C2 = Convert.ToString(rw["2"]),
-                                         C3 = Convert.ToString(rw["3"]),
-                                         C4 = Convert.ToString(rw["4"]),
-                                         C5 = Convert.ToString(rw["5"]),
-                                         C6 = Convert.ToString(rw["6"]),
-                                         C7 = Convert.ToString(rw["7"]),
-                                         C8 = Convert.ToString(rw["8"]),
-                                         C9 = Convert.ToString(rw["9"]),
-                                         C10 = Convert.ToString(rw["10"]),
-                                         C11 = Convert.ToString(rw["11"]),
-                                         C12 = Convert.ToString(rw["12"]),
-                                         C13 = Convert.ToString(rw["13"]),
-                                         C14 = Convert.ToString(rw["14"]),
-                                         C15 = Convert.ToString(rw["15"]),
-                                         C16 = Convert.ToString(rw["16"]),
-                                         C17 = Convert.ToString(rw["17"]),
-                                         C18 = Convert.ToString(rw["18"]),
-                                         C19 = Convert.ToString(rw["19"]),
-                                         C20 = Convert.ToString(rw["20"]),
-                                         C21 = Convert.ToString(rw["21"]),
-                                         C22 = Convert.ToString(rw["22"]),
-                                         C23 = Convert.ToString(rw["23"]),
-                                         C24 = Convert.ToString(rw["24"]),
-                                         C25 = Convert.ToString(rw["25"]),
-                                         C26 = Convert.ToString(rw["26"]),
-                                         C27 = Convert.ToString(rw["27"]),
-                                         C28 = Convert.ToString(rw["28"]),
-                                         C29 = Convert.ToString(rw["29"]),
-                                     }).ToList();
-                }
-            }
-
-
-            return convertedList;
+            System.Web.HttpContext.Current.Session["chosendashgroup"] = Section;
+            //string Costcode = (from c in db.M_Cost_Center_List where c.GroupSection == Section select c.Cost_Center).FirstOrDefault();
+            //user.Section = Costcode;
+            return Json(new { }, JsonRequestBehavior.AllowGet);
         }
 
 
-        public ActionResult GeAttendanceRate(int Month, int Year, string Agency, string Shift)
+
+        public ActionResult GET_ManPowerAttendanceRate(int Month, int Year, string Agency, string Shift, long? Line)
         {
-            List<MARModel> GetAttendanceRate = GetAttendanceRate_data(Month,Year,Agency,Shift);
+            string CostCode = "";
+            string groupsec = (Session["chosendashgroup"] != null) ? Session["chosendashgroup"].ToString() : "";
+            if (groupsec == "")
+            {
+                CostCode = user.CostCode;
+            }
+            else
+            {
+                
+                CostCode = (from c in db.M_Cost_Center_List where c.GroupSection == groupsec select c.Cost_Center).FirstOrDefault();
+            }
+            //string CostCode = (Session["chosendashgroup"].ToString) ?user.Section : user.CostCode;
+            db.Database.CommandTimeout = 0;
+            List<Dashboard_ManpowerAttendanceRate_Result> list = db.Dashboard_ManpowerAttendanceRate(Month, Year, Agency, Shift, Line, CostCode).ToList();
+
+            return Json(new { list = list }, JsonRequestBehavior.AllowGet);
+        }
+
+
+        public ActionResult GET_AbsentRate(int Month, int Year, string Agency, string Shift, long? Line)
+        {
+            string CostCode = "";
+            string groupsec = (Session["chosendashgroup"] != null) ? Session["chosendashgroup"].ToString() : "";
+            if (groupsec == "")
+            {
+                CostCode = user.CostCode;
+            }
+            else
+            {
+
+                CostCode = (from c in db.M_Cost_Center_List where c.GroupSection == groupsec select c.Cost_Center).FirstOrDefault();
+            }
+            //string CostCode = (Session["chosendashgroup"].ToString) ?user.Section : user.CostCode;
+            db.Database.CommandTimeout = 0;
             
-            return Json(new { data2= GetAttendanceRate }, JsonRequestBehavior.AllowGet);
+            List<Dashboard_AbsentRate_Result> list = db.Dashboard_AbsentRate(Month, Year, Agency, Shift, Line, CostCode).ToList();
+          
+            return Json(new { list = list }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult GetAttendanceRate_AbsentRate(int Month, int Year, string Agency, string Shift)
+        public ActionResult GET_LeaveBreakdown(int Month, int Year, string Agency, string Shift, long? Line)
         {
-            List<MARModel> GetAbsentRate = GetAttendanceRate_AbsentRatedata(Month, Year, Agency);
+            string CostCode = "";
+            string groupsec = (Session["chosendashgroup"] != null) ? Session["chosendashgroup"].ToString() : "";
+            if (groupsec == "")
+            {
+                CostCode = user.CostCode;
+            }
+            else
+            {
 
-            return Json(new { data = GetAbsentRate }, JsonRequestBehavior.AllowGet);
+                CostCode = (from c in db.M_Cost_Center_List where c.GroupSection == groupsec select c.Cost_Center).FirstOrDefault();
+            }
+            //string CostCode = (Session["chosendashgroup"].ToString) ?user.Section : user.CostCode;
+            db.Database.CommandTimeout = 0;
+
+            List<Dashboard_LeaveBreakDown_Result> list = db.Dashboard_LeaveBreakDown(Month, Year, Agency, Shift, Line, CostCode).ToList();
+
+            return Json(new { list = list }, JsonRequestBehavior.AllowGet);
         }
+
+
+        public ActionResult GET_AWOLandResignrate(int Month, int Year, string Agency, string Shift, long? Line)
+        {
+            string CostCode = "";
+            string groupsec = (Session["chosendashgroup"] != null) ? Session["chosendashgroup"].ToString() : "";
+            if (groupsec == "")
+            {
+                CostCode = user.CostCode;
+            }
+            else
+            {
+
+                CostCode = (from c in db.M_Cost_Center_List where c.GroupSection == groupsec select c.Cost_Center).FirstOrDefault();
+            }
+            //string CostCode = (Session["chosendashgroup"].ToString) ?user.Section : user.CostCode;
+            db.Database.CommandTimeout = 0;
+            List<Dashboard_AWOLandResignRate_Result> list = db.Dashboard_AWOLandResignRate(Month, Year, Agency, Shift, Line, CostCode).ToList();
+
+            return Json(new { list = list }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GET_OTRate(int Month, int Year, string Agency, string Shift, long? Line)
+        {
+            string CostCode = "";
+            string groupsec = (Session["chosendashgroup"] != null) ? Session["chosendashgroup"].ToString() : "";
+            if (groupsec == "")
+            {
+                CostCode = user.CostCode;
+            }
+            else
+            {
+
+                CostCode = (from c in db.M_Cost_Center_List where c.GroupSection == groupsec select c.Cost_Center).FirstOrDefault();
+            }
+            //string CostCode = (Session["chosendashgroup"].ToString) ?user.Section : user.CostCode;
+            db.Database.CommandTimeout = 0;
+            List<Dashboard_OvertimeRate_Result> list = db.Dashboard_OvertimeRate(Month, Year, Agency, Shift, Line, CostCode).ToList();
+
+            return Json(new { list = list }, JsonRequestBehavior.AllowGet);
+        }
+
+
+        #region Monthly
+
+        public ActionResult Get_MonthlyDashboard(int Year, string Agency, string Shift, long? Line, string GroupSection)
+        {
+            string CostCode = "";
+            string groupsec = (Session["chosendashgroup"] != null) ? Session["chosendashgroup"].ToString() : "";
+            if (groupsec == "")
+            {
+                CostCode = user.CostCode;
+            }
+            else
+            {
+
+                CostCode = (from c in db.M_Cost_Center_List where c.GroupSection == groupsec select c.Cost_Center).FirstOrDefault();
+            }
+            db.Database.CommandTimeout = 0;
+            List<Dashboard_ManpowerAttendanceRate_Monthly_Result> AttendanceRateMonthly = db.Dashboard_ManpowerAttendanceRate_Monthly(Year, Agency, Shift, Line, CostCode).ToList();
+            List<Dashboard_AbsentRate_Monthly_Result> AbsentRateMonthly = db.Dashboard_AbsentRate_Monthly(Year, Agency, Shift, Line, CostCode).ToList();
+            List<Dashboard_LeaveBreakDown_Monthly_Result> LeaveBreakdownMonthly = db.Dashboard_LeaveBreakDown_Monthly(Year, Agency, Shift, Line, CostCode).ToList();
+            List<Dashboard_AWOLandResignRate_Monthly_Result> AwolandResignedMonthly = db.Dashboard_AWOLandResignRate_Monthly(Year, Agency, Shift, Line, CostCode).ToList();
+            List<Dashboard_OvertimeRate_Monthly_Result> OTRateMonthly = db.Dashboard_OvertimeRate_Monthly(Year, Agency, Shift, Line, CostCode).ToList();
+
+
+            Session["chosendashgroup"] = "";
+            return Json(new {
+                AttendanceRateMonthly = AttendanceRateMonthly,
+                AbsentRateMonthly = AbsentRateMonthly,
+                LeaveBreakdownMonthly = LeaveBreakdownMonthly,
+                AwolandResignedMonthly = AwolandResignedMonthly,
+                OTRateMonthly = OTRateMonthly
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        #endregion
+
+
+        #region Yearly
+        public ActionResult Get_YearlyDashboard(string Agency, string Shift, long? Line, string GroupSection)
+        {
+            string CostCode = "";
+            string groupsec = (Session["chosendashgroup"] != null) ? Session["chosendashgroup"].ToString() : "";
+            if (groupsec == "")
+            {
+                CostCode = user.CostCode;
+            }
+            else
+            {
+
+                CostCode = (from c in db.M_Cost_Center_List where c.GroupSection == groupsec select c.Cost_Center).FirstOrDefault();
+            }
+            db.Database.CommandTimeout = 0;
+            List<Dashboard_ManpowerAttendanceRate_Yearly_Result> AttendanceRateYearly = db.Dashboard_ManpowerAttendanceRate_Yearly(Agency, Shift, Line, CostCode).ToList();
+            List<Dashboard_AbsentRate_Yearly_Result> AbsentRateYearly = db.Dashboard_AbsentRate_Yearly(Agency, Shift, Line, CostCode).ToList();
+            List<Dashboard_LeaveBreakDown_Yearly_Result> LeaveBreakdownYearly = db.Dashboard_LeaveBreakDown_Yearly(Agency, Shift, Line, CostCode).ToList();
+            List<Dashboard_AWOLandResignRate_Yearly_Result> AwolandResignedYearly = db.Dashboard_AWOLandResignRate_Yearly(Agency, Shift, Line, CostCode).ToList();
+            List<Dashboard_OvertimeRate_Yearly_Result> OTRateYearly = db.Dashboard_OvertimeRate_Yearly(Agency, Shift, Line, CostCode).ToList();
+
+
+            Session["chosendashgroup"] = "";
+            return Json(new
+            {
+                AttendanceRateYearly = AttendanceRateYearly,
+                AbsentRateYearly = AbsentRateYearly,
+                LeaveBreakdownYearly = LeaveBreakdownYearly,
+                AwolandResignedYearly = AwolandResignedYearly,
+                OTRateYearly = OTRateYearly
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+
+      
+
+      
+
+
+        
+        
+
+        #endregion
 
     }
 }

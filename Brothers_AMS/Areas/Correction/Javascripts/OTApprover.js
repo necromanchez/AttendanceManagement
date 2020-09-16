@@ -53,8 +53,8 @@ function Initializedpage() {
         },
       
        
-        lengthMenu: [100, 200, 300, 500],
-        pagelength: 5000,
+        lengthMenu: [[10, 50, 100], [10, 50, 100]],
+        
         lengthChange: false,
         scrollY: "600px",
         scrollCollapse: true,
@@ -214,8 +214,8 @@ function GetDetails(data,OTType) {
                     createdRow: function (row, data, dataIndex) {
                         $(row).addClass(data.EmployeeNo);
                     },
-                    lengthMenu: [100, 200, 300, 500],
-                    pagelength: 5000,
+                    lengthMenu: [[10, 50, 100], [10, 50, 100]],
+                    
                     lengthChange: false,
                     scrollY: "600px",
                     scrollCollapse: true,
@@ -260,8 +260,8 @@ function GetDetails(data,OTType) {
                           { data: "OTin" },
                           { data: "OTout" },
                           { data: "CumulativeOT", className:"text-center"},
-                          { data: "Requestor", className: "text-center" }
-
+                          { data: "Requestor", className: "text-center" },
+                    { data: "ActualOut", className: "text-center" }
 
                     ],
 

@@ -79,8 +79,8 @@
         background-color: #079ad9;
         border: 2px solid #079ad9;
         color: white;
-        -webkit-transform: scale(1.1, 1.1);
-        transform: scale(1.1, 1.1);
+        -webkit-transform: scale(1.5, 1.5);
+        transform: scale(1.5, 1.5);
     }
 
     .radio-tile-group .input-container2 .radio-button:checked + .radio-tile .icon svg {

@@ -48,9 +48,9 @@ namespace Brothers_WMS.Areas.Correction.Controllers
                     csfile.EmployeeNo = EmploNos;
                     csfile.FileType = Filing.FileType;
                     csfile.Section = (from c in db.M_Employee_CostCenter where c.EmployNo == EmploNos orderby c.ID descending select c.CostCenter_AMS).FirstOrDefault();
-                    Section = csfile.Section;
-                    csfile.DateFrom = Filing.DateFrom;
-                    csfile.DateTo = Filing.DateTo;
+                    Section = (from c in db.M_Cost_Center_List where c.Cost_Center == csfile.Section orderby c.ID descending select c.GroupSection).FirstOrDefault();//otfile.Section;//csfile.Section;
+                    csfile.DateFrom = Filing.DateFrom.Date;
+                    csfile.DateTo = Filing.DateTo.AddHours(23).AddMinutes(59).AddSeconds(59);
                     csfile.CSin = Filing.CSin;
                     csfile.CSout = Filing.CSout;
                     csfile.Reason = reason;
@@ -61,7 +61,11 @@ namespace Brothers_WMS.Areas.Correction.Controllers
                     csfile.UpdateID = user.UserName;
                     csfile.UpdateDate = DateTime.Now;
                     csfile.Schedule = Filing.Schedule;
-                    try
+                    //if (EmploNos.Contains("BIPH"))
+                    //{
+                        csfile.EmployeeAccept = db.TT_GETTIME().FirstOrDefault();//DateTime.Now;;
+                    //}
+                try
                     {
                         db.AF_ChangeSchedulefiling.Add(csfile);
                         db.SaveChanges();
@@ -71,7 +75,7 @@ namespace Brothers_WMS.Areas.Correction.Controllers
                         Error_Logs error = new Error_Logs();
                         error.PageModule = "Application Form - Change Schedule";
                         error.ErrorLog = err.Message;
-                        error.DateLog = DateTime.Now;
+                        error.DateLog = db.TT_GETTIME().FirstOrDefault();//DateTime.Now;;
                         error.Username = user.UserName;
                         db.Error_Logs.Add(error);
                         db.SaveChanges();
@@ -87,12 +91,13 @@ namespace Brothers_WMS.Areas.Correction.Controllers
             if (checker == null)
             {
                 #region GET approver & Email
-                string SectionID = (from c in db.M_Cost_Center_List
-                                    where c.Cost_Center == Section
-                                    select c.ID).FirstOrDefault().ToString();
+                //string SectionID = (from c in db.M_Cost_Center_List
+                //                    where c.Cost_Center == Section
+                //                    select c.ID).FirstOrDefault().ToString();
                 List<M_Section_Approver> approver = (from c in db.M_Section_Approver
-                                                     where c.Section == SectionID
+                                                     where c.Section == Section
                                                      && c.Position != "GeneralManager"
+                                                     && c.Position != "FactoryGeneralManager"
                                                      select c).ToList();
 
 
@@ -103,14 +108,14 @@ namespace Brothers_WMS.Areas.Correction.Controllers
                     M_Section_ApproverStatus approverstat = new M_Section_ApproverStatus();
                     approverstat.Position = approv.Position;
                     approverstat.EmployeeNo = approv.EmployeeNo;
-                    approverstat.Section = SectionID;
+                    approverstat.Section = Section;
                     approverstat.RefNo = CSRefnow;
                     approverstat.Approved = 0;
                     approverstat.OverTimeType = "";
                     approverstat.CreateID = user.UserName;
-                    approverstat.CreateDate = DateTime.Now;
+                    approverstat.CreateDate = DateTime.Now;;
                     approverstat.UpdateID = user.UserName;
-                    approverstat.UpdateDate = DateTime.Now;
+                    approverstat.UpdateDate = DateTime.Now;;
                     db.M_Section_ApproverStatus.Add(approverstat);
                     db.SaveChanges();
                 }
@@ -165,12 +170,15 @@ namespace Brothers_WMS.Areas.Correction.Controllers
                           ).ToList<GET_Employee_OTFiling_Result>();
                     }
                     int start = 14;
-                    ExcelWorksheet ExportData = package.Workbook.Worksheets["Change shift"];
-                    for (int i = 0; i < list.Count; i++)
+                    ExcelWorksheet ExportData = package.Workbook.Worksheets["Standardized-CS Form"];
+                    if (list.Count < 30)
                     {
-                        ExportData.Cells["B" + start].Value = list[i].EmpNo;
-                        ExportData.Cells["C" + start].Value = list[i].Family_Name + ", " + list[i].First_Name;
-                        start++;
+                        for (int i = 0; i < list.Count; i++)
+                        {
+                            ExportData.Cells["B" + start].Value = list[i].EmpNo;
+                            ExportData.Cells["C" + start].Value = list[i].Family_Name + ", " + list[i].First_Name;
+                            start++;
+                        }
                     }
                     ExportData.Cells["C5"].Value = current.Department;
                     ExportData.Cells["J5"].Value = user.Section;
@@ -200,7 +208,7 @@ namespace Brothers_WMS.Areas.Correction.Controllers
                 Error_Logs error = new Error_Logs();
                 error.PageModule = "Application Form - Change Schedule";
                 error.ErrorLog = err.Message;
-                error.DateLog = DateTime.Now;
+                error.DateLog = db.TT_GETTIME().FirstOrDefault();//DateTime.Now;;
                 error.Username = user.UserName;
                 db.Error_Logs.Add(error);
                 db.SaveChanges();
@@ -248,12 +256,14 @@ namespace Brothers_WMS.Areas.Correction.Controllers
                                 if (bemodify == null)
                                 {
                                     #region Creating via upload
-                                    Section = user.Section;//Employee.Section;
+                                    //Section = user.Section;//Employee.Section;
                                     AF_ChangeSchedulefiling CSrequest = new AF_ChangeSchedulefiling();
                                     CSrequest.CS_RefNo = TodayRefno;
                                     CSrequest.BIPH_Agency = Employee.Company;
                                     CSrequest.FileType = 3; //Upload
-                                    CSrequest.Section = Employee.CostCode;
+                                    CSrequest.Section = (from c in db.M_Employee_CostCenter where c.EmployNo == Empno orderby c.ID descending select c.CostCenter_AMS).FirstOrDefault();
+                                    Section = (from c in db.M_Cost_Center_List where c.Cost_Center == CSrequest.Section orderby c.ID descending select c.GroupSection).FirstOrDefault();//otfile.Section;
+
                                     CSrequest.EmployeeNo = Employee.EmpNo;
                                     CSrequest.CSType = worksheet.Cells[startRowForTable, 4].Value.ToString();
                                     CSrequest.DateFrom = Convert.ToDateTime(worksheet.Cells[startRowForTable, 5].Value);
@@ -262,16 +272,19 @@ namespace Brothers_WMS.Areas.Correction.Controllers
                                     DateTime csout = Convert.ToDateTime(worksheet.Cells[startRowForTable, 8].Value.ToString());
                                     CSrequest.CSin = csin.ToString("HH:mm");
                                     CSrequest.CSout = csout.ToString("HH:mm");
-
+                                    //if (Employee.EmpNo.Contains("BIPH"))
+                                    //{
+                                        CSrequest.EmployeeAccept = db.TT_GETTIME().FirstOrDefault();//DateTime.Now;;
+                                    //}
 
                                     CSrequest.Reason = worksheet.Cells[startRowForTable, 9].Value.ToString();
                                     CSrequest.Status = 0;
                                     CSrequest.StatusMax = 2;
 
                                     CSrequest.CreateID = user.UserName;
-                                    CSrequest.CreateDate = DateTime.Now;
+                                    CSrequest.CreateDate = DateTime.Now;;
                                     CSrequest.UpdateID = user.UserName;
-                                    CSrequest.UpdateDate = DateTime.Now;
+                                    CSrequest.UpdateDate = DateTime.Now;;
 
                                     try
                                     {
@@ -283,7 +296,7 @@ namespace Brothers_WMS.Areas.Correction.Controllers
                                         Error_Logs error = new Error_Logs();
                                         error.PageModule = "Application Form - OT Request";
                                         error.ErrorLog = err.Message;
-                                        error.DateLog = DateTime.Now;
+                                        error.DateLog = db.TT_GETTIME().FirstOrDefault();//DateTime.Now;;
                                         error.Username = user.UserName;
                                         db.Error_Logs.Add(error);
                                         db.SaveChanges();
@@ -293,11 +306,12 @@ namespace Brothers_WMS.Areas.Correction.Controllers
                                 else
                                 {
                                     #region modifying via upload
-                                    Section = Employee.Section;
+                                    //Section = Employee.Section;
                                     bemodify.CS_RefNo = TodayRefno;
                                     bemodify.BIPH_Agency = Employee.Company;
                                     bemodify.FileType = 3; //Upload
-                                    bemodify.Section = Employee.CostCode;
+                                    bemodify.Section = (from c in db.M_Employee_CostCenter where c.EmployNo == Empno orderby c.ID descending select c.CostCenter_AMS).FirstOrDefault();
+                                    Section = (from c in db.M_Cost_Center_List where c.Cost_Center == bemodify.Section orderby c.ID descending select c.GroupSection).FirstOrDefault();//otfile.Section;
                                     bemodify.EmployeeNo = Employee.EmpNo;
                                     bemodify.CSType = worksheet.Cells[startRowForTable, 4].Value.ToString();
                                     bemodify.DateFrom = Convert.ToDateTime(worksheet.Cells[startRowForTable, 5].Value);
@@ -310,8 +324,11 @@ namespace Brothers_WMS.Areas.Correction.Controllers
                                     bemodify.Status = 0;
                                     bemodify.StatusMax = 2;
                                     bemodify.UpdateID = user.UserName;
-                                    bemodify.UpdateDate = DateTime.Now;
-
+                                    bemodify.UpdateDate = DateTime.Now;;
+                                    if (Employee.EmpNo.Contains("BIPH"))
+                                    {
+                                        bemodify.EmployeeAccept = db.TT_GETTIME().FirstOrDefault();//DateTime.Now;;
+                                    }
                                     try
                                     {
                                         db.Entry(bemodify).State = EntityState.Modified;
@@ -322,7 +339,7 @@ namespace Brothers_WMS.Areas.Correction.Controllers
                                         Error_Logs error = new Error_Logs();
                                         error.PageModule = "Application Form - CS Request";
                                         error.ErrorLog = err.Message;
-                                        error.DateLog = DateTime.Now;
+                                        error.DateLog = db.TT_GETTIME().FirstOrDefault();//DateTime.Now;;
                                         error.Username = user.UserName;
                                         db.Error_Logs.Add(error);
                                         db.SaveChanges();
@@ -354,10 +371,10 @@ namespace Brothers_WMS.Areas.Correction.Controllers
                     if (checker == null)
                     {
                         #region GET approver & Email
-                        string SectionID = (from c in db.M_Cost_Center_List
-                                            where c.Cost_Center == Section
-                                            select c.ID).FirstOrDefault().ToString();
-                        List<M_Section_Approver> approver = (from c in db.M_Section_Approver where c.Section == SectionID select c).ToList();
+                        //string SectionID = (from c in db.M_Cost_Center_List
+                        //                    where c.Cost_Center == Section
+                        //                    select c.ID).FirstOrDefault().ToString();
+                        List<M_Section_Approver> approver = (from c in db.M_Section_Approver where c.Section == Section select c).ToList();
 
 
                         #endregion
@@ -367,14 +384,14 @@ namespace Brothers_WMS.Areas.Correction.Controllers
                             M_Section_ApproverStatus approverstat = new M_Section_ApproverStatus();
                             approverstat.Position = approv.Position;
                             approverstat.EmployeeNo = approv.EmployeeNo;
-                            approverstat.Section = SectionID;
+                            approverstat.Section = Section;
                             approverstat.RefNo = helper.GenerateCSRef();
                             approverstat.Approved = 0;
                             approverstat.OverTimeType = "";
                             approverstat.CreateID = user.UserName;
-                            approverstat.CreateDate = DateTime.Now;
+                            approverstat.CreateDate = DateTime.Now;;
                             approverstat.UpdateID = user.UserName;
-                            approverstat.UpdateDate = DateTime.Now;
+                            approverstat.UpdateDate = DateTime.Now;;
                             db.M_Section_ApproverStatus.Add(approverstat);
                             db.SaveChanges();
                         }

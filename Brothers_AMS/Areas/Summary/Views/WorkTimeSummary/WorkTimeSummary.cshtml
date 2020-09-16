@@ -4,29 +4,66 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-
+@{
+    ViewBag.Title = "Employees";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using Brothers_WMS.Models;
+@using System.Data.SqlClient;
+@using Brothers_WMS.Controllers;
+@using System.Configuration;
+@{
+    string UserSection = string.Empty;
+    if ((M_Users)(Session["user"]) != null)
+    {
+        M_Users UserInfo = (M_Users)(Session["user"]);
+        UserSection = UserInfo.Section;
+    }
+    else
+    {
+        Url.Action("Logout", "Login");
+    }
+}
 <style>
-    td,th{
+    /*.resized {
+        width: 146.813px !important;
+    }*/
+    .hehetable {
         border: 1px solid black;
+    }
+
+    .tablewew {
+        border: 1px solid black !important;
+        border-top-color: red !important;
+        border-top: 1px solid black !important;
+    }
+
+    .Adjustbrand {
+        font-size: 16px !important;
+        font-weight: bold
+    }
+
+    table.dataTable tbody th,
+    table.dataTable tbody td {
+        white-space: nowrap;
+    }
+    .select2-selection__rendered {
+        margin-right: 180px !important;
       
     }
-  .tablewew{
-       border: 1px solid black !important;
-       border-top-color:red !important;
-       border-top:1px solid black !important;
-  }
 </style>
-
+<!-- Main CSS -->
+<link href="~/Content2/css/main.css" rel="stylesheet" media="screen" />
 
 @*<div class="box-body">
 
-    <ul class="nav nav-tabs" role="tablist">
-        <li class="nav-item"> <a class="nav-link active" href="@Url.Action("WorkTimeSummary", "WorkTimeSummary", new { area = "Summary" })" role="tab"><span class="hidden-sm-up"><i class="ion-home"></i></span> <span class="hidden-xs-down">Present and Absent</span></a> </li>
-        <li class="nav-item"> <a class="nav-link" href="@Url.Action("ChangeScheduleSummary", "ChangeScheduleSummary", new { area = "Summary" })" role="tab"><span class="hidden-sm-up"><i class="ion-person"></i></span> <span class="hidden-xs-down">Working Hours</span></a> </li>
-        <li class="nav-item"> <a class="nav-link" href="@Url.Action("DTRSummary", "DTRSummary", new { area = "Summary" })" role="tab"><span class="hidden-sm-up"><i class="ion-email"></i></span> <span class="hidden-xs-down">OT Checking</span></a> </li>
-    </ul>
+        <ul class="nav nav-tabs" role="tablist">
+            <li class="nav-item"> <a class="nav-link active" href="@Url.Action("WorkTimeSummary", "WorkTimeSummary", new { area = "Summary" })" role="tab"><span class="hidden-sm-up"><i class="ion-home"></i></span> <span class="hidden-xs-down">Present and Absent</span></a> </li>
+            <li class="nav-item"> <a class="nav-link" href="@Url.Action("ChangeScheduleSummary", "ChangeScheduleSummary", new { area = "Summary" })" role="tab"><span class="hidden-sm-up"><i class="ion-person"></i></span> <span class="hidden-xs-down">Working Hours</span></a> </li>
+            <li class="nav-item"> <a class="nav-link" href="@Url.Action("DTRSummary", "DTRSummary", new { area = "Summary" })" role="tab"><span class="hidden-sm-up"><i class="ion-email"></i></span> <span class="hidden-xs-down">OT Checking</span></a> </li>
+        </ul>
 
-</div>*@
+    </div>*@
 
 <section class="content-header">
     <h1>
@@ -44,21 +81,8 @@
                         <div class="form-group">
                             <div class="input-group">
                                 <span class="input-group-addon">Month</span>
-                                <select class="form-control step step4" id="Month" name="Month">
-                                    <option value=''>--SELECT--</option>
-                                    <option value='1'>January</option>
-                                    <option value='2'>February</option>
-                                    <option value='3'>March</option>
-                                    <option value='4'>April</option>
-                                    <option value='5'>May</option>
-                                    <option value='6'>June</option>
-                                    <option value='7'>July</option>
-                                    <option value='8'>August</option>
-                                    <option value='9'>September</option>
-                                    <option value='10'>October</option>
-                                    <option value='11'>November</option>
-                                    <option value='12'>December</option>
-                                </select> 
+                                <select class="form-control step select2" id="Month" name="Month">
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -66,20 +90,7 @@
                         <div class="form-group">
                             <div class="input-group">
                                 <span class="input-group-addon">Year</span>
-                                <select class="form-control step step4" id="Year" name="Year">
-                                    
-                                    <option value=''>--SELECT--</option>
-                                    <option value="2020">2020</option>
-                                    <option value="2019">2019</option>
-                                    <option value="2018">2018</option>
-                                    <option value="2017">2017</option>
-                                    <option value="2016">2016</option>
-                                    <option value="2015">2015</option>
-                                    <option value="2014">2014</option>
-                                    <option value="2013">2013</option>
-                                    <option value="2012">2012</option>
-                                    <option value="2011">2011</option>
-                                    <option value="2010">2010</option>
+                                <select class="form-control step select2" id="Year" name="Year">
                                 </select>
                             </div>
                         </div>
@@ -88,10 +99,7 @@
                         <div class="form-group">
                             <div class="input-group">
                                 <span class="input-group-addon">Section</span>
-                                <select class="form-control step step4" id="Section" name="Section">
-
-                                    
-                                </select>
+                                <select class="form-control step select2" id="Section" name="Section"></select>
                             </div>
                         </div>
                     </div>
@@ -107,10 +115,10 @@
                         </div>
                     </div>
                 </div>
-               
-                
+
+
             </form>
-           
+
         </div>
 
     </div>
@@ -118,434 +126,435 @@
 
 
     <div class="row">
+
         <div class="col-md-12 col-lg-12">
-            <!-- Custom Tabs -->
-            <div class="nav-tabs-custom">
-                <ul class="nav nav-tabs">
-                    <li><a class="reloadtbl active" href="#tab_1" data-toggle="tab">Present And Absent</a></li>
-                    <li><a class="reloadtbl" href="#tab_2" data-toggle="tab">DTR Breakdown</a></li>
-                    <li><a class="reloadtbl" href="#tab_3" data-toggle="tab">Overtime</a></li>
-                   
-                    <li class="float-right icon-btn"><a href="#" class="text-muted"><i class="fa fa-gear fa-spin"></i></a></li>
-                </ul>
-                <div class="tab-content">
-                    <div class="tab-pane active" id="tab_1">
 
-                        <div class="row">
-                            <div class="col">
-                                <div class="box">
-                                    <div class="box-header">
-                                        <i class="fa fa-th"></i>
+            <ul class="nav nav-tabs" role="tablist" id="tabs">
+                <li class="nav-item"> <a class="nav-link active reloadtbl" href="#PresentAbsent" data-toggle="tab" id="PAB">Present And Absent</a></li>
+                <li class="nav-item"> <a class="nav-link reloadtbl" href="#DTRBreak" data-toggle="tab" id="DB">DTR Breakdown</a></li>
+                <li class="nav-item"> <a class="nav-link reloadtbl" href="#OTV" data-toggle="tab" id="OTM">Overtime</a></li>
+                <li class="nav-item"> <a class="nav-link reloadtbl" href="#EmployeeSchedule" data-toggle="tab" id="ES">Employee Shift</a></li>
+                <li class="nav-item"> <a class="nav-link reloadtbl" href="#EmployeeTime" data-toggle="tab" id="TTi">Employee TimeIn/Timeout</a></li>
+                <li class="nav-item"> <a class="nav-link reloadtbl" href="#ABdetails" data-toggle="tab" id="AD">Absent Details</a></li>
 
-                                        <h3 class="box-title">Present and Absent</h3>
+                @*      <li class="nav-item"> <a class="nav-link" data-toggle="tab" id="GetActualTap">Employee Tap</a></li>*@
+                <li class="nav-item"> <a class="nav-link reloadtbl" href="#tapDetails" data-toggle="tab" id="TabD">Employee Tap</a></li>
+            </ul>
 
-                                        <div class="box-tools pull-right">
-                                            <button type="button" class="btn btn-white btn-sm" data-widget="collapse">
-                                                <i class="fa fa-minus"></i>
-                                            </button>
-                                            @*<button type="button" class="btn btn-white btn-sm" data-widget="remove">
-                                <i class="fa fa-times"></i>
-                            </button>*@
-                                        </div>
-                                    </div>
-                                    <div class="box-body border-radius-none">
-                                        <div class="row">
-                                            <div class="col-12">
-                                                <div class="box">
+
+            <div class="tab-content">
+                <div class="tab-pane padhider active" id="PresentAbsent">
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="box">
+                                <div class="box-header">
+                                    <i class="fa fa-th"></i>
+
+                                    <h3 class="box-title">Present and Absent</h3>
+
+
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="box">
 
 
 
-                                                    <div class="box-body">
+                                            <div class="box-body">
+                                                <div class="row">
+                                                    <section class="content-header ">
+                                                        <h2>
+                                                            <span class="changehead">Month</span>
+                                                        </h2>
+                                                    </section>
+                                                </div>
 
-
-                                                        <div class="row theshow">
+                                                <div class="row theshow">
+                                                    <div class="col-md-4">
+                                                        <table class="table ">
+                                                            <tr>
+                                                                <td class="tablewew" colspan="3"><strong>ABSENT RATE</strong></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="tablewew"><strong>DS</strong></td>
+                                                                <td class="tablewew"><span id="DStotal">0</span></td>
+                                                                <td class="tablewew"><span id="DSper">0</span></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="tablewew"><strong>NS</strong></td>
+                                                                <td class="tablewew"><span id="NStotal">0</span></td>
+                                                                <td class="tablewew"><span id="NSper">0</span></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="tablewew"><strong>TOTAL</strong></td>
+                                                                <td class="tablewew"><span id="total">0</span></td>
+                                                                <td class="tablewew"><span id="per">0</span></td>
+                                                            </tr>
+                                                         
+                                                        </table>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <table class="table ">
+                                                            <tr>
+                                                                <td class="tablewew"><strong>MP Count</strong></td>
+                                                                <td class="tablewew"><strong>ML</strong></td>
+                                                                <td class="tablewew"><strong>NW</strong></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="tablewew"><strong>DS</strong></td>
+                                                                <td class="tablewew"><span id="MLDS">0</span></td>
+                                                                <td class="tablewew"><span id="NWDS">0</span></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="tablewew"><strong>NS</strong></td>
+                                                                <td class="tablewew"><span id="MLNS">0</span></td>
+                                                                <td class="tablewew"><span id="NWNS">0</span></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="tablewew"><strong>TOTAL</strong></td>
+                                                                <td class="tablewew"><span id="totalML">0</span></td>
+                                                                <td class="tablewew"><span id="totalNW">0</span></td>
+                                                            </tr>
+                                                           
+                                                        </table>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="row">
                                                             <div class="col-md-6">
-                                                                <table class="table ">
-
-                                                                    <tr>
-                                                                        <td class="tablewew" rowspan="3"><strong>ABSENT RATE</strong></td>
-                                                                        <td class="tablewew"><strong>DS</strong></td>
-                                                                        <td class="tablewew"><span id="DStotal">20</span></td>
-                                                                        <td class="tablewew"><span id="DSper">20</span></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="tg-cly1"><strong>NS</strong></td>
-                                                                        <td class="tablewew"><span id="NStotal">20</span></td>
-                                                                        <td class="tablewew"><span id="NSper">20</span></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="tg-0lax"><strong>TOTAL</strong></td>
-                                                                        <td class="tablewew"><span id="total">20</span></td>
-                                                                        <td class="tablewew"><span id="per">20</span></td>
-                                                                    </tr>
-                                                                    @*<tr>
-                                                                        <td class="tg-0lax" colspan="2"><strong>AWOL/RESIGN</strong></td>
-                                                                        <td class="tg-0lax" colspan="2">O MP</td>
-                                                                    </tr>*@
-                                                                </table>
+                                                                <div class="input-group">
+                                                                    <span class="input-group-addon resized">Date</span>
+                                                                    <input type="text" class="form-control autof" id="DateAdjust" name="DateAdjust">
+                                                                </div>
                                                             </div>
-
                                                             <div class="col-md-6">
-                                                                <div class="row">
-                                                                    <div class="col-md-12">
-                                                                        <div class="form-group">
-                                                                            <span class="btn btn-flat btn-file bg-green btn-lg btn-block">
-                                                                                <a style="color:white" id="btnAdjustmentDownload"><i class="fa fa-download"></i> Download Leave Setting Template</a>
-                                                                            </span>
-                                                                        </div>
+                                                                <div class="form-group">
+                                                                    <span class="btn btn-flat btn-file bg-green btn-lg btn-block">
+                                                                        <i class="fa fa-upload"></i> Upload Adjustment<input type="file" onchange="UploadAdjustment()" name="btnAdjustmentUpload" id="btnAdjustmentUpload" placeholder="(.xlsx)" accept=".xlsx">
+                                                                    </span>
 
-                                                                    </div>
                                                                 </div>
-                                                                <div class="row">
-                                                                    <div class="col-md-6">
-                                                                        <div class="input-group">
-                                                                            <span class="input-group-addon resized">Date</span>
-                                                                            <input type="text" class="form-control autof" id="DateAdjust" name="DateAdjust">
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-md-6">
-                                                                        <div class="form-group">
-                                                                            <span class="btn btn-flat btn-file bg-green btn-lg btn-block">
-                                                                                <i class="fa fa-upload"></i> Upload Adjustment<input type="file" onchange="UploadAdjustment()" name="btnAdjustmentUpload" id="btnAdjustmentUpload" placeholder="(.xlsx)" accept=".xlsx">
-                                                                            </span>
-
-                                                                        </div>
-                                                                    </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <span class="btn btn-flat btn-file bg-green btn-lg btn-block">
+                                                                        <a style="color:white" id="btnAdjustmentDownload"><i class="fa fa-download"></i> Download Leave Setting Template</a>
+                                                                    </span>
                                                                 </div>
 
                                                             </div>
                                                         </div>
-
-
-
-
-                                                        <div class="row theshow">
-                                                            <div class="col-12">
-                                                                <table id="AttenanceTbl" class="table table-bordered table-striped table-responsive">
-                                                                    <thead>
-                                                                        <tr>
-                                                                            <td colspan="6" rowspan="2" align="center" class="changehead">
-
-                                                                                NOVEMBER 2019
-
-                                                                            </td>
-                                                                            <td colspan="7" align="center" >WEEK 1</td>
-                                                                            <td colspan="7" align="center" >WEEK 2</td>
-                                                                            <td colspan="7" align="center" >WEEK 3</td>
-                                                                            <td colspan="7" align="center" >WEEK 4</td>
-                                                                            <td colspan="3"></td>
-                                                                        </tr>
-                                                                        <tr class="Daysname"></tr>
-
-                                                                        <tr>
-                                                                            <td>Employee No.</td>
-                                                                            <td>Employee Name</td>
-                                                                            <td>Position</td>
-                                                                            <td>Cost Code</td>
-                                                                            <td></td>
-                                                                            <td>Line/Team</td>
-                                                                            <td>1</td>
-                                                                            <td>2</td>
-                                                                            <td>3</td>
-                                                                            <td>4</td>
-                                                                            <td>5</td>
-                                                                            <td>6</td>
-                                                                            <td>7</td>
-
-                                                                            <td>8</td>
-                                                                            <td>9</td>
-                                                                            <td>10</td>
-                                                                            <td>11</td>
-                                                                            <td>12</td>
-                                                                            <td>13</td>
-                                                                            <td>14</td>
-
-                                                                            <td>15</td>
-                                                                            <td>16</td>
-                                                                            <td>17</td>
-                                                                            <td>18</td>
-                                                                            <td>19</td>
-                                                                            <td>20</td>
-                                                                            <td>21</td>
-
-                                                                            <td>22</td>
-                                                                            <td>23</td>
-                                                                            <td>24</td>
-                                                                            <td>25</td>
-                                                                            <td>26</td>
-                                                                            <td>27</td>
-                                                                            <td>28</td>
-
-                                                                            <td>29</td>
-                                                                            <td>30</td>
-                                                                            <td>31</td>
-
-                                                                            <td>Status</td>
-                                                                            <td>Present (B&Y)</td>
-                                                                            <td>Absent (B)</td>
-                                                                            <td>Absent (Y)</td>
-                                                                            <td>Absent (ML)</td>
-                                                                            <td>Attendance Rate</td>
-                                                                        </tr>
-                                                                    </thead>
-                                                                </table>
-                                                            </div>
-                                                        </div>
-
                                                     </div>
                                                 </div>
-                                                <!-- /.box -->
-                                            </div>
-                                        </div>
-                                    </div>
 
-                                </div>
-                            </div>
-                            <!-- /.col -->
-                        </div>
+                                                <div class="row theshow">
+                                                    <div class="col-12">
+                                                        <table id="AttenanceTbl" class="table table-bordered table-striped table-responsive">
+                                                            <thead>
 
-                    </div>
-                    <!-- /.tab-pane -->
-                    <div class="tab-pane" id="tab_2">
-                        <div class="row">
-                            <div class="col">
-                                <div class="box">
-                                    <div class="box-header">
-                                        <i class="fa fa-th"></i>
-
-                                        <h3 class="box-title">DTR Breakdown</h3>
-
-                                        <div class="box-tools pull-right">
-                                            <button type="button" class="btn btn-white btn-sm" data-widget="collapse">
-                                                <i class="fa fa-minus"></i>
-                                            </button>
-                                            @*<button type="button" class="btn btn-white btn-sm" data-widget="remove">
-                                <i class="fa fa-times"></i>
-                            </button>*@
-                                        </div>
-                                    </div>
-                                    <div class="box-body border-radius-none">
-                                        <div class="row">
-                                            <div class="col-12">
-                                                <div class="box">
-
-                                                    <div class="box-body">
-
-                                                        <div class="row theshow">
-                                                            <div class="col-12">
-                                                                <table id="AttenanceTbl_WorkingHours" class="table table-bordered table-striped table-responsive">
-                                                                    <thead>
-                                                                        <tr>
-                                                                            <td colspan="6" rowspan="2" align="center" class="changehead">
-
-                                                                                NOVEMBER 2019
-
-                                                                            </td>
-                                                                            <td colspan="7" align="center" >WEEK 1</td>
-                                                                            <td colspan="7" align="center" >WEEK 2</td>
-                                                                            <td colspan="7" align="center" >WEEK 3</td>
-                                                                            <td colspan="7" align="center" >WEEK 4</td>
-                                                                            <td colspan="3"></td>
-                                                                        </tr>
-                                                                        <tr class="Daysname"></tr>
-
-                                                                        <tr>
-                                                                            <td>Employee No.</td>
-                                                                            <td>Employee Name</td>
-                                                                            <td>Position</td>
-                                                                            <td>Cost Code</td>
-                                                                            <td></td>
-                                                                            <td>Line/Team</td>
-                                                                            <td>1</td>
-                                                                            <td>2</td>
-                                                                            <td>3</td>
-                                                                            <td>4</td>
-                                                                            <td>5</td>
-                                                                            <td>6</td>
-                                                                            <td>7</td>
-
-                                                                            <td>8</td>
-                                                                            <td>9</td>
-                                                                            <td>10</td>
-                                                                            <td>11</td>
-                                                                            <td>12</td>
-                                                                            <td>13</td>
-                                                                            <td>14</td>
-
-                                                                            <td>15</td>
-                                                                            <td>16</td>
-                                                                            <td>17</td>
-                                                                            <td>18</td>
-                                                                            <td>19</td>
-                                                                            <td>20</td>
-                                                                            <td>21</td>
-
-                                                                            <td>22</td>
-                                                                            <td>23</td>
-                                                                            <td>24</td>
-                                                                            <td>25</td>
-                                                                            <td>26</td>
-                                                                            <td>27</td>
-                                                                            <td>28</td>
-
-                                                                            <td>29</td>
-                                                                            <td>30</td>
-                                                                            <td>31</td>
-                                                                            <td>Total Hours</td>
-                                                                        </tr>
-                                                                    </thead>
-                                                                </table>
-                                                            </div>
-                                                        </div>
-
+                                                            </thead>
+                                                        </table>
                                                     </div>
                                                 </div>
-                                                <!-- /.box -->
+
                                             </div>
                                         </div>
+                                        <!-- /.box -->
                                     </div>
-
                                 </div>
+
+
                             </div>
-                            <!-- /.col -->
                         </div>
+                        <!-- /.col -->
                     </div>
-                    <!-- /.tab-pane -->
-                    <div class="tab-pane" id="tab_3">
-                        <div class="row">
-                            <div class="col">
-                                <div class="box">
-                                    <div class="box-header">
-                                        <i class="fa fa-th"></i>
 
-                                        <h3 class="box-title">Overtime Breakdown</h3>
-
-                                        <div class="box-tools pull-right">
-                                            <button type="button" class="btn btn-white btn-sm" data-widget="collapse">
-                                                <i class="fa fa-minus"></i>
-                                            </button>
-                                            @*<button type="button" class="btn btn-white btn-sm" data-widget="remove">
-                                <i class="fa fa-times"></i>
-                            </button>*@
-                                        </div>
-                                    </div>
-                                    <div class="box-body border-radius-none">
-                                        <div class="row">
-                                            <div class="col-12">
-                                                <div class="box">
-                                                    <div class="box-body">
-
-                                                        <div class="row theshow">
-                                                            <div class="col-12">
-                                                                <table id="AttenanceTbl_OTHours" class="table table-bordered table-striped table-responsive">
-                                                                    <thead>
-                                                                        <tr>
-                                                                            <td colspan="6" rowspan="2" align="center" class="changehead">
-
-                                                                                NOVEMBER 2019
-
-                                                                            </td>
-                                                                            <td colspan="7" align="center" >WEEK 1</td>
-                                                                            <td colspan="7" align="center" >WEEK 2</td>
-                                                                            <td colspan="7" align="center" >WEEK 3</td>
-                                                                            <td colspan="7" align="center" >WEEK 4</td>
-                                                                            <td colspan="3"></td>
-                                                                        </tr>
-                                                                        <tr class="Daysname"></tr>
-
-                                                                        <tr>
-                                                                            <td>Employee No.</td>
-                                                                            <td>Employee Name</td>
-                                                                            <td>Position</td>
-                                                                            <td>Cost Code</td>
-                                                                            @*<td></td>*@
-                                                                            <td>Line/Team</td>
-                                                                            <td>1</td>
-                                                                            <td>2</td>
-                                                                            <td>3</td>
-                                                                            <td>4</td>
-                                                                            <td>5</td>
-                                                                            <td>6</td>
-                                                                            <td>7</td>
-
-                                                                            <td>8</td>
-                                                                            <td>9</td>
-                                                                            <td>10</td>
-                                                                            <td>11</td>
-                                                                            <td>12</td>
-                                                                            <td>13</td>
-                                                                            <td>14</td>
-
-                                                                            <td>15</td>
-                                                                            <td>16</td>
-                                                                            <td>17</td>
-                                                                            <td>18</td>
-                                                                            <td>19</td>
-                                                                            <td>20</td>
-                                                                            <td>21</td>
-
-                                                                            <td>22</td>
-                                                                            <td>23</td>
-                                                                            <td>24</td>
-                                                                            <td>25</td>
-                                                                            <td>26</td>
-                                                                            <td>27</td>
-                                                                            <td>28</td>
-
-                                                                            <td>29</td>
-                                                                            <td>30</td>
-                                                                            <td>31</td>
-                                                                            <td>Total OT Hours</td>
-                                                                        </tr>
-                                                                    </thead>
-                                                                </table>
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-                                                <!-- /.box -->
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-                            <!-- /.col -->
-                        </div>
-                    </div>
-                    <!-- /.tab-pane -->
                 </div>
-                <!-- /.tab-content -->
+
+                <!-- /.tab-pane -->
+                <div class="tab-pane padhider" id="DTRBreak">
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="box">
+                                <div class="box-header">
+                                    <i class="fa fa-th"></i>
+                                    <h3 class="box-title">DTR Breakdown</h3>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="box">
+
+
+
+                                            <div class="box-body">
+                                                
+
+                                                <div class="row theshow">
+                                                    <div class="col-12">
+                                                        <table id="AttenanceTbl_WorkingHours" class="table table-bordered table-striped table-responsive">
+                                                            <thead>
+
+                                                            </thead>
+                                                        </table>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <!-- /.box -->
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+
+                </div>
+                <!-- /.tab-pane -->
+                <div class="tab-pane padhider" id="OTV">
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="box">
+                                <div class="box-header">
+                                    <i class="fa fa-th"></i>
+                                    <h3 class="box-title">Overtime Breakdown</h3>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="box">
+
+
+
+                                            <div class="box-body">
+                                                
+                                                <div class="row theshow">
+                                                    <div class="col-12">
+                                                        <table id="AttenanceTbl_OTHours" class="table table-bordered table-striped table-responsive">
+                                                            <thead>
+
+                                                            </thead>
+                                                        </table>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <!-- /.box -->
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+
+                </div>
+                <!-- /.tab-pane -->
+
+
+                <div class="tab-pane padhider" id="ABdetails">
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="box">
+                                <div class="box-header">
+                                    <i class="fa fa-th"></i>
+                                    <h3 class="box-title">Employee Absent Details</h3>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-12">
+                                      
+                                        <div class="row theshow">
+                                            <div class="box-body">
+                                                <table class="table table-hover" id="AbsentDetailsTable">
+                                                    <thead>
+
+                                                    </thead>
+                                                </table>
+                                            </div>
+                                        </div>
+
+                                        <!-- /.box -->
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+
+                </div>
+
+
+                <div class="tab-pane padhider" id="EmployeeSchedule">
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="box">
+                                <div class="box-header">
+                                    <i class="fa fa-th"></i>
+                                    <h3 class="box-title">Employee Schedule</h3>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="box">
+
+
+
+                                            <div class="box-body">
+                                               
+
+                                                <div class="row theshow">
+                                                    <div class="col-12">
+                                                        <table id="EmployeeShifttbl" class="table table-bordered table-striped table-responsive">
+                                                            <thead>
+
+                                                            </thead>
+                                                        </table>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <!-- /.box -->
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+
+                </div>
+
+
+
+                <div class="tab-pane padhider" id="EmployeeTime">
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="box">
+                                <div class="box-header">
+                                    <i class="fa fa-th"></i>
+                                    <h3 class="box-title">Employee Time in and Out</h3>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="box">
+
+
+
+                                            <div class="box-body">
+                                               
+                                                <div class="row theshow">
+                                                    <div class="col-12">
+                                                        <table id="Employeetimetbl" class="table table-bordered table-striped table-responsive">
+                                                            <thead>
+
+                                                            </thead>
+                                                        </table>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <!-- /.box -->
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+
+                </div>
+
+
+                <div class="tab-pane padhider" id="tapDetails">
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="box">
+                                <div class="box-header">
+                                    <i class="fa fa-th"></i>
+                                    <h3 class="box-title">Employee Taps</h3>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="box">
+                                            <div class="box-body pad">
+                                                <div class="row">
+                                                    <div class="col-md-2">
+                                                        <div class="form-group">
+                                                            <div class="input-group">
+                                                                <span class="input-group-addon" style="width: 90px;">Date From</span>
+                                                                <input type="text" class="form-control step fil" style="width:45px" id="DateFilter" name="DateFilter">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <div class="form-group">
+                                                            <div class="input-group">
+                                                                <span class="input-group-addon"  style="width: 90px;">Date To</span>
+                                                                <input type="text" class="form-control step fil" style="width:45px" id="DateFilter2" name="DateFilter2">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    @*<div class="col-md-4">
+            <div class="form-group">
+                <div class="input-group">
+                    <select class="form-control" style="width: 168.789px !important;" name="Sectiontap" id="Sectiontap"></select>
+                </div>
             </div>
-            <!-- nav-tabs-custom -->
+        </div>*@
+                                                </div>
+                                                
+                                                <div class="table-responsive">
+                                                    <table class="table table-striped table-no-bordered table-hover" style="width:100%;" id="TapTable"></table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- /.box -->
+                                    </div>
+                                </div>
+                               
+
+
+                            </div>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+
+                </div>
+
+            </div>
+            <!-- /.tab-content -->
+
         </div>
         <!-- /.col -->
 
-     
+
     </div>
 
 
 
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
-
-
-
-
-   
 </section>
 
 
@@ -560,7 +569,7 @@
                     <h4 class="modal-title" id="myModalLabel">Employee Process</h4>
                 </div>
                 <div class="modal-body fixed-modal-height div-chk-less-height">
-                
+
 
                     <table id="ProcessTable" class="table table-bordered table-striped table-responsive" style="width:100%">
                         <thead>
@@ -586,24 +595,22 @@
 
 @section Scripts{
 
-<!-- start - This is for export functionality only -->
-<script src="~/Content/assets/vendor_plugins/DataTables-1.10.15/extensions/Buttons/js/dataTables.buttons.min.js"></script>
-<script src="~/Content/assets/vendor_plugins/DataTables-1.10.15/extensions/Buttons/js/buttons.flash.min.js"></script>
-<script src="~/Content/assets/vendor_plugins/DataTables-1.10.15/ex-js/jszip.min.js"></script>
-<script src="~/Content/assets/vendor_plugins/DataTables-1.10.15/ex-js/pdfmake.min.js"></script>
-<script src="~/Content/assets/vendor_plugins/DataTables-1.10.15/ex-js/vfs_fonts.js"></script>
-<script src="~/Content/assets/vendor_plugins/DataTables-1.10.15/extensions/Buttons/js/buttons.html5.min.js"></script>
-<script src="~/Content/assets/vendor_plugins/DataTables-1.10.15/extensions/Buttons/js/buttons.print.min.js"></script>
-<!-- end - This is for export functionality only -->
 
 
-    @*<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
-    <script src="https//cdn.datatables.net/fixedcolumns/3.3.0/js/dataTables.fixedColumns.min.js"></script>*@
-  <script src="~/Scripts/pages/Lodash.js"></script>
-<script src="~/Content/assets/vendor_components/datatables.net/js/jquery.dataTables.min.js"></script>
-<script src="~/Content/Datatable/js/dataTables.fixedColumns.min.js"></script>
-<script src="~/Areas/Summary/Javascript/WorktimeSummary_OTHoursBreakdown.js"></script>
-<script src="~/Areas/Summary/Javascript/WorktimeSummary_WorkingHours.js"></script>
-<script src="~/Areas/Summary/Javascript/WorktimeSummary.js"></script>
-}   
+    <script src="~/Scripts/pages/Lodash.js"></script>
+    @*<script src="~/Content/assets/vendor_components/datatables.net/js/jquery.dataTables.min.js"></script>*@
+    <script src="~/Content/Datatable/js/dataTables.fixedColumns.min.js"></script>
+
+
+    <script src="~/Areas/Summary/Javascript/WorktimeSummary.js"></script>
+    <script src="~/Areas/Summary/Javascript/WorktimeSummary_WorkingHours.js"></script>
+    <script src="~/Areas/Summary/Javascript/WorktimeSummary_OTHoursBreakdown.js"></script>
+    <script src="~/Areas/Summary/Javascript/WorktimeSummary_AbsentDetails.js"></script>
+    <script src="~/Areas/Summary/Javascript/WorktimeSummary_EmployeeShift.js"></script>
+    <script src="~/Areas/Summary/Javascript/WorktimeSummary_EmployeeTimeinOut.js"></script>
+
+    <script src="~/Content/plugins/daterangepicker/moment.js"></script>
+
+    <script src="~/Areas/Masters/Javascripts/Employeetap.js"></script>
+}
 

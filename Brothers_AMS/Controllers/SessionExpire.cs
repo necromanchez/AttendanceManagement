@@ -27,6 +27,8 @@ namespace Brothers_WMS.Controllers
             }
             System.Web.HttpContext.Current.Session["one"] = user.LastName;
             base.OnActionExecuting(filterContext);
+
+            
         }
 
         public static class TypeHelper

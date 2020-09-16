@@ -13,8 +13,45 @@
     $("#btnRejectRequest").on("click", RejectedCS);
     $("#btnCancel").on("click", CancelRequest);
     $(".Viewall").hide();
+
+
+    $("#checkall_emp").on("change", function () {
+        if (this.checked) {
+            $('.empmod').each(function (i, obj) {
+                chosend_EmpNo.push(obj.id);
+            });
+            $('.empmod').prop('checked', true);
+        }
+        //else {
+        //    $('.empmod').each(function (i, obj) {
+        //        chosend_EmpNo.remove(obj.id);
+        //    }); $('.empmod').prop('checked', false);
+        //}
+    })
+
 })
 
+function GetEmployeeChosen(EmpNo) {
+    if ($("#BIPH_Agency").val() != "") {
+        $("#Schedule").prop("disabled", false);
+        $(".empmod").prop("disabled", false);
+        if (chosend_EmpNo.indexOf(EmpNo) !== -1) {
+            chosend_EmpNo.remove(EmpNo);
+        } else {
+            chosend_EmpNo.push(EmpNo);
+        }
+    }
+
+    if ($("#FileType").val() == 1) {
+        $("#EmployeeNo").val(EmpNo);
+        $("#btnSearch").trigger("click");
+    }
+
+
+
+}
+
+var chosend_EmpNo = [];
 function Initializedpage() {
     $('#ChangeScheduleApprovertable').DataTable({
         ajax: {
@@ -25,8 +62,8 @@ function Initializedpage() {
         serverSide: "true",
         order: [0, "asc"],
         processing: "true",
-        lengthMenu: [100, 200, 300, 500],
-        pagelength: 5000,
+        lengthMenu: [[10, 50, 100], [10, 50, 100]],
+        
         lengthChange: false,
         scrollY: "600px",
         scrollCollapse: true,
@@ -60,7 +97,7 @@ function Initializedpage() {
                   }
               },
               { title: "Section", data: "Section" },
-              { title: "Schedule", data: "Schedule" },
+              //{ title: "Schedule", data: "Schedule" },
               {
                   title: "Date Created", data: function (x) {
                       return moment(x.CreateDate).format("MM/DD/YYYY")
@@ -160,7 +197,16 @@ function Initializedpage() {
         $("#AF_ApproversModal").modal("show");
     });
 }
-
+Array.prototype.remove = function () {
+    var what, a = arguments, L = a.length, ax;
+    while (L && this.length) {
+        what = a[--L];
+        while ((ax = this.indexOf(what)) != -1) {
+            this.splice(ax, 1);
+        }
+    }
+    return this;
+}
 function GetDetails(data) {
     $('#CSApproverDetails').DataTable({
         ajax: {
@@ -174,8 +220,8 @@ function GetDetails(data) {
             $(row).addClass(data.EmployeeNo);
         },
         serverSide: "true",
-        lengthMenu: [100, 200, 300, 500],
-        pagelength: 5000,
+        lengthMenu: [[5000, 50, 100], [5000, 50, 100]],
+        
         lengthChange: false,
         scrollY: "600px",
         scrollCollapse: true,
@@ -189,8 +235,9 @@ function GetDetails(data) {
         columns: [
               {
                  data: function (data, type, row, meta) {
-                     var checked = (data.AccessType == true) ? ' checked ' : '';
-                     return " <input type='checkbox' id=CS_here_" + data.ID + " class='empmod filled-in chk-col-light-blue' " + checked + " name='employchosen' " + "/>" +
+                      var checked = (data.AccessType == true) ? ' checked ' : '';
+                      var status = ((chosend_EmpNo.indexOf("CS_here_" + data.ID) !== -1)) ? "checked" : "";
+                      return " <input type='checkbox' id=CS_here_" + data.ID + " class='empmod filled-in chk-col-light-blue' " + checked + " name='employchosen' " + "" + status + " onclick=GetEmployeeChosen('CS_here_" + data.ID + "') />" +
                              " <label class=checker for=CS_here_" + data.ID + "></label>"
 
                  }, orderable: false, searchable: false

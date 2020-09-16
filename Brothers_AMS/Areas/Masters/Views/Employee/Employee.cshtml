@@ -8,6 +8,11 @@
 @using Brothers_WMS.Controllers;
 @using System.Configuration;
 @{
+    List<GET_DuplicateRFID_Result> DupRFID = new List<GET_DuplicateRFID_Result>();
+    if ((List<GET_DuplicateRFID_Result>)(Session["DupRFID"]) != null)
+    {
+        DupRFID = (List<GET_DuplicateRFID_Result>)(Session["DupRFID"]);
+    }
     string UserSection = string.Empty;
     if ((M_Users)(Session["user"]) != null)
     {
@@ -24,7 +29,46 @@
         display: block;
         overflow-x: auto;
     }
+    .modal-open .ui-datepicker {
+        z-index: 2000 !important
+    }
+
+    .spanadjust {
+       font-size:18px !important;
+    }
 </style>
+<style>
+    /*.resized {
+        width: 146.813px !important;
+    }*/
+    .hehetable {
+        border: 1px solid black;
+    }
+
+    .tablewew {
+        border: 1px solid black !important;
+        border-top-color: red !important;
+        border-top: 1px solid black !important;
+        width:200px !important;
+    }
+
+    .Adjustbrand {
+        font-size: 16px !important;
+        font-weight: bold
+    }
+
+    table.dataTable tbody th,
+    table.dataTable tbody td {
+        white-space: nowrap;
+    }
+
+    .select2-selection__rendered {
+        margin-right: 180px !important;
+    }
+</style>
+
+
+<link href="~/Content/TimeIncss.css" rel="stylesheet" />
 <section class="content-header">
     <h1>
         Employee
@@ -36,7 +80,12 @@
             <i class="fa fa-users"></i>
             <h3 class="box-title">Employee Details</h3>
             <h3 class="box-title"><button id="Syncit" type="button" class="btn btn-block btn-primary btn-lg"><i class="fa fa-refresh"></i> Synchronize</button></h3>
-            <h3 class="box-title"><button id="clearallskill" type="button" class="btn btn-block btn-warning btn-lg"><i class="fa fa-refresh"></i> Clear All Skills</button></h3>
+            <h3 class="box-title"><button id="clearallskill" type="button" class="btn btn-block btn-warning btn-lg"><i class="fa fa-refresh"></i> Clear All Process</button></h3>
+            
+            @if (@DupRFID.Count()>1 && @UserSection == null)
+            {
+                <h3 class="box-title"><button id="DupRFID" type="button" class="btn btn-block btn-danger btn-lg"><i class="fa fa-exclamation-triangle"></i> Duplicate RFID</button></h3>
+            }
         </div>
         <div class="row">
             <div class="col-lg-12 col-xl-12">
@@ -59,7 +108,6 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <span class="btn btn-flat btn-file bg-green btn-lg btn-block">
-                                                    @*<a style="color:white" href="../../Correction/Templates/DownloadTemplate?filename=UploadExprod_AMSTemplate.xlsx"><i class="fa fa-download"></i> Download Template Exprod Cost Center and AMS Cost Center</a>*@
                                                     <a style="color:white" id="downloadbtnExprod"><i class="fa fa-download"></i> Download Template Exprod Cost Center and AMS Cost Center</a>
                                                 </span>
                                             </div>
@@ -72,23 +120,25 @@
                                             </div>
                                         </div>
                                     </div>
+
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <span class="btn btn-flat btn-file bg-green btn-lg btn-block">
                                                     @*<a style="color:white" href="../../Correction/Templates/DownloadTemplate?filename=EmployeeSkillTemplate.xlsx"><i class="fa fa-download"></i> Download Skill Template </a>*@
-                                                    <a style="color:white" id="downloadbtnSkill"><i class="fa fa-download"></i> Download Skill Template </a>
+                                                    <a style="color:white" id="downloadbtnSkill"><i class="fa fa-download"></i> Download Process Template </a>
                                                 </span>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <button type="submit" class="btn btn-flat bg-green btn-lg btn-block" id="btnskillinitupload">
-                                                    <i class="fa fa-upload"></i> Upload Batch Skill
+                                                    <i class="fa fa-upload"></i> Upload Batch Process
                                                 </button>
                                             </div>
                                         </div>
                                     </div>
+
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group">
@@ -100,8 +150,10 @@
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <span class="btn btn-flat btn-file bg-green btn-lg btn-block">
-                                                    <i class="fa fa-upload"></i> Upload Schedule<input type="file" onchange="UploadSchedule()" name="UploadedSchedule" id="UploadedSchedule" placeholder="(.xlsx)" accept=".xlsx">
+                                                <span class="btn btn-flat btn-file bg-green btn-lg btn-block" id="setsched">
+                                                    @*<i class="fa fa-upload"></i> Upload Schedule<input type="file" onchange="UploadSchedule()" name="UploadedSchedule" id="UploadedSchedule" placeholder="(.xlsx)" accept=".xlsx">*@
+                                                    <i class="fa fa-upload"></i> Upload Schedule
+
                                                 </span>
                                             </div>
                                         </div>
@@ -155,7 +207,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                  
                                 </div>
                             </div>
                         </div>
@@ -164,29 +215,94 @@
                     @if (@UserSection == null)
                     {
                         <div class="row" id="forsuperuser" style="padding-top:20px">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <div class="input-group">
-                                        <select class="form-control" style="width: 168.789px !important;" name="Section" id="Section"></select>
+                                        <span class="input-group-addon">Section</span>
+                                        <select class="form-control fil select2" id="Section"></select>
                                     </div>
                                 </div>
+
                             </div>
                         </div>
+
+
                     }
+                    <div class="row">
+                        <div class="offset-md-4 col-md-4">
+                            <label class="Noteme"> Active Employees only </label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <table class="table table-responsive table-hover" style="width:100%" id="EmployeeTableChart">
+
+                                <tr>
+                                    <th class="tablewew" rowspan="2" style="padding-top:20px !important">ACTIVE MAN POWER</th>
+                                    <td class="tablewew">HR</td>
+                                    <td class="tablewew"><span class="spanadjust" id="hractive">0</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="tablewew">AMS</td>
+                                    <td class="tablewew"><span class="spanadjust" id="amsactive">0</span></td>
+                                </tr>
+                            </table>
+
+                        </div>
+
+                        <div class="col-md-5">
+                            <table class="table table-responsive table-hover" style="width:100%" id="EmployeeTableChart">
+
+                                <tr>
+                                    <th class="tablewew" colspan="2">No Schedule</th>
+                                    <td class="tablewew"><span class="spanadjust" id="noschedule">0</span></td>
+                                    <td class="tablewew"><button id="nosheddown" type="button" class="btn-primary btn-sm"><i class="fa fa-download"> Download No Schedule</i> </button></td>
+                                </tr>
+                                <tr>
+                                    <th class="tablewew" colspan="2">No Line/Process</th>
+                                    <td class="tablewew"><span class="spanadjust" id="noprocess">0</span></td>
+                                    <td class="tablewew"><button id="noprossdown" type="button" class="btn-primary btn-sm"><i class="fa fa-download"> Download No Line/Process</i> </button></td>
+                                </tr>
+                              
+                            </table>
+
+                        </div>
+
+                        <div class="col-md-3">
+                            <table class="table table-responsive table-hover" style="width:100%" id="EmployeeTableChart">
+
+                                <tr>
+                                    <th class="tablewew" rowspan="2" style="padding-top:20px !important">INACTIVE MAN POWER</th>
+                                    <td class="tablewew">HR</td>
+                                    <td class="tablewew"><span class="spanadjust" id="hrinactive">0</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="tablewew">AMS</td>
+                                    <td class="tablewew"><span class="spanadjust" id="amsinactive">0</span></td>
+                                </tr>
+                            </table>
+
+                        </div>
+                    </div>
+
+
                 </div>
                 <!-- /.box -->
             </div>
            
         </div>
 
-        <div class="box-body">
+        <div class="">
          
             <div class="table-responsive">
                 <table class="table table-striped table-no-bordered table-hover table-responsive" style="width:100%" id="EmployeeTable">
                     <thead>
                         <tr>
+                            <th>Orderprio</th>
+                            <th>No</th>
                             <th align="center">Photo</th>
                             <th>REFID</th>
+                            <th>RFID</th>
                             <th>ADID</th>
                             <th>Employee No</th>
                             <th>Last Name</th>
@@ -203,12 +319,12 @@
                                     <select class="form-control" id="MStatus" name="MStatus"></select>
                                 </div>
                             </th>
-                            <th>Section</th>
+                            <th>Cost Center Name</th>
                             <th>Gender</th>
                             <th>Schedule</th>
                             <th>Cost Code (AMS)</th>
                             <th>Cost Code (IT)</th>
-                            <th>Cost Code (EX-PROD)</th>
+                            @*<th>Cost Code (EX-PROD)</th>*@
                             <th>History</th>
                             <th>Process</th>
                             <th>Process Count</th>
@@ -219,7 +335,7 @@
                             <th>Position</th>
                             <th>AMS Position</th>
                             <th>Email</th>
-                            <th>RFID</th>
+                            @*<th>Actions</th>*@
                         </tr>
                     </thead>
                 </table>
@@ -236,6 +352,7 @@
                     <h4 class="modal-title" id="myModalLabel">Cost Center History</h4>
                 </div>
                 <div class="modal-body fixed-modal-height div-chk-less-height">
+
                     <form action="" method="POST" role="form" id="EmployCostForm">
                         <input type="hidden" class="form-control input-sm" name="EmployNo" id="EmployNo" readonly="">
                         <div class="row">
@@ -253,23 +370,6 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <div class="input-group">
-                                        <span class="input-group-addon" style="border-color:white;">Cost Center (EXPROD)</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <div class="input-group">
-                                        @*<select class="form-control" id="CostCenter_EXPROD" name="CostCenter_EXPROD"></select>*@
-                                        <input class="form-control" id="CostCenter_EXPROD" name="CostCenter_EXPROD" />
-                                    </div>
-                                </div>
-                            </div>
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <button type="submit" class="btn btn-flat bg-green btn-lg btn-block" id="Add_btn">
@@ -278,7 +378,26 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-md-3" style="display:none">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <span class="input-group-addon" style="border-color:white;">Cost Center (EXPROD)</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4" style="display:none">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        @*<select class="form-control" id="CostCenter_EXPROD" name="CostCenter_EXPROD"></select>*@
+                                        <input class="form-control" id="CostCenter_EXPROD" name="CostCenter_EXPROD" />
+                                    </div>
+                                </div>
+                            </div>
+                           
+                        </div>
                     </form>
+
                     <br><br>
                     <table id="Employee_Costcentertable" class="table table-bordered table-striped table-responsive">
                         <thead>
@@ -302,6 +421,7 @@
                     <h4 class="modal-title" id="myModalLabel">Employee Process</h4>
                 </div>
                 <div class="modal-body">
+
                     <form action="" method="POST" role="form" id="EmploySkillForm">
                         <input type="hidden" class="form-control input-sm" name="EmpNo" id="EmpNo" readonly="">
                         <input type="hidden" class="form-control input-sm" name="EmpSkillID" id="EmpSkillID" readonly="">
@@ -350,6 +470,7 @@
                             </div>
                         </div>
                     </form>
+
                     <br><br>
                     <table id="Skilltablemod" class="table table-bordered table-striped table-responsive" style="width:100%">
                         <thead>
@@ -364,19 +485,7 @@
         </div>
     </div>
 </div>
-<div id="loading_modal" class="modal" data-backdrop="static" role="dialog">
-    <div class="modal-dialog modal-sm">
-        <div class="modal-content">
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-12 text-center">
-                        <img src="~/Content/images/ajax-loader[1].gif" class="img-fluid">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+
 <div class="modal fade bannerformmodal" tabindex="-1" role="dialog" aria-labelledby="bannerformmodal" aria-hidden="true" id="SkillMod">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -427,32 +536,35 @@
                     <h4 class="modal-title" id="myModalLabel">Update Status</h4>
                 </div>
                 <div class="modal-body fixed-modal-height div-chk-less-height">
+
                     <form action="" method="POST" role="form" id="EmployStatusForm">
                         <input type="hidden" class="form-control input-sm" name="EmployNoStatus" id="EmployNoStatus" readonly="">
                         <div class="row">
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <div class="form-group">
                                     <div class="input-group">
                                         <span class="input-group-addon" style="border-color:white;">Status</span>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <div class="input-group">
                                         <select class="form-control" id="EmployeeStatus" name="EmployeeStatus"></select>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="offset-md-4 col-md-6">
-                            <div class="form-group">
-                                <button type="button" class="btn btn-flat bg-green btn-lg btn-block" id="SaveStatus">
-                                    <i class="fa fa-save"></i> Save
-                                </button>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <button type="button" class="btn btn-flat bg-green btn-lg btn-block" id="SaveStatus">
+                                        <i class="fa fa-save"></i> Save
+                                    </button>
+                                </div>
                             </div>
                         </div>
+                        
                     </form>
+
                     <table id="Statustablemod" class="table table-bordered table-striped table-responsive" style="width:100%">
                         <thead>
                         </thead>
@@ -466,6 +578,8 @@
         </div>
     </div>
 </div>
+
+
 <div class="modal fade bannerformmodal" tabindex="-1" role="dialog" aria-labelledby="bannerformmodal" aria-hidden="true" id="UpdatePositionModal">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -475,10 +589,13 @@
                     <h4 class="modal-title" id="myModalLabel">Update Position</h4>
                 </div>
                 <div class="modal-body fixed-modal-height div-chk-less-height">
+
+
+
                     <form action="" method="POST" role="form" id="EmployPositionForm">
                         <input type="hidden" class="form-control input-sm" name="EmployNoPos" id="EmployNoPos" readonly="">
                         <div class="row">
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <div class="form-group">
                                     <div class="input-group">
                                         <span class="input-group-addon" style="border-color:white;">Position</span>
@@ -492,15 +609,17 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="offset-md-4 col-md-6">
-                            <div class="form-group">
-                                <button type="button" class="btn btn-flat bg-green btn-lg btn-block" id="SavePos">
-                                    <i class="fa fa-save"></i> Save
-                                </button>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <button type="button" class="btn btn-flat bg-green btn-lg btn-block" id="SavePos">
+                                        <i class="fa fa-save"></i> Save
+                                    </button>
+                                </div>
                             </div>
                         </div>
+                      
                     </form>
+
                     <table id="Positiontablemod" class="table table-bordered table-striped table-responsive" style="width:100%">
                         <thead>
                         </thead>
@@ -514,6 +633,144 @@
         </div>
     </div>
 </div>
+
+
+<div class="modal fade bannerformmodal" tabindex="-1" role="dialog" aria-labelledby="bannerformmodal" aria-hidden="true" id="SetSchedulemodal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">Schedule Effectivity Date</h4>
+                </div>
+                <div class="modal-body fixed-modal-height div-chk-less-height">
+
+                  
+
+                    <form action="" method="POST" role="form" id="EmployScheduleForm">
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <span class="input-group-addon" style="width:100px">Date</span>
+                                        <input type="date" class="form-control" id="EffectivitySched" name="EffectivitySched">
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <span class="btn btn-flat btn-file bg-green btn-lg btn-block" id="setsched">
+                                        <i class="fa fa-upload"></i> Upload Schedule<input type="file" onchange="UploadSchedule()" name="UploadedSchedule" id="UploadedSchedule" placeholder="(.xlsx)" accept=".xlsx">
+
+
+                                    </span>
+
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="offset-md-3 col-md-6">
+                                <label class="Noteme">NOTE: For changing previous date schedules, use the Change Schedule module  </label>
+                            </div>
+                        </div>
+                </form>
+                </div>
+                <div class="modal-footer">
+                    @*<button type="button" class="btn bg-blue btn-flat btn-block" id="updatePagebtn"><i class="fa fa-floppy-o"></i> Save</button>*@
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade bannerformmodal" tabindex="-1" role="dialog" aria-labelledby="bannerformmodal" aria-hidden="true" id="UpdateSchedule">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">Update Status</h4>
+                </div>
+                <div class="modal-body fixed-modal-height div-chk-less-height">
+
+                    @*<form action="" method="POST" role="form" id="EmployStatusForm">
+                        <input type="hidden" class="form-control input-sm" name="EmployNoStatus" id="EmployNoStatus" readonly="">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <span class="input-group-addon" style="border-color:white;">Status</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <select class="form-control" id="EmployeeStatus" name="EmployeeStatus"></select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <button type="button" class="btn btn-flat bg-green btn-lg btn-block" id="SaveStatus">
+                                        <i class="fa fa-save"></i> Save
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>*@
+
+                    <table id="Schedulehistory" class="table table-bordered table-striped table-responsive" style="width:100%">
+                        <thead>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    @*<button type="button" class="btn bg-blue btn-flat btn-block" id="updatePagebtn"><i class="fa fa-floppy-o"></i> Save</button>*@
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade bannerformmodal" tabindex="-1" role="dialog" aria-labelledby="bannerformmodal" aria-hidden="true" id="DuplicateRFIDmodal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">Duplicate RFID</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12">
+                            <table id="DupRFIDTable" class="table table-bordered table-striped table-responsive" style="width:100%">
+                                <thead>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                       
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    @*<button type="button" class="btn bg-blue btn-flat btn-block" id="updatePagebtn"><i class="fa fa-floppy-o"></i> Save</button>*@
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 @section Scripts{
     <script src="~/Content/plugins/daterangepicker/moment.js"></script>
     <script src="~/Areas/Masters/Javascripts/Employee.js"></script>
