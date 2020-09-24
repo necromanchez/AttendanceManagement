@@ -28,7 +28,6 @@ namespace Brothers_WMS.Models
         }
     
         public virtual DbSet<AF_OTfiling_Cumulative> AF_OTfiling_Cumulative { get; set; }
-        public virtual DbSet<M_Agency> M_Agency { get; set; }
         public virtual DbSet<M_Agency_Email> M_Agency_Email { get; set; }
         public virtual DbSet<M_Employee_CostCenter> M_Employee_CostCenter { get; set; }
         public virtual DbSet<M_Employee_Position> M_Employee_Position { get; set; }
@@ -56,6 +55,8 @@ namespace Brothers_WMS.Models
         public virtual DbSet<AF_ChangeSchedulefiling> AF_ChangeSchedulefiling { get; set; }
         public virtual DbSet<M_Section_ApproverStatus> M_Section_ApproverStatus { get; set; }
         public virtual DbSet<Z_SkillRemoverAll> Z_SkillRemoverAll { get; set; }
+        public virtual DbSet<Z_UploadTracker> Z_UploadTracker { get; set; }
+        public virtual DbSet<M_Agency> M_Agency { get; set; }
     
         public virtual int AF_EmailCSRequest(string cSRefno)
         {
@@ -1557,6 +1558,15 @@ namespace Brothers_WMS.Models
                 new ObjectParameter("Status", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GET_AF_CSSummary_Result>("GET_AF_CSSummary", cSRefnoParameter, sectionParameter, dateFromParameter, dateToParameter, statusParameter);
+        }
+    
+        public virtual ObjectResult<GET_Employee_ScheduleListChangeShift_Result> GET_Employee_ScheduleListChangeShift(string employNo)
+        {
+            var employNoParameter = employNo != null ?
+                new ObjectParameter("EmployNo", employNo) :
+                new ObjectParameter("EmployNo", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GET_Employee_ScheduleListChangeShift_Result>("GET_Employee_ScheduleListChangeShift", employNoParameter);
         }
     }
 }

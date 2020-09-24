@@ -198,8 +198,6 @@ namespace Brothers_WMS.Areas.Correction.Controllers
                     currentstatus = csfile.Status + 1;
                     csfile.Status = (csrequest.Approved == true) ? currentstatus : currentstatus - (currentstatus * 2);
                     db.Entry(csfile).State = EntityState.Modified;
-
-
                     db.SaveChanges();
 
                     stat = csfile.Status;
@@ -212,8 +210,6 @@ namespace Brothers_WMS.Areas.Correction.Controllers
                     currentstatus = csfile.Status + 1;
                     csfile.Status = (csrequest.Approved == true) ? currentstatus : currentstatus - (currentstatus * 2);
                     db.Entry(csfile).State = EntityState.Modified;
-
-
                     db.SaveChanges();
                 }
              
@@ -241,10 +237,9 @@ namespace Brothers_WMS.Areas.Correction.Controllers
             db.Entry(approverstatus).State = EntityState.Modified;
             db.SaveChanges();
 
+
             #endregion
             db.AF_EmailCSRequest(refno);
-
-
             if (stat == statmax)
             {
                 db.AF_UpdateApprovedSchedule();
@@ -289,26 +284,45 @@ namespace Brothers_WMS.Areas.Correction.Controllers
             return Json(new { }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult CancelledRefNo(List<string> RefNo)
+        //public ActionResult CancelledRefNo(List<string> RefNo)
+        //{
+        //    List<string> EmpnoCannotCancel = new List<string>();
+        //    foreach (string data in RefNo)
+        //    {
+        //        long ID = Convert.ToInt64(data.Replace("CS_here_", ""));
+        //        AF_ChangeSchedulefiling csrequest = (from c in db.AF_ChangeSchedulefiling where c.ID == ID select c).FirstOrDefault();
+        //        if (csrequest.CreateID == user.UserName)
+        //        {
+        //            csrequest.Status = -10;
+        //            db.Entry(csrequest).State = EntityState.Modified;
+        //            db.SaveChanges();
+        //        }
+        //        else
+        //        {
+        //            EmpnoCannotCancel.Add(csrequest.EmployeeNo);
+        //        }
+        //    }
+        //    return Json(new { EmpnoCannotCancel= EmpnoCannotCancel }, JsonRequestBehavior.AllowGet);
+        //}
+
+        public ActionResult CancelledRefNo(string RefNo)
         {
-            List<string> EmpnoCannotCancel = new List<string>();
-            foreach (string data in RefNo)
-            {
-                long ID = Convert.ToInt64(data.Replace("CS_here_", ""));
-                AF_ChangeSchedulefiling csrequest = (from c in db.AF_ChangeSchedulefiling where c.ID == ID select c).FirstOrDefault();
-                if (csrequest.CreateID == user.UserName)
+          
+                List<AF_ChangeSchedulefiling> csrequest = (from c in db.AF_ChangeSchedulefiling where c.CS_RefNo == RefNo select c).ToList();
+                foreach(AF_ChangeSchedulefiling a in csrequest)
                 {
-                    csrequest.Status = -10;
-                    db.Entry(csrequest).State = EntityState.Modified;
+               
+                    a.Status = -10;
+                    db.Entry(a).State = EntityState.Modified;
                     db.SaveChanges();
+               
+
                 }
-                else
-                {
-                    EmpnoCannotCancel.Add(csrequest.EmployeeNo);
-                }
-            }
-            return Json(new { EmpnoCannotCancel= EmpnoCannotCancel }, JsonRequestBehavior.AllowGet);
+                
+               
+            return Json(new { EmpnoCannotCancel = "" }, JsonRequestBehavior.AllowGet);
         }
+
 
         public void SendTheMail(string RefNo)
         {

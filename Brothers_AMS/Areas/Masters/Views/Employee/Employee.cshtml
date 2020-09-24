@@ -654,7 +654,7 @@
                                 <div class="form-group">
                                     <div class="input-group">
                                         <span class="input-group-addon" style="width:100px">Date</span>
-                                        <input type="date" class="form-control" id="EffectivitySched" name="EffectivitySched">
+                                        <input type="date" class="form-control" id="EffectivitySchedchosen" name="EffectivitySchedchosen">
                                     </div>
 
                                 </div>
@@ -694,43 +694,74 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title" id="myModalLabel">Update Status</h4>
+                    <h4 class="modal-title" id="myModalLabel">Update Schedule</h4>
                 </div>
                 <div class="modal-body fixed-modal-height div-chk-less-height">
 
-                    @*<form action="" method="POST" role="form" id="EmployStatusForm">
-                        <input type="hidden" class="form-control input-sm" name="EmployNoStatus" id="EmployNoStatus" readonly="">
-                        <div class="row">
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <div class="input-group">
-                                        <span class="input-group-addon" style="border-color:white;">Status</span>
+
+                    <ul class="nav nav-tabs" role="tablist" id="tabs">
+                        <li class="nav-item"> <a class="nav-link active reloadtbl" href="#Schedulehistorytab" data-toggle="tab" id="PAB">Uploaded Schedule</a></li>
+                        <li class="nav-item"> <a class="nav-link reloadtbl" href="#SchedulehistoryCS" data-toggle="tab" id="DB">Change Schedule</a></li>
+
+                    </ul>
+
+                    <div class="tab-content">
+
+                        <div class="tab-pane padhider active" id="Schedulehistorytab">
+
+                            <div class="row">
+                                <div class="col">
+                                    <div class="box">
+                                        <div class="box-body">
+
+                                            <div class="row theshow">
+                                                <div class="col-12">
+                                                    <table id="Schedulehistory" class="table table-bordered table-striped table-responsive" style="width:100%">
+                                                        <thead>
+                                                        </thead>
+                                                        <tbody></tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+
+                                        </div>
                                     </div>
                                 </div>
+                                <!-- /.col -->
                             </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <div class="input-group">
-                                        <select class="form-control" id="EmployeeStatus" name="EmployeeStatus"></select>
+
+                        </div>
+                        <!-- /.tab-pane -->
+                        <div class="tab-pane padhider" id="SchedulehistoryCS">
+
+                            <div class="row">
+                                <div class="col">
+                                    <div class="box">
+                                        <div class="box-body">
+
+                                            <div class="row theshow">
+                                                <div class="col-12">
+                                                   
+                                                    <table id="SchedulehistoryCStable" class="table table-bordered table-striped table-responsive" style="width:100%">
+                                                        <thead>
+                                                        </thead>
+                                                        <tbody></tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+
+                                        </div>
                                     </div>
                                 </div>
+                                <!-- /.col -->
                             </div>
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    <button type="button" class="btn btn-flat bg-green btn-lg btn-block" id="SaveStatus">
-                                        <i class="fa fa-save"></i> Save
-                                    </button>
-                                </div>
-                            </div>
+
                         </div>
 
-                    </form>*@
+                    </div>
 
-                    <table id="Schedulehistory" class="table table-bordered table-striped table-responsive" style="width:100%">
-                        <thead>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
+
+                   
                 </div>
                 <div class="modal-footer">
                     @*<button type="button" class="btn bg-blue btn-flat btn-block" id="updatePagebtn"><i class="fa fa-floppy-o"></i> Save</button>*@

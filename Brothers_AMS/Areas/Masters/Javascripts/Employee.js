@@ -187,7 +187,7 @@
 
     var maxDate = year + '-' + month + '-' + day;
     //alert(maxDate);
-    $('#EffectivitySched').attr('min', maxDate);
+    $('#EffectivitySchedchosen').attr('min', maxDate);
 
 
 
@@ -606,7 +606,8 @@ function UploadSchedule() {
     var files = new FormData();
     var file1 = document.getElementById("UploadedSchedule").files[0];
     files.append('files[0]', file1);
-    files.append('EffectivitySched', $("#EffectivitySched").val());
+    var datecho = $("#EffectivitySchedchosen").val();
+    files.append('EffectivitySched', datecho);
     $.ajax({
         type: 'POST',
         url: '../Employee/UploadSchedule',
@@ -1034,6 +1035,48 @@ function ScheduleTable(Empno) {
                 title: "Effectivity Date", data: function (x) {
                     return (x.EffectivityDate != null) ? moment(x.EffectivityDate).format("MM/DD/YYYY") : ""
                 }, name: "EffectivityDate", sWidth: "10%"
+            },
+            { title: "Update By", data: "UpdateID", sWidth: "15%" },
+            {
+                title: "Update Date", data: function (x) {
+                    return (x.UpdateDate != null) ? moment(x.UpdateDate).format("MM/DD/YYYY") : ""
+                }, name: "UpdateDate", sWidth: "10%"
+            },
+
+
+        ],
+    });
+
+
+    $('#SchedulehistoryCStable').DataTable({
+        ajax: {
+            url: '../Employee/GetEmployeeScheduleCSList?EmployeeNo=' + Empno,
+            type: "POST",
+            datatype: "json"
+        },
+        serverSide: "true",
+        order: [0, "desc"],
+        processing: "true",
+        autowidth: true,
+        language: {
+            "processing": "processing... please wait"
+        },
+        //dom: 'Bfrtip',
+        destroy: true,
+        autoWidth: false,
+        columns: [
+            { title: "Reference No", data: "CS_RefNo", sWidth: "20%" },
+            { title: "Schedule", data: "ScheduleName", sWidth: "20%" },
+            { title: "Shift", data: "ScheduleShift", sWidth: "15%" },
+            {
+                title: "Date From", data: function (x) {
+                    return (x.DateFrom != null) ? moment(x.DateFrom).format("MM/DD/YYYY") : ""
+                }, name: "DateFrom", sWidth: "10%"
+            },
+            {
+                title: "Date To", data: function (x) {
+                    return (x.DateTo != null) ? moment(x.DateTo).format("MM/DD/YYYY") : ""
+                }, name: "DateTo", sWidth: "10%"
             },
             { title: "Update By", data: "UpdateID", sWidth: "15%" },
             {

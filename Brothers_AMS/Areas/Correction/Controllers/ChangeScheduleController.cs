@@ -123,6 +123,8 @@ namespace Brothers_WMS.Areas.Correction.Controllers
                 #endregion
             }
 
+            db.AF_EmailCSRequest(CSRefnow);
+
             return Json(new { CSRefnow = CSRefnow }, JsonRequestBehavior.AllowGet);
         }
 

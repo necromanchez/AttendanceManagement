@@ -128,13 +128,11 @@ namespace Brothers_WMS.Controllers
             }
             else
             {
-
                 CostCode = (from c in db.M_Cost_Center_List where c.GroupSection == groupsec select c.Cost_Center).FirstOrDefault();
             }
             //string CostCode = (Session["chosendashgroup"].ToString) ?user.Section : user.CostCode;
             db.Database.CommandTimeout = 0;
             List<Dashboard_AWOLandResignRate_Result> list = db.Dashboard_AWOLandResignRate(Month, Year, Agency, Shift, Line, CostCode).ToList();
-
             return Json(new { list = list }, JsonRequestBehavior.AllowGet);
         }
 

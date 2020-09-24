@@ -7,6 +7,7 @@ using System.Configuration;
 using System.Data;
 using System.Data.Entity;
 using System.Data.OleDb;
+using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -625,7 +626,7 @@ namespace Brothers_WMS.Areas.Masters.Controllers
         }
 
 
-        public ActionResult UploadSchedule(string EffectivitySched)
+        public ActionResult UploadScheduleold(string EffectivitySched)
         {
             try
             {
@@ -729,6 +730,181 @@ namespace Brothers_WMS.Areas.Masters.Controllers
             }
             return Json(new { result = "success" }, JsonRequestBehavior.AllowGet);
         }
+
+        public DataTable DataRequired(DataTable dt, string EffectivityDate)
+        {
+            #region Add columns to Datatable
+
+            DataColumn col_EffectivityDate = new System.Data.DataColumn("EffectivityDate", typeof(System.DateTime));
+            col_EffectivityDate.DefaultValue = EffectivityDate;
+            dt.Columns.Add(col_EffectivityDate);
+
+            DataColumn col_CreateID = new System.Data.DataColumn("CreateID", typeof(System.String));
+            col_CreateID.DefaultValue = user.UserName;
+            dt.Columns.Add(col_CreateID);
+
+            DataColumn col_CreateDate = new System.Data.DataColumn("CreateDate", typeof(System.DateTime));
+            col_CreateDate.DefaultValue = DateTime.Now;
+            dt.Columns.Add(col_CreateDate);
+
+            DataColumn col_UpdateID = new System.Data.DataColumn("UpdateID", typeof(System.String));
+            col_UpdateID.DefaultValue = user.UserName;
+            dt.Columns.Add(col_UpdateID);
+
+            DataColumn col_UpdateDate = new System.Data.DataColumn("UpdateDate", typeof(System.DateTime));
+            col_UpdateDate.DefaultValue = DateTime.Now;
+            dt.Columns.Add(col_UpdateDate);
+
+            //DataColumn col_Row = new System.Data.DataColumn("Row", typeof(System.Int32));
+            //col_Row.AutoIncrement = true;
+            //col_Row.AutoIncrementSeed = 1;
+            //col_Row.AutoIncrementStep = 1;
+            //dt.Columns.Add(col_Row);
+
+
+            #endregion
+            return dt;
+        }
+
+
+        public ActionResult UploadSchedule(string EffectivitySched)
+        {
+            try
+            {
+                var postedFile = Request.Files[0] as HttpPostedFileBase;
+                string filePath = string.Empty;
+                if (postedFile != null)
+                {
+
+                    Z_UploadTracker uploaddetails = new Z_UploadTracker();
+                    uploaddetails.Uploaddate = db.TT_GETTIME().FirstOrDefault();
+                    uploaddetails.Uploader = user.UserName;
+                    uploaddetails.UploadFile = postedFile.FileName;
+                    db.Z_UploadTracker.Add(uploaddetails);
+                    db.SaveChanges();
+
+
+                    string dividerpath = (user.Section == "" || user.Section == null)?"SuperUser":user.Section;
+                    string path = Server.MapPath("~/Uploads/"+ dividerpath + "/");
+                    if (!Directory.Exists(path))
+                    {
+                        Directory.CreateDirectory(path);
+                    }
+                    filePath = path + Path.GetFileName(postedFile.FileName);
+                    string extension = Path.GetExtension(postedFile.FileName);
+                    postedFile.SaveAs(filePath);
+                    string conString = string.Empty;
+                    switch (extension.ToLower())
+                    {
+                        case ".xls": //Excel 97-03.
+                            conString = ConfigurationManager.ConnectionStrings["Excel03ConString"].ConnectionString;
+                            break;
+                        case ".xlsx": //Excel 07 and above.
+                            conString = ConfigurationManager.ConnectionStrings["Excel07ConString"].ConnectionString;
+                            break;
+                    }
+                    conString = string.Format(conString, filePath);
+
+                    using (OleDbConnection connExcel = new OleDbConnection(conString))
+                    {
+                        using (OleDbCommand cmdExcel = new OleDbCommand())
+                        {
+                            using (OleDbDataAdapter odaExcel = new OleDbDataAdapter())
+                            {
+                                DataTable dt = new DataTable();
+                                cmdExcel.Connection = connExcel;
+                                string sheetName = "Sheet1";
+                                try
+                                {
+                                    connExcel.Open();
+                                }
+                                catch (Exception err)
+                                {
+                                    Error_Logs error = new Error_Logs();
+                                    error.PageModule = "Master - Employee";
+                                    error.ErrorLog = err.Message;
+                                    error.DateLog = DateTime.Now;
+                                    error.Username = user.UserName;
+                                    db.Error_Logs.Add(error);
+                                    db.SaveChanges();
+                                }
+                                cmdExcel.CommandText = "SELECT EmployeeNumber, ScheduleName, ScheduleID FROM [" + sheetName + "$] WHERE EmployeeNumber <> '' AND ScheduleName <> ''";//ung * is column name, ung sheetname ay settings
+                                odaExcel.SelectCommand = cmdExcel;
+                                dt = DataRequired(dt, EffectivitySched);
+                                odaExcel.Fill(dt);
+                                connExcel.Close();
+
+                                #region NEW BULK INSERT
+                                try
+                                {
+                                    DateTime EffectivityDate = Convert.ToDateTime(EffectivitySched);
+                                    string conString2 = ConfigurationManager.ConnectionStrings["Brothers_AMSDB"].ConnectionString;
+                                    using (SqlBulkCopy bulk = new SqlBulkCopy(conString2))
+                                    {
+                                        bulk.ColumnMappings.Add("EmployeeNumber", "EmployeeNo");
+                                        bulk.ColumnMappings.Add("ScheduleID", "ScheduleID");
+                                        bulk.ColumnMappings.Add("EffectivityDate", "EffectivityDate");
+                                        bulk.ColumnMappings.Add("UpdateID", "UpdateID");
+                                        bulk.ColumnMappings.Add("UpdateDate", "UpdateDate");
+                                        bulk.DestinationTableName = "M_Employee_Master_List_Schedule";
+                                        bulk.WriteToServer(dt);
+                                    }
+                                }
+                                catch (Exception err) { }
+
+                              
+                                #endregion
+
+                                //for (int x = 0; x < dt.Rows.Count; x++)
+                                //{
+                                //    try
+                                //    {
+                                //        string EmployeeNo = dt.Rows[x]["EmployeeNumber"].ToString();
+                                //        string ScheduleName = dt.Rows[x]["ScheduleName"].ToString();
+                                //        long ScheduleID = (from c in db.M_Schedule where c.Type == ScheduleName && c.IsDeleted == false select c.ID).FirstOrDefault();
+
+                                //        if (ScheduleName != "" && ScheduleID != 0)
+                                //        {
+                                //            M_Employee_Master_List_Schedule employeesched = new M_Employee_Master_List_Schedule();
+                                //            employeesched.EmployeeNo = EmployeeNo;
+                                //            employeesched.ScheduleID = ScheduleID;
+                                //            employeesched.UpdateDate = db.TT_GETTIME().FirstOrDefault();
+                                //            employeesched.UpdateID = user.UserName;
+                                //            employeesched.EffectivityDate = Convert.ToDateTime(EffectivitySched);
+                                //            db.M_Employee_Master_List_Schedule.Add(employeesched);
+                                //            db.SaveChanges();
+                                //        }
+                                //    }
+                                //    catch (Exception err)
+                                //    {
+                                //        Error_Logs error = new Error_Logs();
+                                //        error.PageModule = "Master - Employee";
+                                //        error.ErrorLog = err.Message;
+                                //        error.DateLog = DateTime.Now;
+                                //        error.Username = user.UserName;
+                                //        db.Error_Logs.Add(error);
+                                //        db.SaveChanges();
+                                //    }
+                                //}
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception err)
+            {
+                Error_Logs error = new Error_Logs();
+                error.PageModule = "Master - Employee";
+                error.ErrorLog = err.Message;
+                error.DateLog = DateTime.Now;
+                error.Username = user.UserName;
+                db.Error_Logs.Add(error);
+                db.SaveChanges();
+                return Json(new { result = "failed" }, JsonRequestBehavior.AllowGet);
+            }
+            return Json(new { result = "success" }, JsonRequestBehavior.AllowGet);
+        }
+
 
         public ActionResult UploadStatus()
         {
@@ -1142,7 +1318,7 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                 string datetimeToday = DateTime.Now.ToString("yyMMddhhmmss");
                 string GroupSection = (user.CostCode != CostCode) ? CostCode : (from c in db.M_Cost_Center_List where c.Cost_Center == CostCode select c.GroupSection).FirstOrDefault();
 
-                string filename = string.Format("EmployeeSkillTemplate{0}_{1}.xlsx", datetimeToday, GroupSection);
+                string filename = string.Format("EmployeeNOSkillTemplate{0}_{1}.xlsx", datetimeToday, GroupSection);
                 FileInfo newFile = new FileInfo(Path.Combine(dir, filename));
                 string apptemplatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"TemplateFiles\", templateFilename);
                 FileInfo templateFile = new FileInfo(apptemplatePath);
@@ -1235,9 +1411,15 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                     //}
                     for (int i = 0; i < list.Count; i++)
                     {
+                        string o = list[i].ScheduleName;
+                        M_Schedule sh = (from c in db.M_Schedule where c.Type == o select c).FirstOrDefault();
                         ExportData.Cells["A"+start].Value = list[i].EmpNo;
                         ExportData.Cells["B"+start].Value = list[i].Family_Name + ", " + list[i].First_Name;
-                        ExportData.Cells["C" + start].Value = list[i].ScheduleName;
+                        if (sh != null)
+                        {
+                            ExportData.Cells["C" + start].Value = list[i].ScheduleName + " (" + sh.Timein + " - " + sh.TimeOut + ")";
+                        }
+                       
                         start++;
                     }
 
@@ -1251,8 +1433,8 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                     int d = 8;
                     for (int i = 0; i < SchedList.Count; i++)
                     {
-                        ExportData2.Cells["A" + d].Value = SchedList[i].Type;
-                        ExportData2.Cells["B" + d].Value = SchedList[i].Timein + " - " + SchedList[i].TimeOut;
+                        ExportData2.Cells["A" + d].Value = SchedList[i].Type + " (" + SchedList[i].Timein + " - " + SchedList[i].TimeOut + ")";
+                        ExportData2.Cells["D" + d].Value = SchedList[i].ID;
                         d++;
                     }
 
@@ -1505,6 +1687,41 @@ namespace Brothers_WMS.Areas.Masters.Controllers
             return Json(new { data = list, draw = Request["draw"], recordsTotal = totalrows, recordsFiltered = totalrowsafterfiltering }, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult GetEmployeeScheduleCSList(string EmployeeNo)
+        {
+            //Server Side Parameter
+
+            int start = Convert.ToInt32(Request["start"]);
+            int length = Convert.ToInt32(Request["length"]);
+            string searchValue = Request["search[value]"];
+            string sortColumnName = Request["columns[" + Request["order[0][column]"] + "][name]"];
+            string sortDirection = Request["order[0][dir]"];
+
+            List<GET_Employee_ScheduleListChangeShift_Result> list = db.GET_Employee_ScheduleListChangeShift(EmployeeNo).ToList();
+
+            if (!string.IsNullOrEmpty(searchValue))//filter
+            {
+                list = list.Where(x => x.ScheduleName.ToLower().Contains(searchValue.ToLower())).ToList<GET_Employee_ScheduleListChangeShift_Result>();
+            }
+            if (sortColumnName != "" && sortColumnName != null)
+            {
+                if (sortDirection == "asc")
+                {
+                    list = list.OrderBy(x => TypeHelper.GetPropertyValue(x, sortColumnName)).ToList();
+                }
+                else
+                {
+                    list = list.OrderByDescending(x => TypeHelper.GetPropertyValue(x, sortColumnName)).ToList();
+                }
+            }
+            int totalrows = list.Count;
+            int totalrowsafterfiltering = list.Count;
+
+            //paging
+            list = list.Skip(start).Take(length).ToList<GET_Employee_ScheduleListChangeShift_Result>();
+            return Json(new { data = list, draw = Request["draw"], recordsTotal = totalrows, recordsFiltered = totalrowsafterfiltering }, JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult GetEmployeePosition(string EmployeeNo)
         {
             //Server Side Parameter
@@ -1689,7 +1906,7 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                 CostCode = (user.CostCode == null) ? CostCode : user.CostCode;
                 //CostCode = (CostCode == "undefined") ? "" : CostCode;
 
-                string templateFilename = "EmployeeNOSchedule.xlsx";
+                string templateFilename = "EmployeeSchedule.xlsx";
                 string dir = Path.GetTempPath();
                 string datetimeToday = DateTime.Now.ToString("yyMMddhhmmss");
                 string GroupSection = (user.CostCode != CostCode) ? CostCode : (from c in db.M_Cost_Center_List where c.Cost_Center == CostCode select c.GroupSection).FirstOrDefault();
@@ -1744,8 +1961,8 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                     int d = 8;
                     for (int i = 0; i < SchedList.Count; i++)
                     {
-                        ExportData2.Cells["A" + d].Value = SchedList[i].Type;
-                        ExportData2.Cells["B" + d].Value = SchedList[i].Timein + " - " + SchedList[i].TimeOut;
+                        ExportData2.Cells["A" + d].Value = SchedList[i].Type + "(" + SchedList[i].Timein + " - " + SchedList[i].TimeOut + ")";
+                        ExportData2.Cells["D" + d].Value = SchedList[i].ID;
                         d++;
                     }
 

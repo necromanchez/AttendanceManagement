@@ -38,6 +38,9 @@ function Initializedpage_EmployeeShift() {
                 scrollCollapse: true,
                 order: [0, "asc"],
                 processing: "true",
+                scrollY: "600px",
+                //scrollX: "1000px",
+                scrollCollapse: true,
                // lengthChange: false,
                 columns: [
                     { title: "No", data: "Rownum", className: "reloadclass", name:"Rownum" },

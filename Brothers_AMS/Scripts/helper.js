@@ -10,6 +10,28 @@ function formatDate(date) {
 
     return [year, month, day].join('');
 }
+function Dropdown_selectEmpCompany(id, url) {
+    var option = '<option value="">All Company' + getlongadjWorktimeSelect() + '</option>';
+    $('#' + id).html(option);
+    $.ajax({
+        url: url,
+        type: 'GET',
+        dataType: 'JSON',
+    }).done(function (data, textStatus, xhr) {
+        $.each(data.list, function (i, x) {
+            option = '<option value="' + x.value + '">' + x.text + getlongadjWorktimeSelect() + '</option>';
+
+            //$('.selectpicker').selectpicker('refresh');
+            $('#' + id).append(option);
+        });
+        var idd = "select2-" + id + "-container";
+        document.getElementById(idd).style.whiteSpace = "nowrap";
+        document.getElementById(id).style.whiteSpace = "nowrap";
+
+    }).fail(function (xhr, textStatus, errorThrown) {
+        console.log(errorThrown, textStatus);
+    });
+}
 
 function Dropdown_selectEmpSection(id, url) {
     var option = '<option value="">All Sections' + getlongadjWorktimeSelect() + '</option>';
@@ -352,11 +374,11 @@ function Dropdown_selectOT(id) {
 function Dropdown_selectApp(id) {
     var option = '<option value="">--SELECT--' + getlong() + '</option>';
     var daa = ["Cancelled", "Rejected", "Pending", "Supervisor approved", "Manager approved", "General approved", "Factory General Manager approved"];
-    var data = ["-2", "-1", "0", "1", "2", "3", "4"];
+    var data = ["-10","-2", "-1", "0", "1", "2", "3", "4"];
     $('#' + id).html(option);
 
     $.each(daa, function (i, x) {
-        option = '<option value="' + data[i] + '">' + x + getlongadj2() + '</option>';
+        option = '<option value="' + data[i] + '">' + x + getlongadjWorktimeSelect() + '</option>';
 
         //$('.selectpicker').selectpicker('refresh');
         $('#' + id).append(option);

@@ -50,7 +50,7 @@ function GetEmployeeChosen(EmpNo) {
 
 
 }
-
+var currentRefNoChosen = "";
 var chosend_EmpNo = [];
 function Initializedpage() {
     $('#ChangeScheduleApprovertable').DataTable({
@@ -161,7 +161,7 @@ function Initializedpage() {
     $('#ChangeScheduleApprovertable tbody').on('click', '.refnoe', function () {
         var table = $('#ChangeScheduleApprovertable').DataTable();
         var data = table.row(this).data();
-
+        currentRefNoChosen = data.CS_RefNo;
         $.ajax({
             url: '../ApproverChangeSchedule/VerifyUser',
             type: 'POST',
@@ -176,12 +176,12 @@ function Initializedpage() {
                     $(".theapprovebtn").prop("disabled", false);
                     $(".Noteme").hide();
                 }
-                //if (returnData.releasebtnCancel == false) {
-                //    $("#btnCancel").hide();
-                //}
-                //else {
+                if (returnData.releasebtnCancel == false) {
+                    $("#btnCancel").hide();
+                }
+                else {
                     $("#btnCancel").show();
-                //}
+                }
                     GetDetails(data.CS_RefNo);
                     table.ajax.reload();
                     $("#CSDetails").modal("show");
@@ -443,9 +443,10 @@ function CancelRequest() {
         url: '../ApproverChangeSchedule/CancelledRefNo',
         type: 'POST',
         contentType: "application/json; charset=utf-8",
-        data: JSON.stringify({
-            RefNo: EmployeeList,
-        }),
+        //data: JSON.stringify({
+        //    RefNo: EmployeeList,
+        //}),
+        data: { RefNo: currentRefNoChosen},
         datatype: "json",
         success: function (returnData) {
             if (returnData.EmpnoCannotCancel.length > 0) {

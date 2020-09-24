@@ -408,6 +408,9 @@
     <Compile Include="Models\GET_Employee_OTFiling_Result.cs">
       <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\GET_Employee_ScheduleListChangeShift_Result.cs">
+      <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\GET_Employee_ScheduleList_Result.cs">
       <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
     </Compile>
@@ -592,6 +595,9 @@
     <Compile Include="Models\UploadError.cs" />
     <Compile Include="Models\WTGlobal.cs" />
     <Compile Include="Models\Z_SkillRemoverAll.cs">
+      <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Z_UploadTracker.cs">
       <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -2281,6 +2287,7 @@
     <Content Include="TemplateFiles\ExportReports\ManPowerMonitoring.xlsx" />
     <Content Include="TemplateFiles\ExportReports\WorkTimeSummary.xlsx" />
     <Content Include="TemplateFiles\ExportReports\AbsentDetails.xlsx" />
+    <Content Include="TemplateFiles\EmployeeNOSchedule.xlsx" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

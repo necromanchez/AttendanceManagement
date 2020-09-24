@@ -1,7 +1,7 @@
 ﻿$(function () {
     $("#ALLtbl").hide();
     $("#checkall_emp").prop("disabled", true);
-    Dropdown_selectEmpSection('BIPH_Agency', "/Helper/GetDropdown_Agency");
+    Dropdown_selectEmpCompany('BIPH_Agency', "/Helper/GetDropdown_Agency");
     //Dropdown_select('Section', "/Helper/GetDropdown_Section");
     Dropdown_selectMP('Line_Team', "/Helper/GetDropdown_LineProcessTeamLogin");
     GetcurrentSection('Section', "/Helper/GetCurrentSection");
@@ -157,6 +157,8 @@
 
                     });
                     setTimeout(function () { $('#ChosenEmployeeTable').DataTable().ajax.reload(); }, 500);
+                    $("#SchedFrom").val($("#DateFrom").val());
+                    $("#SchedTo").val($("#DateTo").val());
                     $("#ConfirmChangeSchedule").modal("show");
                 }
                 else {
@@ -182,7 +184,8 @@
     })
     $("#BIPH_Agency").on("change", function () {
         $("#loading_modal").modal("show");
-        $("#btnSearch").trigger("click");
+        Initializepage();
+        //$("#btnSearch").trigger("click");
         $("#ALLtbl").show();
         //$("#btnDownloadTemplate").prop("disabled", false);
     })

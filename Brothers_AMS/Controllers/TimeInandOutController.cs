@@ -122,7 +122,7 @@ namespace Brothers_WMS.Controllers
 
                 employee.Section = (from c in db.M_Cost_Center_List where c.Cost_Center == CostCode select c.GroupSection).FirstOrDefault();
 
-                AF_ChangeSchedulefiling checkCS = (from c in db.AF_ChangeSchedulefiling where c.EmployeeNo == employee.EmpNo && (c.DateFrom <= servertimechecker && c.DateTo >= servertimechecker) select c).FirstOrDefault();
+                AF_ChangeSchedulefiling checkCS = (from c in db.AF_ChangeSchedulefiling where c.EmployeeNo == employee.EmpNo && c.Status == c.StatusMax && (c.DateFrom <= servertimechecker && c.DateTo >= servertimechecker) select c).FirstOrDefault();
                 long? CurrentSchedule = 0;
                 if (checkCS != null)
                 {
@@ -130,7 +130,7 @@ namespace Brothers_WMS.Controllers
                 }
                 else
                 {
-                    CurrentSchedule = (from c in db.M_Employee_Master_List_Schedule where c.EmployeeNo == Empnumber where c.EffectivityDate <= NOW orderby c.UpdateDate descending select c.ScheduleID).FirstOrDefault();
+                    CurrentSchedule = (from c in db.M_Employee_Master_List_Schedule where c.EmployeeNo == Empnumber where c.EffectivityDate <= NOW && c.ScheduleID != null orderby c.UpdateDate descending select c.ScheduleID).FirstOrDefault();
                 }
                 
                 string ScheduleName = (from c in db.M_Schedule where c.ID == CurrentSchedule where c.IsDeleted != true select c.Type + " (" + c.Timein + "-" + c.TimeOut + ")").FirstOrDefault();
@@ -208,9 +208,9 @@ namespace Brothers_WMS.Controllers
                     string Empno = Employee.EmpNo;
                     string tapprocess = (from c in db.M_Skills where c.ID == ProcessID select c.Skill).FirstOrDefault();
                     DateTime? NOW = db.TT_GETTIME().FirstOrDefault();
-                    long? CurrentSchedule = (from c in db.M_Employee_Master_List_Schedule where c.EmployeeNo == Empno where c.EffectivityDate <= NOW  orderby c.UpdateDate descending select c.ScheduleID).FirstOrDefault();
+                    long? CurrentSchedule = (from c in db.M_Employee_Master_List_Schedule where c.EmployeeNo == Empno where c.EffectivityDate <= NOW && c.ScheduleID != null orderby c.UpdateDate descending select c.ScheduleID).FirstOrDefault();
                     DateTime? servertimechecker = db.TT_GETTIME().FirstOrDefault();
-                    AF_ChangeSchedulefiling checkCS = (from c in db.AF_ChangeSchedulefiling where c.EmployeeNo == Empno && (c.DateFrom <= servertimechecker && c.DateTo >= servertimechecker) select c).FirstOrDefault(); 
+                    AF_ChangeSchedulefiling checkCS = (from c in db.AF_ChangeSchedulefiling where c.EmployeeNo == Empno && c.Status == c.StatusMax  && (c.DateFrom <= servertimechecker && c.DateTo >= servertimechecker) select c).FirstOrDefault(); 
                     
                    
                     string ScheduleName = (from c in db.M_Schedule where c.ID == CurrentSchedule select c.Type).FirstOrDefault();

@@ -9,23 +9,24 @@ function DataConverter(data) {
         return (data == "0.0") ? "<p class='text Adjustbrand'>" + data + "</p>" : "<p class='text-red Adjustbrand'>" + data + "</p>"
         
     }
-    else if (data.toLowerCase().indexOf('noot') > -1) {
-        var res = data.split(" ");
-        data = res[0];
-        if (data > 0) {
-            totalOT += parseFloat(data);
-        } 
-         return (data == "0.0")?"<p class='text Adjustbrand'>" + data + "</p>":"<p class='text-red Adjustbrand'>" + data + "</p>"
-    }
-    else if (data.toLowerCase().indexOf('wot') > -1) {
-        var res = data.split(" ");
-        data = res[0];
-        if (data > 0) {
-            totalOT += parseFloat(data);
-        }
-        return "<p class='text-green Adjustbrand'>" + data + "</p>"
-    }
+    //else if (data.toLowerCase().indexOf('noot') > -1) {
+    //    var res = data.split(" ");
+    //    data = res[0];
+    //    if (data > 0) {
+    //        totalOT += parseFloat(data);
+    //    } 
+    //     return (data == "0.0")?"<p class='text Adjustbrand'>" + data + "</p>":"<p class='text-red Adjustbrand'>" + data + "</p>"
+    //}
+    //else if (data.toLowerCase().indexOf('wot') > -1) {
+    //    var res = data.split(" ");
+    //    data = res[0];
+    //    if (data > 0) {
+    //        totalOT += parseFloat(data);
+    //    }
+    //    return "<p class='text-green Adjustbrand'>" + data + "</p>"
+    //}
     else {
+        totalOT += parseFloat(data);
         return "<p class='text Adjustbrand'>" + data + "</p>"
     }
 
@@ -62,6 +63,8 @@ function Initializedpage_OTHours() {
                         title: "WorkTimeSummary_OTBreakdown" + formatDate(d) + "_" + selectedSection
                     }
                 ],
+                scrollY: "600px",
+                //scrollX: "1000px",
                 scrollCollapse: true,
                 order: [0, "asc"],
                 processing: "true",

@@ -183,21 +183,22 @@ function Initializedpage() {
                          return x.ApprovedSupervisor
                      }
                      else if (x.Status < 0) {
-                         switch (x.Status) {
-                             case -1:
-                                 return "<button type='button' class= 'btn btn-s bg-red'>Rejected by Supervisor</button>"
-                                 break;
-                             case -2:
-                                 return x.ApprovedSupervisor
-                                 break;
-                             case -5:
-                                 return "<button type='button' class= 'btn btn-s bg-red'>Cancelled</button>"
-                                 break;
-                             default:
-                                 return "<button type='button' class= 'btn btn-s bg-orange'></button>"
-                                 break;
+                         return x.ApprovedSupervisor
+                         //switch (x.Status) {
+                         //    case -1:
+                         //        return "<button type='button' class= 'btn btn-s bg-red'>" + x.ApprovedSupervisor+"</button>"
+                         //        break;
+                         //    case -2:
+                         //        return x.ApprovedSupervisor
+                         //        break;
+                         //    case -10:
+                         //        return "<button type='button' class= 'btn btn-s bg-red'>" + x.ApprovedSupervisor+"</button>"
+                         //        break;
+                         //    default:
+                         //        return "<button type='button' class= 'btn btn-s bg-orange'></button>"
+                         //        break;
 
-                         }
+                         //}
                      }
                      else {
                          return data = "<button type='button' class= 'btn btn-s bg-orange'>Pending</button>"
@@ -213,17 +214,18 @@ function Initializedpage() {
                            return x.ApprovedManager
                        }
                        else if (x.Status < 0) {
-                           switch (x.Status) {
-                               case -2:
-                                   return "<button type='button' class= 'btn btn-s bg-red'>Rejected by Manager</button>"
-                                   break;
-                               case -5:
-                                   return "<button type='button' class= 'btn btn-s bg-red'>Cancelled</button>"
-                                   break;
-                               default:
-                                   return data = "<button type='button' class= 'btn btn-s bg-orange'></button>"
-                                   break;
-                           }
+                           return x.ApprovedSupervisor
+                           //switch (x.Status) {
+                           //    case -2:
+                           //        return "<button type='button' class= 'btn btn-s bg-red'>Rejected by Manager</button>"
+                           //        break;
+                           //    case -5:
+                           //        return "<button type='button' class= 'btn btn-s bg-red'>Cancelled</button>"
+                           //        break;
+                           //    default:
+                           //        return data = "<button type='button' class= 'btn btn-s bg-orange'></button>"
+                           //        break;
+                           //}
                        }
                        else {
                            return data = "<button type='button' class= 'btn btn-s bg-orange'>Pending</button>"

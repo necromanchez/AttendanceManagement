@@ -36,6 +36,8 @@ function Initializedpage_WorkingHours() {
                 scrollCollapse: true,
                 order: [0, "asc"],
                 processing: "true",
+                scrollY: "600px",
+                scrollCollapse: true,
                 //lengthChange: false,
                 columns: [
                     { title: "No", data: "Rownum", className: "reloadclass", name: "Rownum"},
@@ -229,7 +231,7 @@ function Initializedpage_WorkingHours() {
                           title: "30", data: function (x) {
                               if (x[30] != null) {
                                   total += parseFloat(x[30]);
-                                  return "<p class='text-green Adjustbrand'> " + x[30] + "</p>";
+                                  return (x[30] != 0) ? "<p class='text-green Adjustbrand'> " + x[30] + "</p>" : x[30]; 
                               }
                               else {
                                   return "";
@@ -240,7 +242,7 @@ function Initializedpage_WorkingHours() {
                           title: "31", data: function (x) {
                               if (x[31] != null) {
                                   total += parseFloat(x[31]);
-                                  return "<p class='text-green Adjustbrand'> " + x[31] + "</p>";
+                                  return (x[31] != 0) ? "<p class='text-green Adjustbrand'> " + x[31] + "</p>" : x[31]; 
                               }
                               else {
                                   return "";

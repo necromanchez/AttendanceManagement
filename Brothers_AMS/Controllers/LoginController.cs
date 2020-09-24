@@ -82,8 +82,10 @@ namespace Brothers_WMS.Controllers
                                  && c.Password == pass
                                  && c.IsDeleted == false
                                  select c).FirstOrDefault();
-                check.Section = (from c in db.M_Cost_Center_List where c.Cost_Center == check.CostCode select c.GroupSection).FirstOrDefault();
                 check.CostCode = (from c in db.M_Employee_CostCenter where c.EmployNo == user.UserName orderby c.UpdateDate_AMS descending select c.CostCenter_AMS).FirstOrDefault();
+                string CostCodenow = check.CostCode;
+                check.Section = (from c in db.M_Cost_Center_List where c.Cost_Center == CostCodenow select c.GroupSection).FirstOrDefault();
+
                 if (check != null)
                 {
                     bool rememberme = false;

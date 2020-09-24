@@ -132,7 +132,7 @@
             <ul class="nav nav-tabs" role="tablist" id="tabs">
                 <li class="nav-item"> <a class="nav-link active reloadtbl" href="#PresentAbsent" data-toggle="tab" id="PAB">Present And Absent</a></li>
                 <li class="nav-item"> <a class="nav-link reloadtbl" href="#DTRBreak" data-toggle="tab" id="DB">DTR Breakdown</a></li>
-                <li class="nav-item"> <a class="nav-link reloadtbl" href="#OTV" data-toggle="tab" id="OTM">Overtime</a></li>
+                <li class="nav-item" disabled> <a class="nav-link reloadtbl" href="#OTV" data-toggle="tab" id="OTM">Overtime</a></li>
                 <li class="nav-item"> <a class="nav-link reloadtbl" href="#EmployeeSchedule" data-toggle="tab" id="ES">Employee Shift</a></li>
                 <li class="nav-item"> <a class="nav-link reloadtbl" href="#EmployeeTime" data-toggle="tab" id="TTi">Employee TimeIn/Timeout</a></li>
                 <li class="nav-item"> <a class="nav-link reloadtbl" href="#ABdetails" data-toggle="tab" id="AD">Absent Details</a></li>
@@ -164,11 +164,11 @@
 
                                             <div class="box-body">
                                                 <div class="row">
-                                                    <section class="content-header ">
+                                                    @*<section class="content-header ">
                                                         <h2>
                                                             <span class="changehead">Month</span>
                                                         </h2>
-                                                    </section>
+                                                    </section>*@
                                                 </div>
 
                                                 <div class="row theshow">
@@ -252,7 +252,7 @@
 
                                                 <div class="row theshow">
                                                     <div class="col-12">
-                                                        <table id="AttenanceTbl" class="table table-bordered table-striped table-responsive">
+                                                        <table id="AttenanceTbl" class="table table-bordered table-striped ">
                                                             <thead>
 
                                                             </thead>
@@ -296,7 +296,7 @@
 
                                                 <div class="row theshow">
                                                     <div class="col-12">
-                                                        <table id="AttenanceTbl_WorkingHours" class="table table-bordered table-striped table-responsive">
+                                                        <table id="AttenanceTbl_WorkingHours" class="table table-bordered table-striped ">
                                                             <thead>
 
                                                             </thead>
@@ -338,7 +338,7 @@
                                                 
                                                 <div class="row theshow">
                                                     <div class="col-12">
-                                                        <table id="AttenanceTbl_OTHours" class="table table-bordered table-striped table-responsive">
+                                                        <table id="AttenanceTbl_OTHours" class="table table-bordered table-striped ">
                                                             <thead>
 
                                                             </thead>
@@ -419,7 +419,7 @@
 
                                                 <div class="row theshow">
                                                     <div class="col-12">
-                                                        <table id="EmployeeShifttbl" class="table table-bordered table-striped table-responsive">
+                                                        <table id="EmployeeShifttbl" class="table table-bordered table-striped ">
                                                             <thead>
 
                                                             </thead>
@@ -463,7 +463,7 @@
                                                
                                                 <div class="row theshow">
                                                     <div class="col-12">
-                                                        <table id="Employeetimetbl" class="table table-bordered table-striped table-responsive">
+                                                        <table id="Employeetimetbl" class="table table-bordered table-striped ">
                                                             <thead>
 
                                                             </thead>
@@ -526,7 +526,7 @@
         </div>*@
                                                 </div>
                                                 
-                                                <div class="table-responsive">
+                                                <div class="">
                                                     <table class="table table-striped table-no-bordered table-hover" style="width:100%;" id="TapTable"></table>
                                                 </div>
                                             </div>
@@ -571,7 +571,7 @@
                 <div class="modal-body fixed-modal-height div-chk-less-height">
 
 
-                    <table id="ProcessTable" class="table table-bordered table-striped table-responsive" style="width:100%">
+                    <table id="ProcessTable" class="table table-bordered table-striped " style="width:100%">
                         <thead>
                             <tr>
                                 <th>Line/Team</th>

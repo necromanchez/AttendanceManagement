@@ -33,7 +33,8 @@ $(function () {
         theDay = d.getDate();
         theMonth = d.getMonth()+1;
         theYear = d.getFullYear();
-        window.open('../WorkTimeSummary/ExportAdjust?Month=' + theMonth + "&Year=" + theYear + "&Day=" + theDay + "&Section=" + $("#Section").val());
+
+        window.open('../WorkTimeSummary/ExportAdjust?Month=' + theMonth + "&Year=" + theYear + "&Day=" + theDay + "&Section=" + selectedSection);
     });
 
     $(".theshow").hide();
@@ -356,6 +357,12 @@ function ShowOutput(data) {
         case "P(N)":
             return "<p class='Adjustbrand' style='color: green'>" + data + "</p>"
             break;
+        case "TR(D)":
+            return "<p class='Adjustbrand' style='color: green'>" + data + "</p>"
+            break;
+        case "TR(N)":
+            return "<p class='Adjustbrand' style='color: green'>" + data + "</p>"
+            break;
         default:
             return "<p class='Adjustbrand' style='color: gray'>" + data + "</p>"
             break;
@@ -399,6 +406,9 @@ function Initializedpage() {
         language: {
             "processing": "processing... please wait"
         },
+        scrollY: "600px",
+        //scrollX: "1000px",
+        scrollCollapse: true,
         //dom: 'Bfrtip',
         destroy: true,
         columns: [
@@ -648,7 +658,7 @@ function Initializedpage() {
         drawCallback: function (settings) {
             $("#loading_modal2").modal("hide");
             //var table = $('#AttenanceTbl').DataTable();
-            //table.columns.adjust();
+            table.columns.adjust();
         },
         fixedColumns: true,
         fixedColumns: {

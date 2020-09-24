@@ -65,7 +65,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                                  select new GET_RP_AttendanceMonitoring_Result()
                                  {
                                      Rownum = Convert.ToInt32(rw["Rownum"]),
-                                     RFID = Convert.ToString(rw["RFID"]),
+                                     //RFID = Convert.ToString(rw["RFID"]),
                                      EmpNo = Convert.ToString(rw["EmpNo"]),
                                      EmployeeName = Convert.ToString(rw["EmployeeName"]),
                                      Position = Convert.ToString(rw["Position"]),
@@ -114,7 +114,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                                      select new GET_RP_AttendanceMonitoring_Result()
                                      {
                                          Rownum = Convert.ToInt32(rw["Rownum"]),
-                                         RFID = Convert.ToString(rw["RFID"]),
+                                         //RFID = Convert.ToString(rw["RFID"]),
                                          EmpNo = Convert.ToString(rw["EmpNo"]),
                                          EmployeeName = Convert.ToString(rw["EmployeeName"]),
                                          Position = Convert.ToString(rw["Position"]),
@@ -159,7 +159,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                                      select new GET_RP_AttendanceMonitoring_Result()
                                      {
                                          Rownum = Convert.ToInt32(rw["Rownum"]),
-                                         RFID = Convert.ToString(rw["RFID"]),
+                                         //RFID = Convert.ToString(rw["RFID"]),
                                          EmpNo = Convert.ToString(rw["EmpNo"]),
                                          EmployeeName = Convert.ToString(rw["EmployeeName"]),
                                          Position = Convert.ToString(rw["Position"]),
@@ -219,7 +219,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C1 = "-";
                     }
                 }
-                else if (row.C1.Contains("P"))
+                else if (row.C1.Contains("P") || row.C1.Contains("TR"))
                 {
                     if (!Dayname(1, Month, Year))
                     {
@@ -252,7 +252,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C2 = "-";
                     }
                 }
-                else if (row.C2.Contains("P"))
+                else if (row.C2.Contains("P") || row.C2.Contains("TR"))
                 {
                     if (!Dayname(2, Month, Year))
                     {
@@ -285,7 +285,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C3 = "-";
                     }
                 }
-                else if (row.C3.Contains("P"))
+                else if (row.C3.Contains("P") || row.C3.Contains("TR"))
                 {
                     if (!Dayname(3, Month, Year))
                     {
@@ -318,7 +318,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C4 = "-";
                     }
                 }
-                else if (row.C4.Contains("P"))
+                else if (row.C4.Contains("P") || row.C4.Contains("TR"))
                 {
                     if (!Dayname(4, Month, Year))
                     {
@@ -351,7 +351,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C5 = "-";
                     }
                 }
-                else if (row.C5.Contains("P"))
+                else if (row.C5.Contains("P") || row.C5.Contains("TR"))
                 {
                     if (!Dayname(5, Month, Year))
                     {
@@ -384,7 +384,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C6 = "-";
                     }
                 }
-                else if (row.C6.Contains("P"))
+                else if (row.C6.Contains("P") || row.C6.Contains("TR"))
                 {
                     if (!Dayname(6, Month, Year))
                     {
@@ -417,7 +417,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C7 = "-";
                     }
                 }
-                else if (row.C7.Contains("P"))
+                else if (row.C7.Contains("P") || row.C7.Contains("TR"))
                 {
                     if (!Dayname(7, Month, Year))
                     {
@@ -450,7 +450,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C8 = "-";
                     }
                 }
-                else if (row.C8.Contains("P"))
+                else if (row.C8.Contains("P") || row.C8.Contains("TR"))
                 {
                     if (!Dayname(8, Month, Year))
                     {
@@ -483,7 +483,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C9 = "-";
                     }
                 }
-                else if (row.C9.Contains("P"))
+                else if (row.C9.Contains("P") || row.C9.Contains("TR"))
                 {
                     if (!Dayname(9, Month, Year))
                     {
@@ -516,7 +516,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C10 = "-";
                     }
                 }
-                else if (row.C10.Contains("P"))
+                else if (row.C10.Contains("P") || row.C10.Contains("TR"))
                 {
                     if (!Dayname(10, Month, Year))
                     {
@@ -549,7 +549,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C11 = "-";
                     }
                 }
-                else if (row.C11.Contains("P"))
+                else if (row.C11.Contains("P") || row.C11.Contains("TR"))
                 {
                     if (!Dayname(11, Month, Year))
                     {
@@ -582,7 +582,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C12 = "-";
                     }
                 }
-                else if (row.C12.Contains("P"))
+                else if (row.C12.Contains("P") || row.C12.Contains("TR"))
                 {
                     if (!Dayname(12, Month, Year))
                     {
@@ -615,7 +615,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C13 = "-";
                     }
                 }
-                else if (row.C13.Contains("P"))
+                else if (row.C13.Contains("P") || row.C13.Contains("TR"))
                 {
                     if (!Dayname(13, Month, Year))
                     {
@@ -648,7 +648,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C14 = "-";
                     }
                 }
-                else if (row.C14.Contains("P"))
+                else if (row.C14.Contains("P") || row.C14.Contains("TR"))
                 {
                     Pcount++;
                 }
@@ -677,7 +677,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C15 = "-";
                     }
                 }
-                else if (row.C15.Contains("P"))
+                else if (row.C15.Contains("P") || row.C15.Contains("TR"))
                 {
                     if(!Dayname(15, Month, Year))
                     {
@@ -710,7 +710,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C16 = "-";
                     }
                 }
-                else if (row.C16.Contains("P"))
+                else if (row.C16.Contains("P") || row.C16.Contains("TR"))
                 {
                     if (!Dayname(16, Month, Year))
                     {
@@ -743,7 +743,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C17 = "-";
                     }
                 }
-                else if (row.C17.Contains("P"))
+                else if (row.C17.Contains("P") || row.C17.Contains("TR"))
                 {
                     if (!Dayname(17, Month, Year))
                     {
@@ -776,7 +776,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C18 = "-";
                     }
                 }
-                else if (row.C18.Contains("P"))
+                else if (row.C18.Contains("P") || row.C18.Contains("TR"))
                 {
                     if (!Dayname(18, Month, Year))
                     {
@@ -809,7 +809,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C19 = "-";
                     }
                 }
-                else if (row.C19.Contains("P"))
+                else if (row.C19.Contains("P") || row.C19.Contains("TR"))
                 {
                     if (!Dayname(19, Month, Year))
                     {
@@ -842,7 +842,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C20 = "-";
                     }
                 }
-                else if (row.C20.Contains("P"))
+                else if (row.C20.Contains("P") || row.C20.Contains("TR"))
                 {
                     if (!Dayname(20, Month, Year))
                     {
@@ -875,7 +875,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C21 = "-";
                     }
                 }
-                else if (row.C21.Contains("P"))
+                else if (row.C21.Contains("P") || row.C22.Contains("TR"))
                 {
                     if (!Dayname(21, Month, Year))
                     {
@@ -908,7 +908,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C22 = "-";
                     }
                 }
-                else if (row.C22.Contains("P"))
+                else if (row.C22.Contains("P") || row.C22.Contains("TR"))
                 {
                     if (!Dayname(22, Month, Year))
                     {
@@ -941,7 +941,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C23 = "-";
                     }
                 }
-                else if (row.C23.Contains("P"))
+                else if (row.C23.Contains("P") || row.C23.Contains("TR"))
                 {
                     if (!Dayname(23, Month, Year))
                     {
@@ -974,7 +974,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C24 = "-";
                     }
                 }
-                else if (row.C24.Contains("P"))
+                else if (row.C24.Contains("P") || row.C24.Contains("TR"))
                 {
                     if (!Dayname(24, Month, Year))
                     {
@@ -1007,7 +1007,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C25 = "-";
                     }
                 }
-                else if (row.C25.Contains("P"))
+                else if (row.C25.Contains("P") || row.C25.Contains("TR"))
                 {
                     if (!Dayname(25, Month, Year))
                     {
@@ -1040,7 +1040,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C26 = "-";
                     }
                 }
-                else if (row.C26.Contains("P"))
+                else if (row.C26.Contains("P") || row.C26.Contains("TR"))
                 {
                     if (!Dayname(26, Month, Year))
                     {
@@ -1073,7 +1073,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C27 = "-";
                     }
                 }
-                else if (row.C27.Contains("P"))
+                else if (row.C27.Contains("P") || row.C27.Contains("TR"))
                 {
                     if (!Dayname(27, Month, Year))
                     {
@@ -1106,7 +1106,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C28 = "-";
                     }
                 }
-                else if (row.C28.Contains("P"))
+                else if (row.C28.Contains("P") || row.C28.Contains("TR"))
                 {
                     if (!Dayname(28, Month, Year))
                     {
@@ -1139,7 +1139,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C29 = "-";
                     }
                 }
-                else if (row.C29.Contains("P"))
+                else if (row.C29.Contains("P") || row.C29.Contains("TR"))
                 {
                     if (!Dayname(29, Month, Year))
                     {
@@ -1175,7 +1175,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                             row.C30 = "-";
                         }
                     }
-                    else if (row.C30.Contains("P"))
+                    else if (row.C30.Contains("P") || row.C30.Contains("TR"))
                     {
                         if (!Dayname(30, Month, Year))
                         {
@@ -1212,7 +1212,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                             row.C31 = "-";
                         }
                     }
-                    else if (row.C31.Contains("P"))
+                    else if (row.C31.Contains("P") || row.C31.Contains("TR"))
                     {
                         if (!Dayname(31, Month, Year))
                         {
@@ -1249,10 +1249,10 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                 return adjustedNW;
         }
 
-        public WTGlobal GetHeaderData(int Month, int Year, string Section, DataTable dt)
+        public WTGlobal GetHeaderData(int Month, int Year, string Section, List<GET_RP_AttendanceMonitoring_Result> dt)
         {
 
-            List<GET_RP_AttendanceMonitoring_Result> list = test(Month, Year, Section, dt);
+            List<GET_RP_AttendanceMonitoring_Result> list = dt;//test(Month, Year, Section, dt);
             List<GET_RP_AttendanceMonitoring_Result> orig = list;
 
             int daysinMonth = DateTime.DaysInMonth(Year, Month);
@@ -2370,10 +2370,12 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                     //wt.globawt = dt;
                     cmdSql.Dispose();
                     conn.Close();
-                    int dday = Day + 6;
+                    int dday = Day + 12;
                     List<string> Pr = new List<string>();
                     Pr.Add("P(D)");
                     Pr.Add("P(N)");
+                    Pr.Add("TR(D)");
+                    Pr.Add("TR(N)");
                     for (int i = 0; i < dt.Rows.Count; i++)
                     {
                         if (!Pr.Contains(dt.Rows[i][dday].ToString()))
@@ -2386,10 +2388,11 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                             //                       select c).FirstOrDefault();
                             //if (checker != null)
                             //{
-                                ExportData.Cells["A" + start].Value = dt.Rows[i][2].ToString();
-                                ExportData.Cells["B" + start].Value = dt.Rows[i][3].ToString();
+                                ExportData.Cells["A" + start].Value = dt.Rows[i][1].ToString();
+                                ExportData.Cells["B" + start].Value = dt.Rows[i][2].ToString();
                                 ExportData.Cells["C" + start].Value = dt.Rows[i][4].ToString();
-                                ExportData.Cells["D" + start].Value = dt.Rows[i][5].ToString();
+                                ExportData.Cells["D" + start].Value = dt.Rows[i][3].ToString();
+                             
                                 ExportData.Cells["E" + start].Value = (dt.Rows[i][dday].ToString() == "AB") ? "AB" : dt.Rows[i][dday].ToString();
                                 start++;
                             //}
@@ -2419,7 +2422,17 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                 string filePath = string.Empty;
                 if (postedFile != null)
                 {
-                    string path = Server.MapPath("~/Uploads/");
+
+                    Z_UploadTracker uploaddetails = new Z_UploadTracker();
+                    uploaddetails.Uploaddate = db.TT_GETTIME().FirstOrDefault();
+                    uploaddetails.Uploader = user.UserName;
+                    uploaddetails.UploadFile = postedFile.FileName;
+                    db.Z_UploadTracker.Add(uploaddetails);
+                    db.SaveChanges();
+
+
+                    string LeaveAdjustment = "LeaveAdjustment";
+                    string path = Server.MapPath("~/Uploads/"+ LeaveAdjustment+"/");
                     if (!Directory.Exists(path))
                     {
                         Directory.CreateDirectory(path);
@@ -2462,7 +2475,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                                     db.Error_Logs.Add(error);
                                     db.SaveChanges();
                                 }
-                                cmdExcel.CommandText = "SELECT EmployeeNo, LeaveType, Reason FROM [" + sheetName + "$] WHERE LeaveType <> 'AB'";//ung * is column name, ung sheetname ay settings
+                                cmdExcel.CommandText = "SELECT EmployeeNo, LeaveType, Reason FROM [" + sheetName + "$] WHERE EmployeeNo <> ''";//ung * is column name, ung sheetname ay settings
                                 odaExcel.SelectCommand = cmdExcel;
                                 odaExcel.Fill(dt);
                                 connExcel.Close();
@@ -2598,9 +2611,10 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                 //wt.globawt = dt;
                 cmdSql.Dispose();
                 conn.Close();
-                WTGlobal header = GetHeaderData(Month,Year,Section,dt);
-                System.Web.HttpContext.Current.Session["WT"] = header;
+                
                 List<GET_RP_AttendanceMonitoring_Result> list = test(Month, Year, Section, dt);
+                WTGlobal header = GetHeaderData(Month, Year, Section, list);
+                System.Web.HttpContext.Current.Session["WT"] = header;
                 System.Web.HttpContext.Current.Session["ExportWT"] = dt;
                
                 if (!string.IsNullOrEmpty(searchValue))//filter
