@@ -752,7 +752,9 @@ function UploadAdjustment() {
                 //Initializedpage();
             }
             else {
-                swal("An error occured");
+                $("#loading_modal").modal("hide")
+
+                swal("Adjustment Failed. Please recheck upload file");
 
             }
         },

@@ -2337,7 +2337,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                 using (ExcelPackage package = new ExcelPackage(newFile, templateFile))  //-- With template.
                 {
                     int start = 2;
-                    ExcelWorksheet ExportData = package.Workbook.Worksheets["Sheet1"];
+                    ExcelWorksheet ExportData = package.Workbook.Worksheets["AMSSheet"];
                     //List<GET_RP_AttendanceMonitoring_Result> list = test(Month,Year,Section);// db.GET_RP_AttendanceMonitoring(Month, Year, Section).ToList();
                     DataTable dt = new DataTable();// (DataTable)System.Web.HttpContext.Current.Session["ExportWT"];//ExportsEmployee(Month, Year, Day, Section);
 
@@ -2459,8 +2459,9 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                             using (OleDbDataAdapter odaExcel = new OleDbDataAdapter())
                             {
                                 DataTable dt = new DataTable();
+                                DataTable dtchecker = new DataTable();
                                 cmdExcel.Connection = connExcel;
-                                string sheetName = "Sheet1";
+                                string sheetName = "AMSSheet";
                                 try
                                 {
                                     connExcel.Open();
@@ -2478,55 +2479,68 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                                 cmdExcel.CommandText = "SELECT EmployeeNo, LeaveType, Reason FROM [" + sheetName + "$] WHERE EmployeeNo <> ''";//ung * is column name, ung sheetname ay settings
                                 odaExcel.SelectCommand = cmdExcel;
                                 odaExcel.Fill(dt);
+
+
+                                cmdExcel.CommandText = "SELECT EmployeeNo, LeaveType, Reason FROM [" + sheetName + "$] WHERE LeaveType <> 'AB' AND EmployeeNo <> '' AND (LeaveType IS NULL OR LeaveType = '' OR Reason IS NULL OR Reason = '')";//ung * is column name, ung sheetname ay settings
+                                odaExcel.SelectCommand = cmdExcel;
+                                odaExcel.Fill(dtchecker);
                                 connExcel.Close();
-                                for (int x = 0; x < dt.Rows.Count; x++)
+
+                                if(dtchecker.Rows.Count > 0) {
+                                    return Json(new { result = "failed" }, JsonRequestBehavior.AllowGet);
+                                }
+                                else
                                 {
-                                    try
+                                    for (int x = 0; x < dt.Rows.Count; x++)
                                     {
-                                        string EmployeeNo = dt.Rows[x]["EmployeeNo"].ToString();
-                                        string LeaveType = dt.Rows[x]["LeaveType"].ToString();
-                                        string Reason = dt.Rows[x]["Reason"].ToString();
-                                        if (LeaveType != "")
+                                        try
                                         {
-                                            RP_AttendanceMonitoring checker = (from c in db.RP_AttendanceMonitoring where c.EmployeeNo == EmployeeNo && c.Date == DateChange select c).FirstOrDefault();
-                                            if (checker == null)
+                                            string EmployeeNo = dt.Rows[x]["EmployeeNo"].ToString();
+                                            string LeaveType = dt.Rows[x]["LeaveType"].ToString();
+                                            string Reason = dt.Rows[x]["Reason"].ToString();
+                                            if (LeaveType != "")
                                             {
+                                                RP_AttendanceMonitoring checker = (from c in db.RP_AttendanceMonitoring where c.EmployeeNo == EmployeeNo && c.Date == DateChange select c).FirstOrDefault();
+                                                if (checker == null)
+                                                {
 
-                                                RP_AttendanceMonitoring EmpStatus = new RP_AttendanceMonitoring();
-                                                EmpStatus.EmployeeNo = EmployeeNo;
-                                                EmpStatus.LeaveType = LeaveType;
-                                                EmpStatus.Date = DateChange;
-                                                EmpStatus.UpdateDate = DateTime.Now;
-                                                EmpStatus.UpdateID = user.UserName;
-                                                EmpStatus.Reason = Reason;
-                                                db.RP_AttendanceMonitoring.Add(EmpStatus);
-                                                db.SaveChanges();
+                                                    RP_AttendanceMonitoring EmpStatus = new RP_AttendanceMonitoring();
+                                                    EmpStatus.EmployeeNo = EmployeeNo;
+                                                    EmpStatus.LeaveType = LeaveType;
+                                                    EmpStatus.Date = DateChange;
+                                                    EmpStatus.UpdateDate = DateTime.Now;
+                                                    EmpStatus.UpdateID = user.UserName;
+                                                    EmpStatus.Reason = Reason;
+                                                    db.RP_AttendanceMonitoring.Add(EmpStatus);
+                                                    db.SaveChanges();
 
+                                                }
+                                                else
+                                                {
+                                                    checker.Reason = Reason;
+                                                    checker.LeaveType = LeaveType;
+                                                    checker.UpdateDate = DateTime.Now;
+                                                    checker.UpdateID = user.UpdateID;
+                                                    db.Entry(checker).State = EntityState.Modified;
+                                                    db.SaveChanges();
+
+                                                }
                                             }
-                                            else
-                                            {
-                                                checker.Reason = Reason;
-                                                checker.LeaveType = LeaveType;
-                                                checker.UpdateDate = DateTime.Now;
-                                                checker.UpdateID = user.UpdateID;
-                                                db.Entry(checker).State = EntityState.Modified;
-                                                db.SaveChanges();
 
-                                            }
                                         }
-                                        
-                                    }
-                                    catch (Exception err)
-                                    {
-                                        Error_Logs error = new Error_Logs();
-                                        error.PageModule = "Reports - WorkTimeSummary";
-                                        error.ErrorLog = err.Message;
-                                        error.DateLog = DateTime.Now;
-                                        error.Username = user.UserName;
-                                        db.Error_Logs.Add(error);
-                                        db.SaveChanges();
+                                        catch (Exception err)
+                                        {
+                                            Error_Logs error = new Error_Logs();
+                                            error.PageModule = "Reports - WorkTimeSummary";
+                                            error.ErrorLog = err.Message;
+                                            error.DateLog = DateTime.Now;
+                                            error.Username = user.UserName;
+                                            db.Error_Logs.Add(error);
+                                            db.SaveChanges();
+                                        }
                                     }
                                 }
+                               
                             }
                         }
                     }
@@ -2706,7 +2720,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                    // dt = (DataTable)System.Web.HttpContext.Current.Session["ExportWT"];
                     List<GET_RP_AttendanceMonitoring_Result> list = new List<GET_RP_AttendanceMonitoring_Result>();
                     list = test(Month, Year, Section, dt); //db.GET_RP_MPCMonitoringv2(Filter.DateFrom, Filter.DateTo, shift, Filter.Line, Filter.Process, section).ToList();
-                    ExcelWorksheet ExportData = package.Workbook.Worksheets["Sheet1"];
+                    ExcelWorksheet ExportData = package.Workbook.Worksheets["AMSSheet"];
                     int start = 2;
 
                     for (int i = 0; i < list.Count; i++)
@@ -2969,7 +2983,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                    
                     List<GET_RP_AbsentDetails_Result> list = new List<GET_RP_AbsentDetails_Result>();
                     list = db.GET_RP_AbsentDetails(Month, Year, Section).ToList();
-                    ExcelWorksheet ExportData = package.Workbook.Worksheets["Sheet1"];
+                    ExcelWorksheet ExportData = package.Workbook.Worksheets["AMSSheet"];
                     int start = 2;
 
                     for (int i = 0; i < list.Count; i++)

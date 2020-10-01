@@ -27,21 +27,21 @@ var timer;
       
     })
 
-    //var delay = (function () {
-    //    var timer = 0;
-    //    return function (callback, ms) {
-    //        clearTimeout(timer);
-    //        timer = setTimeout(callback, ms);
-    //    };
-    //})();
+    var delay = (function () {
+        var timer = 0;
+        return function (callback, ms) {
+            clearTimeout(timer);
+            timer = setTimeout(callback, ms);
+        };
+    })();
 
-    //$("#IDno").on("input", function () {
-    //    delay(function () {
-    //        if ($("#IDno").val().length < 4) {
-    //            $("#IDno").val("");
-    //        }
-    //    }, 20);
-    //});
+    $("#IDno").on("input", function () {
+        delay(function () {
+            if ($("#IDno").val().length < 4) {
+                $("#IDno").val("");
+            }
+        }, 20);
+    });
 
     $("#INN").click();
     $(".sidebar-mini").addClass("sidebar-collapse");
@@ -148,7 +148,10 @@ var timer;
                         $("#empDetails").show();
                         $("#TimeIns").text(thetime);
                         if (mode == "OUT") {
-                            selectprocess(0);
+                            if (returnData.employee.Status.toUpperCase() == "ACTIVE") {
+                                selectprocess(0);
+                            }
+                            
                         }
 
                         if(returnData.employee.First_Name == "undefined")

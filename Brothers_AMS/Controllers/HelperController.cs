@@ -181,10 +181,17 @@ namespace Brothers_WMS.Controllers
             List<M_Agency> a = (from c in db.M_Agency where c.AgencyCode == "BIPH" select c).ToList();
             List<M_Agency> b = (from c in db.M_Agency where c.AgencyCode != "BIPH" orderby c.AgencyName ascending select c).ToList();
             List<M_Agency> li = new List<M_Agency>();
+
+            M_Agency AllAgency = new M_Agency();
+            AllAgency.AgencyCode = "AGENCY";
+            AllAgency.AgencyName = "All Agencies";
+            AllAgency.IsDeleted = false;
+            AllAgency.Status = true;
             foreach(M_Agency i in a)
             {
                 li.Add(i);
             }
+            li.Add(AllAgency);
             foreach (M_Agency i in b)
             {
                 li.Add(i);
@@ -215,14 +222,20 @@ namespace Brothers_WMS.Controllers
             return Json(new { list = list }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult GetDropdown_LineProcessTeamLogin()
+        public ActionResult GetDropdown_LineProcessTeamLogin(string Sectiongroup)
         {
+            //var list = (from w in db.M_LineTeam.ToList()
+            //            where w.IsDeleted == false && w.Status == true 
+            //            && w.Section == user.CostCode
+            //            orderby w.Line ascending
+            //            select new { text = w.Line, value = w.ID }).Distinct().ToList();
+            List<string> GroupLine = (from c in db.M_Cost_Center_List where c.GroupSection == Sectiongroup || Sectiongroup == "null" select c.Cost_Center).ToList();
             var list = (from w in db.M_LineTeam.ToList()
-                        where w.IsDeleted == false && w.Status == true 
-                        && w.Section == user.CostCode
+                        where w.IsDeleted == false && w.Status == true
+                        //&& w.Section == user.CostCode
+                        && GroupLine.Contains(w.Section)
                         orderby w.Line ascending
                         select new { text = w.Line, value = w.ID }).Distinct().ToList();
-
             return Json(new { list = list }, JsonRequestBehavior.AllowGet);
         }
 

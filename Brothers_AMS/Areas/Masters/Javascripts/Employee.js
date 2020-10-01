@@ -1,11 +1,11 @@
 ﻿$(function () {
 
     GetUser();
-    Dropdown_select('LineID2', "/Helper/GetDropdown_LineProcessTeamLogin");
+    Dropdown_select('LineID2', "/Helper/GetDropdown_LineProcessTeamLogin?Sectiongroup=" + $("#Section").val());
     Dropdown_selectEmpSection('Section', "/Helper/GetDropdown_SectionAMS?Dgroup=");
     Dropdown_select('Status', "/Helper/GetDropdown_EmployeeStatus?Sectiongroup="+$("#Section").val() +"&MStatus=false");
     Dropdown_select('MStatus', "/Helper/GetDropdown_EmployeeStatus?Sectiongroup=" + $("#Section").val() + "&MStatus=true");
-    Dropdown_select('EmployeeStatus', "/Helper/GetDropdown_EmployeeStatus");
+    Dropdown_select('EmployeeStatus', "/Helper/GetDropdown_EmployeeStatus?Sectiongroup=" + $("#Section").val() +"&MStatus=false");//"/Helper/GetDropdown_EmployeeStatus");
     Dropdown_select('EmployeePos', "/Helper/GetDropdown_EmployeePosition?Sectiongroup=" + $("#Section").val());
    
    
@@ -101,7 +101,7 @@
 
     $("#btnskillinitupload").on("click", ModalSkill);
     $('#SkillMod').on('hidden.bs.modal', function (e) {
-        location.reload();
+        //location.reload();
     })
 
     $("#LineID2").on("change", function () {
@@ -113,6 +113,8 @@
         //$("#select2-selection__rendered").text($("#Section").val());
         Dropdown_select('Status', "/Helper/GetDropdown_EmployeeStatus?Sectiongroup=" + $("#Section").val() + "&MStatus=false");
         Dropdown_select('MStatus', "/Helper/GetDropdown_EmployeeStatus?Sectiongroup=" + $("#Section").val() + "&MStatus=true");
+        Dropdown_select('LineID2', "/Helper/GetDropdown_LineProcessTeamLogin?Sectiongroup=" + $("#Section").val());
+
         Initializepage();
     });
 
@@ -587,11 +589,12 @@ function UploadExprod() {
         success: function (response) {
             if (response.result == "success") {
                 $("#loading_modal").modal("hide")
-                swal("Exprod Cost Center Updated");
+                swal("AMS Cost Center Updated");
                 Initializepage();
             }
             else {
-                swal("An error occured");
+                $("#loading_modal").modal("hide");
+                swal("AMS Cost Center Upload Failed");
 
             }
         },
@@ -624,7 +627,8 @@ function UploadSchedule() {
                 Initializepage();
             }
             else {
-                swal("An error occured");
+                $("#loading_modal").modal("hide");
+                swal("Schedule Upload Failed. Please recheck upload file");
 
             }
         },
@@ -649,12 +653,13 @@ function UploadStatus() {
         processData: false,
         success: function (response) {
             if (response.result == "success") {
-                $("#loading_modal").modal("hide")
+                $("#loading_modal").modal("hide");
                 swal("Status Updated");
                 Initializepage();
             }
             else {
-                swal("An error occured");
+                $("#loading_modal").modal("hide");
+                swal("Status Upload Failed. Please recheck upload file");
 
             }
         },
@@ -684,7 +689,8 @@ function UploadPosition() {
                 Initializepage();
             }
             else {
-                swal("An error occured");
+                $("#loading_modal").modal("hide")
+                swal("Position Upload Failed. Please recheck upload file");
 
             }
         },

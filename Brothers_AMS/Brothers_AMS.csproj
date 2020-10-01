@@ -2287,7 +2287,6 @@
     <Content Include="TemplateFiles\ExportReports\ManPowerMonitoring.xlsx" />
     <Content Include="TemplateFiles\ExportReports\WorkTimeSummary.xlsx" />
     <Content Include="TemplateFiles\ExportReports\AbsentDetails.xlsx" />
-    <Content Include="TemplateFiles\EmployeeNOSchedule.xlsx" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

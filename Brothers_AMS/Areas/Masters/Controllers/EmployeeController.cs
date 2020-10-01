@@ -360,6 +360,141 @@ namespace Brothers_WMS.Areas.Masters.Controllers
             return Json(new { skillLogo = skillLogo }, JsonRequestBehavior.AllowGet);
         }
 
+        #region old exprod upload
+        //public ActionResult UploadExprodOLD()
+        //{
+        //    try
+        //    {
+        //        var postedFile = Request.Files[0] as HttpPostedFileBase;
+        //        string filePath = string.Empty;
+        //        if (postedFile != null)
+        //        {
+        //            Z_UploadTracker uploaddetails = new Z_UploadTracker();
+        //            uploaddetails.Uploaddate = db.TT_GETTIME().FirstOrDefault();
+        //            uploaddetails.Uploader = user.UserName;
+        //            uploaddetails.UploadFile = postedFile.FileName;
+        //            db.Z_UploadTracker.Add(uploaddetails);
+        //            db.SaveChanges();
+
+
+        //            string dividerpath = (user.Section == "" || user.Section == null) ? "SuperUser" : user.Section;
+        //            string path = Server.MapPath("~/Uploads/" + dividerpath + "/");
+        //            if (!Directory.Exists(path))
+        //            {
+        //                Directory.CreateDirectory(path);
+        //            }
+        //            filePath = path + Path.GetFileName(postedFile.FileName);
+        //            string extension = Path.GetExtension(postedFile.FileName);
+        //            postedFile.SaveAs(filePath);
+        //            string conString = string.Empty;
+        //            switch (extension.ToLower())
+        //            {
+        //                case ".xls": //Excel 97-03.
+        //                    conString = ConfigurationManager.ConnectionStrings["Excel03ConString"].ConnectionString;
+        //                    break;
+        //                case ".xlsx": //Excel 07 and above.
+        //                    conString = ConfigurationManager.ConnectionStrings["Excel07ConString"].ConnectionString;
+        //                    break;
+        //            }
+        //            conString = string.Format(conString, filePath);
+
+        //            using (OleDbConnection connExcel = new OleDbConnection(conString))
+        //            {
+        //                using (OleDbCommand cmdExcel = new OleDbCommand())
+        //                {
+        //                    using (OleDbDataAdapter odaExcel = new OleDbDataAdapter())
+        //                    {
+        //                        DataTable dt = new DataTable();
+        //                        cmdExcel.Connection = connExcel;
+        //                        string sheetName = "AMSSheet";
+        //                        try
+        //                        {
+        //                            connExcel.Open();
+        //                        }
+        //                        catch (Exception err)
+        //                        {
+        //                            Error_Logs error = new Error_Logs();
+        //                            error.PageModule = "Master - Employee";
+        //                            error.ErrorLog = err.Message;
+        //                            error.DateLog = DateTime.Now;
+        //                            error.Username = user.UserName;
+        //                            db.Error_Logs.Add(error);
+        //                            db.SaveChanges();
+        //                        }
+        //                        cmdExcel.CommandText = "SELECT EmployeeNumber, AMS_CostCenter FROM [" + sheetName + "$]";//ung * is column name, ung sheetname ay settings
+        //                        odaExcel.SelectCommand = cmdExcel;
+        //                        odaExcel.Fill(dt);
+        //                        connExcel.Close();
+        //                        for (int x = 0; x < dt.Rows.Count; x++)
+        //                        {
+        //                            try
+        //                            {
+        //                                string EmployeeNo = dt.Rows[x]["EmployeeNumber"].ToString();
+        //                                //string CostCenter_EXPROD = dt.Rows[x]["EXPROD_CostCenter"].ToString();
+        //                                string CostCenter_AMS = dt.Rows[x]["AMS_CostCenter"].ToString();
+        //                                M_Employee_CostCenter employee = (from c in db.M_Employee_CostCenter
+        //                                                                  where c.EmployNo == EmployeeNo && c.CostCenter_AMS == CostCenter_AMS
+        //                                                                  && c.UpdateDate_AMS.Value < DateTime.Now
+        //                                                                  select c).FirstOrDefault();
+        //                                if (employee != null)
+        //                                {
+        //                                    employee.CostCenter_EXPROD = "";
+        //                                    employee.CostCenter_AMS = CostCenter_AMS;
+
+        //                                    employee.UpdateDate_AMS = db.TT_GETTIME().FirstOrDefault();
+        //                                    employee.UpdateDate_IT = db.TT_GETTIME().FirstOrDefault();
+        //                                    employee.Update_ID = user.UserName;
+        //                                    db.Entry(employee).State = EntityState.Modified;
+        //                                    db.SaveChanges();
+        //                                }
+        //                                else
+        //                                {
+        //                                    employee = new M_Employee_CostCenter();
+        //                                    employee.EmployNo = EmployeeNo;
+        //                                    employee.CostCenter_AMS = CostCenter_AMS;
+        //                                    employee.CostCenter_EXPROD = "";
+        //                                    employee.CostCenter_IT = "";
+        //                                    employee.UpdateDate_AMS = db.TT_GETTIME().FirstOrDefault();
+        //                                    employee.UpdateDate_IT = db.TT_GETTIME().FirstOrDefault();
+        //                                    employee.UpdateDate_EXPROD = db.TT_GETTIME().FirstOrDefault();
+        //                                    employee.Update_ID = user.UserName;
+        //                                    db.M_Employee_CostCenter.Add(employee);
+        //                                    db.SaveChanges();
+        //                                }
+        //                            }
+        //                            catch (Exception err)
+        //                            {
+        //                                Error_Logs error = new Error_Logs();
+        //                                error.PageModule = "Master - Employee";
+        //                                error.ErrorLog = err.Message;
+        //                                error.DateLog = DateTime.Now;
+        //                                error.Username = user.UserName;
+        //                                db.Error_Logs.Add(error);
+        //                                db.SaveChanges();
+
+        //                            }
+
+        //                        }
+        //                    }
+        //                }
+        //            }
+        //        }
+        //    }
+        //    catch (Exception err)
+        //    {
+        //        Error_Logs error = new Error_Logs();
+        //        error.PageModule = "Master - Employee";
+        //        error.ErrorLog = err.Message;
+        //        error.DateLog = DateTime.Now;
+        //        error.Username = user.UserName;
+        //        db.Error_Logs.Add(error);
+        //        db.SaveChanges();
+        //        return Json(new { result = "failed" }, JsonRequestBehavior.AllowGet);
+        //    }
+        //    return Json(new { result = "success" }, JsonRequestBehavior.AllowGet);
+        //}
+        #endregion
+
         public ActionResult UploadExprod()
         {
             try
@@ -368,7 +503,16 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                 string filePath = string.Empty;
                 if (postedFile != null)
                 {
-                    string path = Server.MapPath("~/Uploads/");
+                    Z_UploadTracker uploaddetails = new Z_UploadTracker();
+                    uploaddetails.Uploaddate = db.TT_GETTIME().FirstOrDefault();
+                    uploaddetails.Uploader = user.UserName;
+                    uploaddetails.UploadFile = postedFile.FileName;
+                    db.Z_UploadTracker.Add(uploaddetails);
+                    db.SaveChanges();
+
+
+                    string dividerpath = (user.Section == "" || user.Section == null) ? "SuperUser" : user.Section;
+                    string path = Server.MapPath("~/Uploads/" + dividerpath + "/");
                     if (!Directory.Exists(path))
                     {
                         Directory.CreateDirectory(path);
@@ -395,8 +539,9 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                             using (OleDbDataAdapter odaExcel = new OleDbDataAdapter())
                             {
                                 DataTable dt = new DataTable();
+                                DataTable dtchecker = new DataTable();
                                 cmdExcel.Connection = connExcel;
-                                string sheetName = "Sheet1";
+                                string sheetName = "AMSSheet";
                                 try
                                 {
                                     connExcel.Open();
@@ -411,59 +556,48 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                                     db.Error_Logs.Add(error);
                                     db.SaveChanges();
                                 }
-                                cmdExcel.CommandText = "SELECT EmployeeNumber, AMS_CostCenter FROM [" + sheetName + "$]";//ung * is column name, ung sheetname ay settings
+                                cmdExcel.CommandText = "SELECT EmployeeNumber, AMS_CostCenter, IT_CostCenter FROM [" + sheetName + "$]";
                                 odaExcel.SelectCommand = cmdExcel;
                                 odaExcel.Fill(dt);
+                                dt = DataRequiredExprod(dt);
+
+
+                                cmdExcel.CommandText = "SELECT EmployeeNumber, AMS_CostCenter, IT_CostCenter FROM [" + sheetName + "$] WHERE EmployeeNumber <> '' AND (AMS_CostCenter IS NULL OR AMS_CostCenter = '')";
+                                odaExcel.SelectCommand = cmdExcel;
+                                odaExcel.Fill(dtchecker);
+                                
                                 connExcel.Close();
-                                for (int x = 0; x < dt.Rows.Count; x++)
+
+                                if (dtchecker.Rows.Count > 0)
                                 {
+                                    return Json(new { result = "failed" }, JsonRequestBehavior.AllowGet);
+                                }
+                                else
+                                {
+                                    #region NEW BULK INSERT
                                     try
                                     {
-                                        string EmployeeNo = dt.Rows[x]["EmployeeNumber"].ToString();
-                                        //string CostCenter_EXPROD = dt.Rows[x]["EXPROD_CostCenter"].ToString();
-                                        string CostCenter_AMS = dt.Rows[x]["AMS_CostCenter"].ToString();
-                                        M_Employee_CostCenter employee = (from c in db.M_Employee_CostCenter
-                                                                          where c.EmployNo == EmployeeNo && c.CostCenter_AMS == CostCenter_AMS
-                                                                          && c.UpdateDate_AMS.Value < DateTime.Now
-                                                                          select c).FirstOrDefault();
-                                        if (employee != null)
+                                        string conString2 = ConfigurationManager.ConnectionStrings["Brothers_AMSDB"].ConnectionString;
+                                        using (SqlBulkCopy bulk = new SqlBulkCopy(conString2))
                                         {
-                                            employee.CostCenter_EXPROD = "";
-                                            employee.CostCenter_AMS = CostCenter_AMS;
+                                            bulk.ColumnMappings.Add("EmployeeNumber", "EmployNo");
+                                            bulk.ColumnMappings.Add("AMS_CostCenter", "CostCenter_AMS");
+                                            bulk.ColumnMappings.Add("IT_CostCenter", "CostCenter_IT");
 
-                                            employee.UpdateDate_AMS = db.TT_GETTIME().FirstOrDefault();
-                                            employee.UpdateDate_IT = db.TT_GETTIME().FirstOrDefault();
-                                            employee.Update_ID = user.UserName;
-                                            db.Entry(employee).State = EntityState.Modified;
-                                            db.SaveChanges();
-                                        }
-                                        else
-                                        {
-                                            employee = new M_Employee_CostCenter();
-                                            employee.EmployNo = EmployeeNo;
-                                            employee.CostCenter_AMS = CostCenter_AMS;
-                                            employee.CostCenter_EXPROD = "";
-                                            employee.CostCenter_IT = "";
-                                            employee.UpdateDate_AMS = db.TT_GETTIME().FirstOrDefault();
-                                            employee.UpdateDate_IT = db.TT_GETTIME().FirstOrDefault();
-                                            employee.UpdateDate_EXPROD = db.TT_GETTIME().FirstOrDefault();
-                                            employee.Update_ID = user.UserName;
-                                            db.M_Employee_CostCenter.Add(employee);
-                                            db.SaveChanges();
+                                            bulk.ColumnMappings.Add("UpdateID", "Update_ID");
+                                            bulk.ColumnMappings.Add("UpdateDate_AMS", "UpdateDate_AMS");
+                                            bulk.ColumnMappings.Add("UpdateDate_IT", "UpdateDate_IT");
+                                            bulk.DestinationTableName = "M_Employee_CostCenter";
+                                            bulk.WriteToServer(dt);
                                         }
                                     }
                                     catch (Exception err)
                                     {
-                                        Error_Logs error = new Error_Logs();
-                                        error.PageModule = "Master - Employee";
-                                        error.ErrorLog = err.Message;
-                                        error.DateLog = DateTime.Now;
-                                        error.Username = user.UserName;
-                                        db.Error_Logs.Add(error);
-                                        db.SaveChanges();
-
+                                        return Json(new { result = "failed" }, JsonRequestBehavior.AllowGet);
                                     }
 
+
+                                    #endregion
                                 }
                             }
                         }
@@ -483,6 +617,7 @@ namespace Brothers_WMS.Areas.Masters.Controllers
             }
             return Json(new { result = "success" }, JsonRequestBehavior.AllowGet);
         }
+
         public ActionResult UploadSkills(long LineID)
         {
             List<UploadError> uploaderror = new List<UploadError>();
@@ -492,7 +627,16 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                 string filePath = string.Empty;
                 if (postedFile != null)
                 {
-                    string path = Server.MapPath("~/Uploads/");
+                    Z_UploadTracker uploaddetails = new Z_UploadTracker();
+                    uploaddetails.Uploaddate = db.TT_GETTIME().FirstOrDefault();
+                    uploaddetails.Uploader = user.UserName;
+                    uploaddetails.UploadFile = postedFile.FileName;
+                    db.Z_UploadTracker.Add(uploaddetails);
+                    db.SaveChanges();
+
+
+                    string dividerpath = (user.Section == "" || user.Section == null) ? "SuperUser" : user.Section;
+                    string path = Server.MapPath("~/Uploads/" + dividerpath + "/");
                     if (!Directory.Exists(path))
                     {
                         Directory.CreateDirectory(path);
@@ -520,7 +664,7 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                             {
                                 DataTable dt = new DataTable();
                                 cmdExcel.Connection = connExcel;
-                                string sheetName = "Sheet1";
+                                string sheetName = "AMSSheet";
                                 try
                                 {
                                     connExcel.Open();
@@ -625,7 +769,6 @@ namespace Brothers_WMS.Areas.Masters.Controllers
             return Json(new { result = "success", uploaderror = uploaderror }, JsonRequestBehavior.AllowGet);
         }
 
-
         public ActionResult UploadScheduleold(string EffectivitySched)
         {
             try
@@ -662,7 +805,7 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                             {
                                 DataTable dt = new DataTable();
                                 cmdExcel.Connection = connExcel;
-                                string sheetName = "Sheet1";
+                                string sheetName = "AMSSheet";
                                 try
                                 {
                                     connExcel.Open();
@@ -766,6 +909,33 @@ namespace Brothers_WMS.Areas.Masters.Controllers
             return dt;
         }
 
+        public DataTable DataRequiredExprod(DataTable dt)
+        {
+            #region Add columns to Datatable
+            
+       
+            DataColumn col_UpdateDate_AMS = new System.Data.DataColumn("UpdateDate_AMS", typeof(System.DateTime));
+            col_UpdateDate_AMS.DefaultValue = DateTime.Now;
+            dt.Columns.Add(col_UpdateDate_AMS);
+
+            DataColumn col_UpdateID = new System.Data.DataColumn("UpdateID", typeof(System.String));
+            col_UpdateID.DefaultValue = user.UserName;
+            dt.Columns.Add(col_UpdateID);
+
+            DataColumn col_UpdateDate_IT = new System.Data.DataColumn("UpdateDate_IT", typeof(System.DateTime));
+            col_UpdateDate_IT.DefaultValue = DateTime.Now;
+            dt.Columns.Add(col_UpdateDate_IT);
+
+            //DataColumn col_Row = new System.Data.DataColumn("Row", typeof(System.Int32));
+            //col_Row.AutoIncrement = true;
+            //col_Row.AutoIncrementSeed = 1;
+            //col_Row.AutoIncrementStep = 1;
+            //dt.Columns.Add(col_Row);
+
+
+            #endregion
+            return dt;
+        }
 
         public ActionResult UploadSchedule(string EffectivitySched)
         {
@@ -812,8 +982,9 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                             using (OleDbDataAdapter odaExcel = new OleDbDataAdapter())
                             {
                                 DataTable dt = new DataTable();
+                                DataTable dtchecker = new DataTable();
                                 cmdExcel.Connection = connExcel;
-                                string sheetName = "Sheet1";
+                                string sheetName = "AMSSheet";
                                 try
                                 {
                                     connExcel.Open();
@@ -830,30 +1001,43 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                                 }
                                 cmdExcel.CommandText = "SELECT EmployeeNumber, ScheduleName, ScheduleID FROM [" + sheetName + "$] WHERE EmployeeNumber <> '' AND ScheduleName <> ''";//ung * is column name, ung sheetname ay settings
                                 odaExcel.SelectCommand = cmdExcel;
-                                dt = DataRequired(dt, EffectivitySched);
+
                                 odaExcel.Fill(dt);
+                                dt = DataRequired(dt, EffectivitySched);
+
+
+                                cmdExcel.CommandText = "SELECT EmployeeNumber, ScheduleName, ScheduleID FROM [" + sheetName + "$] WHERE EmployeeNumber <> '' AND (ScheduleName IS NULL OR ScheduleName = '')";//ung * is column name, ung sheetname ay settings
+                                odaExcel.SelectCommand = cmdExcel;
+                                odaExcel.Fill(dtchecker);
                                 connExcel.Close();
-
-                                #region NEW BULK INSERT
-                                try
+                                if (dtchecker.Rows.Count > 0)
                                 {
-                                    DateTime EffectivityDate = Convert.ToDateTime(EffectivitySched);
-                                    string conString2 = ConfigurationManager.ConnectionStrings["Brothers_AMSDB"].ConnectionString;
-                                    using (SqlBulkCopy bulk = new SqlBulkCopy(conString2))
-                                    {
-                                        bulk.ColumnMappings.Add("EmployeeNumber", "EmployeeNo");
-                                        bulk.ColumnMappings.Add("ScheduleID", "ScheduleID");
-                                        bulk.ColumnMappings.Add("EffectivityDate", "EffectivityDate");
-                                        bulk.ColumnMappings.Add("UpdateID", "UpdateID");
-                                        bulk.ColumnMappings.Add("UpdateDate", "UpdateDate");
-                                        bulk.DestinationTableName = "M_Employee_Master_List_Schedule";
-                                        bulk.WriteToServer(dt);
-                                    }
+                                    return Json(new { result = "failed" }, JsonRequestBehavior.AllowGet);
                                 }
-                                catch (Exception err) { }
+                                else
+                                {
+                                    #region NEW BULK INSERT
+                                    try
+                                    {
+                                        DateTime EffectivityDate = Convert.ToDateTime(EffectivitySched);
+                                        string conString2 = ConfigurationManager.ConnectionStrings["Brothers_AMSDB"].ConnectionString;
+                                        using (SqlBulkCopy bulk = new SqlBulkCopy(conString2))
+                                        {
+                                            bulk.ColumnMappings.Add("EmployeeNumber", "EmployeeNo");
+                                            bulk.ColumnMappings.Add("ScheduleID", "ScheduleID");
+                                            bulk.ColumnMappings.Add("EffectivityDate", "EffectivityDate");
+                                            bulk.ColumnMappings.Add("UpdateID", "UpdateID");
+                                            bulk.ColumnMappings.Add("UpdateDate", "UpdateDate");
+                                            bulk.DestinationTableName = "M_Employee_Master_List_Schedule";
+                                            bulk.WriteToServer(dt);
+                                        }
+                                    }
+                                    catch (Exception err) { }
 
-                              
-                                #endregion
+
+                                    #endregion
+                                }
+                               
 
                                 //for (int x = 0; x < dt.Rows.Count; x++)
                                 //{
@@ -905,7 +1089,6 @@ namespace Brothers_WMS.Areas.Masters.Controllers
             return Json(new { result = "success" }, JsonRequestBehavior.AllowGet);
         }
 
-
         public ActionResult UploadStatus()
         {
             try
@@ -914,7 +1097,16 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                 string filePath = string.Empty;
                 if (postedFile != null)
                 {
-                    string path = Server.MapPath("~/Uploads/");
+                    Z_UploadTracker uploaddetails = new Z_UploadTracker();
+                    uploaddetails.Uploaddate = db.TT_GETTIME().FirstOrDefault();
+                    uploaddetails.Uploader = user.UserName;
+                    uploaddetails.UploadFile = postedFile.FileName;
+                    db.Z_UploadTracker.Add(uploaddetails);
+                    db.SaveChanges();
+
+
+                    string dividerpath = (user.Section == "" || user.Section == null) ? "SuperUser" : user.Section;
+                    string path = Server.MapPath("~/Uploads/" + dividerpath + "/");
                     if (!Directory.Exists(path))
                     {
                         Directory.CreateDirectory(path);
@@ -941,8 +1133,9 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                             using (OleDbDataAdapter odaExcel = new OleDbDataAdapter())
                             {
                                 DataTable dt = new DataTable();
+                                DataTable dtchecker = new DataTable();
                                 cmdExcel.Connection = connExcel;
-                                string sheetName = "Sheet1";
+                                string sheetName = "AMSSheet";
                                 try
                                 {
                                     connExcel.Open();
@@ -957,37 +1150,45 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                                     db.Error_Logs.Add(error);
                                     db.SaveChanges();
                                 }
-                                cmdExcel.CommandText = "SELECT EmployeeNumber, Status FROM [" + sheetName + "$]";//ung * is column name, ung sheetname ay settings
+                                cmdExcel.CommandText = "SELECT EmployeeNumber, Status FROM [" + sheetName + "$] WHERE EmployeeNumber <> '' AND Status <> ''";//ung * is column name, ung sheetname ay settings
                                 odaExcel.SelectCommand = cmdExcel;
                                 odaExcel.Fill(dt);
+                                dt = DataRequired(dt, DateTime.Now.ToLongDateString());
+
+
+                                cmdExcel.CommandText = "SELECT EmployeeNumber, Status FROM [" + sheetName + "$] WHERE EmployeeNumber <> '' AND (Status IS NULL OR Status = '')";//ung * is column name, ung sheetname ay settings
+                                odaExcel.SelectCommand = cmdExcel;
+                                odaExcel.Fill(dtchecker);
+
                                 connExcel.Close();
-                                for (int x = 0; x < dt.Rows.Count; x++)
+
+                                if (dtchecker.Rows.Count > 0)
                                 {
+                                    return Json(new { result = "failed" }, JsonRequestBehavior.AllowGet);
+                                }
+                                else
+                                {
+                                    #region NEW BULK INSERT
                                     try
                                     {
-                                        string EmployeeNo = dt.Rows[x]["EmployeeNumber"].ToString();
-                                        string Status = dt.Rows[x]["Status"].ToString();
 
-                                        M_Employee_Status EmpStatus = new M_Employee_Status();
-                                        EmpStatus.EmployNo = EmployeeNo;
-                                        EmpStatus.Status = Status;
-                                        EmpStatus.UpdateDate = DateTime.Now;
-                                        EmpStatus.Update_ID = user.UserName;
+                                        string conString2 = ConfigurationManager.ConnectionStrings["Brothers_AMSDB"].ConnectionString;
+                                        using (SqlBulkCopy bulk = new SqlBulkCopy(conString2))
+                                        {
+                                            bulk.ColumnMappings.Add("EmployeeNumber", "EmployNo");
+                                            bulk.ColumnMappings.Add("Status", "Status");
+                                            bulk.ColumnMappings.Add("UpdateID", "Update_ID");
+                                            bulk.ColumnMappings.Add("UpdateDate", "UpdateDate");
+                                            bulk.DestinationTableName = "M_Employee_Status";
+                                            bulk.WriteToServer(dt);
+                                        }
+                                    }
+                                    catch (Exception err) { }
 
-                                        db.M_Employee_Status.Add(EmpStatus);
-                                        db.SaveChanges();
-                                    }
-                                    catch (Exception err)
-                                    {
-                                        Error_Logs error = new Error_Logs();
-                                        error.PageModule = "Master - Employee";
-                                        error.ErrorLog = err.Message;
-                                        error.DateLog = DateTime.Now;
-                                        error.Username = user.UserName;
-                                        db.Error_Logs.Add(error);
-                                        db.SaveChanges();
-                                    }
+
+                                    #endregion
                                 }
+
                             }
                         }
                     }
@@ -1042,8 +1243,9 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                             using (OleDbDataAdapter odaExcel = new OleDbDataAdapter())
                             {
                                 DataTable dt = new DataTable();
+                                DataTable dtchecker = new DataTable();
                                 cmdExcel.Connection = connExcel;
-                                string sheetName = "Sheet1";
+                                string sheetName = "AMSSheet";
                                 try
                                 {
                                     connExcel.Open();
@@ -1061,32 +1263,46 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                                 cmdExcel.CommandText = "SELECT EmployeeNumber, PositionName FROM [" + sheetName + "$]";//ung * is column name, ung sheetname ay settings
                                 odaExcel.SelectCommand = cmdExcel;
                                 odaExcel.Fill(dt);
+
+
+                                cmdExcel.CommandText = "SELECT EmployeeNumber, PositionName FROM [" + sheetName + "$] WHERE EmployeeNumber <> '' AND (PositionName IS NULL AND PositionName = '')";//ung * is column name, ung sheetname ay settings
+                                odaExcel.SelectCommand = cmdExcel;
+                                odaExcel.Fill(dtchecker);
                                 connExcel.Close();
-                                for (int x = 0; x < dt.Rows.Count; x++)
+
+                                if (dtchecker.Rows.Count > 0)
                                 {
-                                    try
-                                    {
-                                        string EmployeeNo = dt.Rows[x]["EmployeeNumber"].ToString();
-                                        string Status = dt.Rows[x]["PositionName"].ToString();
+                                    return Json(new { result = "failed" }, JsonRequestBehavior.AllowGet);
 
-                                        M_Employee_Position EmpStatus = new M_Employee_Position();
-                                        EmpStatus.EmployNo = EmployeeNo;
-                                        EmpStatus.Position = Status;
-                                        EmpStatus.UpdateDate = db.TT_GETTIME().FirstOrDefault();
-                                        EmpStatus.Update_ID = user.UserName;
-
-                                        db.M_Employee_Position.Add(EmpStatus);
-                                        db.SaveChanges();
-                                    }
-                                    catch (Exception err)
+                                }
+                                else
+                                {
+                                    for (int x = 0; x < dt.Rows.Count; x++)
                                     {
-                                        Error_Logs error = new Error_Logs();
-                                        error.PageModule = "Master - Employee";
-                                        error.ErrorLog = err.Message;
-                                        error.DateLog = db.TT_GETTIME().FirstOrDefault();
-                                        error.Username = user.UserName;
-                                        db.Error_Logs.Add(error);
-                                        db.SaveChanges();
+                                        try
+                                        {
+                                            string EmployeeNo = dt.Rows[x]["EmployeeNumber"].ToString();
+                                            string Status = dt.Rows[x]["PositionName"].ToString();
+
+                                            M_Employee_Position EmpStatus = new M_Employee_Position();
+                                            EmpStatus.EmployNo = EmployeeNo;
+                                            EmpStatus.Position = Status;
+                                            EmpStatus.UpdateDate = db.TT_GETTIME().FirstOrDefault();
+                                            EmpStatus.Update_ID = user.UserName;
+
+                                            db.M_Employee_Position.Add(EmpStatus);
+                                            db.SaveChanges();
+                                        }
+                                        catch (Exception err)
+                                        {
+                                            Error_Logs error = new Error_Logs();
+                                            error.PageModule = "Master - Employee";
+                                            error.ErrorLog = err.Message;
+                                            error.DateLog = db.TT_GETTIME().FirstOrDefault();
+                                            error.Username = user.UserName;
+                                            db.Error_Logs.Add(error);
+                                            db.SaveChanges();
+                                        }
                                     }
                                 }
                             }
@@ -1120,7 +1336,6 @@ namespace Brothers_WMS.Areas.Masters.Controllers
             return Json(new { msg = "Success" }, JsonRequestBehavior.AllowGet);
         }
 
-
         public ActionResult ExportExpro(string CostCode)
         {
             try
@@ -1145,7 +1360,7 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                     list = db.GET_Employee_Details(GroupSection).ToList();
                     list = list.Where(xx => xx.ModifiedStatus != null).ToList();
                     list = list.Where(x => x.ModifiedStatus.ToLower() == "active").ToList();
-                    ExcelWorksheet ExportData = package.Workbook.Worksheets["Sheet1"];
+                    ExcelWorksheet ExportData = package.Workbook.Worksheets["AMSSheet"];
                     ExcelWorksheet ExportData2 = package.Workbook.Worksheets["Instructions"];
                     int start = 2;
                     if (!string.IsNullOrEmpty(searchnow))//filter
@@ -1170,7 +1385,8 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                     {
                         ExportData.Cells["A"+start].Value = list[i].EmpNo;
                         ExportData.Cells["B" + start].Value = list[i].Family_Name + ", " + list[i].First_Name;
-                        ExportData.Cells["C" + start].Value = list[i].CostCenter_AMS;
+                        ExportData.Cells["C" + start].Value = list[i].CostCenter_IT;
+                        ExportData.Cells["D" + start].Value = list[i].CostCenter_AMS;
                         start++;
                     }
 
@@ -1212,7 +1428,7 @@ namespace Brothers_WMS.Areas.Masters.Controllers
         //            list = db.GET_Employee_Details(user.CostCode, CostCode).ToList();
         //            list = list.Where(xx => xx.ModifiedStatus != null).ToList();
         //            list = list.Where(x => x.ModifiedStatus.ToLower() == "active").ToList();
-        //            ExcelWorksheet ExportData = package.Workbook.Worksheets["Sheet1"];
+        //            ExcelWorksheet ExportData = package.Workbook.Worksheets["AMSSheet"];
         //            int start = 2;
         //            if (!string.IsNullOrEmpty(searchnow))//filter
         //            {
@@ -1244,7 +1460,6 @@ namespace Brothers_WMS.Areas.Masters.Controllers
         //    catch (Exception err) { }
         //    return Json(new { }, JsonRequestBehavior.AllowGet);
         //}
-
         #endregion
 
         public ActionResult ExportSkillEmployee(string CostCode)
@@ -1272,7 +1487,7 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                     list = db.GET_Employee_Details_Skill(GroupSection).ToList();
                  
                     list = list.Where(x => x.ModifiedStatus.ToLower() == "active").ToList();
-                    ExcelWorksheet ExportData = package.Workbook.Worksheets["Sheet1"];
+                    ExcelWorksheet ExportData = package.Workbook.Worksheets["AMSSheet"];
                     int start = 2;
                     if (!string.IsNullOrEmpty(searchnow))//filter
                     {
@@ -1331,7 +1546,7 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                     list = db.GET_Employee_Details(GroupSection).ToList();
                     list = list.Where(x => x.SkillCount == 0).ToList();
                     list = list.Where(x => x.ModifiedStatus.ToLower() == "active").ToList();
-                    ExcelWorksheet ExportData = package.Workbook.Worksheets["Sheet1"];
+                    ExcelWorksheet ExportData = package.Workbook.Worksheets["AMSSheet"];
                     int start = 2;
                     if (!string.IsNullOrEmpty(searchnow))//filter
                     {
@@ -1389,7 +1604,7 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                     CostCode = (user.CostCode == CostCode) ? "" : CostCode;
                     list = db.GET_Employee_Details(GroupSection).ToList();
                     list = list.Where(x => x.Status.ToLower() == "active").ToList();
-                    ExcelWorksheet ExportData = package.Workbook.Worksheets["Sheet1"];
+                    ExcelWorksheet ExportData = package.Workbook.Worksheets["AMSSheet"];
                     int start = 2;
                     if (!string.IsNullOrEmpty(searchnow))//filter
                     {
@@ -1478,8 +1693,8 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                     List<GET_Employee_Details_Result> list = new List<GET_Employee_Details_Result>();
                     CostCode = (user.CostCode == CostCode) ? "" : CostCode;
                     list = db.GET_Employee_Details(GroupSection).ToList();
-                    list = list.Where(x => x.Status.ToLower() == "active").ToList();
-                    ExcelWorksheet ExportData = package.Workbook.Worksheets["Sheet1"];
+                    //list = list.Where(x => x.ModifiedStatus.ToLower() == "active").ToList();
+                    ExcelWorksheet ExportData = package.Workbook.Worksheets["AMSSheet"];
                     ExcelWorksheet ExportData2 = package.Workbook.Worksheets["Instructions"];
 
                     int start = 2;
@@ -1559,8 +1774,8 @@ namespace Brothers_WMS.Areas.Masters.Controllers
 
                     List<GET_Employee_Details_Result> list = new List<GET_Employee_Details_Result>();
                     list = db.GET_Employee_Details(GroupSection).ToList();
-                    list = list.Where(x => x.Status.ToLower() == "active").ToList();
-                    ExcelWorksheet ExportData = package.Workbook.Worksheets["Sheet1"];
+                    list = list.Where(x => x.ModifiedStatus.ToLower() == "active").ToList();
+                    ExcelWorksheet ExportData = package.Workbook.Worksheets["AMSSheet"];
                     ExcelWorksheet ExportData2 = package.Workbook.Worksheets["Instructions"];
                     int start = 2;
                     if (!string.IsNullOrEmpty(searchnow))//filter
@@ -1650,8 +1865,7 @@ namespace Brothers_WMS.Areas.Masters.Controllers
             list = list.Skip(start).Take(length).ToList<GET_Employee_ModifiedStatus_Result>();
             return Json(new { data = list, draw = Request["draw"], recordsTotal = totalrows, recordsFiltered = totalrowsafterfiltering }, JsonRequestBehavior.AllowGet);
         }
-
-
+        
         public ActionResult GetEmployeeScheduleList(string EmployeeNo)
         {
             //Server Side Parameter
@@ -1895,9 +2109,7 @@ namespace Brothers_WMS.Areas.Masters.Controllers
             }
             return Json(new { result = result }, JsonRequestBehavior.AllowGet);
         }
-
-
-
+        
         public ActionResult ExportNOSchedule(string CostCode)
         {
             try
@@ -1922,8 +2134,8 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                     CostCode = (user.CostCode == CostCode) ? "" : CostCode;
                     list = db.GET_Employee_Details(GroupSection).ToList();
                     list = list.Where(x => x.Schedule == null).ToList();
-                    list = list.Where(x => x.Status.ToLower() == "active").ToList();
-                    ExcelWorksheet ExportData = package.Workbook.Worksheets["Sheet1"];
+                    list = list.Where(x => x.ModifiedStatus.ToLower() == "active").ToList();
+                    ExcelWorksheet ExportData = package.Workbook.Worksheets["AMSSheet"];
                     int start = 2;
                     if (!string.IsNullOrEmpty(searchnow))//filter
                     {
