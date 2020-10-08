@@ -90,6 +90,7 @@ function Initializedpage() {
             }
         },
         columns: [
+              { title: "No", data: "Rownum", name: "Rownum" },
               {
                   title: "CS Reference No.", className: "refnoe", data: function (x) {
                       return data = "<button type='button' class='btn btn-s bg-green'> <i class='fa fa-expand' ></i> " + x.CS_RefNo + "</button>"
@@ -233,6 +234,7 @@ function GetDetails(data) {
         //dom: 'Bfrtip',
         destroy: true,
         columns: [
+
               {
                  data: function (data, type, row, meta) {
                       var checked = (data.AccessType == true) ? ' checked ' : '';

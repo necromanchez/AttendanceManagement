@@ -76,8 +76,11 @@ function Initializedpage() {
                 Status: $("#Status").val(),
             }
         },
-        lengthChange: false,
+        lengthChange: true,
+        lengthMenu: [[10, 50, 100], [10, 50, 100]],
+        pagelength: 10,
         scrollY: "600px",
+        //scrollX: "1000px",
         scrollCollapse: true,
         serverSide: "true",
         order: [0, "asc"],

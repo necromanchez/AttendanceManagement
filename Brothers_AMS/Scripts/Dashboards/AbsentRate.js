@@ -36,6 +36,21 @@ function AbsentRate() {
     });
 }
 
+function AbsentRate_Department() {
+    $("#loading_modalD_AbsentRate").modal("show");
+    $.ajax({
+        url: '/Home/GET_AbsentRate_Department',
+        type: 'POST',
+        data: Filter,
+        datatype: "json",
+        success: function (returnData) {
+
+            GraphStartAbsentRate(returnData.list);
+        }
+
+    });
+}
+
 function GraphStartAbsentRate(datahere) {
     var finalticks = [];
     var DayAbsent = [];

@@ -186,7 +186,7 @@ namespace Brothers_WMS.Areas.Correction.Controllers
         
         public ActionResult ApprovedCS(List<AF_CSModel> GetApproved, string ifalter)
         {
-            string[] Position = {"Supervisor", "Manager", "GeneralManager" };
+            string[] Position = {"Supervisor", "Manager"};
             int currentstatus = 0;
             int stat = 0, statmax = 0;
             foreach (AF_CSModel csrequest in GetApproved)
@@ -197,6 +197,11 @@ namespace Brothers_WMS.Areas.Correction.Controllers
                     csfile = (from c in db.AF_ChangeSchedulefiling where c.Status > -1 && c.CS_RefNo == csrequest.CS_RefNo && c.EmployeeNo == csrequest.EmployeeNo select c).FirstOrDefault();
                     currentstatus = csfile.Status + 1;
                     csfile.Status = (csrequest.Approved == true) ? currentstatus : currentstatus - (currentstatus * 2);
+
+                    if (csfile.Status >= csfile.StatusMax)
+                    {
+                        csfile.Status = 2;
+                    }
                     db.Entry(csfile).State = EntityState.Modified;
                     db.SaveChanges();
 
@@ -209,6 +214,10 @@ namespace Brothers_WMS.Areas.Correction.Controllers
                     csfile = (from c in db.AF_ChangeSchedulefiling where c.Status > -1 && c.CS_RefNo == csrequest.CS_RefNo && c.EmployeeNo == csrequest.EmployeeNo select c).FirstOrDefault();
                     currentstatus = csfile.Status + 1;
                     csfile.Status = (csrequest.Approved == true) ? currentstatus : currentstatus - (currentstatus * 2);
+                    if(csfile.Status >= csfile.StatusMax)
+                    {
+                        csfile.Status = 2;
+                    }
                     db.Entry(csfile).State = EntityState.Modified;
                     db.SaveChanges();
                 }

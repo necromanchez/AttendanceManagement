@@ -678,7 +678,7 @@ namespace Brothers_WMS.Areas.Masters.Controllers
             {
                 string searchnow = System.Web.HttpContext.Current.Session["SearchvalueUser"].ToString();
 
-                Section = (Section == "undefined") ? user.Section : (from c in db.M_Cost_Center_List where c.GroupSection == Section select c.Cost_Center).FirstOrDefault();
+                Section = (Section == "undefined") ? user.CostCode : (from c in db.M_Cost_Center_List where c.GroupSection == Section select c.Cost_Center).FirstOrDefault();
                 Section = (Section == null) ? "" : Section;
                 string templateFilename = "PageAccessTemplate.xlsx";
                 string dir = Path.GetTempPath();
@@ -716,8 +716,8 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                     }
                     for (int i = 0; i < list.Count; i++)
                     {
-                        ExportData.Cells["A" + start].Value = list[i].UserName;
-                        ExportData.Cells["B" + start].Value = list[i].FirstName + ", " + list[i].LastNAme;
+                        ExportData.Cells["A" + start].Value = list[i].MainUser;
+                        ExportData.Cells["B" + start].Value = list[i].First_Name + ", " + list[i].Family_Name;
                         ExportData.Cells["C" + start].Value = list[i].SectionGroup;
                         ExportData.Cells["D" + start].Value = (list[i].Employee != null && list[i].Employee > 0)?1:0;
                         ExportData.Cells["E" + start].Value = (list[i].FormatorTemplate != null && list[i].FormatorTemplate > 0) ? 1 : 0;

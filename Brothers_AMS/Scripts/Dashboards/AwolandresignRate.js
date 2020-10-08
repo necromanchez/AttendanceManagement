@@ -36,6 +36,24 @@ function GetAWOLResignedRate() {
 }
 
 
+function GetAWOLResignedRate_Department() {
+    //$("#loading_modalD_Awol").modal("show");
+
+    $.ajax({
+        url: '/Home/GET_AWOLandResignrate_Department',
+        type: 'POST',
+        data: Filter,
+        datatype: "json",
+        success: function (returnData) {
+            var statusGroupData = returnData.list;
+            var groupedDateSet = _.mapValues(_.groupBy(statusGroupData, 'DayMonth'),
+                clist => clist.map(DayMonth => _.omit(DayMonth, 'DayMonth')));
+            GraphStartGET_AWOLandResignrate(groupedDateSet);
+        }
+    });
+}
+
+
 function GraphStartGET_AWOLandResignrate(datahere) {
     var finalticks = [];
     var Status = [];

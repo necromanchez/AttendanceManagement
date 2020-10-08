@@ -316,6 +316,45 @@
     <Compile Include="Models\Dashboard_OvertimeRate_Yearly_Result.cs">
       <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Department_Dashboard_AbsentRate_Monthly_Result.cs">
+      <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Department_Dashboard_AbsentRate_Result.cs">
+      <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Department_Dashboard_AWOLandResignRate_Monthly_Result.cs">
+      <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Department_Dashboard_AWOLandResignRate_Result.cs">
+      <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Department_Dashboard_AWOLandResignRate_Yearly_Result.cs">
+      <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Department_Dashboard_LeaveBreakDown_Monthly_Result.cs">
+      <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Department_Dashboard_LeaveBreakDown_Result.cs">
+      <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Department_Dashboard_ManpowerAttendanceRate_Monthly_Result.cs">
+      <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Department_Dashboard_ManpowerAttendanceRate_Result.cs">
+      <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Department_Dashboard_ManpowerAttendanceRate_Yearly_Result.cs">
+      <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Department_Dashboard_OvertimeRate_Monthly_Result.cs">
+      <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Department_Dashboard_OvertimeRate_Result.cs">
+      <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Department_Dashboard_OvertimeRate_Yearly_Result.cs">
+      <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\EmployeeSkillModel.cs" />
     <Compile Include="Models\Error_Logs.cs">
       <DependentUpon>Brothers_AMSDB.tt</DependentUpon>

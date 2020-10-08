@@ -12,7 +12,8 @@ function Initializedpage_EmployeeShift() {
         data: {
             Month: $("#Month").val(),
             Year: $("#Year").val(),
-            Section:selectedSection
+            Section: selectedSection,
+            Agency: $("#BIPH_Agency").val(),
         },
         type: 'GET',
         dataType: 'JSON',

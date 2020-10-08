@@ -2,6 +2,12 @@
 var MYear, MAgency, MLine, MShift;
 var Filter = {};
 $(function () {
+    $("#Sectiond").prop("disabled", true);
+    $("#Departmentd").on("change", function () {
+        
+        $("#Sectiond").prop("disabled", false);  
+        
+    })
     $("#Bigchosen").val("Daily");
     //$("#BigchosenYear").prop("disabled", true);
     $("#BigchosenYear").val(GetYear());
@@ -100,7 +106,10 @@ $(function () {
         $.ajax({
             url: '/Home/ChangeSection',
             type: 'POST',
-            data: { Section: $("#Sectiond").val() },
+            data: {
+                Section: $("#Sectiond").val(),
+                Department: $("#Departmentd").val() 
+            },
             datatype: "json",
             success: function (returnData) {
 
@@ -112,29 +121,49 @@ $(function () {
                 month = ($("#BigchosenMonth").val() != "") ? $("#BigchosenMonth").val() : month;
 
                 Filter = {
-                    //Month: month,
-                    //Year: year,
-                    //Agency: agency,
-                    //Shift: '',
-                    //Line: line
                     Month: month,
                     Year: MYear,
                     Agency: MAgency,
                     Line: MLine,
                     Shift: MShift,
-                    GroupSection: $("#Sectiond").val()
-
+                    GroupSection: $("#Sectiond").val(),
+                    Department: $("#Departmentd").val()
                 }
 
-                //Dropdown_select('Line', "/Helper/GetDropdown_LineProcessTeamwithSection?CostCode=" + returnData.usercost + "&RFID=" + "&GroupSection=" + $('#Sectiond').val());
-                //Dropdown_select('MPA_Line', "/Helper/GetDropdown_LineProcessTeamwithSection?CostCode=" + returnData.usercost + "&RFID=" + "&GroupSection=" + $('#Sectiond').val());
-                //Dropdown_select('AR_Line', "/Helper/GetDropdown_LineProcessTeamwithSection?CostCode=" + returnData.usercost + "&RFID=" + "&GroupSection=" + $('#Sectiond').val());
-                //Dropdown_select('awol_Line', "/Helper/GetDropdown_LineProcessTeamwithSection?CostCode=" + returnData.usercost + "&RFID=" + "&GroupSection=" + $('#Sectiond').val());
-                //Dropdown_select('breakd_Line', "/Helper/GetDropdown_LineProcessTeamwithSection?CostCode=" + returnData.usercost + "&RFID=" + "&GroupSection=" + $('#Sectiond').val());
-                //Dropdown_select('overt_Line', "/Helper/GetDropdown_LineProcessTeamwithSection?CostCode=" + returnData.usercost + "&RFID=" + "&GroupSection=" + $('#Sectiond').val());
 
-                if ($("#Sectiond").val() == "") {
-                    swal("Please choose Section");
+                if ($("#Departmentd").val() != "" && $("#Sectiond").val() == "") {
+                    if ($("#Bigchosen").val() != "") {
+
+                        MYear = $("#BigchosenYear").val();
+                        MAgency = $("#BIPH_Agency").val();
+                        MLine = $("#Line").val();
+                        MShift = $("#Shift").val();
+
+                        //$("#loading_modalD").modal("show");
+
+                        if ($("#Bigchosen").val() == "Mon") {
+                            //MonthlyDashboard();
+                        }
+                        else if ($("#Bigchosen").val() == "Yer") {
+                           // YearlyDashboard();
+                        }
+                        else {
+                            GET_AttendanceRate_Department();// GET_AttendanceRate();
+                            AbsentRate_Department();
+                            LeaveBreakDown_Department();
+                            GetAWOLResignedRate_Department();
+                            GetOvertimeRate_Department();
+                        }
+                    }
+                    else {
+
+                        GET_AttendanceRate_Department();//GET_AttendanceRate();
+                        AbsentRate_Department();
+                        LeaveBreakDown_Department();
+                        GetAWOLResignedRate_Department();
+                        GetOvertimeRate_Department();
+
+                    }
                 }
                 else {
                     if ($("#Bigchosen").val() != "") {
@@ -161,7 +190,7 @@ $(function () {
                         }
                     }
                     else {
-                        
+
                         GET_AttendanceRate();
                         AbsentRate();
                         LeaveBreakDown();
@@ -170,6 +199,8 @@ $(function () {
 
                     }
                 }
+               
+               
 
 
 
@@ -259,6 +290,22 @@ function GET_AttendanceRate() {
           
             GraphStart(returnData.list);
            
+        }
+    });
+}
+
+function GET_AttendanceRate_Department() {
+
+    //$("#loading_modalD_AttendanceRate").modal("show");
+    $.ajax({
+        url: '/Home/GET_ManPowerAttendanceRate_Department',
+        type: 'POST',
+        data: Filter,
+        datatype: "json",
+        success: function (returnData) {
+
+            GraphStart(returnData.list);
+
         }
     });
 }

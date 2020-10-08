@@ -12,7 +12,7 @@ $(function () {
    // Dropdown_selectMPMain2('Section', "/Helper/GetDropdown_SectionAMS");
    
 
-
+    Dropdown_selectEmpCompany('BIPH_Agency', "/Helper/GetDropdown_Agency");
     Dropdown_selectYear("Year");
     Dropdown_selectMonth("Month");
     $("#DateAdjust").datepicker().datepicker("setDate", new Date());
@@ -336,6 +336,12 @@ function GenerateDaysname(){
 
 function ShowOutput(data) {
     switch (data) {
+        case "EL":
+            return "<p class='Adjustbrand' style='color: #AF67FF'>" + data + "</p>"
+            break;
+        case "HD":
+            return "<p class='Adjustbrand' style='color: #E9FF97'>" + data + "</p>"
+            break;
         case "SL":
             return "<p class='Adjustbrand' style='color: #DF7401'>" + data + "</p>"
             break;
@@ -379,6 +385,7 @@ function Initializedpage() {
                 Month: $("#Month").val(),
                 Year: $("#Year").val(),
                 Section: selectedSection,// $("#Section").val(),
+                Agency: $("#BIPH_Agency").val(),
                 go: goagain
             },
             type: "GET",
@@ -395,7 +402,7 @@ function Initializedpage() {
             {
                 text: "Excel",
                 action: function () {
-                    window.open('../WorkTimeSummary/ExportWorktimeSummary_Present?Month=' + $("#Month").val() + '&Year=' + $("#Year").val()+'&Section=' + selectedSection);
+                    window.open('../WorkTimeSummary/ExportWorktimeSummary_Present?Month=' + $("#Month").val() + '&Year=' + $("#Year").val() + '&Section=' + selectedSection + '&Agency=' + $("#BIPH_Agency").val());
 
                 }
             },

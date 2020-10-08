@@ -1265,7 +1265,7 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                                 odaExcel.Fill(dt);
 
 
-                                cmdExcel.CommandText = "SELECT EmployeeNumber, PositionName FROM [" + sheetName + "$] WHERE EmployeeNumber <> '' AND (PositionName IS NULL AND PositionName = '')";//ung * is column name, ung sheetname ay settings
+                                cmdExcel.CommandText = "SELECT EmployeeNumber, PositionName FROM [" + sheetName + "$] WHERE EmployeeNumber <> '' AND (PositionName IS NULL OR PositionName = '')";//ung * is column name, ung sheetname ay settings
                                 odaExcel.SelectCommand = cmdExcel;
                                 odaExcel.Fill(dtchecker);
                                 connExcel.Close();
@@ -1348,7 +1348,7 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                 string datetimeToday = DateTime.Now.ToString("yyMMddhhmmss");
                 string GroupSection = (user.CostCode != CostCode) ? CostCode : (from c in db.M_Cost_Center_List where c.Cost_Center == CostCode && c.GroupSection != "" select c.GroupSection).FirstOrDefault();
 
-                string filename = string.Format("UploadExprod_AMSTemplate{0}_{1}.xlsx", datetimeToday, GroupSection);
+                string filename = string.Format("Employee_CostCenterCode{0}_{1}.xlsx", datetimeToday, GroupSection);
                 FileInfo newFile = new FileInfo(Path.Combine(dir, filename));
                 string apptemplatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"TemplateFiles\", templateFilename);
                 FileInfo templateFile = new FileInfo(apptemplatePath);
@@ -1383,19 +1383,27 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                     //}
                     for (int i = 0; i < list.Count; i++)
                     {
-                        ExportData.Cells["A"+start].Value = list[i].EmpNo;
-                        ExportData.Cells["B" + start].Value = list[i].Family_Name + ", " + list[i].First_Name;
-                        ExportData.Cells["C" + start].Value = list[i].CostCenter_IT;
-                        ExportData.Cells["D" + start].Value = list[i].CostCenter_AMS;
+                        ExportData.Cells["A" + start].Value = i+1;
+                        ExportData.Cells["B" + start].Value = list[i].EmpNo;
+                        ExportData.Cells["C" + start].Value = list[i].Family_Name + ", " + list[i].First_Name;
+                        ExportData.Cells["D" + start].Value = list[i].CostCenter_IT;
+                        ExportData.Cells["E" + start].Value = list[i].CostCenter_AMS;
                         start++;
                     }
 
-                    List<string> costcodelist = (from c in db.M_Cost_Center_List
-                                                 select c.Cost_Center).Distinct().ToList();
-                    int d = 1;
+                    List<M_Cost_Center_List> costcodelist = (from c in db.M_Cost_Center_List
+                                                             orderby c.Cost_Center
+                                                             select c).ToList();
+                    int d = 8;
+                    
                     for (int i = 0; i < costcodelist.Count; i++)
                     {
-                        ExportData2.Cells["Z" + d].Value = costcodelist[i];
+                        ExportData2.Cells["A" + d].Value = i+1;
+                        ExportData2.Cells["B" + d].Value = costcodelist[i].Cost_Center;
+                        ExportData2.Cells["C" + d].Value = costcodelist[i].Section;
+                        ExportData2.Cells["D" + d].Value = costcodelist[i].GroupSection;
+                        ExportData2.Cells["E" + d].Value = costcodelist[i].DepartmentGroup;
+
                         d++;
                     }
                     return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename);
@@ -1474,7 +1482,7 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                 string datetimeToday = DateTime.Now.ToString("yyMMddhhmmss");
                 string GroupSection = (user.CostCode != CostCode) ? CostCode : (from c in db.M_Cost_Center_List where c.Cost_Center == CostCode select c.GroupSection).FirstOrDefault();
 
-                string filename = string.Format("EmployeeSkillTemplate{0}_{1}.xlsx", datetimeToday, GroupSection);
+                string filename = string.Format("EmployeesProcessTemplate{0}_{1}.xlsx", datetimeToday, GroupSection);
                 FileInfo newFile = new FileInfo(Path.Combine(dir, filename));
                 string apptemplatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"TemplateFiles\", templateFilename);
                 FileInfo templateFile = new FileInfo(apptemplatePath);
@@ -1508,10 +1516,11 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                     //}
                     for (int i = 0; i < list.Count; i++)
                     {
-                        ExportData.Cells["A" + start].Value = list[i].EmpNo;
-                        ExportData.Cells["B" + start].Value = list[i].Family_Name + ", " + list[i].First_Name;
-                        ExportData.Cells["C" + start].Value = list[i].Line;
-                        ExportData.Cells["D" + start].Value = list[i].Skill;
+                        ExportData.Cells["A" + start].Value = i+1;
+                        ExportData.Cells["B" + start].Value = list[i].EmpNo;
+                        ExportData.Cells["C" + start].Value = list[i].Family_Name + ", " + list[i].First_Name;
+                        ExportData.Cells["D" + start].Value = list[i].Line;
+                        ExportData.Cells["E" + start].Value = list[i].Skill;
                         start++;
                     }
                     return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename);
@@ -1568,8 +1577,9 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                     //}
                     for (int i = 0; i < list.Count; i++)
                     {
-                        ExportData.Cells["A" + start].Value = list[i].EmpNo;
-                        ExportData.Cells["B" + start].Value = list[i].Family_Name + ", " + list[i].First_Name;
+                        ExportData.Cells["A" + start].Value = i+1;
+                        ExportData.Cells["B" + start].Value = list[i].EmpNo;
+                        ExportData.Cells["C" + start].Value = list[i].Family_Name + ", " + list[i].First_Name;
                         
                         start++;
                     }
@@ -1628,11 +1638,12 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                     {
                         string o = list[i].ScheduleName;
                         M_Schedule sh = (from c in db.M_Schedule where c.Type == o select c).FirstOrDefault();
-                        ExportData.Cells["A"+start].Value = list[i].EmpNo;
-                        ExportData.Cells["B"+start].Value = list[i].Family_Name + ", " + list[i].First_Name;
+                        ExportData.Cells["A" + start].Value = i+1;
+                        ExportData.Cells["B"+start].Value = list[i].EmpNo;
+                        ExportData.Cells["C"+start].Value = list[i].Family_Name + ", " + list[i].First_Name;
                         if (sh != null)
                         {
-                            ExportData.Cells["C" + start].Value = list[i].ScheduleName + " (" + sh.Timein + " - " + sh.TimeOut + ")";
+                            ExportData.Cells["D" + start].Value = list[i].ScheduleName + " (" + sh.Timein + " - " + sh.TimeOut + ")";
                         }
                        
                         start++;
@@ -1718,9 +1729,10 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                     //}
                     for (int i = 0; i < list.Count; i++)
                     {
-                        ExportData.Cells["A"+start].Value = list[i].EmpNo;
-                        ExportData.Cells["B"+start].Value = list[i].Family_Name + ", " + list[i].First_Name;
-                        ExportData.Cells["C" + start].Value = list[i].ModifiedStatus;
+                        ExportData.Cells["A" + start].Value = i+1;
+                        ExportData.Cells["B"+start].Value = list[i].EmpNo;
+                        ExportData.Cells["C"+start].Value = list[i].Family_Name + ", " + list[i].First_Name;
+                        ExportData.Cells["D" + start].Value = list[i].ModifiedStatus;
                         start++;
                     }
 
@@ -1798,9 +1810,10 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                     //}
                     for (int i = 0; i < list.Count; i++)
                     {
-                        ExportData.Cells["A"+start].Value = list[i].EmpNo;
-                        ExportData.Cells["B"+start].Value = list[i].Family_Name + ", " + list[i].First_Name;
-                        ExportData.Cells["C" + start].Value = list[i].ModifiedPosition;
+                        ExportData.Cells["A" + start].Value = i+1;
+                        ExportData.Cells["B"+start].Value = list[i].EmpNo;
+                        ExportData.Cells["C"+start].Value = list[i].Family_Name + ", " + list[i].First_Name;
+                        ExportData.Cells["D" + start].Value = list[i].ModifiedPosition;
                         start++;
                     }
                     List<string> positionlist = (from c in db.M_Employee_Master_List
@@ -1808,10 +1821,12 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                                                && c.Position != ""
                                                && c.Position != null
                                                select c.Position).Distinct().ToList();
-                    int d = 1;
-                    for (int i = 0; i < positionlist.Count; i++)
+                    int d = 8;
+                    List<string> positionlistORdered = positionlist.OrderBy(q => q).ToList();
+                    for (int i = 0; i < positionlistORdered.Count; i++)
                     {
-                        ExportData2.Cells["Z" + d].Value = positionlist[i];
+                        ExportData2.Cells["A" + d].Value = i+1;
+                        ExportData2.Cells["B" + d].Value = positionlistORdered[i];
 
                         d++;
                     }
@@ -2027,62 +2042,36 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                         list = list.Where(x => x.ModifiedStatus.ToUpper() != "ACTIVE").ToList();
                     }
                     
-                    //= db.GET_Employee_Details(Status).ToList();
-                    ExportData.Cells["A1"].Value = "REFID";
-                    ExportData.Cells["B1"].Value = "ADID";
-                    ExportData.Cells["C1"].Value = "EmpNo";
-                    ExportData.Cells["D1"].Value = "Family_Name_Suffix";
-                    ExportData.Cells["E1"].Value = "Family_Name";
-                    ExportData.Cells["F1"].Value = "First_Name";
-                    ExportData.Cells["G1"].Value = "Middle_Name";
-                    ExportData.Cells["H1"].Value = "Date_Hired";
-                    ExportData.Cells["I1"].Value = "Status";
-                    ExportData.Cells["J1"].Value = "Emp_Category";
-                    ExportData.Cells["K1"].Value = "Date_Regularized";
-                    ExportData.Cells["L1"].Value = "Position";
-                    ExportData.Cells["M1"].Value = "Email";
-                    ExportData.Cells["N1"].Value = "Gender";
-                    ExportData.Cells["O1"].Value = "RFID";
-                    ExportData.Cells["P1"].Value = "Section";
-                    ExportData.Cells["Q1"].Value = "Department";
-                    ExportData.Cells["R1"].Value = "Company";
-                    ExportData.Cells["S1"].Value = "CostCode";
-                    ExportData.Cells["T1"].Value = "SectionGroup";
-                    ExportData.Cells["U1"].Value = "AMS Status";
-                    ExportData.Cells["V1"].Value = "AMS Position";
-                    ExportData.Cells["W1"].Value = "CostCenter_AMS";
-                    ExportData.Cells["X1"].Value = "CostCenter_IT";
-                    ExportData.Cells["Y1"].Value = "CostCenter_EXPROD";
-                    ExportData.Cells["Z1"].Value = "Date_Resigned";
                     int start = 2;
                     foreach (GET_Employee_Details_Result item in list)
                     {
-                        ExportData.Cells["A" + start].Value = item.REFID;
-                        ExportData.Cells["B" + start].Value = item.ADID;
-                        ExportData.Cells["C" + start].Value = item.EmpNo;
-                        ExportData.Cells["D" + start].Value = item.Family_Name_Suffix;
-                        ExportData.Cells["E" + start].Value = item.Family_Name;
-                        ExportData.Cells["F" + start].Value = item.First_Name;
-                        ExportData.Cells["G" + start].Value = item.Middle_Name;
-                        ExportData.Cells["H" + start].Value = item.Date_Hired;
-                        ExportData.Cells["I" + start].Value = item.Status;
-                        ExportData.Cells["J" + start].Value = item.Emp_Category;
-                        ExportData.Cells["K" + start].Value = item.Date_Regularized;
-                        ExportData.Cells["L" + start].Value = item.Position;
-                        ExportData.Cells["M" + start].Value = item.Email;
-                        ExportData.Cells["N" + start].Value = item.Gender;
-                        ExportData.Cells["O" + start].Value = item.RFID;
-                        ExportData.Cells["P" + start].Value = item.Section;
-                        ExportData.Cells["Q" + start].Value = item.Department;
-                        ExportData.Cells["R" + start].Value = item.Company;
-                        ExportData.Cells["S" + start].Value = item.CostCode;
-                        ExportData.Cells["T" + start].Value = GroupSection;
-                        ExportData.Cells["U" + start].Value = item.ModifiedStatus;
-                        ExportData.Cells["V" + start].Value = item.ModifiedPosition;
-                        ExportData.Cells["W" + start].Value = item.CostCenter_AMS;
-                        ExportData.Cells["X" + start].Value = item.CostCenter_IT;
-                        ExportData.Cells["Y" + start].Value = item.CostCenter_EXPROD;
-                        ExportData.Cells["Z" + start].Value = item.Date_Resigned;
+                        ExportData.Cells["A" + start].Value = item.Rownum;
+                        ExportData.Cells["B" + start].Value = item.REFID;
+                        ExportData.Cells["C" + start].Value = item.ADID;
+                        ExportData.Cells["D" + start].Value = item.EmpNo;
+                        ExportData.Cells["E" + start].Value = item.Family_Name_Suffix;
+                        ExportData.Cells["F" + start].Value = item.Family_Name;
+                        ExportData.Cells["G" + start].Value = item.First_Name;
+                        ExportData.Cells["H" + start].Value = item.Middle_Name;
+                        ExportData.Cells["I" + start].Value = item.Date_Hired;
+                        ExportData.Cells["J" + start].Value = item.Status;
+                        ExportData.Cells["K" + start].Value = item.Emp_Category;
+                        ExportData.Cells["L" + start].Value = item.Date_Regularized;
+                        ExportData.Cells["M" + start].Value = item.Position;
+                        ExportData.Cells["N" + start].Value = item.Email;
+                        ExportData.Cells["O" + start].Value = item.Gender;
+                        ExportData.Cells["P" + start].Value = item.RFID;
+                        ExportData.Cells["Q" + start].Value = item.Section;
+                        ExportData.Cells["R" + start].Value = item.Department;
+                        ExportData.Cells["S" + start].Value = item.Company;
+                        ExportData.Cells["T" + start].Value = item.CostCode;
+                        ExportData.Cells["U" + start].Value = GroupSection;
+                        ExportData.Cells["V" + start].Value = item.ModifiedStatus;
+                        ExportData.Cells["W" + start].Value = item.ModifiedPosition;
+                        ExportData.Cells["X" + start].Value = item.CostCenter_AMS;
+                        ExportData.Cells["Y" + start].Value = item.CostCenter_IT;
+                        ExportData.Cells["Z" + start].Value = item.CostCenter_EXPROD;
+                        ExportData.Cells["AA" + start].Value = item.Date_Resigned;
                         start++;
                     }
 
@@ -2157,9 +2146,10 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                     //}
                     for (int i = 0; i < list.Count; i++)
                     {
-                        ExportData.Cells["A" + start].Value = list[i].EmpNo;
-                        ExportData.Cells["B" + start].Value = list[i].Family_Name + ", " + list[i].First_Name;
-                        ExportData.Cells["C" + start].Value = list[i].ScheduleName;
+                        ExportData.Cells["A" + start].Value = i+1;
+                        ExportData.Cells["B" + start].Value = list[i].EmpNo;
+                        ExportData.Cells["C" + start].Value = list[i].Family_Name + ", " + list[i].First_Name;
+                        ExportData.Cells["D" + start].Value = list[i].ScheduleName;
                         start++;
                     }
 

@@ -21,6 +21,7 @@ namespace Brothers_WMS.Controllers
         public ActionResult Index()
         {
             System.Web.HttpContext.Current.Session["chosendashgroup"] = "";
+            System.Web.HttpContext.Current.Session["chosendashgroupDepartment"] = "";
             return View();
         }
 
@@ -44,9 +45,10 @@ namespace Brothers_WMS.Controllers
             return View();
         }
 
-        public ActionResult ChangeSection(string Section)
+        public ActionResult ChangeSection(string Section, string Department)
         {
             System.Web.HttpContext.Current.Session["chosendashgroup"] = Section;
+            System.Web.HttpContext.Current.Session["chosendashgroupDepartment"] = Department;
             //string Costcode = (from c in db.M_Cost_Center_List where c.GroupSection == Section select c.Cost_Center).FirstOrDefault();
             //user.Section = Costcode;
             return Json(new { }, JsonRequestBehavior.AllowGet);
@@ -64,11 +66,12 @@ namespace Brothers_WMS.Controllers
             }
             else
             {
-                
                 CostCode = (from c in db.M_Cost_Center_List where c.GroupSection == groupsec select c.Cost_Center).FirstOrDefault();
             }
             //string CostCode = (Session["chosendashgroup"].ToString) ?user.Section : user.CostCode;
             db.Database.CommandTimeout = 0;
+
+
             List<Dashboard_ManpowerAttendanceRate_Result> list = db.Dashboard_ManpowerAttendanceRate(Month, Year, Agency, Shift, Line, CostCode).ToList();
 
             return Json(new { list = list }, JsonRequestBehavior.AllowGet);
@@ -227,13 +230,53 @@ namespace Brothers_WMS.Controllers
         }
 
 
-      
-
-      
+        #endregion
 
 
-        
-        
+
+        #region Department
+
+        public ActionResult GET_ManPowerAttendanceRate_Department(int Month, int Year, string Agency, string Shift, long? Line)
+        {
+            string Department = Session["chosendashgroupDepartment"].ToString();
+            db.Database.CommandTimeout = 0;
+            List<Department_Dashboard_ManpowerAttendanceRate_Result> list = db.Department_Dashboard_ManpowerAttendanceRate(Month, Year, Agency, Shift, Line, Department).ToList();
+            return Json(new { list = list }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GET_AbsentRate_Department(int Month, int Year, string Agency, string Shift, long? Line)
+        {
+            string Department = Session["chosendashgroupDepartment"].ToString();
+            db.Database.CommandTimeout = 0;
+            List<Department_Dashboard_AbsentRate_Result> list = db.Department_Dashboard_AbsentRate(Month, Year, Agency, Shift, Line, Department).ToList();
+            return Json(new { list = list }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GET_LeaveBreakdown_Department(int Month, int Year, string Agency, string Shift, long? Line)
+        {
+            string Department = Session["chosendashgroupDepartment"].ToString();
+            db.Database.CommandTimeout = 0;
+            List<Department_Dashboard_LeaveBreakDown_Result> list = db.Department_Dashboard_LeaveBreakDown(Month, Year, Agency, Shift, Line, Department).ToList();
+
+            return Json(new { list = list }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GET_AWOLandResignrate_Department(int Month, int Year, string Agency, string Shift, long? Line)
+        {
+            string Department = Session["chosendashgroupDepartment"].ToString();
+            db.Database.CommandTimeout = 0;
+            List<Department_Dashboard_AWOLandResignRate_Result> list = db.Department_Dashboard_AWOLandResignRate(Month, Year, Agency, Shift, Line, Department).ToList();
+            return Json(new { list = list }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GET_OTRate_Department(int Month, int Year, string Agency, string Shift, long? Line)
+        {
+            string Department = Session["chosendashgroupDepartment"].ToString();
+            db.Database.CommandTimeout = 0;
+            List<Department_Dashboard_OvertimeRate_Result> list = db.Department_Dashboard_OvertimeRate(Month, Year, Agency, Shift, Line, Department).ToList();
+
+            return Json(new { list = list }, JsonRequestBehavior.AllowGet);
+        }
 
         #endregion
 

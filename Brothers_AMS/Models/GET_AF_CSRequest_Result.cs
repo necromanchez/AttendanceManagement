@@ -13,6 +13,7 @@ namespace Brothers_WMS.Models
     
     public partial class GET_AF_CSRequest_Result
     {
+        public Nullable<long> Rownum { get; set; }
         public string CS_RefNo { get; set; }
         public string Section { get; set; }
         public string CreateDate { get; set; }

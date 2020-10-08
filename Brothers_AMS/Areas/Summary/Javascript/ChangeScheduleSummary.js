@@ -115,8 +115,11 @@ function Initializedpage() {
                 Status: $("#Status").val()
             }
         },
-        lengthChange: false,
+        lengthChange: true,
+        lengthMenu: [[10, 50, 100], [10, 50, 100]],
+        pagelength: 10,
         scrollY: "600px",
+        //scrollX: "1000px",
         scrollCollapse: true,
         serverSide: "true",
         order: [0, "asc"],
@@ -136,6 +139,7 @@ function Initializedpage() {
 
               //   }, orderable: false, searchable: false
               //},
+              { data: "Rownum", name: "Rownum" },
               {
                   className: "refnoe", data: function (x) {
                       return data = "<button type='button' class='btn btn-s bg-green'>" + x.CS_RefNo + "</button>"
@@ -275,7 +279,7 @@ function GetDetails(data, status) {
         },
         dom: 'Bfrtip',
         buttons: [
-          'csv', 'excel'
+          'excel'
         ],
         lengthMenu: [[10, 50, 100], [10, 50, 100]],
         
@@ -292,6 +296,7 @@ function GetDetails(data, status) {
         //dom: 'Bfrtip',
         destroy: true,
         columns: [
+            {  data: "Rownum", name: "Rownum" },
               { data: "CS_RefNo", sWidth: "10%" },
               { data: "EmployeeNo" },
               { data: "EmployeeName" },

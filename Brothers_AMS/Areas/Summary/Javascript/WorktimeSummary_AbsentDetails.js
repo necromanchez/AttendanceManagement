@@ -7,10 +7,15 @@
             data: {
                 Month: $("#Month").val(),
                 Year: $("#Year").val(),
-                Section: selectedSection
+                Section: selectedSection,
+                Agency: $("#BIPH_Agency").val(),
             },
             datatype: "json"
         },
+        scrollCollapse: true,
+        order: [0, "asc"],
+        processing: "true",
+        scrollY: "600px",
         serverSide: "true",
         pageLength: 10,
         //lengthMenu: [10, 100, 500, 1000, 5000],
@@ -26,7 +31,7 @@
             {
                 text: "Excel",
                 action: function () {
-                    window.open('../WorkTimeSummary/ExportWorktimeSummary_AbsentDetails?Month=' + $("#Month").val() + '&Year=' + $("#Year").val() + '&Section=' + selectedSection);
+                    window.open('../WorkTimeSummary/ExportWorktimeSummary_AbsentDetails?Month=' + $("#Month").val() + '&Year=' + $("#Year").val() + '&Section=' + selectedSection + '&Agency=' + $("#BIPH_Agency").val());
 
                 }
             },
@@ -61,6 +66,8 @@
         initComplete: function () {
             $("#loading_modal").modal("hide");
             $("#ABdetails").show();
+            var table = $('#AbsentDetailsTable').DataTable();
+            table.columns.adjust();
         }
 
     });

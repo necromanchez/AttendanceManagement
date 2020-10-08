@@ -30,7 +30,7 @@ namespace Brothers_WMS.Areas.Masters.Controllers
             string sortDirection = Request["order[0][dir]"];
 
             List<TT_EmployeeTaps_Result> list = new List<TT_EmployeeTaps_Result>();
-            list = (from c in db.TT_EmployeeTaps("",DateTime.Now, DateTime.Now)
+            list = (from c in db.TT_EmployeeTaps("",DateTime.Now, DateTime.Now, "")
                    
                     orderby c.Employee_RFID descending
                     select c).ToList();

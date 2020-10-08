@@ -41,6 +41,27 @@ function LeaveBreakDown() {
     });
 }
 
+function LeaveBreakDown_Department() {
+    //$("#loading_modalD_Leave").modal("show");
+    $.ajax({
+        url: '/Home/GET_LeaveBreakdown_Department',
+        type: 'POST',
+        data: Filter,
+        datatype: "json",
+        success: function (returnData) {
+
+            var LeaveGroupData = returnData.list;
+
+            var groupedDateSet = _.mapValues(_.groupBy(LeaveGroupData, 'DateSet'),
+                clist => clist.map(DateSet => _.omit(DateSet, 'DateSet')));
+
+
+            GraphStartLeaveBreakdown(groupedDateSet);
+        }
+
+    });
+}
+
 function GraphStartLeaveBreakdown(datahere) {
     var finalticks = [];
     //var LeaveType = [];
@@ -52,6 +73,7 @@ function GraphStartLeaveBreakdown(datahere) {
     var MLLeave = [];
     var ELLeave = [];
     var UNKLeave = [];
+    var ABLeave = [];
     var TOTALout = [];
     $.each(datahere, function (ii, leavedata) {
         var monthdaydata = moment(ii).format("MM/DD/YYYY");
@@ -84,6 +106,11 @@ function GraphStartLeaveBreakdown(datahere) {
                     var HeadCountdata = [Iterator, leavedataType.HeadCount];
                     UNKLeave.push(HeadCountdata);
                     break;
+                case "AB":
+                    var HeadCountdata = [Iterator, leavedataType.HeadCount];
+                    ABLeave.push(HeadCountdata);
+                    break;
+
             };
             tcount += leavedataType.HeadCount;
         });
@@ -167,7 +194,17 @@ function GraphStartLeaveBreakdown(datahere) {
         stack: true,
         color: "#FF0000"
     };
-    data = [TotaloutSet, UNKSet, VLSet, SLSet, MLSet, ELSet];//[VLSet,UNKSet, totalSet, Overalltotal];
+
+    var ABSet = {
+        label: "No Leave Count",
+        data: ABLeave,
+        bars: bar_options,
+        stack: true,
+        color: "#F39D9D"
+    };
+
+    
+    data = [TotaloutSet, UNKSet, VLSet, SLSet, MLSet, ELSet, ABSet];//[VLSet,UNKSet, totalSet, Overalltotal];
   
     var tickis = finalticks;
     function degreeFormatter4(v, axis) {

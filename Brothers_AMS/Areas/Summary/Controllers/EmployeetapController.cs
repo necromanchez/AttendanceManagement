@@ -20,7 +20,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
             return View();
         }
 
-        public ActionResult GetTapList(DateTime searchdate, DateTime searchdate2, string Sectiontap)
+        public ActionResult GetTapList(DateTime searchdate, DateTime searchdate2, string Sectiontap, string Agency)
         {
             //Server Side Parameter
            
@@ -32,7 +32,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
             string sortDirection = Request["order[0][dir]"];
             db.Database.CommandTimeout = 0;
             List<TT_EmployeeTaps_Result> list = new List<TT_EmployeeTaps_Result>();
-            list = (from c in db.TT_EmployeeTaps(Sectiontap, searchdate, searchdate2)
+            list = (from c in db.TT_EmployeeTaps(Sectiontap, searchdate, searchdate2, Agency)
                     orderby c.TapDate descending
                     select c).ToList();
 

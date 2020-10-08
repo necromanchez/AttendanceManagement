@@ -33,30 +33,6 @@ namespace Brothers_WMS.Areas.Summary.Controllers
 
         private List<GET_RP_AttendanceMonitoring_Result> test(int Month, int Year, string Section, DataTable dt)       
         {
-
-            //SqlConnection conn = new SqlConnection(Connection_String.AMSDB);
-            //SqlCommand cmdSql = new SqlCommand();
-            //cmdSql.Connection = conn;
-            //cmdSql.CommandType = CommandType.StoredProcedure;
-            //cmdSql.CommandText = @"dbo.GET_RP_AttendanceMonitoring";
-
-            //cmdSql.Parameters.Clear();
-            //cmdSql.Parameters.Add("@Month", SqlDbType.Int).Value = Month;
-            //cmdSql.Parameters.Add("@Year", SqlDbType.Int).Value = Year;
-            //cmdSql.Parameters.Add("@Section", SqlDbType.NVarChar).Value = Section;
-
-
-            //conn.Open();
-            //cmdSql.CommandTimeout = 0;
-            //SqlDataReader sdr = cmdSql.ExecuteReader();
-            //var dt = new DataTable();
-            //dt.Load(sdr);
-            //cmdSql.Dispose();
-            //conn.Close();
-
-
-            //DataTable dt = wt.globawt;//globalDT; //(DataTable)System.Web.HttpContext.Current.Session["WT"];
-
             List<GET_RP_AttendanceMonitoring_Result> convertedList = new List<GET_RP_AttendanceMonitoring_Result>();
 
             try
@@ -219,7 +195,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C1 = "-";
                     }
                 }
-                else if (row.C1.Contains("P") || row.C1.Contains("TR"))
+                else if (row.C1.Contains("P"))
                 {
                     if (!Dayname(1, Month, Year))
                     {
@@ -252,7 +228,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C2 = "-";
                     }
                 }
-                else if (row.C2.Contains("P") || row.C2.Contains("TR"))
+                else if (row.C2.Contains("P"))
                 {
                     if (!Dayname(2, Month, Year))
                     {
@@ -285,7 +261,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C3 = "-";
                     }
                 }
-                else if (row.C3.Contains("P") || row.C3.Contains("TR"))
+                else if (row.C3.Contains("P"))
                 {
                     if (!Dayname(3, Month, Year))
                     {
@@ -318,7 +294,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C4 = "-";
                     }
                 }
-                else if (row.C4.Contains("P") || row.C4.Contains("TR"))
+                else if (row.C4.Contains("P"))
                 {
                     if (!Dayname(4, Month, Year))
                     {
@@ -351,7 +327,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C5 = "-";
                     }
                 }
-                else if (row.C5.Contains("P") || row.C5.Contains("TR"))
+                else if (row.C5.Contains("P"))
                 {
                     if (!Dayname(5, Month, Year))
                     {
@@ -384,7 +360,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C6 = "-";
                     }
                 }
-                else if (row.C6.Contains("P") || row.C6.Contains("TR"))
+                else if (row.C6.Contains("P"))
                 {
                     if (!Dayname(6, Month, Year))
                     {
@@ -417,7 +393,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C7 = "-";
                     }
                 }
-                else if (row.C7.Contains("P") || row.C7.Contains("TR"))
+                else if (row.C7.Contains("P"))
                 {
                     if (!Dayname(7, Month, Year))
                     {
@@ -450,7 +426,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C8 = "-";
                     }
                 }
-                else if (row.C8.Contains("P") || row.C8.Contains("TR"))
+                else if (row.C8.Contains("P"))
                 {
                     if (!Dayname(8, Month, Year))
                     {
@@ -483,7 +459,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C9 = "-";
                     }
                 }
-                else if (row.C9.Contains("P") || row.C9.Contains("TR"))
+                else if (row.C9.Contains("P"))
                 {
                     if (!Dayname(9, Month, Year))
                     {
@@ -516,7 +492,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C10 = "-";
                     }
                 }
-                else if (row.C10.Contains("P") || row.C10.Contains("TR"))
+                else if (row.C10.Contains("P"))
                 {
                     if (!Dayname(10, Month, Year))
                     {
@@ -549,7 +525,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C11 = "-";
                     }
                 }
-                else if (row.C11.Contains("P") || row.C11.Contains("TR"))
+                else if (row.C11.Contains("P"))
                 {
                     if (!Dayname(11, Month, Year))
                     {
@@ -582,7 +558,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C12 = "-";
                     }
                 }
-                else if (row.C12.Contains("P") || row.C12.Contains("TR"))
+                else if (row.C12.Contains("P"))
                 {
                     if (!Dayname(12, Month, Year))
                     {
@@ -615,7 +591,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C13 = "-";
                     }
                 }
-                else if (row.C13.Contains("P") || row.C13.Contains("TR"))
+                else if (row.C13.Contains("P"))
                 {
                     if (!Dayname(13, Month, Year))
                     {
@@ -648,7 +624,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C14 = "-";
                     }
                 }
-                else if (row.C14.Contains("P") || row.C14.Contains("TR"))
+                else if (row.C14.Contains("P"))
                 {
                     Pcount++;
                 }
@@ -677,7 +653,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C15 = "-";
                     }
                 }
-                else if (row.C15.Contains("P") || row.C15.Contains("TR"))
+                else if (row.C15.Contains("P"))
                 {
                     if(!Dayname(15, Month, Year))
                     {
@@ -710,7 +686,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C16 = "-";
                     }
                 }
-                else if (row.C16.Contains("P") || row.C16.Contains("TR"))
+                else if (row.C16.Contains("P"))
                 {
                     if (!Dayname(16, Month, Year))
                     {
@@ -743,7 +719,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C17 = "-";
                     }
                 }
-                else if (row.C17.Contains("P") || row.C17.Contains("TR"))
+                else if (row.C17.Contains("P"))
                 {
                     if (!Dayname(17, Month, Year))
                     {
@@ -776,7 +752,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C18 = "-";
                     }
                 }
-                else if (row.C18.Contains("P") || row.C18.Contains("TR"))
+                else if (row.C18.Contains("P"))
                 {
                     if (!Dayname(18, Month, Year))
                     {
@@ -809,7 +785,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C19 = "-";
                     }
                 }
-                else if (row.C19.Contains("P") || row.C19.Contains("TR"))
+                else if (row.C19.Contains("P"))
                 {
                     if (!Dayname(19, Month, Year))
                     {
@@ -842,7 +818,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C20 = "-";
                     }
                 }
-                else if (row.C20.Contains("P") || row.C20.Contains("TR"))
+                else if (row.C20.Contains("P"))
                 {
                     if (!Dayname(20, Month, Year))
                     {
@@ -875,7 +851,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C21 = "-";
                     }
                 }
-                else if (row.C21.Contains("P") || row.C22.Contains("TR"))
+                else if (row.C21.Contains("P"))
                 {
                     if (!Dayname(21, Month, Year))
                     {
@@ -908,7 +884,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C22 = "-";
                     }
                 }
-                else if (row.C22.Contains("P") || row.C22.Contains("TR"))
+                else if (row.C22.Contains("P"))
                 {
                     if (!Dayname(22, Month, Year))
                     {
@@ -941,7 +917,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C23 = "-";
                     }
                 }
-                else if (row.C23.Contains("P") || row.C23.Contains("TR"))
+                else if (row.C23.Contains("P"))
                 {
                     if (!Dayname(23, Month, Year))
                     {
@@ -974,7 +950,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C24 = "-";
                     }
                 }
-                else if (row.C24.Contains("P") || row.C24.Contains("TR"))
+                else if (row.C24.Contains("P"))
                 {
                     if (!Dayname(24, Month, Year))
                     {
@@ -1007,7 +983,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C25 = "-";
                     }
                 }
-                else if (row.C25.Contains("P") || row.C25.Contains("TR"))
+                else if (row.C25.Contains("P"))
                 {
                     if (!Dayname(25, Month, Year))
                     {
@@ -1040,7 +1016,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C26 = "-";
                     }
                 }
-                else if (row.C26.Contains("P") || row.C26.Contains("TR"))
+                else if (row.C26.Contains("P"))
                 {
                     if (!Dayname(26, Month, Year))
                     {
@@ -1073,7 +1049,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C27 = "-";
                     }
                 }
-                else if (row.C27.Contains("P") || row.C27.Contains("TR"))
+                else if (row.C27.Contains("P"))
                 {
                     if (!Dayname(27, Month, Year))
                     {
@@ -1106,7 +1082,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C28 = "-";
                     }
                 }
-                else if (row.C28.Contains("P") || row.C28.Contains("TR"))
+                else if (row.C28.Contains("P"))
                 {
                     if (!Dayname(28, Month, Year))
                     {
@@ -1139,7 +1115,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C29 = "-";
                     }
                 }
-                else if (row.C29.Contains("P") || row.C29.Contains("TR"))
+                else if (row.C29.Contains("P"))
                 {
                     if (!Dayname(29, Month, Year))
                     {
@@ -1175,7 +1151,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                             row.C30 = "-";
                         }
                     }
-                    else if (row.C30.Contains("P") || row.C30.Contains("TR"))
+                    else if (row.C30.Contains("P"))
                     {
                         if (!Dayname(30, Month, Year))
                         {
@@ -1212,7 +1188,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                             row.C31 = "-";
                         }
                     }
-                    else if (row.C31.Contains("P") || row.C31.Contains("TR"))
+                    else if (row.C31.Contains("P"))
                     {
                         if (!Dayname(31, Month, Year))
                         {
@@ -1241,7 +1217,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                 row.WD = BusinessDays(Month, 1, Year) + WKWeekend;
                 adjustedNW.Add(row);
 
-              
+                
             }
 
             adjustedNW = adjustedNW.OrderBy(x => x.Rownum).ToList();
@@ -1249,1029 +1225,2234 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                 return adjustedNW;
         }
 
-        public WTGlobal GetHeaderData(int Month, int Year, string Section, List<GET_RP_AttendanceMonitoring_Result> dt)
+        
+
+        public WTGlobal GetHeaderVs2(List<GET_RP_AttendanceMonitoring_Result> list)
         {
-
-            List<GET_RP_AttendanceMonitoring_Result> list = dt;//test(Month, Year, Section, dt);
-            List<GET_RP_AttendanceMonitoring_Result> orig = list;
-
-            int daysinMonth = DateTime.DaysInMonth(Year, Month);
-            list = list.Where(x => x.Schedule != "").ToList();
             List<GET_RP_AttendanceMonitoring_Result> Dayshift = list.Where(x => x.Schedule.ToLower().Contains("day")).ToList();
             List<GET_RP_AttendanceMonitoring_Result> NightShift = list.Where(x => x.Schedule.ToLower().Contains("night")).ToList();
+            List<string> LeaveList = new List<string>();
+            //LeaveList.Add("ML");
+            LeaveList.Add("SL");
+            LeaveList.Add("VL");
+            LeaveList.Add("EL");
+            LeaveList.Add("AB");
 
+            int peremployeeAttendance = 0;
+            int peremployeeAttendance2 = 0;
+            foreach (GET_RP_AttendanceMonitoring_Result day in Dayshift)
+            {
+                if(day.C1 == "NW")
+                {
+                    wt.NWCountDay++;
+                }
+                else if(day.C1 == "ML")
+                {
+                    wt.MLCountDay++;
+                }
+                else if (LeaveList.Contains(day.C1))
+                {
+                    wt.DayShiftCountnow++;
+                    peremployeeAttendance++;
+                }
+                else if(day.C1 == "P(D)" || day.C1 == "P(N)")
+                {
+                    peremployeeAttendance++;
+                }
+
+                if (day.C2 == "NW")
+                {
+                    wt.NWCountDay++;
+                }
+                else if (day.C2 == "ML")
+                {
+                    wt.MLCountDay++;
+                }
+                else if (LeaveList.Contains(day.C2))
+                {
+                    wt.DayShiftCountnow++;
+                    peremployeeAttendance++;
+                }
+                else if (day.C2 == "P(D)" || day.C2 == "P(N)")
+                {
+                    peremployeeAttendance++;
+                }
+
+                if (day.C3 == "NW")
+                {
+                    wt.NWCountDay++;
+                }
+                else if (day.C3 == "ML")
+                {
+                    wt.MLCountDay++;
+                }
+                else if (LeaveList.Contains(day.C3))
+                {
+                    wt.DayShiftCountnow++;
+                    peremployeeAttendance++;
+                }
+                else if (day.C3 == "P(D)" || day.C3 == "P(N)")
+                {
+                    peremployeeAttendance++;
+                }
+
+                if (day.C4 == "NW")
+                {
+                    wt.NWCountDay++;
+                }
+                else if (day.C4 == "ML")
+                {
+                    wt.MLCountDay++;
+                }
+                else if (LeaveList.Contains(day.C4))
+                {
+                    wt.DayShiftCountnow++;
+                    peremployeeAttendance++;
+                }
+                else if (day.C4 == "P(D)" || day.C4 == "P(N)")
+                {
+                    peremployeeAttendance++;
+                }
+
+                if (day.C5 == "NW")
+                {
+                    wt.NWCountDay++;
+                }
+                else if (day.C5 == "ML")
+                {
+                    wt.MLCountDay++;
+                }
+                else if (LeaveList.Contains(day.C5))
+                {
+                    wt.DayShiftCountnow++;
+                    peremployeeAttendance++;
+                }
+                else if (day.C5 == "P(D)" || day.C5 == "P(N)")
+                {
+                    peremployeeAttendance++;
+                }
+
+                if (day.C6 == "NW")
+                {
+                    wt.NWCountDay++;
+                }
+                else if (day.C6 == "ML")
+                {
+                    wt.MLCountDay++;
+                }
+                else if (LeaveList.Contains(day.C6))
+                {
+                    wt.DayShiftCountnow++;
+                    peremployeeAttendance++;
+                }
+                else if (day.C6 == "P(D)" || day.C6 == "P(N)")
+                {
+                    peremployeeAttendance++;
+                }
+
+                if (day.C7 == "NW")
+                {
+                    wt.NWCountDay++;
+                }
+                else if (day.C7 == "ML")
+                {
+                    wt.MLCountDay++;
+                }
+                else if (LeaveList.Contains(day.C7))
+                {
+                    wt.DayShiftCountnow++;
+                    peremployeeAttendance++;
+                }
+                else if (day.C7 == "P(D)" || day.C7 == "P(N)")
+                {
+                    peremployeeAttendance++;
+                }
+
+
+                if (day.C8 == "NW")
+                {
+                    wt.NWCountDay++;
+                }
+                else if (day.C8 == "ML")
+                {
+                    wt.MLCountDay++;
+                }
+                else if (LeaveList.Contains(day.C8))
+                {
+                    wt.DayShiftCountnow++;
+                    peremployeeAttendance++;
+                }
+                else if (day.C8 == "P(D)" || day.C8 == "P(N)")
+                {
+                    peremployeeAttendance++;
+                }
+
+                if (day.C9 == "NW")
+                {
+                    wt.NWCountDay++;
+                }
+                else if (day.C9 == "ML")
+                {
+                    wt.MLCountDay++;
+                }
+                else if (LeaveList.Contains(day.C9))
+                {
+                    wt.DayShiftCountnow++;
+                    peremployeeAttendance++;
+                }
+                else if (day.C9 == "P(D)" || day.C9 == "P(N)")
+                {
+                    peremployeeAttendance++;
+                }
+
+
+                if (day.C10 == "NW")
+                {
+                    wt.NWCountDay++;
+                }
+                else if (day.C10 == "ML")
+                {
+                    wt.MLCountDay++;
+                }
+                else if (LeaveList.Contains(day.C10))
+                {
+                    wt.DayShiftCountnow++;
+                    peremployeeAttendance++;
+                }
+                else if (day.C10 == "P(D)" || day.C10 == "P(N)")
+                {
+                    peremployeeAttendance++;
+                }
+
+                if (day.C11 == "NW")
+                {
+                    wt.NWCountDay++;
+                }
+                else if (day.C11 == "ML")
+                {
+                    wt.MLCountDay++;
+                }
+                else if (LeaveList.Contains(day.C11))
+                {
+                    wt.DayShiftCountnow++;
+                    peremployeeAttendance++;
+                }
+                else if (day.C11 == "P(D)" || day.C11 == "P(N)")
+                {
+                    peremployeeAttendance++;
+                }
+
+
+                if (day.C12 == "NW")
+                {
+                    wt.NWCountDay++;
+                }
+                else if (day.C12 == "ML")
+                {
+                    wt.MLCountDay++;
+                }
+                else if (LeaveList.Contains(day.C12))
+                {
+                    wt.DayShiftCountnow++;
+                    peremployeeAttendance++;
+                }
+                else if (day.C12 == "P(D)" || day.C12 == "P(N)")
+                {
+                    peremployeeAttendance++;
+                }
+
+                if (day.C13 == "NW")
+                {
+                    wt.NWCountDay++;
+                }
+                else if (day.C13 == "ML")
+                {
+                    wt.MLCountDay++;
+                }
+                else if (LeaveList.Contains(day.C13))
+                {
+                    wt.DayShiftCountnow++;
+                    peremployeeAttendance++;
+                }
+                else if (day.C13 == "P(D)" || day.C13 == "P(N)")
+                {
+                    peremployeeAttendance++;
+                }
+
+                if (day.C14 == "NW")
+                {
+                    wt.NWCountDay++;
+                }
+                else if (day.C14 == "ML")
+                {
+                    wt.MLCountDay++;
+                }
+                else if (LeaveList.Contains(day.C14))
+                {
+                    wt.DayShiftCountnow++;
+                    peremployeeAttendance++;
+                }
+                else if (day.C14 == "P(D)" || day.C14 == "P(N)")
+                {
+                    peremployeeAttendance++;
+                }
+
+                if (day.C15 == "NW")
+                {
+                    wt.NWCountDay++;
+                }
+                else if (day.C15 == "ML")
+                {
+                    wt.MLCountDay++;
+                }
+                else if (LeaveList.Contains(day.C15))
+                {
+                    wt.DayShiftCountnow++;
+                    peremployeeAttendance++;
+                }
+                else if (day.C15 == "P(D)" || day.C15 == "P(N)")
+                {
+                    peremployeeAttendance++;
+                }
+
+
+                if (day.C16 == "NW")
+                {
+                    wt.NWCountDay++;
+                }
+                else if (day.C16 == "ML")
+                {
+                    wt.MLCountDay++;
+                }
+                else if (LeaveList.Contains(day.C16))
+                {
+                    wt.DayShiftCountnow++;
+                    peremployeeAttendance++;
+                }
+                else if (day.C16 == "P(D)" || day.C16 == "P(N)")
+                {
+                    peremployeeAttendance++;
+                }
+
+
+                if (day.C17 == "NW")
+                {
+                    wt.NWCountDay++;
+                }
+                else if (day.C17 == "ML")
+                {
+                    wt.MLCountDay++;
+                }
+                else if (LeaveList.Contains(day.C17))
+                {
+                    wt.DayShiftCountnow++;
+                    peremployeeAttendance++;
+                }
+                else if (day.C17 == "P(D)" || day.C17 == "P(N)")
+                {
+                    peremployeeAttendance++;
+                }
+
+
+                if (day.C18 == "NW")
+                {
+                    wt.NWCountDay++;
+                }
+                else if (day.C18 == "ML")
+                {
+                    wt.MLCountDay++;
+                }
+                else if (LeaveList.Contains(day.C18))
+                {
+                    wt.DayShiftCountnow++;
+                    peremployeeAttendance++;
+                }
+                else if (day.C18 == "P(D)" || day.C18 == "P(N)")
+                {
+                    peremployeeAttendance++;
+                }
+
+
+                if (day.C19 == "NW")
+                {
+                    wt.NWCountDay++;
+                }
+                else if (day.C19 == "ML")
+                {
+                    wt.MLCountDay++;
+                }
+                else if (LeaveList.Contains(day.C19))
+                {
+                    wt.DayShiftCountnow++;
+                    peremployeeAttendance++;
+                }
+                else if (day.C19 == "P(D)" || day.C19 == "P(N)")
+                {
+                    peremployeeAttendance++;
+                }
+
+
+                if (day.C20 == "NW")
+                {
+                    wt.NWCountDay++;
+                }
+                else if (day.C20 == "ML")
+                {
+                    wt.MLCountDay++;
+                }
+                else if (LeaveList.Contains(day.C20))
+                {
+                    wt.DayShiftCountnow++;
+                    peremployeeAttendance++;
+                }
+                else if (day.C20 == "P(D)" || day.C20 == "P(N)")
+                {
+                    peremployeeAttendance++;
+                }
+
+
+                if (day.C21 == "NW")
+                {
+                    wt.NWCountDay++;
+                }
+                else if (day.C21 == "ML")
+                {
+                    wt.MLCountDay++;
+                }
+                else if (LeaveList.Contains(day.C21))
+                {
+                    wt.DayShiftCountnow++;
+                    peremployeeAttendance++;
+                }
+                else if (day.C21 == "P(D)" || day.C21 == "P(N)")
+                {
+                    peremployeeAttendance++;
+                }
+
+
+                if (day.C22 == "NW")
+                {
+                    wt.NWCountDay++;
+                }
+                else if (day.C22 == "ML")
+                {
+                    wt.MLCountDay++;
+                }
+                else if (LeaveList.Contains(day.C22))
+                {
+                    wt.DayShiftCountnow++;
+                    peremployeeAttendance++;
+                }
+                else if (day.C22 == "P(D)" || day.C22 == "P(N)")
+                {
+                    peremployeeAttendance++;
+                }
+
+                if (day.C23 == "NW")
+                {
+                    wt.NWCountDay++;
+                }
+                else if (day.C23 == "ML")
+                {
+                    wt.MLCountDay++;
+                }
+                else if (LeaveList.Contains(day.C23))
+                {
+                    wt.DayShiftCountnow++;
+                    peremployeeAttendance++;
+                }
+                else if (day.C23 == "P(D)" || day.C23 == "P(N)")
+                {
+                    peremployeeAttendance++;
+                }
+
+                if (day.C24 == "NW")
+                {
+                    wt.NWCountDay++;
+                }
+                else if (day.C24 == "ML")
+                {
+                    wt.MLCountDay++;
+                }
+                else if (LeaveList.Contains(day.C24))
+                {
+                    wt.DayShiftCountnow++;
+                    peremployeeAttendance++;
+                }
+                else if (day.C24 == "P(D)" || day.C24 == "P(N)")
+                {
+                    peremployeeAttendance++;
+                }
+
+
+                if (day.C25 == "NW")
+                {
+                    wt.NWCountDay++;
+                }
+                else if (day.C25 == "ML")
+                {
+                    wt.MLCountDay++;
+                }
+                else if (LeaveList.Contains(day.C25))
+                {
+                    wt.DayShiftCountnow++;
+                    peremployeeAttendance++;
+                }
+                else if (day.C25 == "P(D)" || day.C25 == "P(N)")
+                {
+                    peremployeeAttendance++;
+                }
+
+
+                if (day.C26 == "NW")
+                {
+                    wt.NWCountDay++;
+                }
+                else if (day.C26 == "ML")
+                {
+                    wt.MLCountDay++;
+                }
+                else if (LeaveList.Contains(day.C26))
+                {
+                    wt.DayShiftCountnow++;
+                    peremployeeAttendance++;
+                }
+                else if (day.C26 == "P(D)" || day.C26 == "P(N)")
+                {
+                    peremployeeAttendance++;
+                }
+
+
+                if (day.C27 == "NW")
+                {
+                    wt.NWCountDay++;
+                }
+                else if (day.C27 == "ML")
+                {
+                    wt.MLCountDay++;
+                }
+                else if (LeaveList.Contains(day.C27))
+                {
+                    wt.DayShiftCountnow++;
+                    peremployeeAttendance++;
+                }
+                else if (day.C27 == "P(D)" || day.C27 == "P(N)")
+                {
+                    peremployeeAttendance++;
+                }
+
+
+                if (day.C28 == "NW")
+                {
+                    wt.NWCountDay++;
+                }
+                else if (day.C28 == "ML")
+                {
+                    wt.MLCountDay++;
+                }
+                else if (LeaveList.Contains(day.C28))
+                {
+                    wt.DayShiftCountnow++;
+                    peremployeeAttendance++;
+                }
+                else if (day.C28 == "P(D)" || day.C28 == "P(N)")
+                {
+                    peremployeeAttendance++;
+                }
+
+
+                if (day.C29 == "NW")
+                {
+                    wt.NWCountDay++;
+                }
+                else if (day.C29 == "ML")
+                {
+                    wt.MLCountDay++;
+                }
+                else if (LeaveList.Contains(day.C29))
+                {
+                    wt.DayShiftCountnow++;
+                    peremployeeAttendance++;
+                }
+                else if (day.C29 == "P(D)" || day.C29 == "P(N)")
+                {
+                    peremployeeAttendance++;
+                }
+
+                if (day.C30 != null)
+                {
+                    if (day.C30 == "NW")
+                    {
+                        wt.NWCountDay++;
+                    }
+                    else if (day.C30 == "ML")
+                    {
+                        wt.MLCountDay++;
+                    }
+                    else if (LeaveList.Contains(day.C30))
+                    {
+                        wt.DayShiftCountnow++;
+                        peremployeeAttendance++;
+                    }
+                    else if (day.C30 == "P(D)" || day.C30 == "P(N)")
+                    {
+                        peremployeeAttendance++;
+                    }
+                }
+
+                if (day.C31 != null)
+                {
+                    if (day.C31 == "NW")
+                    {
+                        wt.NWCountDay++;
+                    }
+                    else if (day.C31 == "ML")
+                    {
+                        wt.MLCountDay++;
+                    }
+                    else if (LeaveList.Contains(day.C31))
+                    {
+                        wt.DayShiftCountnow++;
+                        peremployeeAttendance++;
+                    }
+                    else if (day.C31 == "P(D)" || day.C31 == "P(N)")
+                    {
+                        peremployeeAttendance++;
+                    }
+                }
+            }
+            foreach (GET_RP_AttendanceMonitoring_Result night in NightShift)
+            {
+                if (night.C1 == "NW")
+                {
+                    wt.NWCountNight++;
+                }
+                else if (night.C1 == "ML")
+                {
+                    wt.MLCountNight++;
+                }
+                else if (LeaveList.Contains(night.C1))
+                {
+                    wt.NightshiftCountnow++;
+                    peremployeeAttendance2++;
+                }
+                else if (night.C1 == "P(D)" || night.C1 == "P(N)")
+                {
+                    peremployeeAttendance2++;
+                }
+
+                if (night.C2 == "NW")
+                {
+                    wt.NWCountNight++;
+                }
+                else if (night.C2 == "ML")
+                {
+                    wt.MLCountNight++;
+                }
+                else if (LeaveList.Contains(night.C2))
+                {
+                    wt.NightshiftCountnow++;
+                    peremployeeAttendance2++;
+                }
+                else if (night.C2 == "P(D)" || night.C2 == "P(N)")
+                {
+                    peremployeeAttendance2++;
+                }
+
+                if (night.C3 == "NW")
+                {
+                    wt.NWCountNight++;
+                }
+                else if (night.C3 == "ML")
+                {
+                    wt.MLCountNight++;
+                }
+                else if (LeaveList.Contains(night.C3))
+                {
+                    wt.NightshiftCountnow++;
+                    peremployeeAttendance2++;
+                }
+                else if (night.C3 == "P(D)" || night.C3 == "P(N)")
+                {
+                    peremployeeAttendance2++;
+                }
+
+                if (night.C4 == "NW")
+                {
+                    wt.NWCountNight++;
+                }
+                else if (night.C4 == "ML")
+                {
+                    wt.MLCountNight++;
+                }
+                else if (LeaveList.Contains(night.C4))
+                {
+                    wt.NightshiftCountnow++;
+                    peremployeeAttendance2++;
+                }
+                else if (night.C4 == "P(D)" || night.C4 == "P(N)")
+                {
+                    peremployeeAttendance2++;
+                }
+
+                if (night.C5 == "NW")
+                {
+                    wt.NWCountNight++;
+                }
+                else if (night.C5 == "ML")
+                {
+                    wt.MLCountNight++;
+                }
+                else if (LeaveList.Contains(night.C5))
+                {
+                    wt.NightshiftCountnow++;
+                    peremployeeAttendance2++;
+                }
+                else if (night.C5 == "P(D)" || night.C5 == "P(N)")
+                {
+                    peremployeeAttendance2++;
+                }
+
+                if (night.C6 == "NW")
+                {
+                    wt.NWCountNight++;
+                }
+                else if (night.C6 == "ML")
+                {
+                    wt.MLCountNight++;
+                }
+                else if (LeaveList.Contains(night.C6))
+                {
+                    wt.NightshiftCountnow++;
+                    peremployeeAttendance2++;
+                }
+                else if (night.C6 == "P(D)" || night.C6 == "P(N)")
+                {
+                    peremployeeAttendance2++;
+                }
+
+                if (night.C7 == "NW")
+                {
+                    wt.NWCountNight++;
+                }
+                else if (night.C7 == "ML")
+                {
+                    wt.MLCountNight++;
+                }
+                else if (LeaveList.Contains(night.C7))
+                {
+                    wt.NightshiftCountnow++;
+                    peremployeeAttendance2++;
+                }
+                else if (night.C7 == "P(D)" || night.C7 == "P(N)")
+                {
+                    peremployeeAttendance2++;
+                }
+
+
+                if (night.C8 == "NW")
+                {
+                    wt.NWCountNight++;
+                }
+                else if (night.C8 == "ML")
+                {
+                    wt.MLCountNight++;
+                }
+                else if (LeaveList.Contains(night.C8))
+                {
+                    wt.NightshiftCountnow++;
+                    peremployeeAttendance2++;
+                }
+                else if (night.C8 == "P(D)" || night.C8 == "P(N)")
+                {
+                    peremployeeAttendance2++;
+                }
+
+                if (night.C9 == "NW")
+                {
+                    wt.NWCountNight++;
+                }
+                else if (night.C9 == "ML")
+                {
+                    wt.MLCountNight++;
+                }
+                else if (LeaveList.Contains(night.C9))
+                {
+                    wt.NightshiftCountnow++;
+                    peremployeeAttendance2++;
+                }
+                else if (night.C9 == "P(D)" || night.C9 == "P(N)")
+                {
+                    peremployeeAttendance2++;
+                }
+
+
+                if (night.C10 == "NW")
+                {
+                    wt.NWCountNight++;
+                }
+                else if (night.C10 == "ML")
+                {
+                    wt.MLCountNight++;
+                }
+                else if (LeaveList.Contains(night.C10))
+                {
+                    wt.NightshiftCountnow++;
+                    peremployeeAttendance2++;
+                }
+                else if (night.C10 == "P(D)" || night.C10 == "P(N)")
+                {
+                    peremployeeAttendance2++;
+                }
+
+                if (night.C11 == "NW")
+                {
+                    wt.NWCountNight++;
+                }
+                else if (night.C11 == "ML")
+                {
+                    wt.MLCountNight++;
+                }
+                else if (LeaveList.Contains(night.C11))
+                {
+                    wt.NightshiftCountnow++;
+                    peremployeeAttendance2++;
+                }
+                else if (night.C11 == "P(D)" || night.C11 == "P(N)")
+                {
+                    peremployeeAttendance2++;
+                }
+
+
+                if (night.C12 == "NW")
+                {
+                    wt.NWCountNight++;
+                }
+                else if (night.C12 == "ML")
+                {
+                    wt.MLCountNight++;
+                }
+                else if (LeaveList.Contains(night.C12))
+                {
+                    wt.NightshiftCountnow++;
+                    peremployeeAttendance2++;
+                }
+                else if (night.C12 == "P(D)" || night.C12 == "P(N)")
+                {
+                    peremployeeAttendance2++;
+                }
+
+                if (night.C13 == "NW")
+                {
+                    wt.NWCountNight++;
+                }
+                else if (night.C13 == "ML")
+                {
+                    wt.MLCountNight++;
+                }
+                else if (LeaveList.Contains(night.C13))
+                {
+                    wt.NightshiftCountnow++;
+                    peremployeeAttendance2++;
+                }
+                else if (night.C13 == "P(D)" || night.C13 == "P(N)")
+                {
+                    peremployeeAttendance2++;
+                }
+
+                if (night.C14 == "NW")
+                {
+                    wt.NWCountNight++;
+                }
+                else if (night.C14 == "ML")
+                {
+                    wt.MLCountNight++;
+                }
+                else if (LeaveList.Contains(night.C14))
+                {
+                    wt.NightshiftCountnow++;
+                    peremployeeAttendance2++;
+                }
+                else if (night.C14 == "P(D)" || night.C14 == "P(N)")
+                {
+                    peremployeeAttendance2++;
+                }
+
+                if (night.C15 == "NW")
+                {
+                    wt.NWCountNight++;
+                }
+                else if (night.C15 == "ML")
+                {
+                    wt.MLCountNight++;
+                }
+                else if (LeaveList.Contains(night.C15))
+                {
+                    wt.NightshiftCountnow++;
+                    peremployeeAttendance2++;
+                }
+                else if (night.C15 == "P(D)" || night.C15 == "P(N)")
+                {
+                    peremployeeAttendance2++;
+                }
+
+
+                if (night.C16 == "NW")
+                {
+                    wt.NWCountNight++;
+                }
+                else if (night.C16 == "ML")
+                {
+                    wt.MLCountNight++;
+                }
+                else if (LeaveList.Contains(night.C16))
+                {
+                    wt.NightshiftCountnow++;
+                    peremployeeAttendance2++;
+                }
+                else if (night.C16 == "P(D)" || night.C16 == "P(N)")
+                {
+                    peremployeeAttendance2++;
+                }
+
+
+                if (night.C17 == "NW")
+                {
+                    wt.NWCountNight++;
+                }
+                else if (night.C17 == "ML")
+                {
+                    wt.MLCountNight++;
+                }
+                else if (LeaveList.Contains(night.C17))
+                {
+                    wt.NightshiftCountnow++;
+                    peremployeeAttendance2++;
+                }
+                else if (night.C17 == "P(D)" || night.C17 == "P(N)")
+                {
+                    peremployeeAttendance2++;
+                }
+
+
+                if (night.C18 == "NW")
+                {
+                    wt.NWCountNight++;
+                }
+                else if (night.C18 == "ML")
+                {
+                    wt.MLCountNight++;
+                }
+                else if (LeaveList.Contains(night.C18))
+                {
+                    wt.NightshiftCountnow++;
+                    peremployeeAttendance2++;
+                }
+                else if (night.C18 == "P(D)" || night.C18 == "P(N)")
+                {
+                    peremployeeAttendance2++;
+                }
+
+
+                if (night.C19 == "NW")
+                {
+                    wt.NWCountNight++;
+                }
+                else if (night.C19 == "ML")
+                {
+                    wt.MLCountNight++;
+                }
+                else if (LeaveList.Contains(night.C19))
+                {
+                    wt.NightshiftCountnow++;
+                    peremployeeAttendance2++;
+                }
+                else if (night.C19 == "P(D)" || night.C19 == "P(N)")
+                {
+                    peremployeeAttendance2++;
+                }
+
+
+                if (night.C20 == "NW")
+                {
+                    wt.NWCountNight++;
+                }
+                else if (night.C20 == "ML")
+                {
+                    wt.MLCountNight++;
+                }
+                else if (LeaveList.Contains(night.C20))
+                {
+                    wt.NightshiftCountnow++;
+                    peremployeeAttendance2++;
+                }
+                else if (night.C20 == "P(D)" || night.C20 == "P(N)")
+                {
+                    peremployeeAttendance2++;
+                }
+
+
+                if (night.C21 == "NW")
+                {
+                    wt.NWCountNight++;
+                }
+                else if (night.C21 == "ML")
+                {
+                    wt.MLCountNight++;
+                }
+                else if (LeaveList.Contains(night.C21))
+                {
+                    wt.NightshiftCountnow++;
+                    peremployeeAttendance2++;
+                }
+                else if (night.C21 == "P(D)" || night.C21 == "P(N)")
+                {
+                    peremployeeAttendance2++;
+                }
+
+
+                if (night.C22 == "NW")
+                {
+                    wt.NWCountNight++;
+                }
+                else if (night.C22 == "ML")
+                {
+                    wt.MLCountNight++;
+                }
+                else if (LeaveList.Contains(night.C22))
+                {
+                    wt.NightshiftCountnow++;
+                    peremployeeAttendance2++;
+                }
+                else if (night.C22 == "P(D)" || night.C22 == "P(N)")
+                {
+                    peremployeeAttendance2++;
+                }
+
+                if (night.C23 == "NW")
+                {
+                    wt.NWCountNight++;
+                }
+                else if (night.C23 == "ML")
+                {
+                    wt.MLCountNight++;
+                }
+                else if (LeaveList.Contains(night.C23))
+                {
+                    wt.NightshiftCountnow++;
+                    peremployeeAttendance2++;
+                }
+                else if (night.C23 == "P(D)" || night.C23 == "P(N)")
+                {
+                    peremployeeAttendance2++;
+                }
+
+                if (night.C24 == "NW")
+                {
+                    wt.NWCountNight++;
+                }
+                else if (night.C24 == "ML")
+                {
+                    wt.MLCountNight++;
+                }
+                else if (LeaveList.Contains(night.C24))
+                {
+                    wt.NightshiftCountnow++;
+                    peremployeeAttendance2++;
+                }
+                else if (night.C24 == "P(D)" || night.C24 == "P(N)")
+                {
+                    peremployeeAttendance2++;
+                }
+
+
+                if (night.C25 == "NW")
+                {
+                    wt.NWCountNight++;
+                }
+                else if (night.C25 == "ML")
+                {
+                    wt.MLCountNight++;
+                }
+                else if (LeaveList.Contains(night.C25))
+                {
+                    wt.NightshiftCountnow++;
+                    peremployeeAttendance2++;
+                }
+                else if (night.C25 == "P(D)" || night.C25 == "P(N)")
+                {
+                    peremployeeAttendance2++;
+                }
+
+
+                if (night.C26 == "NW")
+                {
+                    wt.NWCountNight++;
+                }
+                else if (night.C26 == "ML")
+                {
+                    wt.MLCountNight++;
+                }
+                else if (LeaveList.Contains(night.C26))
+                {
+                    wt.NightshiftCountnow++;
+                    peremployeeAttendance2++;
+                }
+                else if (night.C26 == "P(D)" || night.C26 == "P(N)")
+                {
+                    peremployeeAttendance2++;
+                }
+
+
+                if (night.C27 == "NW")
+                {
+                    wt.NWCountNight++;
+                }
+                else if (night.C27 == "ML")
+                {
+                    wt.MLCountNight++;
+                }
+                else if (LeaveList.Contains(night.C27))
+                {
+                    wt.NightshiftCountnow++;
+                    peremployeeAttendance2++;
+                }
+                else if (night.C27 == "P(D)" || night.C27 == "P(N)")
+                {
+                    peremployeeAttendance2++;
+                }
+
+
+                if (night.C28 == "NW")
+                {
+                    wt.NWCountNight++;
+                }
+                else if (night.C28 == "ML")
+                {
+                    wt.MLCountNight++;
+                }
+                else if (LeaveList.Contains(night.C28))
+                {
+                    wt.NightshiftCountnow++;
+                    peremployeeAttendance2++;
+                }
+                else if (night.C28 == "P(D)" || night.C28 == "P(N)")
+                {
+                    peremployeeAttendance2++;
+                }
+
+
+                if (night.C29 == "NW")
+                {
+                    wt.NWCountNight++;
+                }
+                else if (night.C29 == "ML")
+                {
+                    wt.MLCountNight++;
+                }
+                else if (LeaveList.Contains(night.C29))
+                {
+                    wt.NightshiftCountnow++;
+                    peremployeeAttendance2++;
+                }
+                else if (night.C29 == "P(D)" || night.C29 == "P(N)")
+                {
+                    peremployeeAttendance2++;
+                }
+
+                if (night.C30 != null)
+                {
+                    if (night.C30 == "NW")
+                    {
+                        wt.NWCountNight++;
+                    }
+                    else if (night.C30 == "ML")
+                    {
+                        wt.MLCountNight++;
+                    }
+                    else if (LeaveList.Contains(night.C30))
+                    {
+                        wt.NightshiftCountnow++;
+                        peremployeeAttendance2++;
+                    }
+                    else if (night.C30 == "P(D)" || night.C30 == "P(N)")
+                    {
+                        peremployeeAttendance2++;
+                    }
+                }
+
+                if (night.C31 != null)
+                {
+                    if (night.C31 == "NW")
+                    {
+                        wt.NWCountNight++;
+                    }
+                    else if (night.C31 == "ML")
+                    {
+                        wt.MLCountNight++;
+                    }
+                    else if (LeaveList.Contains(night.C31))
+                    {
+                        wt.NightshiftCountnow++;
+                        peremployeeAttendance2++;
+                    }
+                    else if (night.C31 == "P(D)" || night.C31 == "P(N)")
+                    {
+                        peremployeeAttendance2++;
+                    }
+                }
+            }
+            if (peremployeeAttendance2 > 0)
+            {
+                double c = (double)wt.DayShiftCountnow / (double)peremployeeAttendance;
+                double Ppercentage = c * 100;
+                wt.DayShiftper = Math.Round((decimal)Ppercentage, 2);
+                
+            }
+            else
+            {
+                wt.DayShiftper = 0;
+            }
             
-            int bDay = BusinessDays(Month, 1, Year);
-            int employeecount = orig.Count();//Dayshift.Count + NightShift.Count;
+            wt.Dayshift = Dayshift.Count;
+
+            if (peremployeeAttendance2 > 0)
+            {
+                double c1 = (double)wt.NightshiftCountnow / (double)peremployeeAttendance2;
+                double Ppercentage2 = c1 * 100;
+
+                wt.NightShiftper = Math.Round((decimal)Ppercentage2, 2);
+            }
+            else
+            {
+                wt.NightShiftper = 0;
+            }
             
+            wt.NightShift = NightShift.Count;
 
-            int AbsentCountDay = 0;
-            int MLCountDay = 0;
-            int NWCountDay = 0;
-            int AbsentCountNight = 0;
-            int MLCountNight = 0;
-            int NWCountNight = 0;
-
-            #region DS
-            foreach (GET_RP_AttendanceMonitoring_Result row in Dayshift)
-            {
-                if (Dayname(1, Month, Year))
-                {
-                    switch (row.C1)
-                    {
-                        case "AB":
-                            AbsentCountDay++;
-                            break;
-                        case "ML":
-                            MLCountDay++;
-                            break;
-                        case "NW":
-                            NWCountDay++;
-                            break;
-                    }       
-                   
-                }
-                if (Dayname(2, Month, Year))
-                {
-                    switch (row.C2)
-                    {
-                        case "AB":
-                            AbsentCountDay++;
-                            break;
-                        case "ML":
-                            MLCountDay++;
-                            break;
-                        case "NW":
-                            NWCountDay++;
-                            break;
-                    }
-                }
-                if (Dayname(3, Month, Year))
-                {
-                    switch (row.C3)
-                    {
-                        case "AB":
-                            AbsentCountDay++;
-                            break;
-                        case "ML":
-                            MLCountDay++;
-                            break;
-                        case "NW":
-                            NWCountDay++;
-                            break;
-                    }
-                }
-                if (Dayname(4, Month, Year))
-                {
-                    switch (row.C4)
-                    {
-                        case "AB":
-                            AbsentCountDay++;
-                            break;
-                        case "ML":
-                            MLCountDay++;
-                            break;
-                        case "NW":
-                            NWCountDay++;
-                            break;
-                    }
-                }
-                if (Dayname(5, Month, Year))
-                {
-                    switch (row.C5)
-                    {
-                        case "AB":
-                            AbsentCountDay++;
-                            break;
-                        case "ML":
-                            MLCountDay++;
-                            break;
-                        case "NW":
-                            NWCountDay++;
-                            break;
-                    }
-                }
-                if (Dayname(6, Month, Year))
-                {
-                    switch (row.C6)
-                    {
-                        case "AB":
-                            AbsentCountDay++;
-                            break;
-                        case "ML":
-                            MLCountDay++;
-                            break;
-                        case "NW":
-                            NWCountDay++;
-                            break;
-                    }
-                }
-                if (Dayname(7, Month, Year))
-                {
-                    switch (row.C7)
-                    {
-                        case "AB":
-                            AbsentCountDay++;
-                            break;
-                        case "ML":
-                            MLCountDay++;
-                            break;
-                        case "NW":
-                            NWCountDay++;
-                            break;
-                    }
-                }
-                if (Dayname(8, Month, Year))
-                {
-                    switch (row.C8)
-                    {
-                        case "AB":
-                            AbsentCountDay++;
-                            break;
-                        case "ML":
-                            MLCountDay++;
-                            break;
-                        case "NW":
-                            NWCountDay++;
-                            break;
-                    }
-                }
-                if (Dayname(9, Month, Year))
-                {
-                    switch (row.C9)
-                    {
-                        case "AB":
-                            AbsentCountDay++;
-                            break;
-                        case "ML":
-                            MLCountDay++;
-                            break;
-                        case "NW":
-                            NWCountDay++;
-                            break;
-                    }
-                }
-                if (Dayname(10, Month, Year))
-                {
-                    switch (row.C10)
-                    {
-                        case "AB":
-                            AbsentCountDay++;
-                            break;
-                        case "ML":
-                            MLCountDay++;
-                            break;
-                        case "NW":
-                            NWCountDay++;
-                            break;
-                    }
-                }
-                if (Dayname(11, Month, Year))
-                {
-                    switch (row.C11)
-                    {
-                        case "AB":
-                            AbsentCountDay++;
-                            break;
-                        case "ML":
-                            MLCountDay++;
-                            break;
-                        case "NW":
-                            NWCountDay++;
-                            break;
-                    }
-                }
-                if (Dayname(12, Month, Year))
-                {
-                    switch (row.C12)
-                    {
-                        case "AB":
-                            AbsentCountDay++;
-                            break;
-                        case "ML":
-                            MLCountDay++;
-                            break;
-                        case "NW":
-                            NWCountDay++;
-                            break;
-                    }
-                }
-                if (Dayname(13, Month, Year))
-                {
-                    switch (row.C13)
-                    {
-                        case "AB":
-                            AbsentCountDay++;
-                            break;
-                        case "ML":
-                            MLCountDay++;
-                            break;
-                        case "NW":
-                            NWCountDay++;
-                            break;
-                    }
-                }
-                if (Dayname(14, Month, Year))
-                {
-                    switch (row.C14)
-                    {
-                        case "AB":
-                            AbsentCountDay++;
-                            break;
-                        case "ML":
-                            MLCountDay++;
-                            break;
-                        case "NW":
-                            NWCountDay++;
-                            break;
-                    }
-                }
-                if (Dayname(15, Month, Year))
-                {
-                    switch (row.C15)
-                    {
-                        case "AB":
-                            AbsentCountDay++;
-                            break;
-                        case "ML":
-                            MLCountDay++;
-                            break;
-                        case "NW":
-                            NWCountDay++;
-                            break;
-                    }
-                }
-                if (Dayname(16, Month, Year))
-                {
-                    switch (row.C16)
-                    {
-                        case "AB":
-                            AbsentCountDay++;
-                            break;
-                        case "ML":
-                            MLCountDay++;
-                            break;
-                        case "NW":
-                            NWCountDay++;
-                            break;
-                    }
-                }
-                if (Dayname(17, Month, Year))
-                {
-                    switch (row.C17)
-                    {
-                        case "AB":
-                            AbsentCountDay++;
-                            break;
-                        case "ML":
-                            MLCountDay++;
-                            break;
-                        case "NW":
-                            NWCountDay++;
-                            break;
-                    }
-                }
-                if (Dayname(18, Month, Year))
-                {
-                    switch (row.C18)
-                    {
-                        case "AB":
-                            AbsentCountDay++;
-                            break;
-                        case "ML":
-                            MLCountDay++;
-                            break;
-                        case "NW":
-                            NWCountDay++;
-                            break;
-                    }
-                }
-                if (Dayname(19, Month, Year))
-                {
-                    switch (row.C19)
-                    {
-                        case "AB":
-                            AbsentCountDay++;
-                            break;
-                        case "ML":
-                            MLCountDay++;
-                            break;
-                        case "NW":
-                            NWCountDay++;
-                            break;
-                    }
-                }
-                if (Dayname(20, Month, Year))
-                {
-                    switch (row.C20)
-                    {
-                        case "AB":
-                            AbsentCountDay++;
-                            break;
-                        case "ML":
-                            MLCountDay++;
-                            break;
-                        case "NW":
-                            NWCountDay++;
-                            break;
-                    }
-                }
-                if (Dayname(21, Month, Year))
-                {
-                    switch (row.C21)
-                    {
-                        case "AB":
-                            AbsentCountDay++;
-                            break;
-                        case "ML":
-                            MLCountDay++;
-                            break;
-                        case "NW":
-                            NWCountDay++;
-                            break;
-                    }
-                }
-                if (Dayname(22, Month, Year))
-                {
-                    switch (row.C22)
-                    {
-                        case "AB":
-                            AbsentCountDay++;
-                            break;
-                        case "ML":
-                            MLCountDay++;
-                            break;
-                        case "NW":
-                            NWCountDay++;
-                            break;
-                    }
-                }
-                if (Dayname(23, Month, Year))
-                {
-                    switch (row.C23)
-                    {
-                        case "AB":
-                            AbsentCountDay++;
-                            break;
-                        case "ML":
-                            MLCountDay++;
-                            break;
-                        case "NW":
-                            NWCountDay++;
-                            break;
-                    }
-                }
-                if (Dayname(24, Month, Year))
-                {
-                    switch (row.C24)
-                    {
-                        case "AB":
-                            AbsentCountDay++;
-                            break;
-                        case "ML":
-                            MLCountDay++;
-                            break;
-                        case "NW":
-                            NWCountDay++;
-                            break;
-                    }
-                }
-                if (Dayname(25, Month, Year))
-                {
-                    switch (row.C25)
-                    {
-                        case "AB":
-                            AbsentCountDay++;
-                            break;
-                        case "ML":
-                            MLCountDay++;
-                            break;
-                        case "NW":
-                            NWCountDay++;
-                            break;
-                    }
-                }
-                if (Dayname(26, Month, Year))
-                {
-                    switch (row.C26)
-                    {
-                        case "AB":
-                            AbsentCountDay++;
-                            break;
-                        case "ML":
-                            MLCountDay++;
-                            break;
-                        case "NW":
-                            NWCountDay++;
-                            break;
-                    }
-                }
-                if (Dayname(27, Month, Year))
-                {
-                    switch (row.C27)
-                    {
-                        case "AB":
-                            AbsentCountDay++;
-                            break;
-                        case "ML":
-                            MLCountDay++;
-                            break;
-                        case "NW":
-                            NWCountDay++;
-                            break;
-                    }
-                }
-                if (Dayname(28, Month, Year))
-                {
-                    switch (row.C28)
-                    {
-                        case "AB":
-                            AbsentCountDay++;
-                            break;
-                        case "ML":
-                            MLCountDay++;
-                            break;
-                        case "NW":
-                            NWCountDay++;
-                            break;
-                    }
-                }
-                if (Dayname(29, Month, Year))
-                {
-                    switch (row.C29)
-                    {
-                        case "AB":
-                            AbsentCountDay++;
-                            break;
-                        case "ML":
-                            MLCountDay++;
-                            break;
-                        case "NW":
-                            NWCountDay++;
-                            break;
-                    }
-                }
-                if (row.C30 != null)
-                {
-                    if (Dayname(30, Month, Year))
-                    {
-                        switch (row.C30)
-                        {
-                            case "AB":
-                                AbsentCountDay++;
-                                break;
-                            case "ML":
-                                MLCountDay++;
-                                break;
-                            case "NW":
-                                NWCountDay++;
-                                break;
-                        }
-                    }
-                }
-                if (row.C31 != null)
-                {
-                    if (Dayname(31, Month, Year))
-                    {
-                        switch (row.C31)
-                        {
-                            case "AB":
-                                AbsentCountDay++;
-                                break;
-                            case "ML":
-                                MLCountDay++;
-                                break;
-                            case "NW":
-                                NWCountDay++;
-                                break;
-                        }
-                    }
-                }
-            }
-            #endregion
-
-            #region NS
-            foreach (GET_RP_AttendanceMonitoring_Result row in NightShift)
-            {
-                if (Dayname(1, Month, Year))
-                {
-                    switch (row.C1)
-                    {
-                        case "AB":
-                            AbsentCountNight++;
-                            break;
-                        case "ML":
-                            MLCountNight++;
-                            break;
-                        case "NW":
-                            NWCountNight++;
-                            break;
-                    }
-
-                }
-                if (Dayname(2, Month, Year))
-                {
-                    switch (row.C2)
-                    {
-                        case "AB":
-                            AbsentCountNight++;
-                            break;
-                        case "ML":
-                            MLCountNight++;
-                            break;
-                        case "NW":
-                            NWCountNight++;
-                            break;
-                    }
-                }
-                if (Dayname(3, Month, Year))
-                {
-                    switch (row.C3)
-                    {
-                        case "AB":
-                            AbsentCountNight++;
-                            break;
-                        case "ML":
-                            MLCountNight++;
-                            break;
-                        case "NW":
-                            NWCountNight++;
-                            break;
-                    }
-                }
-                if (Dayname(4, Month, Year))
-                {
-                    switch (row.C4)
-                    {
-                        case "AB":
-                            AbsentCountNight++;
-                            break;
-                        case "ML":
-                            MLCountNight++;
-                            break;
-                        case "NW":
-                            NWCountNight++;
-                            break;
-                    }
-                }
-                if (Dayname(5, Month, Year))
-                {
-                    switch (row.C5)
-                    {
-                        case "AB":
-                            AbsentCountNight++;
-                            break;
-                        case "ML":
-                            MLCountNight++;
-                            break;
-                        case "NW":
-                            NWCountNight++;
-                            break;
-                    }
-                }
-                if (Dayname(6, Month, Year))
-                {
-                    switch (row.C6)
-                    {
-                        case "AB":
-                            AbsentCountNight++;
-                            break;
-                        case "ML":
-                            MLCountNight++;
-                            break;
-                        case "NW":
-                            NWCountNight++;
-                            break;
-                    }
-                }
-                if (Dayname(7, Month, Year))
-                {
-                    switch (row.C7)
-                    {
-                        case "AB":
-                            AbsentCountNight++;
-                            break;
-                        case "ML":
-                            MLCountNight++;
-                            break;
-                        case "NW":
-                            NWCountNight++;
-                            break;
-                    }
-                }
-                if (Dayname(8, Month, Year))
-                {
-                    switch (row.C8)
-                    {
-                        case "AB":
-                            AbsentCountNight++;
-                            break;
-                        case "ML":
-                            MLCountNight++;
-                            break;
-                        case "NW":
-                            NWCountNight++;
-                            break;
-                    }
-                }
-                if (Dayname(9, Month, Year))
-                {
-                    switch (row.C9)
-                    {
-                        case "AB":
-                            AbsentCountNight++;
-                            break;
-                        case "ML":
-                            MLCountNight++;
-                            break;
-                        case "NW":
-                            NWCountNight++;
-                            break;
-                    }
-                }
-                if (Dayname(10, Month, Year))
-                {
-                    switch (row.C10)
-                    {
-                        case "AB":
-                            AbsentCountNight++;
-                            break;
-                        case "ML":
-                            MLCountNight++;
-                            break;
-                        case "NW":
-                            NWCountNight++;
-                            break;
-                    }
-                }
-                if (Dayname(11, Month, Year))
-                {
-                    switch (row.C11)
-                    {
-                        case "AB":
-                            AbsentCountNight++;
-                            break;
-                        case "ML":
-                            MLCountNight++;
-                            break;
-                        case "NW":
-                            NWCountNight++;
-                            break;
-                    }
-                }
-                if (Dayname(12, Month, Year))
-                {
-                    switch (row.C12)
-                    {
-                        case "AB":
-                            AbsentCountNight++;
-                            break;
-                        case "ML":
-                            MLCountNight++;
-                            break;
-                        case "NW":
-                            NWCountNight++;
-                            break;
-                    }
-                }
-                if (Dayname(13, Month, Year))
-                {
-                    switch (row.C13)
-                    {
-                        case "AB":
-                            AbsentCountNight++;
-                            break;
-                        case "ML":
-                            MLCountNight++;
-                            break;
-                        case "NW":
-                            NWCountNight++;
-                            break;
-                    }
-                }
-                if (Dayname(14, Month, Year))
-                {
-                    switch (row.C14)
-                    {
-                        case "AB":
-                            AbsentCountNight++;
-                            break;
-                        case "ML":
-                            MLCountNight++;
-                            break;
-                        case "NW":
-                            NWCountNight++;
-                            break;
-                    }
-                }
-                if (Dayname(15, Month, Year))
-                {
-                    switch (row.C15)
-                    {
-                        case "AB":
-                            AbsentCountNight++;
-                            break;
-                        case "ML":
-                            MLCountNight++;
-                            break;
-                        case "NW":
-                            NWCountNight++;
-                            break;
-                    }
-                }
-                if (Dayname(16, Month, Year))
-                {
-                    switch (row.C16)
-                    {
-                        case "AB":
-                            AbsentCountNight++;
-                            break;
-                        case "ML":
-                            MLCountNight++;
-                            break;
-                        case "NW":
-                            NWCountNight++;
-                            break;
-                    }
-                }
-                if (Dayname(17, Month, Year))
-                {
-                    switch (row.C17)
-                    {
-                        case "AB":
-                            AbsentCountNight++;
-                            break;
-                        case "ML":
-                            MLCountNight++;
-                            break;
-                        case "NW":
-                            NWCountNight++;
-                            break;
-                    }
-                }
-                if (Dayname(18, Month, Year))
-                {
-                    switch (row.C18)
-                    {
-                        case "AB":
-                            AbsentCountNight++;
-                            break;
-                        case "ML":
-                            MLCountNight++;
-                            break;
-                        case "NW":
-                            NWCountNight++;
-                            break;
-                    }
-                }
-                if (Dayname(19, Month, Year))
-                {
-                    switch (row.C19)
-                    {
-                        case "AB":
-                            AbsentCountNight++;
-                            break;
-                        case "ML":
-                            MLCountNight++;
-                            break;
-                        case "NW":
-                            NWCountNight++;
-                            break;
-                    }
-                }
-                if (Dayname(20, Month, Year))
-                {
-                    switch (row.C20)
-                    {
-                        case "AB":
-                            AbsentCountNight++;
-                            break;
-                        case "ML":
-                            MLCountNight++;
-                            break;
-                        case "NW":
-                            NWCountNight++;
-                            break;
-                    }
-                }
-                if (Dayname(21, Month, Year))
-                {
-                    switch (row.C21)
-                    {
-                        case "AB":
-                            AbsentCountNight++;
-                            break;
-                        case "ML":
-                            MLCountNight++;
-                            break;
-                        case "NW":
-                            NWCountNight++;
-                            break;
-                    }
-                }
-                if (Dayname(22, Month, Year))
-                {
-                    switch (row.C22)
-                    {
-                        case "AB":
-                            AbsentCountNight++;
-                            break;
-                        case "ML":
-                            MLCountNight++;
-                            break;
-                        case "NW":
-                            NWCountNight++;
-                            break;
-                    }
-                }
-                if (Dayname(23, Month, Year))
-                {
-                    switch (row.C23)
-                    {
-                        case "AB":
-                            AbsentCountNight++;
-                            break;
-                        case "ML":
-                            MLCountNight++;
-                            break;
-                        case "NW":
-                            NWCountNight++;
-                            break;
-                    }
-                }
-                if (Dayname(24, Month, Year))
-                {
-                    switch (row.C24)
-                    {
-                        case "AB":
-                            AbsentCountNight++;
-                            break;
-                        case "ML":
-                            MLCountNight++;
-                            break;
-                        case "NW":
-                            NWCountNight++;
-                            break;
-                    }
-                }
-                if (Dayname(25, Month, Year))
-                {
-                    switch (row.C25)
-                    {
-                        case "AB":
-                            AbsentCountNight++;
-                            break;
-                        case "ML":
-                            MLCountNight++;
-                            break;
-                        case "NW":
-                            NWCountNight++;
-                            break;
-                    }
-                }
-                if (Dayname(26, Month, Year))
-                {
-                    switch (row.C26)
-                    {
-                        case "AB":
-                            AbsentCountNight++;
-                            break;
-                        case "ML":
-                            MLCountNight++;
-                            break;
-                        case "NW":
-                            NWCountNight++;
-                            break;
-                    }
-                }
-                if (Dayname(27, Month, Year))
-                {
-                    switch (row.C27)
-                    {
-                        case "AB":
-                            AbsentCountNight++;
-                            break;
-                        case "ML":
-                            MLCountNight++;
-                            break;
-                        case "NW":
-                            NWCountNight++;
-                            break;
-                    }
-                }
-                if (Dayname(28, Month, Year))
-                {
-                    switch (row.C28)
-                    {
-                        case "AB":
-                            AbsentCountNight++;
-                            break;
-                        case "ML":
-                            MLCountNight++;
-                            break;
-                        case "NW":
-                            NWCountNight++;
-                            break;
-                    }
-                }
-                if (Dayname(29, Month, Year))
-                {
-                    switch (row.C29)
-                    {
-                        case "AB":
-                            AbsentCountNight++;
-                            break;
-                        case "ML":
-                            MLCountNight++;
-                            break;
-                        case "NW":
-                            NWCountNight++;
-                            break;
-                    }
-                }
-                if (row.C30 != null)
-                {
-                    if (Dayname(30, Month, Year))
-                    {
-                        switch (row.C30)
-                        {
-                            case "AB":
-                                AbsentCountNight++;
-                                break;
-                            case "ML":
-                                MLCountNight++;
-                                break;
-                            case "NW":
-                                NWCountNight++;
-                                break;
-                        }
-                    }
-                }
-                if (row.C31 != null)
-                {
-                    if (Dayname(31, Month, Year))
-                    {
-                        switch (row.C31)
-                        {
-                            case "AB":
-                                AbsentCountNight++;
-                                break;
-                            case "ML":
-                                MLCountNight++;
-                                break;
-                            case "NW":
-                                NWCountNight++;
-                                break;
-                        }
-                    }
-                }
-            }
-            #endregion
-            decimal DayShiftper = 0;
-            decimal NightShiftper = 0;
-
-
-            decimal DayShiftCountnow = AbsentCountDay;
-            decimal NightshiftCountnow = AbsentCountNight;
-            try
-            {
-                //DayShiftper = Math.Round((100 * ((decimal)AbsentCountDay / ((decimal)bDay * employeecount))), 2);
-                //NightShiftper = Math.Round((100 * ((decimal)AbsentCountNight / ((decimal)bDay * employeecount))), 2);
-                DayShiftper = Math.Round((100 * ((decimal)DayShiftCountnow / ((decimal)bDay * employeecount))), 2);
-                NightShiftper = Math.Round((100 * ((decimal)NightshiftCountnow / ((decimal)bDay * employeecount))), 2);
-            }
-            catch (Exception err)
-            {
-
-            }
-
-            WTGlobal header = new WTGlobal();
-            header.DayShiftCountnow = DayShiftCountnow;
-            header.NightshiftCountnow = NightshiftCountnow;
-            header.Dayshift = Dayshift.Count;
-            header.NightShift = NightShift.Count;
-            header.DayShiftper = DayShiftper;
-            header.NightShiftper = NightShiftper;
-            header.MLCountDay = MLCountDay;
-            header.MLCountNight = MLCountNight;
-            header.NWCountDay = NWCountDay;
-            header.NWCountNight = NWCountNight;
-
-            //return Json(new {
-            //    DayShiftCountnow = DayShiftCountnow,
-            //    NightshiftCountnow = NightshiftCountnow,
-            //    Dayshift = Dayshift.Count,
-            //    NightShift= NightShift.Count,
-            //    DayShiftper= DayShiftper,
-            //    NightShiftper= NightShiftper,
-            //    MLCountDay = MLCountDay,
-            //    MLCountNight = MLCountNight,
-            //    NWCountDay = NWCountDay,
-            //    NWCountNight = NWCountNight
-            //}, JsonRequestBehavior.AllowGet);
-
-            return header;
+            return wt;
         }
+
+
+        #region Remove
+        //public WTGlobal GetHeaderData(int Month, int Year, string Section, List<GET_RP_AttendanceMonitoring_Result> dt)
+        //{
+
+        //    List<GET_RP_AttendanceMonitoring_Result> list = dt;//test(Month, Year, Section, dt);
+        //    List<GET_RP_AttendanceMonitoring_Result> orig = list;
+
+        //    int daysinMonth = DateTime.DaysInMonth(Year, Month);
+        //    list = list.Where(x => x.Schedule != "").ToList();
+        //    List<GET_RP_AttendanceMonitoring_Result> Dayshift = list.Where(x => x.Schedule.ToLower().Contains("day")).ToList();
+        //    List<GET_RP_AttendanceMonitoring_Result> NightShift = list.Where(x => x.Schedule.ToLower().Contains("night")).ToList();
+
+            
+        //    int bDay = BusinessDays(Month, 1, Year);
+        //    int employeecount = orig.Count();//Dayshift.Count + NightShift.Count;
+            
+
+        //    int AbsentCountDay = 0;
+        //    int MLCountDay = 0;
+        //    int NWCountDay = 0;
+        //    int AbsentCountNight = 0;
+        //    int MLCountNight = 0;
+        //    int NWCountNight = 0;
+
+        //    List<string> LeaveList = new List<string>();
+        //    LeaveList.Add("ML");
+        //    LeaveList.Add("SL");
+        //    LeaveList.Add("VL");
+        //    LeaveList.Add("EL");
+        //    LeaveList.Add("AB");
+
+        //    #region DS
+        //    foreach (GET_RP_AttendanceMonitoring_Result row in Dayshift)
+        //    {
+        //        if (Dayname(1, Month, Year))
+        //        {
+        //            switch (row.C1)
+        //            {
+        //                case "AB":
+        //                    AbsentCountDay++;
+        //                    break;
+        //                case "ML":
+        //                    MLCountDay++;
+        //                    break;
+        //                case "NW":
+        //                    NWCountDay++;
+        //                    break;
+        //            }       
+                   
+        //        }
+        //        if (Dayname(2, Month, Year))
+        //        {
+        //            switch (row.C2)
+        //            {
+        //                case "AB":
+        //                    AbsentCountDay++;
+        //                    break;
+        //                case "ML":
+        //                    MLCountDay++;
+        //                    break;
+        //                case "NW":
+        //                    NWCountDay++;
+        //                    break;
+        //            }
+        //        }
+        //        if (Dayname(3, Month, Year))
+        //        {
+        //            switch (row.C3)
+        //            {
+        //                case "AB":
+        //                    AbsentCountDay++;
+        //                    break;
+        //                case "ML":
+        //                    MLCountDay++;
+        //                    break;
+        //                case "NW":
+        //                    NWCountDay++;
+        //                    break;
+        //            }
+        //        }
+        //        if (Dayname(4, Month, Year))
+        //        {
+        //            switch (row.C4)
+        //            {
+        //                case "AB":
+        //                    AbsentCountDay++;
+        //                    break;
+        //                case "ML":
+        //                    MLCountDay++;
+        //                    break;
+        //                case "NW":
+        //                    NWCountDay++;
+        //                    break;
+        //            }
+        //        }
+        //        if (Dayname(5, Month, Year))
+        //        {
+        //            switch (row.C5)
+        //            {
+        //                case "AB":
+        //                    AbsentCountDay++;
+        //                    break;
+        //                case "ML":
+        //                    MLCountDay++;
+        //                    break;
+        //                case "NW":
+        //                    NWCountDay++;
+        //                    break;
+        //            }
+        //        }
+        //        if (Dayname(6, Month, Year))
+        //        {
+        //            switch (row.C6)
+        //            {
+        //                case "AB":
+        //                    AbsentCountDay++;
+        //                    break;
+        //                case "ML":
+        //                    MLCountDay++;
+        //                    break;
+        //                case "NW":
+        //                    NWCountDay++;
+        //                    break;
+        //            }
+        //        }
+        //        if (Dayname(7, Month, Year))
+        //        {
+        //            switch (row.C7)
+        //            {
+        //                case "AB":
+        //                    AbsentCountDay++;
+        //                    break;
+        //                case "ML":
+        //                    MLCountDay++;
+        //                    break;
+        //                case "NW":
+        //                    NWCountDay++;
+        //                    break;
+        //            }
+        //        }
+        //        if (Dayname(8, Month, Year))
+        //        {
+        //            switch (row.C8)
+        //            {
+        //                case "AB":
+        //                    AbsentCountDay++;
+        //                    break;
+        //                case "ML":
+        //                    MLCountDay++;
+        //                    break;
+        //                case "NW":
+        //                    NWCountDay++;
+        //                    break;
+        //            }
+        //        }
+        //        if (Dayname(9, Month, Year))
+        //        {
+        //            switch (row.C9)
+        //            {
+        //                case "AB":
+        //                    AbsentCountDay++;
+        //                    break;
+        //                case "ML":
+        //                    MLCountDay++;
+        //                    break;
+        //                case "NW":
+        //                    NWCountDay++;
+        //                    break;
+        //            }
+        //        }
+        //        if (Dayname(10, Month, Year))
+        //        {
+        //            switch (row.C10)
+        //            {
+        //                case "AB":
+        //                    AbsentCountDay++;
+        //                    break;
+        //                case "ML":
+        //                    MLCountDay++;
+        //                    break;
+        //                case "NW":
+        //                    NWCountDay++;
+        //                    break;
+        //            }
+        //        }
+        //        if (Dayname(11, Month, Year))
+        //        {
+        //            switch (row.C11)
+        //            {
+        //                case "AB":
+        //                    AbsentCountDay++;
+        //                    break;
+        //                case "ML":
+        //                    MLCountDay++;
+        //                    break;
+        //                case "NW":
+        //                    NWCountDay++;
+        //                    break;
+        //            }
+        //        }
+        //        if (Dayname(12, Month, Year))
+        //        {
+        //            switch (row.C12)
+        //            {
+        //                case "AB":
+        //                    AbsentCountDay++;
+        //                    break;
+        //                case "ML":
+        //                    MLCountDay++;
+        //                    break;
+        //                case "NW":
+        //                    NWCountDay++;
+        //                    break;
+        //            }
+        //        }
+        //        if (Dayname(13, Month, Year))
+        //        {
+        //            switch (row.C13)
+        //            {
+        //                case "AB":
+        //                    AbsentCountDay++;
+        //                    break;
+        //                case "ML":
+        //                    MLCountDay++;
+        //                    break;
+        //                case "NW":
+        //                    NWCountDay++;
+        //                    break;
+        //            }
+        //        }
+        //        if (Dayname(14, Month, Year))
+        //        {
+        //            switch (row.C14)
+        //            {
+        //                case "AB":
+        //                    AbsentCountDay++;
+        //                    break;
+        //                case "ML":
+        //                    MLCountDay++;
+        //                    break;
+        //                case "NW":
+        //                    NWCountDay++;
+        //                    break;
+        //            }
+        //        }
+        //        if (Dayname(15, Month, Year))
+        //        {
+        //            switch (row.C15)
+        //            {
+        //                case "AB":
+        //                    AbsentCountDay++;
+        //                    break;
+        //                case "ML":
+        //                    MLCountDay++;
+        //                    break;
+        //                case "NW":
+        //                    NWCountDay++;
+        //                    break;
+        //            }
+        //        }
+        //        if (Dayname(16, Month, Year))
+        //        {
+        //            switch (row.C16)
+        //            {
+        //                case "AB":
+        //                    AbsentCountDay++;
+        //                    break;
+        //                case "ML":
+        //                    MLCountDay++;
+        //                    break;
+        //                case "NW":
+        //                    NWCountDay++;
+        //                    break;
+        //            }
+        //        }
+        //        if (Dayname(17, Month, Year))
+        //        {
+        //            switch (row.C17)
+        //            {
+        //                case "AB":
+        //                    AbsentCountDay++;
+        //                    break;
+        //                case "ML":
+        //                    MLCountDay++;
+        //                    break;
+        //                case "NW":
+        //                    NWCountDay++;
+        //                    break;
+        //            }
+        //        }
+        //        if (Dayname(18, Month, Year))
+        //        {
+        //            switch (row.C18)
+        //            {
+        //                case "AB":
+        //                    AbsentCountDay++;
+        //                    break;
+        //                case "ML":
+        //                    MLCountDay++;
+        //                    break;
+        //                case "NW":
+        //                    NWCountDay++;
+        //                    break;
+        //            }
+        //        }
+        //        if (Dayname(19, Month, Year))
+        //        {
+        //            switch (row.C19)
+        //            {
+        //                case "AB":
+        //                    AbsentCountDay++;
+        //                    break;
+        //                case "ML":
+        //                    MLCountDay++;
+        //                    break;
+        //                case "NW":
+        //                    NWCountDay++;
+        //                    break;
+        //            }
+        //        }
+        //        if (Dayname(20, Month, Year))
+        //        {
+        //            switch (row.C20)
+        //            {
+        //                case "AB":
+        //                    AbsentCountDay++;
+        //                    break;
+        //                case "ML":
+        //                    MLCountDay++;
+        //                    break;
+        //                case "NW":
+        //                    NWCountDay++;
+        //                    break;
+        //            }
+        //        }
+        //        if (Dayname(21, Month, Year))
+        //        {
+        //            switch (row.C21)
+        //            {
+        //                case "AB":
+        //                    AbsentCountDay++;
+        //                    break;
+        //                case "ML":
+        //                    MLCountDay++;
+        //                    break;
+        //                case "NW":
+        //                    NWCountDay++;
+        //                    break;
+        //            }
+        //        }
+        //        if (Dayname(22, Month, Year))
+        //        {
+        //            switch (row.C22)
+        //            {
+        //                case "AB":
+        //                    AbsentCountDay++;
+        //                    break;
+        //                case "ML":
+        //                    MLCountDay++;
+        //                    break;
+        //                case "NW":
+        //                    NWCountDay++;
+        //                    break;
+        //            }
+        //        }
+        //        if (Dayname(23, Month, Year))
+        //        {
+        //            switch (row.C23)
+        //            {
+        //                case "AB":
+        //                    AbsentCountDay++;
+        //                    break;
+        //                case "ML":
+        //                    MLCountDay++;
+        //                    break;
+        //                case "NW":
+        //                    NWCountDay++;
+        //                    break;
+        //            }
+        //        }
+        //        if (Dayname(24, Month, Year))
+        //        {
+        //            switch (row.C24)
+        //            {
+        //                case "AB":
+        //                    AbsentCountDay++;
+        //                    break;
+        //                case "ML":
+        //                    MLCountDay++;
+        //                    break;
+        //                case "NW":
+        //                    NWCountDay++;
+        //                    break;
+        //            }
+        //        }
+        //        if (Dayname(25, Month, Year))
+        //        {
+        //            switch (row.C25)
+        //            {
+        //                case "AB":
+        //                    AbsentCountDay++;
+        //                    break;
+        //                case "ML":
+        //                    MLCountDay++;
+        //                    break;
+        //                case "NW":
+        //                    NWCountDay++;
+        //                    break;
+        //            }
+        //        }
+        //        if (Dayname(26, Month, Year))
+        //        {
+        //            switch (row.C26)
+        //            {
+        //                case "AB":
+        //                    AbsentCountDay++;
+        //                    break;
+        //                case "ML":
+        //                    MLCountDay++;
+        //                    break;
+        //                case "NW":
+        //                    NWCountDay++;
+        //                    break;
+        //            }
+        //        }
+        //        if (Dayname(27, Month, Year))
+        //        {
+        //            switch (row.C27)
+        //            {
+        //                case "AB":
+        //                    AbsentCountDay++;
+        //                    break;
+        //                case "ML":
+        //                    MLCountDay++;
+        //                    break;
+        //                case "NW":
+        //                    NWCountDay++;
+        //                    break;
+        //            }
+        //        }
+        //        if (Dayname(28, Month, Year))
+        //        {
+        //            switch (row.C28)
+        //            {
+        //                case "AB":
+        //                    AbsentCountDay++;
+        //                    break;
+        //                case "ML":
+        //                    MLCountDay++;
+        //                    break;
+        //                case "NW":
+        //                    NWCountDay++;
+        //                    break;
+        //            }
+        //        }
+        //        if (Dayname(29, Month, Year))
+        //        {
+        //            switch (row.C29)
+        //            {
+        //                case "AB":
+        //                    AbsentCountDay++;
+        //                    break;
+        //                case "ML":
+        //                    MLCountDay++;
+        //                    break;
+        //                case "NW":
+        //                    NWCountDay++;
+        //                    break;
+        //            }
+        //        }
+        //        if (row.C30 != null)
+        //        {
+        //            if (Dayname(30, Month, Year))
+        //            {
+        //                switch (row.C30)
+        //                {
+        //                    case "AB":
+        //                        AbsentCountDay++;
+        //                        break;
+        //                    case "ML":
+        //                        MLCountDay++;
+        //                        break;
+        //                    case "NW":
+        //                        NWCountDay++;
+        //                        break;
+        //                }
+        //            }
+        //        }
+        //        if (row.C31 != null)
+        //        {
+        //            if (Dayname(31, Month, Year))
+        //            {
+        //                switch (row.C31)
+        //                {
+        //                    case "AB":
+        //                        AbsentCountDay++;
+        //                        break;
+        //                    case "ML":
+        //                        MLCountDay++;
+        //                        break;
+        //                    case "NW":
+        //                        NWCountDay++;
+        //                        break;
+        //                }
+        //            }
+        //        }
+        //    }
+        //    #endregion
+
+        //    #region NS
+        //    foreach (GET_RP_AttendanceMonitoring_Result row in NightShift)
+        //    {
+        //        if (Dayname(1, Month, Year))
+        //        {
+        //            switch (row.C1)
+        //            {
+        //                case "AB":
+        //                    AbsentCountNight++;
+        //                    break;
+        //                case "ML":
+        //                    MLCountNight++;
+        //                    break;
+        //                case "NW":
+        //                    NWCountNight++;
+        //                    break;
+        //            }
+
+        //        }
+        //        if (Dayname(2, Month, Year))
+        //        {
+        //            switch (row.C2)
+        //            {
+        //                case "AB":
+        //                    AbsentCountNight++;
+        //                    break;
+        //                case "ML":
+        //                    MLCountNight++;
+        //                    break;
+        //                case "NW":
+        //                    NWCountNight++;
+        //                    break;
+        //            }
+        //        }
+        //        if (Dayname(3, Month, Year))
+        //        {
+        //            switch (row.C3)
+        //            {
+        //                case "AB":
+        //                    AbsentCountNight++;
+        //                    break;
+        //                case "ML":
+        //                    MLCountNight++;
+        //                    break;
+        //                case "NW":
+        //                    NWCountNight++;
+        //                    break;
+        //            }
+        //        }
+        //        if (Dayname(4, Month, Year))
+        //        {
+        //            switch (row.C4)
+        //            {
+        //                case "AB":
+        //                    AbsentCountNight++;
+        //                    break;
+        //                case "ML":
+        //                    MLCountNight++;
+        //                    break;
+        //                case "NW":
+        //                    NWCountNight++;
+        //                    break;
+        //            }
+        //        }
+        //        if (Dayname(5, Month, Year))
+        //        {
+        //            switch (row.C5)
+        //            {
+        //                case "AB":
+        //                    AbsentCountNight++;
+        //                    break;
+        //                case "ML":
+        //                    MLCountNight++;
+        //                    break;
+        //                case "NW":
+        //                    NWCountNight++;
+        //                    break;
+        //            }
+        //        }
+        //        if (Dayname(6, Month, Year))
+        //        {
+        //            switch (row.C6)
+        //            {
+        //                case "AB":
+        //                    AbsentCountNight++;
+        //                    break;
+        //                case "ML":
+        //                    MLCountNight++;
+        //                    break;
+        //                case "NW":
+        //                    NWCountNight++;
+        //                    break;
+        //            }
+        //        }
+        //        if (Dayname(7, Month, Year))
+        //        {
+        //            switch (row.C7)
+        //            {
+        //                case "AB":
+        //                    AbsentCountNight++;
+        //                    break;
+        //                case "ML":
+        //                    MLCountNight++;
+        //                    break;
+        //                case "NW":
+        //                    NWCountNight++;
+        //                    break;
+        //            }
+        //        }
+        //        if (Dayname(8, Month, Year))
+        //        {
+        //            switch (row.C8)
+        //            {
+        //                case "AB":
+        //                    AbsentCountNight++;
+        //                    break;
+        //                case "ML":
+        //                    MLCountNight++;
+        //                    break;
+        //                case "NW":
+        //                    NWCountNight++;
+        //                    break;
+        //            }
+        //        }
+        //        if (Dayname(9, Month, Year))
+        //        {
+        //            switch (row.C9)
+        //            {
+        //                case "AB":
+        //                    AbsentCountNight++;
+        //                    break;
+        //                case "ML":
+        //                    MLCountNight++;
+        //                    break;
+        //                case "NW":
+        //                    NWCountNight++;
+        //                    break;
+        //            }
+        //        }
+        //        if (Dayname(10, Month, Year))
+        //        {
+        //            switch (row.C10)
+        //            {
+        //                case "AB":
+        //                    AbsentCountNight++;
+        //                    break;
+        //                case "ML":
+        //                    MLCountNight++;
+        //                    break;
+        //                case "NW":
+        //                    NWCountNight++;
+        //                    break;
+        //            }
+        //        }
+        //        if (Dayname(11, Month, Year))
+        //        {
+        //            switch (row.C11)
+        //            {
+        //                case "AB":
+        //                    AbsentCountNight++;
+        //                    break;
+        //                case "ML":
+        //                    MLCountNight++;
+        //                    break;
+        //                case "NW":
+        //                    NWCountNight++;
+        //                    break;
+        //            }
+        //        }
+        //        if (Dayname(12, Month, Year))
+        //        {
+        //            switch (row.C12)
+        //            {
+        //                case "AB":
+        //                    AbsentCountNight++;
+        //                    break;
+        //                case "ML":
+        //                    MLCountNight++;
+        //                    break;
+        //                case "NW":
+        //                    NWCountNight++;
+        //                    break;
+        //            }
+        //        }
+        //        if (Dayname(13, Month, Year))
+        //        {
+        //            switch (row.C13)
+        //            {
+        //                case "AB":
+        //                    AbsentCountNight++;
+        //                    break;
+        //                case "ML":
+        //                    MLCountNight++;
+        //                    break;
+        //                case "NW":
+        //                    NWCountNight++;
+        //                    break;
+        //            }
+        //        }
+        //        if (Dayname(14, Month, Year))
+        //        {
+        //            switch (row.C14)
+        //            {
+        //                case "AB":
+        //                    AbsentCountNight++;
+        //                    break;
+        //                case "ML":
+        //                    MLCountNight++;
+        //                    break;
+        //                case "NW":
+        //                    NWCountNight++;
+        //                    break;
+        //            }
+        //        }
+        //        if (Dayname(15, Month, Year))
+        //        {
+        //            switch (row.C15)
+        //            {
+        //                case "AB":
+        //                    AbsentCountNight++;
+        //                    break;
+        //                case "ML":
+        //                    MLCountNight++;
+        //                    break;
+        //                case "NW":
+        //                    NWCountNight++;
+        //                    break;
+        //            }
+        //        }
+        //        if (Dayname(16, Month, Year))
+        //        {
+        //            switch (row.C16)
+        //            {
+        //                case "AB":
+        //                    AbsentCountNight++;
+        //                    break;
+        //                case "ML":
+        //                    MLCountNight++;
+        //                    break;
+        //                case "NW":
+        //                    NWCountNight++;
+        //                    break;
+        //            }
+        //        }
+        //        if (Dayname(17, Month, Year))
+        //        {
+        //            switch (row.C17)
+        //            {
+        //                case "AB":
+        //                    AbsentCountNight++;
+        //                    break;
+        //                case "ML":
+        //                    MLCountNight++;
+        //                    break;
+        //                case "NW":
+        //                    NWCountNight++;
+        //                    break;
+        //            }
+        //        }
+        //        if (Dayname(18, Month, Year))
+        //        {
+        //            switch (row.C18)
+        //            {
+        //                case "AB":
+        //                    AbsentCountNight++;
+        //                    break;
+        //                case "ML":
+        //                    MLCountNight++;
+        //                    break;
+        //                case "NW":
+        //                    NWCountNight++;
+        //                    break;
+        //            }
+        //        }
+        //        if (Dayname(19, Month, Year))
+        //        {
+        //            switch (row.C19)
+        //            {
+        //                case "AB":
+        //                    AbsentCountNight++;
+        //                    break;
+        //                case "ML":
+        //                    MLCountNight++;
+        //                    break;
+        //                case "NW":
+        //                    NWCountNight++;
+        //                    break;
+        //            }
+        //        }
+        //        if (Dayname(20, Month, Year))
+        //        {
+        //            switch (row.C20)
+        //            {
+        //                case "AB":
+        //                    AbsentCountNight++;
+        //                    break;
+        //                case "ML":
+        //                    MLCountNight++;
+        //                    break;
+        //                case "NW":
+        //                    NWCountNight++;
+        //                    break;
+        //            }
+        //        }
+        //        if (Dayname(21, Month, Year))
+        //        {
+        //            switch (row.C21)
+        //            {
+        //                case "AB":
+        //                    AbsentCountNight++;
+        //                    break;
+        //                case "ML":
+        //                    MLCountNight++;
+        //                    break;
+        //                case "NW":
+        //                    NWCountNight++;
+        //                    break;
+        //            }
+        //        }
+        //        if (Dayname(22, Month, Year))
+        //        {
+        //            switch (row.C22)
+        //            {
+        //                case "AB":
+        //                    AbsentCountNight++;
+        //                    break;
+        //                case "ML":
+        //                    MLCountNight++;
+        //                    break;
+        //                case "NW":
+        //                    NWCountNight++;
+        //                    break;
+        //            }
+        //        }
+        //        if (Dayname(23, Month, Year))
+        //        {
+        //            switch (row.C23)
+        //            {
+        //                case "AB":
+        //                    AbsentCountNight++;
+        //                    break;
+        //                case "ML":
+        //                    MLCountNight++;
+        //                    break;
+        //                case "NW":
+        //                    NWCountNight++;
+        //                    break;
+        //            }
+        //        }
+        //        if (Dayname(24, Month, Year))
+        //        {
+        //            switch (row.C24)
+        //            {
+        //                case "AB":
+        //                    AbsentCountNight++;
+        //                    break;
+        //                case "ML":
+        //                    MLCountNight++;
+        //                    break;
+        //                case "NW":
+        //                    NWCountNight++;
+        //                    break;
+        //            }
+        //        }
+        //        if (Dayname(25, Month, Year))
+        //        {
+        //            switch (row.C25)
+        //            {
+        //                case "AB":
+        //                    AbsentCountNight++;
+        //                    break;
+        //                case "ML":
+        //                    MLCountNight++;
+        //                    break;
+        //                case "NW":
+        //                    NWCountNight++;
+        //                    break;
+        //            }
+        //        }
+        //        if (Dayname(26, Month, Year))
+        //        {
+        //            switch (row.C26)
+        //            {
+        //                case "AB":
+        //                    AbsentCountNight++;
+        //                    break;
+        //                case "ML":
+        //                    MLCountNight++;
+        //                    break;
+        //                case "NW":
+        //                    NWCountNight++;
+        //                    break;
+        //            }
+        //        }
+        //        if (Dayname(27, Month, Year))
+        //        {
+        //            switch (row.C27)
+        //            {
+        //                case "AB":
+        //                    AbsentCountNight++;
+        //                    break;
+        //                case "ML":
+        //                    MLCountNight++;
+        //                    break;
+        //                case "NW":
+        //                    NWCountNight++;
+        //                    break;
+        //            }
+        //        }
+        //        if (Dayname(28, Month, Year))
+        //        {
+        //            switch (row.C28)
+        //            {
+        //                case "AB":
+        //                    AbsentCountNight++;
+        //                    break;
+        //                case "ML":
+        //                    MLCountNight++;
+        //                    break;
+        //                case "NW":
+        //                    NWCountNight++;
+        //                    break;
+        //            }
+        //        }
+        //        if (Dayname(29, Month, Year))
+        //        {
+        //            switch (row.C29)
+        //            {
+        //                case "AB":
+        //                    AbsentCountNight++;
+        //                    break;
+        //                case "ML":
+        //                    MLCountNight++;
+        //                    break;
+        //                case "NW":
+        //                    NWCountNight++;
+        //                    break;
+        //            }
+        //        }
+        //        if (row.C30 != null)
+        //        {
+        //            if (Dayname(30, Month, Year))
+        //            {
+        //                switch (row.C30)
+        //                {
+        //                    case "AB":
+        //                        AbsentCountNight++;
+        //                        break;
+        //                    case "ML":
+        //                        MLCountNight++;
+        //                        break;
+        //                    case "NW":
+        //                        NWCountNight++;
+        //                        break;
+        //                }
+        //            }
+        //        }
+        //        if (row.C31 != null)
+        //        {
+        //            if (Dayname(31, Month, Year))
+        //            {
+        //                switch (row.C31)
+        //                {
+        //                    case "AB":
+        //                        AbsentCountNight++;
+        //                        break;
+        //                    case "ML":
+        //                        MLCountNight++;
+        //                        break;
+        //                    case "NW":
+        //                        NWCountNight++;
+        //                        break;
+        //                }
+        //            }
+        //        }
+        //    }
+        //    #endregion
+        //    decimal DayShiftper = 0;
+        //    decimal NightShiftper = 0;
+
+
+        //    decimal DayShiftCountnow = AbsentCountDay;
+        //    decimal NightshiftCountnow = AbsentCountNight;
+        //    try
+        //    {
+        //        //DayShiftper = Math.Round((100 * ((decimal)AbsentCountDay / ((decimal)bDay * employeecount))), 2);
+        //        //NightShiftper = Math.Round((100 * ((decimal)AbsentCountNight / ((decimal)bDay * employeecount))), 2);
+        //        DayShiftper = Math.Round((100 * ((decimal)DayShiftCountnow / ((decimal)bDay * employeecount))), 2);
+        //        NightShiftper = Math.Round((100 * ((decimal)NightshiftCountnow / ((decimal)bDay * employeecount))), 2);
+        //    }
+        //    catch (Exception err)
+        //    {
+
+        //    }
+
+        //    WTGlobal header = new WTGlobal();
+        //    header.DayShiftCountnow = DayShiftCountnow;
+        //    header.NightshiftCountnow = NightshiftCountnow;
+        //    header.Dayshift = Dayshift.Count;
+        //    header.NightShift = NightShift.Count;
+        //    header.DayShiftper = DayShiftper;
+        //    header.NightShiftper = NightShiftper;
+        //    header.MLCountDay = MLCountDay;
+        //    header.MLCountNight = MLCountNight;
+        //    header.NWCountDay = NWCountDay;
+        //    header.NWCountNight = NWCountNight;
+            
+        //    return header;
+        //}
+        #endregion
 
         public ActionResult GetAttendanceEmployeeProcess(string EmpNo, string CostCode)
         {
@@ -2329,7 +3510,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                 string templateFilename = "AttendanceMonitoring.xlsx";
                 string dir = Path.GetTempPath();
                 string datetimeToday = DateTime.Now.ToString("yyMMddhhmmss");
-                string filename = string.Format("AttendanceMonitoring{0}.xlsx", datetimeToday);
+                string filename = string.Format("LeaveAdjustment{0}_{1}.xlsx", datetimeToday, Section);
                 FileInfo newFile = new FileInfo(Path.Combine(dir, filename));
                 string apptemplatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"TemplateFiles\", templateFilename);
                 FileInfo templateFile = new FileInfo(apptemplatePath);
@@ -2476,12 +3657,12 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                                     db.Error_Logs.Add(error);
                                     db.SaveChanges();
                                 }
-                                cmdExcel.CommandText = "SELECT EmployeeNo, LeaveType, Reason FROM [" + sheetName + "$] WHERE EmployeeNo <> ''";//ung * is column name, ung sheetname ay settings
+                                cmdExcel.CommandText = "SELECT EmployeeNo, LeaveType, Reason FROM [" + sheetName + "$] WHERE EmployeeNo <> '' AND LeaveType <> 'NoLeave'";//ung * is column name, ung sheetname ay settings
                                 odaExcel.SelectCommand = cmdExcel;
                                 odaExcel.Fill(dt);
 
 
-                                cmdExcel.CommandText = "SELECT EmployeeNo, LeaveType, Reason FROM [" + sheetName + "$] WHERE LeaveType <> 'AB' AND EmployeeNo <> '' AND (LeaveType IS NULL OR LeaveType = '' OR Reason IS NULL OR Reason = '')";//ung * is column name, ung sheetname ay settings
+                                cmdExcel.CommandText = "SELECT EmployeeNo, LeaveType, Reason FROM [" + sheetName + "$] WHERE LeaveType <> 'AB' AND EmployeeNo <> '' AND LeaveType <> 'NoLeave' AND (LeaveType IS NULL OR LeaveType = '' OR Reason IS NULL OR Reason = '')";//ung * is column name, ung sheetname ay settings
                                 odaExcel.SelectCommand = cmdExcel;
                                 odaExcel.Fill(dtchecker);
                                 connExcel.Close();
@@ -2586,7 +3767,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
             return Json(new { }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult GeAttendanceMonitoringList(int Month, int Year, string Section, bool go)
+        public ActionResult GeAttendanceMonitoringList(int Month, int Year, string Section, bool go, string Agency)
         {
             try
             {
@@ -2606,7 +3787,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                 cmdSql.Parameters.Add("@Month", SqlDbType.Int).Value = Month;
                 cmdSql.Parameters.Add("@Year", SqlDbType.Int).Value = Year;
                 cmdSql.Parameters.Add("@Section", SqlDbType.NVarChar).Value = Section;
-
+                cmdSql.Parameters.Add("@Agency", SqlDbType.NVarChar).Value = Agency;
                 cmdSql.CommandTimeout = 0;
                 conn.Open();
 
@@ -2627,10 +3808,11 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                 conn.Close();
                 
                 List<GET_RP_AttendanceMonitoring_Result> list = test(Month, Year, Section, dt);
-                WTGlobal header = GetHeaderData(Month, Year, Section, list);
+                WTGlobal header = GetHeaderVs2(list);
+                //WTGlobal header = GetHeaderData(Month, Year, Section, list);
                 System.Web.HttpContext.Current.Session["WT"] = header;
-                System.Web.HttpContext.Current.Session["ExportWT"] = dt;
-               
+                //System.Web.HttpContext.Current.Session["ExportWT"] = dt;
+
                 if (!string.IsNullOrEmpty(searchValue))//filter
                 {
                     list = list.Where(x => x.EmpNo.ToLower().Contains(searchValue.ToLower())
@@ -2681,7 +3863,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
             }
         }
 
-        public ActionResult ExportWorktimeSummary_Present(int Month, int Year, string Section)
+        public ActionResult ExportWorktimeSummary_Present(int Month, int Year, string Section, string Agency)
         {
             try
             {
@@ -2705,6 +3887,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                 cmdSql.Parameters.Add("@Month", SqlDbType.Int).Value = Month;
                 cmdSql.Parameters.Add("@Year", SqlDbType.Int).Value = Year;
                 cmdSql.Parameters.Add("@Section", SqlDbType.NVarChar).Value = Section;
+                cmdSql.Parameters.Add("@Agency", SqlDbType.NVarChar).Value = Agency;
 
                 cmdSql.CommandTimeout = 0;
                 conn.Open();
@@ -2793,7 +3976,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
             return Json(new { }, JsonRequestBehavior.AllowGet);
         }
 
-        public DataTable ExportsEmployee(int Month, int Year, int Day, string Section)
+        public DataTable ExportsEmployee(int Month, int Year, int Day, string Section, string Agency)
         {
             SqlConnection conn = new SqlConnection(Connection_String.AMSDB);
             SqlCommand cmdSql = new SqlCommand();
@@ -2806,7 +3989,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
             cmdSql.Parameters.Add("@Month", SqlDbType.Int).Value = Month;
             cmdSql.Parameters.Add("@Year", SqlDbType.Int).Value = Year;
             cmdSql.Parameters.Add("@Section", SqlDbType.NVarChar).Value = Section;
-
+            cmdSql.Parameters.Add("@Agency", SqlDbType.NVarChar).Value = Agency;
 
             conn.Open();
             SqlDataReader sdr = cmdSql.ExecuteReader();
@@ -2829,7 +4012,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
 
 
         #region Working Hours
-        public ActionResult GeAttendanceMonitoringList_WorkingHours(int Month, int Year, string Section)
+        public ActionResult GeAttendanceMonitoringList_WorkingHours(int Month, int Year, string Section, string Agency)
         {
             var dt = new DataTable();
             SqlConnection conn = new SqlConnection(Connection_String.AMSDB);
@@ -2842,7 +4025,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
             cmdSql.Parameters.Add("@Month", SqlDbType.Int).Value = Month;
             cmdSql.Parameters.Add("@Year", SqlDbType.Int).Value = Year;
             cmdSql.Parameters.Add("@Section", SqlDbType.NVarChar).Value = Section;
-            
+            cmdSql.Parameters.Add("@Agency", SqlDbType.NVarChar).Value = Agency;
 
             conn.Open();
 
@@ -2862,7 +4045,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
 
 
 
-            System.Web.HttpContext.Current.Session["ExportDTR"] = dt;
+            //System.Web.HttpContext.Current.Session["ExportDTR"] = dt;
 
             var list = JsonConvert.SerializeObject(dt,
                 Formatting.None,
@@ -2885,7 +4068,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
 
 
         #region OT Hours BreakDown
-        public ActionResult GeAttendanceMonitoringList_OTBreakDown(int Month, int Year, string Section)
+        public ActionResult GeAttendanceMonitoringList_OTBreakDown(int Month, int Year, string Section, string Agency)
         {
 
             SqlConnection conn = new SqlConnection(Connection_String.AMSDB);
@@ -2899,6 +4082,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
             cmdSql.Parameters.Add("@Month", SqlDbType.Int).Value = Month;
             cmdSql.Parameters.Add("@Year", SqlDbType.Int).Value = Year;
             cmdSql.Parameters.Add("@Section", SqlDbType.NVarChar).Value = Section;
+            cmdSql.Parameters.Add("@Agency", SqlDbType.NVarChar).Value = Agency;
             cmdSql.CommandTimeout = 0;
 
             conn.Open();
@@ -2928,7 +4112,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
 
 
         #region Absent Details
-        public ActionResult GetAbsentDetails(int Month, int Year, string Section)
+        public ActionResult GetAbsentDetails(int Month, int Year, string Section, string Agency)
         {
 
             //Server Side Parameter
@@ -2939,7 +4123,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
             string sortDirection = Request["order[0][dir]"];
 
             List<GET_RP_AbsentDetails_Result> list = new List<GET_RP_AbsentDetails_Result>();
-            list = db.GET_RP_AbsentDetails(Month,Year,Section).ToList();
+            list = db.GET_RP_AbsentDetails(Month,Year,Section,Agency).ToList();
 
             if (!string.IsNullOrEmpty(searchValue))//filter
             {
@@ -2965,7 +4149,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
             return Json(new { data = list, draw = Request["draw"], recordsTotal = totalrows, recordsFiltered = totalrowsafterfiltering }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult ExportWorktimeSummary_AbsentDetails(int Month, int Year, string Section)
+        public ActionResult ExportWorktimeSummary_AbsentDetails(int Month, int Year, string Section, string Agency)
         {
             try
             {
@@ -2982,7 +4166,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                 {
                    
                     List<GET_RP_AbsentDetails_Result> list = new List<GET_RP_AbsentDetails_Result>();
-                    list = db.GET_RP_AbsentDetails(Month, Year, Section).ToList();
+                    list = db.GET_RP_AbsentDetails(Month, Year, Section, Agency).ToList();
                     ExcelWorksheet ExportData = package.Workbook.Worksheets["AMSSheet"];
                     int start = 2;
 
@@ -3012,7 +4196,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
         #region EmployeeShift
 
 
-        public ActionResult GETEmployeeShift(string Month, string Year, string Section)
+        public ActionResult GETEmployeeShift(string Month, string Year, string Section, string Agency)
         {
             SqlConnection conn = new SqlConnection(Connection_String.AMSDB);
             SqlCommand cmdSql = new SqlCommand();
@@ -3025,22 +4209,22 @@ namespace Brothers_WMS.Areas.Summary.Controllers
             cmdSql.Parameters.Add("@Month", SqlDbType.Int).Value = Month;
             cmdSql.Parameters.Add("@Year", SqlDbType.Int).Value = Year;
             cmdSql.Parameters.Add("@Section", SqlDbType.NVarChar).Value = Section;
-
-
+            cmdSql.Parameters.Add("@Agency", SqlDbType.NVarChar).Value = Agency;
+            
             conn.Open();
            
             var dt = new DataTable();
 
-            if (System.Web.HttpContext.Current.Session["ExportShift"] == null)
-            {
+            //if (System.Web.HttpContext.Current.Session["ExportShift"] == null)
+            //{
                 SqlDataReader sdr = cmdSql.ExecuteReader();
                 dt.Load(sdr);
-            }
+            //}
 
-            else
-            {
-                dt = (DataTable)System.Web.HttpContext.Current.Session["ExportShift"];
-            }
+            //else
+            //{
+            //    dt = (DataTable)System.Web.HttpContext.Current.Session["ExportShift"];
+            //}
            
             cmdSql.Dispose();
             conn.Close();
@@ -3066,7 +4250,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
         #region Employee Time in out
 
 
-        public ActionResult GETEmployeeTimeinout(string Month, string Year, string Section)
+        public ActionResult GETEmployeeTimeinout(string Month, string Year, string Section, string Agency)
         {
             SqlConnection conn = new SqlConnection(Connection_String.AMSDB);
             SqlCommand cmdSql = new SqlCommand();
@@ -3078,6 +4262,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
             cmdSql.Parameters.Add("@Month", SqlDbType.Int).Value = Month;
             cmdSql.Parameters.Add("@Year", SqlDbType.Int).Value = Year;
             cmdSql.Parameters.Add("@Section", SqlDbType.NVarChar).Value = Section;
+            cmdSql.Parameters.Add("@Agency", SqlDbType.NVarChar).Value = Agency;
             cmdSql.CommandTimeout = 0;
 
             conn.Open();

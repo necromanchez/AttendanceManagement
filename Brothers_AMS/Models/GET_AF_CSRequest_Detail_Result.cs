@@ -13,6 +13,7 @@ namespace Brothers_WMS.Models
     
     public partial class GET_AF_CSRequest_Detail_Result
     {
+        public Nullable<long> Rownum { get; set; }
         public long ID { get; set; }
         public string Family_Name { get; set; }
         public string First_Name { get; set; }

@@ -15,13 +15,15 @@ namespace Brothers_WMS.Models
     {
         public Nullable<long> Rownum { get; set; }
         public string SectionGroup { get; set; }
+        public int OrderPrio { get; set; }
+        public string First_Name { get; set; }
+        public string Family_Name { get; set; }
         public string MainUser { get; set; }
         public string CostCenter_AMS { get; set; }
         public string UserName { get; set; }
         public string FirstName { get; set; }
         public string LastNAme { get; set; }
         public string CostCode { get; set; }
-        public Nullable<int> OrderPrio { get; set; }
         public Nullable<int> Employee { get; set; }
         public Nullable<int> FormatorTemplate { get; set; }
         public Nullable<int> Section { get; set; }

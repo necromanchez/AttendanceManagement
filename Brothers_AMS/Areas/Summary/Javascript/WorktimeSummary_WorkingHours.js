@@ -10,7 +10,8 @@ function Initializedpage_WorkingHours() {
         data: {
             Month: $("#Month").val(),
             Year: $("#Year").val(),
-            Section: selectedSection//$("#Section").val()
+            Section: selectedSection,//$("#Section").val()
+            Agency: $("#BIPH_Agency").val(),
         },
         type: 'GET',
         dataType: 'JSON',
@@ -23,7 +24,6 @@ function Initializedpage_WorkingHours() {
                 pageLength: 10,
                 //lengthMenu: [10, 100, 500, 1000, 5000],
                 lengthMenu: [[10, 50, 100], [10, 50, 100]],
-
                 lengthChange: true,
                 loadonce: false,
                 dom: 'lBfrtip',

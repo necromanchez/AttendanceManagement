@@ -25,9 +25,9 @@
     }
 }
 <style>
-    /*.resized {
+    .resized2 {
         width: 146.813px !important;
-    }*/
+    }
     .hehetable {
         border: 1px solid black;
     }
@@ -74,35 +74,49 @@
     <div class="box box-primary">
 
         <div class="box-body pad">
-            <form action="" method="POST" role="form" id="AttendanceSummary">
+            <form action="" method="POST" role="form" id="AttendanceSummary" autocomplete="off">
                 <input type="hidden" class="form-control input-sm" name="ID" id="ID" readonly="">
+
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <div class="form-group">
                             <div class="input-group">
-                                <span class="input-group-addon">Month</span>
-                                <select class="form-control step select2" id="Month" name="Month">
-                                </select>
+                                <span class="input-group-addon resized2">Month</span>
+                                <select class="form-control step select2" id="Month" name="Month"></select>
                             </div>
+
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <div class="form-group">
                             <div class="input-group">
-                                <span class="input-group-addon">Year</span>
-                                <select class="form-control step select2" id="Year" name="Year">
-                                </select>
+                                <span class="input-group-addon resized2">Year</span>
+                                <select class="form-control step select2" id="Year" name="Year"></select>
                             </div>
+
                         </div>
                     </div>
-                    <div class="col-md-4">
+
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
                         <div class="form-group">
                             <div class="input-group">
-                                <span class="input-group-addon">Section</span>
+                                <span class="input-group-addon resized2">Section</span>
                                 <select class="form-control step select2" id="Section" name="Section"></select>
                             </div>
                         </div>
                     </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon resized2">Company</span>
+                                <select class="form-control step select2" id="BIPH_Agency" name="BIPH_Agency"></select>
+                            </div>
+
+                        </div>
+                    </div>
+
                 </div>
                 <div class="row">
                     <div class="offset-md-8 col-md-4">
@@ -115,7 +129,6 @@
                         </div>
                     </div>
                 </div>
-
 
             </form>
 

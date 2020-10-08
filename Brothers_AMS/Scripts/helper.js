@@ -373,7 +373,7 @@ function Dropdown_selectOT(id) {
 
 function Dropdown_selectApp(id) {
     var option = '<option value="">--SELECT--' + getlong() + '</option>';
-    var daa = ["Cancelled", "Rejected", "Pending", "Supervisor approved", "Manager approved", "General approved", "Factory General Manager approved"];
+    var daa = ["Cancelled", "Supervisor Rejected","Manager Rejected", "Pending", "Supervisor approved", "Manager approved", "General approved", "Factory General Manager approved"];
     var data = ["-10","-2", "-1", "0", "1", "2", "3", "4"];
     $('#' + id).html(option);
 

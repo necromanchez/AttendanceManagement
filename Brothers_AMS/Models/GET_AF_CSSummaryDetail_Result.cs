@@ -13,6 +13,7 @@ namespace Brothers_WMS.Models
     
     public partial class GET_AF_CSSummaryDetail_Result
     {
+        public Nullable<long> Rownum { get; set; }
         public string CS_RefNo { get; set; }
         public string EmployeeNo { get; set; }
         public string EmployeeName { get; set; }

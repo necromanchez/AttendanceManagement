@@ -20,7 +20,8 @@ function InitializepageTT() {
             data: {
                 searchdate: $("#DateFilter").val(),
                 searchdate2: $("#DateFilter2").val(),
-                Sectiontap: $("#Section").val()
+                Sectiontap: $("#Section").val(),
+                Agency: $("#BIPH_Agency").val(),
             },
             datatype: "json"
         },

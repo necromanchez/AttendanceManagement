@@ -111,28 +111,6 @@ namespace Brothers_WMS.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GET_AF_Approver_Result>("GET_AF_Approver", refNoParameter);
         }
     
-        public virtual ObjectResult<GET_AF_CSRequest_Detail_Result> GET_AF_CSRequest_Detail(string cSRefNo)
-        {
-            var cSRefNoParameter = cSRefNo != null ?
-                new ObjectParameter("CSRefNo", cSRefNo) :
-                new ObjectParameter("CSRefNo", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GET_AF_CSRequest_Detail_Result>("GET_AF_CSRequest_Detail", cSRefNoParameter);
-        }
-    
-        public virtual ObjectResult<GET_AF_CSSummaryDetail_Result> GET_AF_CSSummaryDetail(string cS_Refno, Nullable<int> status)
-        {
-            var cS_RefnoParameter = cS_Refno != null ?
-                new ObjectParameter("CS_Refno", cS_Refno) :
-                new ObjectParameter("CS_Refno", typeof(string));
-    
-            var statusParameter = status.HasValue ?
-                new ObjectParameter("Status", status) :
-                new ObjectParameter("Status", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GET_AF_CSSummaryDetail_Result>("GET_AF_CSSummaryDetail", cS_RefnoParameter, statusParameter);
-        }
-    
         public virtual ObjectResult<GET_AF_DTRRequest_Result> GET_AF_DTRRequest()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GET_AF_DTRRequest_Result>("GET_AF_DTRRequest");
@@ -474,7 +452,7 @@ namespace Brothers_WMS.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("RESETDB_AF");
         }
     
-        public virtual int GET_RP_AttendanceMonitoring(Nullable<int> month, Nullable<int> year, string section)
+        public virtual int GET_RP_AttendanceMonitoring(Nullable<int> month, Nullable<int> year, string section, string agency)
         {
             var monthParameter = month.HasValue ?
                 new ObjectParameter("Month", month) :
@@ -488,10 +466,14 @@ namespace Brothers_WMS.Models
                 new ObjectParameter("Section", section) :
                 new ObjectParameter("Section", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("GET_RP_AttendanceMonitoring", monthParameter, yearParameter, sectionParameter);
+            var agencyParameter = agency != null ?
+                new ObjectParameter("Agency", agency) :
+                new ObjectParameter("Agency", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("GET_RP_AttendanceMonitoring", monthParameter, yearParameter, sectionParameter, agencyParameter);
         }
     
-        public virtual int GET_RP_AttendanceMonitoring_TTWorkingHours(Nullable<int> month, Nullable<int> year, string section)
+        public virtual int GET_RP_AttendanceMonitoring_TTWorkingHours(Nullable<int> month, Nullable<int> year, string section, string agency)
         {
             var monthParameter = month.HasValue ?
                 new ObjectParameter("Month", month) :
@@ -505,7 +487,11 @@ namespace Brothers_WMS.Models
                 new ObjectParameter("Section", section) :
                 new ObjectParameter("Section", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("GET_RP_AttendanceMonitoring_TTWorkingHours", monthParameter, yearParameter, sectionParameter);
+            var agencyParameter = agency != null ?
+                new ObjectParameter("Agency", agency) :
+                new ObjectParameter("Agency", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("GET_RP_AttendanceMonitoring_TTWorkingHours", monthParameter, yearParameter, sectionParameter, agencyParameter);
         }
     
         public virtual ObjectResult<string> TT_TimeInAccept(string processID, string empNo)
@@ -534,7 +520,7 @@ namespace Brothers_WMS.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GET_TT_EmployeeLineViewCount_Result>("GET_TT_EmployeeLineViewCount", lineParameter, shiftParameter);
         }
     
-        public virtual int GET_RP_AttendanceMonitoring_OTBreakDown(Nullable<int> month, Nullable<int> year, string section)
+        public virtual int GET_RP_AttendanceMonitoring_OTBreakDown(Nullable<int> month, Nullable<int> year, string section, string agency)
         {
             var monthParameter = month.HasValue ?
                 new ObjectParameter("Month", month) :
@@ -548,7 +534,11 @@ namespace Brothers_WMS.Models
                 new ObjectParameter("Section", section) :
                 new ObjectParameter("Section", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("GET_RP_AttendanceMonitoring_OTBreakDown", monthParameter, yearParameter, sectionParameter);
+            var agencyParameter = agency != null ?
+                new ObjectParameter("Agency", agency) :
+                new ObjectParameter("Agency", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("GET_RP_AttendanceMonitoring_OTBreakDown", monthParameter, yearParameter, sectionParameter, agencyParameter);
         }
     
         public virtual int M_SP_AgencyInsert1()
@@ -679,7 +669,7 @@ namespace Brothers_WMS.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AF_UpdateApprovedSchedule_old");
         }
     
-        public virtual int GET_RP_AttendanceMonitoring_Shift(Nullable<int> month, Nullable<int> year, string section)
+        public virtual int GET_RP_AttendanceMonitoring_Shift(Nullable<int> month, Nullable<int> year, string section, string agency)
         {
             var monthParameter = month.HasValue ?
                 new ObjectParameter("Month", month) :
@@ -693,10 +683,14 @@ namespace Brothers_WMS.Models
                 new ObjectParameter("Section", section) :
                 new ObjectParameter("Section", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("GET_RP_AttendanceMonitoring_Shift", monthParameter, yearParameter, sectionParameter);
+            var agencyParameter = agency != null ?
+                new ObjectParameter("Agency", agency) :
+                new ObjectParameter("Agency", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("GET_RP_AttendanceMonitoring_Shift", monthParameter, yearParameter, sectionParameter, agencyParameter);
         }
     
-        public virtual int GET_RP_AttendanceMonitoring_TimeINOUT(Nullable<int> month, Nullable<int> year, string section)
+        public virtual int GET_RP_AttendanceMonitoring_TimeINOUT(Nullable<int> month, Nullable<int> year, string section, string agency)
         {
             var monthParameter = month.HasValue ?
                 new ObjectParameter("Month", month) :
@@ -710,7 +704,11 @@ namespace Brothers_WMS.Models
                 new ObjectParameter("Section", section) :
                 new ObjectParameter("Section", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("GET_RP_AttendanceMonitoring_TimeINOUT", monthParameter, yearParameter, sectionParameter);
+            var agencyParameter = agency != null ?
+                new ObjectParameter("Agency", agency) :
+                new ObjectParameter("Agency", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("GET_RP_AttendanceMonitoring_TimeINOUT", monthParameter, yearParameter, sectionParameter, agencyParameter);
         }
     
         public virtual ObjectResult<GET_TT_EmployeeLineView_Result> GET_TT_EmployeeLineView(Nullable<long> line, Nullable<long> skillID, string shift)
@@ -1033,23 +1031,6 @@ namespace Brothers_WMS.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("M_SP_ImportEmployeeStatus");
         }
     
-        public virtual ObjectResult<TT_EmployeeTaps_Result> TT_EmployeeTaps(string sectionGroup, Nullable<System.DateTime> datechosen, Nullable<System.DateTime> datechosenEnd)
-        {
-            var sectionGroupParameter = sectionGroup != null ?
-                new ObjectParameter("SectionGroup", sectionGroup) :
-                new ObjectParameter("SectionGroup", typeof(string));
-    
-            var datechosenParameter = datechosen.HasValue ?
-                new ObjectParameter("Datechosen", datechosen) :
-                new ObjectParameter("Datechosen", typeof(System.DateTime));
-    
-            var datechosenEndParameter = datechosenEnd.HasValue ?
-                new ObjectParameter("DatechosenEnd", datechosenEnd) :
-                new ObjectParameter("DatechosenEnd", typeof(System.DateTime));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<TT_EmployeeTaps_Result>("TT_EmployeeTaps", sectionGroupParameter, datechosenParameter, datechosenEndParameter);
-        }
-    
         public virtual ObjectResult<RP_DropdownSchedule_Result> RP_DropdownSchedules()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RP_DropdownSchedule_Result>("RP_DropdownSchedules");
@@ -1275,23 +1256,6 @@ namespace Brothers_WMS.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GET_Employee_OTFiling_Result>("GET_Employee_OTFiling", agencyParameter, costCodeParameter, lINEIDParameter, employeeNoParameter);
         }
     
-        public virtual ObjectResult<GET_RP_AbsentDetails_Result> GET_RP_AbsentDetails(Nullable<int> month, Nullable<int> year, string sectionSuperGroup)
-        {
-            var monthParameter = month.HasValue ?
-                new ObjectParameter("Month", month) :
-                new ObjectParameter("Month", typeof(int));
-    
-            var yearParameter = year.HasValue ?
-                new ObjectParameter("Year", year) :
-                new ObjectParameter("Year", typeof(int));
-    
-            var sectionSuperGroupParameter = sectionSuperGroup != null ?
-                new ObjectParameter("SectionSuperGroup", sectionSuperGroup) :
-                new ObjectParameter("SectionSuperGroup", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GET_RP_AbsentDetails_Result>("GET_RP_AbsentDetails", monthParameter, yearParameter, sectionSuperGroupParameter);
-        }
-    
         public virtual ObjectResult<GET_FormatTimeKeeping_Result> GET_FormatTimeKeeping()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GET_FormatTimeKeeping_Result>("GET_FormatTimeKeeping");
@@ -1412,15 +1376,6 @@ namespace Brothers_WMS.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GET_UserDetails_Result>("GET_UserDetails", costCodeParameter, superUserParameter);
         }
     
-        public virtual ObjectResult<GET_UserDetails_Export_Result> GET_UserDetails_Export(string costCode)
-        {
-            var costCodeParameter = costCode != null ?
-                new ObjectParameter("CostCode", costCode) :
-                new ObjectParameter("CostCode", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GET_UserDetails_Export_Result>("GET_UserDetails_Export", costCodeParameter);
-        }
-    
         public virtual ObjectResult<GET_RPMonitoring_Graphv2ALLShift_Result> GET_RPMonitoring_Graphv2ALLShift(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string shift, Nullable<long> line, Nullable<long> process, string sectionGroup, string certified)
         {
             var dateFromParameter = dateFrom.HasValue ?
@@ -1526,6 +1481,15 @@ namespace Brothers_WMS.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GET_M_ErrorLogs_Result>("GET_M_ErrorLogs", dateSearchParameter);
         }
     
+        public virtual ObjectResult<GET_Employee_ScheduleListChangeShift_Result> GET_Employee_ScheduleListChangeShift(string employNo)
+        {
+            var employNoParameter = employNo != null ?
+                new ObjectParameter("EmployNo", employNo) :
+                new ObjectParameter("EmployNo", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GET_Employee_ScheduleListChangeShift_Result>("GET_Employee_ScheduleListChangeShift", employNoParameter);
+        }
+    
         public virtual ObjectResult<GET_AF_CSRequest_Result> GET_AF_CSRequest(string sectionSuperGroup)
         {
             var sectionSuperGroupParameter = sectionSuperGroup != null ?
@@ -1533,6 +1497,15 @@ namespace Brothers_WMS.Models
                 new ObjectParameter("SectionSuperGroup", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GET_AF_CSRequest_Result>("GET_AF_CSRequest", sectionSuperGroupParameter);
+        }
+    
+        public virtual ObjectResult<GET_AF_CSRequest_Detail_Result> GET_AF_CSRequest_Detail(string cSRefNo)
+        {
+            var cSRefNoParameter = cSRefNo != null ?
+                new ObjectParameter("CSRefNo", cSRefNo) :
+                new ObjectParameter("CSRefNo", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GET_AF_CSRequest_Detail_Result>("GET_AF_CSRequest_Detail", cSRefNoParameter);
         }
     
         public virtual ObjectResult<GET_AF_CSSummary_Result> GET_AF_CSSummary(string cSRefno, string section, Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string status)
@@ -1560,13 +1533,443 @@ namespace Brothers_WMS.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GET_AF_CSSummary_Result>("GET_AF_CSSummary", cSRefnoParameter, sectionParameter, dateFromParameter, dateToParameter, statusParameter);
         }
     
-        public virtual ObjectResult<GET_Employee_ScheduleListChangeShift_Result> GET_Employee_ScheduleListChangeShift(string employNo)
+        public virtual ObjectResult<GET_AF_CSSummaryDetail_Result> GET_AF_CSSummaryDetail(string cS_Refno, Nullable<int> status)
         {
-            var employNoParameter = employNo != null ?
-                new ObjectParameter("EmployNo", employNo) :
-                new ObjectParameter("EmployNo", typeof(string));
+            var cS_RefnoParameter = cS_Refno != null ?
+                new ObjectParameter("CS_Refno", cS_Refno) :
+                new ObjectParameter("CS_Refno", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GET_Employee_ScheduleListChangeShift_Result>("GET_Employee_ScheduleListChangeShift", employNoParameter);
+            var statusParameter = status.HasValue ?
+                new ObjectParameter("Status", status) :
+                new ObjectParameter("Status", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GET_AF_CSSummaryDetail_Result>("GET_AF_CSSummaryDetail", cS_RefnoParameter, statusParameter);
+        }
+    
+        public virtual ObjectResult<GET_RP_AbsentDetails_Result> GET_RP_AbsentDetails(Nullable<int> month, Nullable<int> year, string sectionSuperGroup, string agency)
+        {
+            var monthParameter = month.HasValue ?
+                new ObjectParameter("Month", month) :
+                new ObjectParameter("Month", typeof(int));
+    
+            var yearParameter = year.HasValue ?
+                new ObjectParameter("Year", year) :
+                new ObjectParameter("Year", typeof(int));
+    
+            var sectionSuperGroupParameter = sectionSuperGroup != null ?
+                new ObjectParameter("SectionSuperGroup", sectionSuperGroup) :
+                new ObjectParameter("SectionSuperGroup", typeof(string));
+    
+            var agencyParameter = agency != null ?
+                new ObjectParameter("Agency", agency) :
+                new ObjectParameter("Agency", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GET_RP_AbsentDetails_Result>("GET_RP_AbsentDetails", monthParameter, yearParameter, sectionSuperGroupParameter, agencyParameter);
+        }
+    
+        public virtual ObjectResult<GET_UserDetails_Export_Result> GET_UserDetails_Export(string costCode)
+        {
+            var costCodeParameter = costCode != null ?
+                new ObjectParameter("CostCode", costCode) :
+                new ObjectParameter("CostCode", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GET_UserDetails_Export_Result>("GET_UserDetails_Export", costCodeParameter);
+        }
+    
+        public virtual ObjectResult<TT_EmployeeTaps_Result> TT_EmployeeTaps(string sectionGroup, Nullable<System.DateTime> datechosen, Nullable<System.DateTime> datechosenEnd, string agency)
+        {
+            var sectionGroupParameter = sectionGroup != null ?
+                new ObjectParameter("SectionGroup", sectionGroup) :
+                new ObjectParameter("SectionGroup", typeof(string));
+    
+            var datechosenParameter = datechosen.HasValue ?
+                new ObjectParameter("Datechosen", datechosen) :
+                new ObjectParameter("Datechosen", typeof(System.DateTime));
+    
+            var datechosenEndParameter = datechosenEnd.HasValue ?
+                new ObjectParameter("DatechosenEnd", datechosenEnd) :
+                new ObjectParameter("DatechosenEnd", typeof(System.DateTime));
+    
+            var agencyParameter = agency != null ?
+                new ObjectParameter("Agency", agency) :
+                new ObjectParameter("Agency", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<TT_EmployeeTaps_Result>("TT_EmployeeTaps", sectionGroupParameter, datechosenParameter, datechosenEndParameter, agencyParameter);
+        }
+    
+        public virtual ObjectResult<Department_Dashboard_AbsentRate_Result> Department_Dashboard_AbsentRate(Nullable<int> month, Nullable<int> year, string agency, string shift, Nullable<long> line, string department)
+        {
+            var monthParameter = month.HasValue ?
+                new ObjectParameter("Month", month) :
+                new ObjectParameter("Month", typeof(int));
+    
+            var yearParameter = year.HasValue ?
+                new ObjectParameter("Year", year) :
+                new ObjectParameter("Year", typeof(int));
+    
+            var agencyParameter = agency != null ?
+                new ObjectParameter("Agency", agency) :
+                new ObjectParameter("Agency", typeof(string));
+    
+            var shiftParameter = shift != null ?
+                new ObjectParameter("Shift", shift) :
+                new ObjectParameter("Shift", typeof(string));
+    
+            var lineParameter = line.HasValue ?
+                new ObjectParameter("Line", line) :
+                new ObjectParameter("Line", typeof(long));
+    
+            var departmentParameter = department != null ?
+                new ObjectParameter("Department", department) :
+                new ObjectParameter("Department", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Department_Dashboard_AbsentRate_Result>("Department_Dashboard_AbsentRate", monthParameter, yearParameter, agencyParameter, shiftParameter, lineParameter, departmentParameter);
+        }
+    
+        public virtual ObjectResult<Department_Dashboard_AbsentRate_Monthly_Result> Department_Dashboard_AbsentRate_Monthly(Nullable<int> year, string agency, string shift, Nullable<long> line, string department)
+        {
+            var yearParameter = year.HasValue ?
+                new ObjectParameter("Year", year) :
+                new ObjectParameter("Year", typeof(int));
+    
+            var agencyParameter = agency != null ?
+                new ObjectParameter("Agency", agency) :
+                new ObjectParameter("Agency", typeof(string));
+    
+            var shiftParameter = shift != null ?
+                new ObjectParameter("Shift", shift) :
+                new ObjectParameter("Shift", typeof(string));
+    
+            var lineParameter = line.HasValue ?
+                new ObjectParameter("Line", line) :
+                new ObjectParameter("Line", typeof(long));
+    
+            var departmentParameter = department != null ?
+                new ObjectParameter("Department", department) :
+                new ObjectParameter("Department", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Department_Dashboard_AbsentRate_Monthly_Result>("Department_Dashboard_AbsentRate_Monthly", yearParameter, agencyParameter, shiftParameter, lineParameter, departmentParameter);
+        }
+    
+        public virtual int Department_Dashboard_AbsentRate_Yearly(string agency, string shift, Nullable<long> line, string department)
+        {
+            var agencyParameter = agency != null ?
+                new ObjectParameter("Agency", agency) :
+                new ObjectParameter("Agency", typeof(string));
+    
+            var shiftParameter = shift != null ?
+                new ObjectParameter("Shift", shift) :
+                new ObjectParameter("Shift", typeof(string));
+    
+            var lineParameter = line.HasValue ?
+                new ObjectParameter("Line", line) :
+                new ObjectParameter("Line", typeof(long));
+    
+            var departmentParameter = department != null ?
+                new ObjectParameter("Department", department) :
+                new ObjectParameter("Department", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Department_Dashboard_AbsentRate_Yearly", agencyParameter, shiftParameter, lineParameter, departmentParameter);
+        }
+    
+        public virtual ObjectResult<Department_Dashboard_AWOLandResignRate_Result> Department_Dashboard_AWOLandResignRate(Nullable<int> month, Nullable<int> year, string agency, string shift, Nullable<long> line, string department)
+        {
+            var monthParameter = month.HasValue ?
+                new ObjectParameter("Month", month) :
+                new ObjectParameter("Month", typeof(int));
+    
+            var yearParameter = year.HasValue ?
+                new ObjectParameter("Year", year) :
+                new ObjectParameter("Year", typeof(int));
+    
+            var agencyParameter = agency != null ?
+                new ObjectParameter("Agency", agency) :
+                new ObjectParameter("Agency", typeof(string));
+    
+            var shiftParameter = shift != null ?
+                new ObjectParameter("Shift", shift) :
+                new ObjectParameter("Shift", typeof(string));
+    
+            var lineParameter = line.HasValue ?
+                new ObjectParameter("Line", line) :
+                new ObjectParameter("Line", typeof(long));
+    
+            var departmentParameter = department != null ?
+                new ObjectParameter("Department", department) :
+                new ObjectParameter("Department", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Department_Dashboard_AWOLandResignRate_Result>("Department_Dashboard_AWOLandResignRate", monthParameter, yearParameter, agencyParameter, shiftParameter, lineParameter, departmentParameter);
+        }
+    
+        public virtual ObjectResult<Department_Dashboard_AWOLandResignRate_Monthly_Result> Department_Dashboard_AWOLandResignRate_Monthly(Nullable<int> year, string agency, string shift, Nullable<long> line, string department)
+        {
+            var yearParameter = year.HasValue ?
+                new ObjectParameter("Year", year) :
+                new ObjectParameter("Year", typeof(int));
+    
+            var agencyParameter = agency != null ?
+                new ObjectParameter("Agency", agency) :
+                new ObjectParameter("Agency", typeof(string));
+    
+            var shiftParameter = shift != null ?
+                new ObjectParameter("Shift", shift) :
+                new ObjectParameter("Shift", typeof(string));
+    
+            var lineParameter = line.HasValue ?
+                new ObjectParameter("Line", line) :
+                new ObjectParameter("Line", typeof(long));
+    
+            var departmentParameter = department != null ?
+                new ObjectParameter("Department", department) :
+                new ObjectParameter("Department", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Department_Dashboard_AWOLandResignRate_Monthly_Result>("Department_Dashboard_AWOLandResignRate_Monthly", yearParameter, agencyParameter, shiftParameter, lineParameter, departmentParameter);
+        }
+    
+        public virtual ObjectResult<Department_Dashboard_AWOLandResignRate_Yearly_Result> Department_Dashboard_AWOLandResignRate_Yearly(string agency, string shift, Nullable<long> line, string department)
+        {
+            var agencyParameter = agency != null ?
+                new ObjectParameter("Agency", agency) :
+                new ObjectParameter("Agency", typeof(string));
+    
+            var shiftParameter = shift != null ?
+                new ObjectParameter("Shift", shift) :
+                new ObjectParameter("Shift", typeof(string));
+    
+            var lineParameter = line.HasValue ?
+                new ObjectParameter("Line", line) :
+                new ObjectParameter("Line", typeof(long));
+    
+            var departmentParameter = department != null ?
+                new ObjectParameter("Department", department) :
+                new ObjectParameter("Department", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Department_Dashboard_AWOLandResignRate_Yearly_Result>("Department_Dashboard_AWOLandResignRate_Yearly", agencyParameter, shiftParameter, lineParameter, departmentParameter);
+        }
+    
+        public virtual ObjectResult<Department_Dashboard_LeaveBreakDown_Result> Department_Dashboard_LeaveBreakDown(Nullable<int> month, Nullable<int> year, string agency, string shift, Nullable<long> line, string department)
+        {
+            var monthParameter = month.HasValue ?
+                new ObjectParameter("Month", month) :
+                new ObjectParameter("Month", typeof(int));
+    
+            var yearParameter = year.HasValue ?
+                new ObjectParameter("Year", year) :
+                new ObjectParameter("Year", typeof(int));
+    
+            var agencyParameter = agency != null ?
+                new ObjectParameter("Agency", agency) :
+                new ObjectParameter("Agency", typeof(string));
+    
+            var shiftParameter = shift != null ?
+                new ObjectParameter("Shift", shift) :
+                new ObjectParameter("Shift", typeof(string));
+    
+            var lineParameter = line.HasValue ?
+                new ObjectParameter("Line", line) :
+                new ObjectParameter("Line", typeof(long));
+    
+            var departmentParameter = department != null ?
+                new ObjectParameter("Department", department) :
+                new ObjectParameter("Department", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Department_Dashboard_LeaveBreakDown_Result>("Department_Dashboard_LeaveBreakDown", monthParameter, yearParameter, agencyParameter, shiftParameter, lineParameter, departmentParameter);
+        }
+    
+        public virtual ObjectResult<Department_Dashboard_LeaveBreakDown_Monthly_Result> Department_Dashboard_LeaveBreakDown_Monthly(Nullable<int> year, string agency, string shift, Nullable<long> line, string department)
+        {
+            var yearParameter = year.HasValue ?
+                new ObjectParameter("Year", year) :
+                new ObjectParameter("Year", typeof(int));
+    
+            var agencyParameter = agency != null ?
+                new ObjectParameter("Agency", agency) :
+                new ObjectParameter("Agency", typeof(string));
+    
+            var shiftParameter = shift != null ?
+                new ObjectParameter("Shift", shift) :
+                new ObjectParameter("Shift", typeof(string));
+    
+            var lineParameter = line.HasValue ?
+                new ObjectParameter("Line", line) :
+                new ObjectParameter("Line", typeof(long));
+    
+            var departmentParameter = department != null ?
+                new ObjectParameter("Department", department) :
+                new ObjectParameter("Department", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Department_Dashboard_LeaveBreakDown_Monthly_Result>("Department_Dashboard_LeaveBreakDown_Monthly", yearParameter, agencyParameter, shiftParameter, lineParameter, departmentParameter);
+        }
+    
+        public virtual int Department_Dashboard_LeaveBreakDown_Yearly(string agency, string shift, Nullable<long> line, string department)
+        {
+            var agencyParameter = agency != null ?
+                new ObjectParameter("Agency", agency) :
+                new ObjectParameter("Agency", typeof(string));
+    
+            var shiftParameter = shift != null ?
+                new ObjectParameter("Shift", shift) :
+                new ObjectParameter("Shift", typeof(string));
+    
+            var lineParameter = line.HasValue ?
+                new ObjectParameter("Line", line) :
+                new ObjectParameter("Line", typeof(long));
+    
+            var departmentParameter = department != null ?
+                new ObjectParameter("Department", department) :
+                new ObjectParameter("Department", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Department_Dashboard_LeaveBreakDown_Yearly", agencyParameter, shiftParameter, lineParameter, departmentParameter);
+        }
+    
+        public virtual ObjectResult<Department_Dashboard_ManpowerAttendanceRate_Result> Department_Dashboard_ManpowerAttendanceRate(Nullable<int> month, Nullable<int> year, string agency, string shift, Nullable<long> line, string department)
+        {
+            var monthParameter = month.HasValue ?
+                new ObjectParameter("Month", month) :
+                new ObjectParameter("Month", typeof(int));
+    
+            var yearParameter = year.HasValue ?
+                new ObjectParameter("Year", year) :
+                new ObjectParameter("Year", typeof(int));
+    
+            var agencyParameter = agency != null ?
+                new ObjectParameter("Agency", agency) :
+                new ObjectParameter("Agency", typeof(string));
+    
+            var shiftParameter = shift != null ?
+                new ObjectParameter("Shift", shift) :
+                new ObjectParameter("Shift", typeof(string));
+    
+            var lineParameter = line.HasValue ?
+                new ObjectParameter("Line", line) :
+                new ObjectParameter("Line", typeof(long));
+    
+            var departmentParameter = department != null ?
+                new ObjectParameter("Department", department) :
+                new ObjectParameter("Department", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Department_Dashboard_ManpowerAttendanceRate_Result>("Department_Dashboard_ManpowerAttendanceRate", monthParameter, yearParameter, agencyParameter, shiftParameter, lineParameter, departmentParameter);
+        }
+    
+        public virtual ObjectResult<Department_Dashboard_ManpowerAttendanceRate_Monthly_Result> Department_Dashboard_ManpowerAttendanceRate_Monthly(Nullable<int> year, string agency, string shift, Nullable<long> line, string department)
+        {
+            var yearParameter = year.HasValue ?
+                new ObjectParameter("Year", year) :
+                new ObjectParameter("Year", typeof(int));
+    
+            var agencyParameter = agency != null ?
+                new ObjectParameter("Agency", agency) :
+                new ObjectParameter("Agency", typeof(string));
+    
+            var shiftParameter = shift != null ?
+                new ObjectParameter("Shift", shift) :
+                new ObjectParameter("Shift", typeof(string));
+    
+            var lineParameter = line.HasValue ?
+                new ObjectParameter("Line", line) :
+                new ObjectParameter("Line", typeof(long));
+    
+            var departmentParameter = department != null ?
+                new ObjectParameter("Department", department) :
+                new ObjectParameter("Department", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Department_Dashboard_ManpowerAttendanceRate_Monthly_Result>("Department_Dashboard_ManpowerAttendanceRate_Monthly", yearParameter, agencyParameter, shiftParameter, lineParameter, departmentParameter);
+        }
+    
+        public virtual ObjectResult<Department_Dashboard_ManpowerAttendanceRate_Yearly_Result> Department_Dashboard_ManpowerAttendanceRate_Yearly(string agency, string shift, Nullable<long> line, string department)
+        {
+            var agencyParameter = agency != null ?
+                new ObjectParameter("Agency", agency) :
+                new ObjectParameter("Agency", typeof(string));
+    
+            var shiftParameter = shift != null ?
+                new ObjectParameter("Shift", shift) :
+                new ObjectParameter("Shift", typeof(string));
+    
+            var lineParameter = line.HasValue ?
+                new ObjectParameter("Line", line) :
+                new ObjectParameter("Line", typeof(long));
+    
+            var departmentParameter = department != null ?
+                new ObjectParameter("Department", department) :
+                new ObjectParameter("Department", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Department_Dashboard_ManpowerAttendanceRate_Yearly_Result>("Department_Dashboard_ManpowerAttendanceRate_Yearly", agencyParameter, shiftParameter, lineParameter, departmentParameter);
+        }
+    
+        public virtual ObjectResult<Department_Dashboard_OvertimeRate_Result> Department_Dashboard_OvertimeRate(Nullable<int> month, Nullable<int> year, string agency, string shift, Nullable<long> line, string department)
+        {
+            var monthParameter = month.HasValue ?
+                new ObjectParameter("Month", month) :
+                new ObjectParameter("Month", typeof(int));
+    
+            var yearParameter = year.HasValue ?
+                new ObjectParameter("Year", year) :
+                new ObjectParameter("Year", typeof(int));
+    
+            var agencyParameter = agency != null ?
+                new ObjectParameter("Agency", agency) :
+                new ObjectParameter("Agency", typeof(string));
+    
+            var shiftParameter = shift != null ?
+                new ObjectParameter("Shift", shift) :
+                new ObjectParameter("Shift", typeof(string));
+    
+            var lineParameter = line.HasValue ?
+                new ObjectParameter("Line", line) :
+                new ObjectParameter("Line", typeof(long));
+    
+            var departmentParameter = department != null ?
+                new ObjectParameter("Department", department) :
+                new ObjectParameter("Department", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Department_Dashboard_OvertimeRate_Result>("Department_Dashboard_OvertimeRate", monthParameter, yearParameter, agencyParameter, shiftParameter, lineParameter, departmentParameter);
+        }
+    
+        public virtual ObjectResult<Department_Dashboard_OvertimeRate_Monthly_Result> Department_Dashboard_OvertimeRate_Monthly(Nullable<int> year, string agency, string shift, Nullable<long> line, string department)
+        {
+            var yearParameter = year.HasValue ?
+                new ObjectParameter("Year", year) :
+                new ObjectParameter("Year", typeof(int));
+    
+            var agencyParameter = agency != null ?
+                new ObjectParameter("Agency", agency) :
+                new ObjectParameter("Agency", typeof(string));
+    
+            var shiftParameter = shift != null ?
+                new ObjectParameter("Shift", shift) :
+                new ObjectParameter("Shift", typeof(string));
+    
+            var lineParameter = line.HasValue ?
+                new ObjectParameter("Line", line) :
+                new ObjectParameter("Line", typeof(long));
+    
+            var departmentParameter = department != null ?
+                new ObjectParameter("Department", department) :
+                new ObjectParameter("Department", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Department_Dashboard_OvertimeRate_Monthly_Result>("Department_Dashboard_OvertimeRate_Monthly", yearParameter, agencyParameter, shiftParameter, lineParameter, departmentParameter);
+        }
+    
+        public virtual ObjectResult<Department_Dashboard_OvertimeRate_Yearly_Result> Department_Dashboard_OvertimeRate_Yearly(string agency, string shift, Nullable<long> line, string department)
+        {
+            var agencyParameter = agency != null ?
+                new ObjectParameter("Agency", agency) :
+                new ObjectParameter("Agency", typeof(string));
+    
+            var shiftParameter = shift != null ?
+                new ObjectParameter("Shift", shift) :
+                new ObjectParameter("Shift", typeof(string));
+    
+            var lineParameter = line.HasValue ?
+                new ObjectParameter("Line", line) :
+                new ObjectParameter("Line", typeof(long));
+    
+            var departmentParameter = department != null ?
+                new ObjectParameter("Department", department) :
+                new ObjectParameter("Department", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Department_Dashboard_OvertimeRate_Yearly_Result>("Department_Dashboard_OvertimeRate_Yearly", agencyParameter, shiftParameter, lineParameter, departmentParameter);
         }
     }
 }
