@@ -6,8 +6,15 @@ var currentSection = "";
 var all = false;
 var val;
 var timer;
+
+
+
+
 (function () {
-  
+
+   
+   
+
     $("#empDetails").hide();
     $("#requestrow").hide();
     GetComip();

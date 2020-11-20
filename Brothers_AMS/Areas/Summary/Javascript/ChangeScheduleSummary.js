@@ -2,7 +2,11 @@
     Dropdown_selectMP('Section', "/Helper/GetDropdown_SectionAMS");
     initDatePicker('DateFrom');
     initDatePicker('DateTo');
-    Dropdown_selectApp("Status");
+    Dropdown_selectAppCS("Status");
+
+    $('#CSDetails').on('hidden.bs.modal', function (e) {
+        window.location = '../ChangeScheduleSummary/ChangeScheduleSummary';
+    })
     var d = new Date();
 
     var date = d.getDate();
@@ -102,6 +106,7 @@ function initDatePicker(dp) {
 }
 
 function Initializedpage() {
+    var d = new Date();
     $('#CSSummaryTable').DataTable({
         ajax: {
             url: '../ChangeScheduleSummary/GetApproverCSSummaryList',
@@ -116,10 +121,22 @@ function Initializedpage() {
             }
         },
         lengthChange: true,
-        lengthMenu: [[10, 50, 100], [10, 50, 100]],
-        pagelength: 10,
+        pagelength: 10000,
         scrollY: "600px",
-        //scrollX: "1000px",
+        //dom: 'lBfrtip',
+        //buttons: [
+        //    {
+        //        extend: 'excel',
+        //        title: "Export Summary" + formatDate(d) + "_" + $("#Section").val()
+        //    },
+        //    {
+        //        text: 'Export Detailed Summary',
+        //        action: function (e, dt, node, config) {
+        //            window.open('../ChangeScheduleSummary/ExportChangeSchedule?Section=' + $("#Section").val() + "&DateFrom=" + $("#DateFrom").val() + "&DateTo=" + $("#DateTo").val() + "&Status=" + $("#Status").val());
+        //        }
+        //    }
+        //],
+    
         scrollCollapse: true,
         serverSide: "true",
         order: [0, "asc"],
@@ -129,6 +146,24 @@ function Initializedpage() {
         },
         loadonce: true,
         destroy: true,
+        initComplete: function () {
+            var CSType = getParameterByName("CSType");
+            var Approved = getParameterByName("Approved");
+            var table = $('#CSSummaryTable').DataTable();
+
+
+            if (CSType != null) {
+                $(".refnoe").trigger("click");
+                if (!table.data().any()) {
+                    var Refno = getParameterByName("RefNo");
+                    //swal("CS Request \n" + Refno + " is Finished");
+                }
+            }
+            //if (Approved != null) {
+            //    //swal("CS Already approved by " + Approved);
+            //    $(".Viewall").show();
+            //}
+        },
         columns: [
               //{
               //   data: function (data, type, row, meta) {
@@ -183,56 +218,24 @@ function Initializedpage() {
               //},
              {
                  title: "Supervisor", data: function (x) {
-                     if (x.ApprovedSupervisor != null && x.Status > 0) {
-                         return x.ApprovedSupervisor
-                     }
-                     else if (x.Status < 0) {
-                         return x.ApprovedSupervisor
-                         //switch (x.Status) {
-                         //    case -1:
-                         //        return "<button type='button' class= 'btn btn-s bg-red'>" + x.ApprovedSupervisor+"</button>"
-                         //        break;
-                         //    case -2:
-                         //        return x.ApprovedSupervisor
-                         //        break;
-                         //    case -10:
-                         //        return "<button type='button' class= 'btn btn-s bg-red'>" + x.ApprovedSupervisor+"</button>"
-                         //        break;
-                         //    default:
-                         //        return "<button type='button' class= 'btn btn-s bg-orange'></button>"
-                         //        break;
-
-                         //}
+                     if (x.Status == 0) {
+                         return data = "<button type='button' class= 'btn btn-s bg-orange'>Pending</button>"
+                        
                      }
                      else {
-                         return data = "<button type='button' class= 'btn btn-s bg-orange'>Pending</button>"
+                         return x.ApprovedSupervisor
                      }
-
-
-
+                     
                  }
              },
                {
                    title: "Manager", data: function (x) {
-                       if (x.ApprovedManager != null && x.Status > 0) {
-                           return x.ApprovedManager
-                       }
-                       else if (x.Status < 0) {
-                           return x.ApprovedSupervisor
-                           //switch (x.Status) {
-                           //    case -2:
-                           //        return "<button type='button' class= 'btn btn-s bg-red'>Rejected by Manager</button>"
-                           //        break;
-                           //    case -5:
-                           //        return "<button type='button' class= 'btn btn-s bg-red'>Cancelled</button>"
-                           //        break;
-                           //    default:
-                           //        return data = "<button type='button' class= 'btn btn-s bg-orange'></button>"
-                           //        break;
-                           //}
+                       if (x.Status == 0) {
+                           return data = "<button type='button' class= 'btn btn-s bg-orange'>Pending</button>"
+
                        }
                        else {
-                           return data = "<button type='button' class= 'btn btn-s bg-orange'>Pending</button>"
+                           return x.ApprovedManager
                        }
                    }
                },
@@ -281,9 +284,10 @@ function GetDetails(data, status) {
         buttons: [
           'excel'
         ],
-        lengthMenu: [[10, 50, 100], [10, 50, 100]],
+        //lengthMenu: [[10, 50, 100], [10, 50, 100]],
         
-        lengthChange: false,
+        //lengthChange: false,
+        pagelength: 10000,
         scrollY: "600px",
         scrollCollapse: true,
         scrollx: true,

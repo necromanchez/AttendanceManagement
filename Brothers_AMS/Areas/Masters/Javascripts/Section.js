@@ -14,7 +14,7 @@
         }
     });
     //Dropdown_select('Section', "/Helper/GetDropdown_SectionAMS");
-    Dropdown_selectMPMain22('Section', "/Helper/GetDropdown_SectionAMS?Dgroup=");
+    Dropdown_selectEmpSection('Section', "/Helper/GetDropdown_SectionAMS?Dgroup=");
   
     $("#Manager").focusout(function () {
         $.ajax({
@@ -82,9 +82,9 @@ function Initializepage() {
             }
         },
         lengthMenu: [[10, 50, 100], [10, 50, 100]],
-        
+        scrollY: "600px",
         lengthChange: true,
-        
+        ordering: false,
         scrollCollapse: true,
         serverSide: "true",
         order: [0, "asc"],

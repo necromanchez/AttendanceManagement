@@ -257,5 +257,9 @@ function GraphStartGET_AWOLandResignrate(datahere) {
             }
         });
     }
-    $("#loading_modalD_Awol").modal("hide");
+    Graph3 = true;
+
+    if (Graph1 == true && Graph2 == true && Graph3 == true && Graph4 == true && Graph5 == true) {
+        $("#loading_modalD_AttendanceRate").modal("hide");
+    }
 }

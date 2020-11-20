@@ -45,7 +45,7 @@ function Initializedpage_WorkingHours() {
                     { title: "Employee Name", data: "EmployeeName", className: "reloadclass", name: "EmployeeName" },
                     { title: "Position", data: "Position", name: "Position" },
                     { title: "Cost Center", data: "CostCode", name: "CostCode" },
-                    { title: "Schedule", data: "Schedule", name: "Schedule" },
+                    { title: "Current Schedule", data: "Schedule", name: "Schedule" },
                       {
                           title: "Process", data: function (x) {
 

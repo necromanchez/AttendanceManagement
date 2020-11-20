@@ -1,17 +1,24 @@
-﻿$(function () {
+﻿var d = new Date();
 
-    Initializedpage();
-    $("#checkall_emp").on("change", function () {
-        if (this.checked) {
-            $('.empmod').prop('checked', true);
-        }
-        else {
-            $('.empmod').prop('checked', false);
+var date = d.getDate();
+var month = d.getMonth() + 1;
+var year = d.getFullYear();
+var lastDay = new Date(year, month, 0).getDate();
+var dateStr = month + "/1/" + year;
+var dTo = month + "/" + date + "/" + year;
+var selectedSection = "";
+
+$(function () {
+    
+    $('#CSDetails').on('hidden.bs.modal', function (e) {
+        var refresh = getParameterByName("RefNo");
+        if (refresh != null) {
+            window.location = '../ApproverChangeSchedule/ApproverChangeSchedule';
         }
     })
     $("#btnApprovedRequest").on("click", ApprovedCS);
     $("#btnRejectRequest").on("click", RejectedCS);
-    $("#btnCancel").on("click", CancelRequest);
+    $("#btnCancel").one("click", CancelRequest);
     $(".Viewall").hide();
 
 
@@ -20,17 +27,35 @@
             $('.empmod').each(function (i, obj) {
                 chosend_EmpNo.push(obj.id);
             });
-            $('.empmod').prop('checked', true);
+            $('.empmod').prop('checked', true); checkall_emp
         }
-        //else {
-        //    $('.empmod').each(function (i, obj) {
-        //        chosend_EmpNo.remove(obj.id);
-        //    }); $('.empmod').prop('checked', false);
-        //}
+        else {
+            $('.empmod').each(function (i, obj) {
+                chosend_EmpNo.remove(obj.id);
+            }); $('.empmod').prop('checked', false);
+        }
     })
+    initDatePicker('DateFrom');
+    initDatePicker('DateTo');
+    $("#DateFrom").datepicker().datepicker("setDate", dateStr);
+    $("#DateTo").datepicker().datepicker("setDate", dTo);
+    Dropdown_selectMP('Section', "/Helper/GetDropdown_SectionAMS");
 
+    $(".autof").on("change", function () {
+        Initializedpage();
+    });
+
+    Initializedpage();
 })
 
+function initDatePicker(dp) {
+    $('#' + dp).datepicker({
+        todayBtn: "linked",
+        orientation: "top right",
+        autoclose: true,
+        todayHighlight: true
+    });
+}
 function GetEmployeeChosen(EmpNo) {
     if ($("#BIPH_Agency").val() != "") {
         $("#Schedule").prop("disabled", false);
@@ -52,25 +77,33 @@ function GetEmployeeChosen(EmpNo) {
 }
 var currentRefNoChosen = "";
 var chosend_EmpNo = [];
+var pagecount = 0;
 function Initializedpage() {
+    
     $('#ChangeScheduleApprovertable').DataTable({
         ajax: {
             url: '../ApproverChangeSchedule/GetApproverCSList',
             type: "GET",
+            data: {
+                Section: $("#Section").val(),
+                DateFrom: $("#DateFrom").val(),
+                DateTo: $("#DateTo").val()
+            },
             datatype: "json",
         },
         serverSide: "true",
         order: [0, "asc"],
         processing: "true",
+        lengthChange: true,
         lengthMenu: [[10, 50, 100], [10, 50, 100]],
-        
-        lengthChange: false,
+        pagelength: 10,
         scrollY: "600px",
         scrollCollapse: true,
         language: {
             "processing": "processing... please wait"
         },
         destroy: true,
+        displayStart: pagecount,
         initComplete: function () {
             var CSType = getParameterByName("CSType");
             var Approved = getParameterByName("Approved");
@@ -160,6 +193,7 @@ function Initializedpage() {
     $('#ChangeScheduleApprovertable tbody').off('click');
    
     $('#ChangeScheduleApprovertable tbody').on('click', '.refnoe', function () {
+        $('#checkall_emp').prop('checked', false);
         var table = $('#ChangeScheduleApprovertable').DataTable();
         var data = table.row(this).data();
         currentRefNoChosen = data.CS_RefNo;
@@ -184,7 +218,7 @@ function Initializedpage() {
                     $("#btnCancel").show();
                 }
                     GetDetails(data.CS_RefNo);
-                    table.ajax.reload();
+                    //table.ajax.reload();
                     $("#CSDetails").modal("show");
             }
         });
@@ -221,7 +255,7 @@ function GetDetails(data) {
             $(row).addClass(data.EmployeeNo);
         },
         serverSide: "true",
-        lengthMenu: [[5000, 50, 100], [5000, 50, 100]],
+        lengthMenu: [[10000, 50, 100], [10000, 50, 100]],
         
         lengthChange: false,
         scrollY: "600px",
@@ -346,6 +380,7 @@ function GetApprovers(data) {
 }
 
 function ApprovedCS() {
+    //$("#loading_modal").modal("show");
     var table = $('#CSApproverDetails').DataTable();
     var ApprovedCSrows = [];
     var allrow = $('.empmod:checked').length == $('.empmod').length;
@@ -361,6 +396,7 @@ function ApprovedCS() {
         ApprovedCSrows.push(item);
     });
     if (allrow || GlobalAcceptance) {
+        $("#loading_modal").modal("show");
         $.ajax({
             url: '../ApproverChangeSchedule/ApprovedCS',
             type: 'POST',
@@ -371,16 +407,28 @@ function ApprovedCS() {
             }),
             datatype: "json",
             success: function (returnData) {
-                //swal("CS Approved Successfully");
+                var tabledata = $('#ChangeScheduleApprovertable').DataTable();
+                var info = tabledata.page.info();
+                pagecount = 0;
+                pagecount = pagecount + (info.page * 10);
                 notify("Saved!", "CS Successfully Filed", "success");
                 $("#CSDetails").modal("hide");
+                $("#loading_modal").modal("hide");
+                ApprovedCSrows = [];
                 Initializedpage();
             },
-             error: function (xhr, ajaxOptions, thrownError) {
+            error: function (xhr, ajaxOptions, thrownError) {
+                var tabledata = $('#ChangeScheduleApprovertable').DataTable();
+                var info = tabledata.page.info();
+                pagecount = 0;
+                pagecount = pagecount + (info.page * 10);
                  //swal("CS Approved Successfully");
                  notify("Saved!", "CS Successfully Filed", "success");
-                 $("#CSDetails").modal("hide");
+                $("#CSDetails").modal("hide");
+                $("#loading_modal").modal("hide");
+                ApprovedCSrows = [];
                  Initializedpage();
+               
             }
         });
     }
@@ -391,6 +439,7 @@ function ApprovedCS() {
 }
 
 function RejectedCS() {
+    $("#loading_modal").modal("show");
     var table = $('#CSApproverDetails').DataTable();
     var ApprovedCSrows = [];
     var allrow = $('.empmod:checked').length == $('.empmod').length;
@@ -420,6 +469,7 @@ function RejectedCS() {
                 notify("Saved!", "CS Rejected", "success");
                 $("#CSDetails").modal("hide");
                 Initializedpage();
+                $("#loading_modal").modal("hide");
             }
         });
     //}
@@ -445,10 +495,10 @@ function CancelRequest() {
         url: '../ApproverChangeSchedule/CancelledRefNo',
         type: 'POST',
         contentType: "application/json; charset=utf-8",
-        //data: JSON.stringify({
-        //    RefNo: EmployeeList,
-        //}),
-        data: { RefNo: currentRefNoChosen},
+        data: JSON.stringify({
+            RefNo: EmployeeList,
+        }),
+        //data: { RefNo: currentRefNoChosen},
         datatype: "json",
         success: function (returnData) {
             if (returnData.EmpnoCannotCancel.length > 0) {
@@ -465,3 +515,4 @@ function CancelRequest() {
         }
     });
 }
+

@@ -35,6 +35,22 @@ function GetOvertimeRate() {
     });
 }
 
+
+function GetOvertimeRate_Department() {
+    $.ajax({
+        url: '/Home/GET_OTRate_Department',
+        type: 'POST',
+        data: Filter,
+        datatype: "json",
+        success: function (returnData) {
+
+            GraphStartOTrate(returnData.list);
+        }
+
+    });
+
+}
+
 function GraphStartOTrate(datahere) {
     var finalticks = [];
     var HeadCount = [];
@@ -158,5 +174,9 @@ function GraphStartOTrate(datahere) {
         });
 
     }
-    $("#loading_modalD_OT").modal("hide");
+    Graph4 = true;
+
+    if (Graph1 == true && Graph2 == true && Graph3 == true && Graph4 == true && Graph5 == true) {
+        $("#loading_modalD_AttendanceRate").modal("hide");
+    }
 }

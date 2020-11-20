@@ -35,7 +35,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
 
         public ActionResult GetManPowerList(MPFilterModel Filter)
         {
-            Filter.DateTo = Filter.DateTo.AddHours(23).AddMinutes(59).AddSeconds(59);
+            //Filter.DateTo = Filter.DateTo.AddHours(23).AddMinutes(59).AddSeconds(59);
             //Server Side Parameter
             int start = Convert.ToInt32(Request["start"]);
             int length = Convert.ToInt32(Request["length"]);

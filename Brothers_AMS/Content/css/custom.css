@@ -143,4 +143,9 @@ select:not(:disabled){
     background-color:#6CE2DD !important;
 }
 
+th {
+    background-color: #D3D3D3;
+    font-weight:bold !important;
+}
+
 

@@ -123,13 +123,65 @@
             text-align:right !important;
         }
 </style>
+<style type='text/css'>
+    .my-legend .legend-title {
+        text-align: left;
+        margin-bottom: 5px;
+        font-weight: bold;
+        font-size: 100%;
+    }
 
+    .my-legend .legend-scale ul {
+        margin: 0;
+        margin-bottom: 5px;
+        padding: 0;
+        float: left;
+        list-style: none;
+    }
+
+        .my-legend .legend-scale ul li {
+            font-size: 100%;
+            list-style: none;
+            margin-left: 0;
+            line-height: 18px;
+            margin-bottom: 2px;
+        }
+
+    .my-legend ul.legend-labels li span {
+        display: block;
+        float: left;
+        height: 16px;
+        width: 30px;
+        margin-right: 5px;
+        margin-left: 0;
+        border: 1px solid #999;
+    }
+
+    .my-legend .legend-source {
+        font-size: 70%;
+        color: #999;
+        clear: both;
+    }
+
+    .my-legend a {
+        color: #777;
+    }
+</style>
 <div class="content-header">
+
+
     <h1>
         Line View
 
     </h1>
-
+    <br>
+    <div class="row">
+        <div class="col-md-2">
+            <button type="button" class="btn btn-flat bg-green btn-lg btn-block" id="Lineviewbtn" onclick="location.href = '/'">
+                <i class="fa fa-pie-chart"></i> Time In and Out
+            </button>
+        </div>
+    </div>
     <ul class="nav">
         <li>
             <div class="h2" id="datess">
@@ -165,10 +217,10 @@
     </label>
     <br>
     <div class="row">
-        <div class="col-6">
+        <div class="col-7">
             <label> Use this switch to choose Auto or Manual update</label>
         </div>
-        <div class="col-6">
+        <div class="col-5">
             <div class="box-header">
                 <i class="fa fa-search"></i>
                 <h3 class="box-title">Search Result</h3>
@@ -178,13 +230,27 @@
 
     <div class="row" id="forsuperuser">
 
-        <div class="col-md-3">
+        <div class="col-md-4">
             <div class="form-group">
                 <div class="input-group">
                     <span class="input-group-addon resi">Section</span>
                     <select class="form-control select2" name="Section" id="Section"></select>
                 </div>
             </div>
+
+            <div class='my-legend'>
+                <div class='legend-title'>Line View Legends</div>
+                <div class='legend-scale'>
+                    <ul class='legend-labels'>
+                        <li><span style='background:#DCDCDC;'></span>No Employee in Line/Process</li>
+                        <li><span style='background:#AEDEFF;'></span>With Employee in Line/Process</li>
+                        <li><span style='background:#A3F087;'></span>Full Employee in Line/Process</li>
+                    </ul>
+                </div>
+
+            </div>
+
+
         </div>
 
 
@@ -202,7 +268,7 @@
             </div>
         </div>
 
-        <div class="col-md-6">
+        <div class="col-md-5">
             <div class="row">
                 <div class="col-md-6">
 

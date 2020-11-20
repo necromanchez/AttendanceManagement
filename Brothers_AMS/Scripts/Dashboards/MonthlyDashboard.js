@@ -34,6 +34,41 @@ function Getchosen() {
 
 }
 
+function MonthlyDashboard_Department() {
+    $("#loading_modalD_Monthly").modal("show");
+    $.ajax({
+        url: '/Home/Get_MonthlyDashboard_Department',
+        type: 'POST',
+        data: {
+            Year: MYear,
+            Agency: MAgency,
+            Line: MLine,
+            Shift: MShift,
+            GroupSection: $("#Sectiond").val()
+        },
+        datatype: "json",
+        success: function (returnData) {
+
+            GraphAttendanceRate_Monthly(returnData.AttendanceRateMonthly);
+            GraphStartAbsentRate_Monthly(returnData.AbsentRateMonthly);
+            var LeaveGroupData = returnData.LeaveBreakdownMonthly;
+            var groupedDateSet = _.mapValues(_.groupBy(LeaveGroupData, 'Monthnumfillter'),
+                clist => clist.map(Monthnumfillter => _.omit(Monthnumfillter, 'Monthnumfillter')));
+            GraphStartLeaveBreakdown_Monthly(groupedDateSet);
+
+            var statusGroupData = returnData.AwolandResignedMonthly;
+            var groupedDateSet2 = _.mapValues(_.groupBy(statusGroupData, 'Monthnumfillter'),
+                clist => clist.map(Monthnumfillter => _.omit(Monthnumfillter, 'Monthnumfillter')));
+            GraphStartGET_AWOLandResignrate_Monthly(groupedDateSet2);
+
+            GraphStartOTrate_Monthly(returnData.OTRateMonthly);
+
+            $("#loading_modalD_Monthly").modal("hide");
+        }
+    });
+}
+
+
 function MonthlyDashboard() {
     $("#loading_modalD_Monthly").modal("show");
     $.ajax({
@@ -89,13 +124,13 @@ function GraphAttendanceRate_Monthly(datahere) {
         var Tickshere = [Iterator, MonthNames[x.Monthnum-1]];
         var Presentdata = [Iterator, x.PresentTotal];
         var Absentdata = [Iterator, x.AbsentTotal];
-        var PresentInactivedata = [Iterator, x.PresentInactive];
+        //var PresentInactivedata = [Iterator, x.PresentInactive];
         var MLCountdata = [Iterator, x.MLTotal];
         var NWCountdata = [Iterator, x.NWTotal];
         var Percentdata = [Iterator, x.Percentage];
         
         Present.push(Presentdata);
-        PresentInactive.push(PresentInactivedata);
+        //PresentInactive.push(PresentInactivedata);
         Absent.push(Absentdata);
         MLCount.push(MLCountdata);
         NWCount.push(NWCountdata);
@@ -131,14 +166,14 @@ function GraphAttendanceRate_Monthly(datahere) {
 
     };
 
-    var PresentInactiveSet = {
-        label: "Present Inactive Employees",
-        data: PresentInactive,
-        bars: bar_options,
-        fill: true,
-        fillColor: { colors: [{ opacity: 1 }, { opacity: 1 }] },
+    //var PresentInactiveSet = {
+    //    label: "Present Inactive Employees",
+    //    data: PresentInactive,
+    //    bars: bar_options,
+    //    fill: true,
+    //    fillColor: { colors: [{ opacity: 1 }, { opacity: 1 }] },
 
-    };
+    //};
 
     var AbsentSet = {
         label: 'Absent',
@@ -185,10 +220,10 @@ function GraphAttendanceRate_Monthly(datahere) {
         data.push(AbsentSet);
         data.push(MLCountSet);
         data.push(NWCountSet);
-        data.push(PresentInactiveSet);
+        //data.push(PresentInactiveSet);
         data.push(totalSet);
-        columncount = 6;
-        colored = ['#4E8EFF', '#FD8D86', '#F2FC86', '#929495', '#7CE7FF', 'red']
+        columncount = 5;
+        colored = ['#4E8EFF', '#FF6666', '#04B404', '#929495', 'red']
     }
     else {
         data.push(PresentSet);
@@ -197,7 +232,7 @@ function GraphAttendanceRate_Monthly(datahere) {
         data.push(NWCountSet);
         data.push(totalSet);
         columncount = 5;
-        colored = ['#4E8EFF', '#FD8D86', '#F2FC86', '#929495', 'red']
+        colored = ['#4E8EFF', '#FF6666', '#04B404', '#929495', 'red']
 
     }
 
@@ -260,20 +295,11 @@ function GraphAttendanceRate_Monthly(datahere) {
 
     if (holder.length) {
         var p = $.plot(holder, data, chartOptions);
-        $.each(p.getData()[columncount-1].data, function (i, el) {
+        $.each(p.getData()[columncount - 1].data, function (i, el) {
             var o = p.pointOffset({ x: el[0], y: el[1], yaxis: 2 });
 
             if (!isNaN(el[1])) {
-                var va = "";
-                try {
-                    va = el[1].toFixed(0);
-                }
-                catch (err) {
-                    va = 0;
-                }
-
-
-                $('<div class="data-point-label">' + va + '%</div>').css({
+                $('<div class="data-point-label">' + el[1].toFixed(0) + '%</div>').css({
                     position: 'absolute',
                     left: o.left,
                     top: o.top,
@@ -486,7 +512,7 @@ function GraphStartAbsentRate_Monthly(datahere) {
             data.push(nightSet);
             data.push(daySet);
             data.push(noschedSet);
-            colored = ['red', '#4E8EFF', '#FD8D86', '#929495']
+            colored = ['red', '#808000', '#4E8EFF', '#929495']
             columncount = 4;
             break;
         case "Day":
@@ -498,7 +524,7 @@ function GraphStartAbsentRate_Monthly(datahere) {
         case "Night":
             data.push(nightpercentSet);
             data.push(nightSet);
-            colored = ['red', '#FD8D86']
+            colored = ['red', '#808000']
             columncount = 2;
             break;
         case "NoSched":
@@ -607,11 +633,12 @@ function GraphStartLeaveBreakdown_Monthly(datahere) {
     var MLLeave = [];
     var ELLeave = [];
     var UNKLeave = [];
-
+    var ABLeave = [];
+    var TOTALout = [];
     $.each(datahere, function (ii, leavedata) {
          
         var Tickshere = [Iterator, MonthNames[ii - 1]];
-
+        var tcount = 0;
         $.each(leavedata, function (iii, leavedataType) {
 
 
@@ -636,10 +663,16 @@ function GraphStartLeaveBreakdown_Monthly(datahere) {
                     var HeadCountdata = [Iterator, leavedataType.TotalHeadcount];
                     UNKLeave.push(HeadCountdata);
                     break;
+                case "AB":
+                    var HeadCountdata = [Iterator, leavedataType.TotalHeadcount];
+                    ABLeave.push(HeadCountdata);
+                    break;
             };
-
+            tcount += leavedataType.TotalHeadcount;
         });
+        var totalout = [Iterator, tcount];
         finalticks.push(Tickshere);
+        TOTALout.push(totalout);
         Iterator++;
     });
 
@@ -663,65 +696,77 @@ function GraphStartLeaveBreakdown_Monthly(datahere) {
         fillColor: { colors: [{ opacity: 1 }, { opacity: 1 }] },
     };
 
+    var TotaloutSet = {
+        label: '',
+        data: TOTALout,
+        lines: line_options2,
+        //points: {
+        //    show: true,
+        //    radius: 4,
+        //    fill: true,
+        //    lineWidth: 1
+        //},
+        yaxis: 1,
+        stack: false,
 
+    }
     var SLSet = {
-        label: "SL Rate",
+        label: "SL Count",
         data: SLLeave,
         bars: bar_options,
-        stack: true
+        stack: true,
+        color: "#DF7401"
     };
 
     var VLSet = {
-        label: 'VL Rate',
+        label: 'VL Count',
         data: VLLeave,
         bars: bar_options,
-        stack: true
+        stack: true,
+        color: "#4E8EFF"
     }
 
     var MLSet = {
-        label: "ML Rate",
+        label: "ML Count",
         data: MLLeave,
         bars: bar_options,
+        color: "#04B404",
         stack: true
     };
 
     var ELSet = {
-        label: "ML Rate",
+        label: "EL Count",
         data: ELLeave,
         bars: bar_options,
-        stack: true
+        stack: true,
+        color: "#AF67FF"
     };
 
     var UNKSet = {
-        label: "UNK Rate",
+        label: "Absent Count",
         data: UNKLeave,
         bars: bar_options,
-        stack: true
+        stack: true,
+        color: "#FF0000"
     };
-    data = [VLSet, SLSet, MLSet, ELSet, UNKSet];//[VLSet,UNKSet, totalSet, Overalltotal];
+
+    var ABSet = {
+        label: "No Leave Count",
+        data: ABLeave,
+        bars: bar_options,
+        stack: true,
+        color: "#F39D9D"
+    };
+    data = [TotaloutSet, UNKSet, VLSet, SLSet, MLSet, ELSet, ABSet];//[VLSet,UNKSet, totalSet, Overalltotal];
     var tickis = finalticks;
     function degreeFormatter4(v, axis) {
         return v.toFixed(axis.tickDecimals) + "%";
     }
     chartOptions = {
-        yaxes: [
-            {
-                /* First y axis */
-                //interval: 1
-            },
-            {
-                /* Second y axis */
-                position: "right",  /* left or right */
-                tick: {
-                    format: function (d) {
-                        return d + "%";
-                    }
-                },
-                min: 0,
-                max: 100,
-                tickFormatter: degreeFormatter4
-            }
-        ],
+        yaxis:
+        {
+            min: 0
+        },
         xaxis: {
             ticks: tickis,
             rotateTicks: 90
@@ -742,28 +787,28 @@ function GraphStartLeaveBreakdown_Monthly(datahere) {
                 return '%s: %y'
             },
         },
+        //colors: coloredb,
         legend: {
             noColumns: 7,
             container: $("#chartLegend5")
-        }
+        },
+
     }
 
     var holder = $('#stacked-absent-breakdown');
-    var ss = datahere.length;
     if (holder.length) {
         var p = $.plot(holder, data, chartOptions);
-        $.each(p.getData()[2].data, function (i, el) {
-            var o = p.pointOffset({ x: i, y: el[1], yaxis: 2 });
+        $.each(p.getData()[0].data, function (i, el) {
             if (!isNaN(el[1])) {
-                $('<div class="data-point-label">' + el[1] + '%</div>').css({
+                var o = p.pointOffset({ x: el[0], y: el[1] });
+                $('<div class="data-point-label">' + el[1] + '</div>').css({
                     position: 'absolute',
-                    left: o.left + 25,
-                    top: o.top - 15,
+                    left: o.left - 5,
+                    top: o.top - 20,
                     display: 'none',
                     color: "red",
                 }).appendTo(p.getPlaceholder()).fadeIn('slow');
             }
-
         });
     }
 

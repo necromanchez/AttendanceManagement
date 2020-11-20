@@ -195,14 +195,6 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C1 = "-";
                     }
                 }
-                else if (row.C1.Contains("P"))
-                {
-                    if (!Dayname(1, Month, Year))
-                    {
-                        WKWeekend++;
-                    }
-                    Pcount++;
-                }
                 else if (row.C1 == "HD")
                 {
                     Ycount = Ycount + 0.5;
@@ -215,7 +207,15 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                 {
                     Bcount++;
                 }
-                
+                else if (row.C1.Contains("P"))
+                {
+                    if (!Dayname(1, Month, Year))
+                    {
+                        WKWeekend++;
+                    }
+                    Pcount++;
+                }
+
                 if (!Dayname(2, Month, Year) && row.C2 == "AB")
                 {
                     DateTime day = new DateTime(Year, Month, 2);
@@ -228,14 +228,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C2 = "-";
                     }
                 }
-                else if (row.C2.Contains("P"))
-                {
-                    if (!Dayname(2, Month, Year))
-                    {
-                        WKWeekend++;
-                    }
-                    Pcount++;
-                }
+               
                 else if (row.C2 == "HD")
                 {
                     Ycount = Ycount + 0.5;
@@ -248,7 +241,15 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                 {
                     Bcount++;
                 }
-                
+                else if (row.C2.Contains("P"))
+                {
+                    if (!Dayname(2, Month, Year))
+                    {
+                        WKWeekend++;
+                    }
+                    Pcount++;
+                }
+
                 if (!Dayname(3, Month, Year) && row.C3 == "AB")
                 {
                     DateTime day = new DateTime(Year, Month, 3);
@@ -261,14 +262,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C3 = "-";
                     }
                 }
-                else if (row.C3.Contains("P"))
-                {
-                    if (!Dayname(3, Month, Year))
-                    {
-                        WKWeekend++;
-                    }
-                    Pcount++;
-                }
+                
                 else if (row.C3 == "HD")
                 {
                     Ycount = Ycount + 0.5;
@@ -281,7 +275,14 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                 {
                     Bcount++;
                 }
-                
+                else if (row.C3.Contains("P"))
+                {
+                    if (!Dayname(3, Month, Year))
+                    {
+                        WKWeekend++;
+                    }
+                    Pcount++;
+                }
                 if (!Dayname(4, Month, Year) && row.C4 == "AB")
                 {
                     DateTime day = new DateTime(Year, Month, 4);
@@ -294,14 +295,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C4 = "-";
                     }
                 }
-                else if (row.C4.Contains("P"))
-                {
-                    if (!Dayname(4, Month, Year))
-                    {
-                        WKWeekend++;
-                    }
-                    Pcount++;
-                }
+                
                 else if (row.C4 == "HD")
                 {
                     Ycount = Ycount + 0.5;
@@ -314,7 +308,14 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                 {
                     Bcount++;
                 }
-                
+                else if (row.C4.Contains("P"))
+                {
+                    if (!Dayname(4, Month, Year))
+                    {
+                        WKWeekend++;
+                    }
+                    Pcount++;
+                }
                 if (!Dayname(5, Month, Year) && row.C5 == "AB")
                 {
                     DateTime day = new DateTime(Year, Month, 5);
@@ -327,14 +328,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C5 = "-";
                     }
                 }
-                else if (row.C5.Contains("P"))
-                {
-                    if (!Dayname(5, Month, Year))
-                    {
-                        WKWeekend++;
-                    }
-                    Pcount++;
-                }
+                
                 else if (row.C5 == "HD")
                 {
                     Ycount = Ycount + 0.5;
@@ -347,7 +341,14 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                 {
                     Bcount++;
                 }
-                
+                else if (row.C5.Contains("P"))
+                {
+                    if (!Dayname(5, Month, Year))
+                    {
+                        WKWeekend++;
+                    }
+                    Pcount++;
+                }
                 if (!Dayname(6, Month, Year) && row.C6 == "AB")
                 {
                     DateTime day = new DateTime(Year, Month, 6);
@@ -360,14 +361,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C6 = "-";
                     }
                 }
-                else if (row.C6.Contains("P"))
-                {
-                    if (!Dayname(6, Month, Year))
-                    {
-                        WKWeekend++;
-                    }
-                    Pcount++;
-                }
+                
                 else if (row.C6 == "HD")
                 {
                     Ycount = Ycount + 0.5;
@@ -380,7 +374,14 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                 {
                     Bcount++;
                 }
-                
+                else if (row.C6.Contains("P"))
+                {
+                    if (!Dayname(6, Month, Year))
+                    {
+                        WKWeekend++;
+                    }
+                    Pcount++;
+                }
                 if (!Dayname(7, Month, Year) && row.C7 == "AB")
                 {
                     DateTime day = new DateTime(Year, Month, 7);
@@ -393,14 +394,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C7 = "-";
                     }
                 }
-                else if (row.C7.Contains("P"))
-                {
-                    if (!Dayname(7, Month, Year))
-                    {
-                        WKWeekend++;
-                    }
-                    Pcount++;
-                }
+                
                 else if (row.C7 == "HD")
                 {
                     Ycount = Ycount + 0.5;
@@ -413,7 +407,14 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                 {
                     Bcount++;
                 }
-                
+                else if (row.C7.Contains("P"))
+                {
+                    if (!Dayname(7, Month, Year))
+                    {
+                        WKWeekend++;
+                    }
+                    Pcount++;
+                }
                 if (!Dayname(8, Month, Year) && row.C8 == "AB")
                 {
                     DateTime day = new DateTime(Year, Month, 8);
@@ -426,14 +427,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C8 = "-";
                     }
                 }
-                else if (row.C8.Contains("P"))
-                {
-                    if (!Dayname(8, Month, Year))
-                    {
-                        WKWeekend++;
-                    }
-                    Pcount++;
-                }
+                
                 else if (row.C8 == "HD")
                 {
                     Ycount = Ycount + 0.5;
@@ -446,7 +440,14 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                 {
                     Bcount++;
                 }
-                
+                else if (row.C8.Contains("P"))
+                {
+                    if (!Dayname(8, Month, Year))
+                    {
+                        WKWeekend++;
+                    }
+                    Pcount++;
+                }
                 if (!Dayname(9, Month, Year) && row.C9 == "AB")
                 {
                     DateTime day = new DateTime(Year, Month, 9);
@@ -459,14 +460,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C9 = "-";
                     }
                 }
-                else if (row.C9.Contains("P"))
-                {
-                    if (!Dayname(9, Month, Year))
-                    {
-                        WKWeekend++;
-                    }
-                    Pcount++;
-                }
+               
                 else if (row.C9 == "HD")
                 {
                     Ycount = Ycount + 0.5;
@@ -479,7 +473,14 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                 {
                     Bcount++;
                 }
-                
+                else if (row.C9.Contains("P"))
+                {
+                    if (!Dayname(9, Month, Year))
+                    {
+                        WKWeekend++;
+                    }
+                    Pcount++;
+                }
                 if (!Dayname(10, Month, Year) && row.C10 == "AB")
                 {
                     DateTime day = new DateTime(Year, Month, 10);
@@ -492,14 +493,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C10 = "-";
                     }
                 }
-                else if (row.C10.Contains("P"))
-                {
-                    if (!Dayname(10, Month, Year))
-                    {
-                        WKWeekend++;
-                    }
-                    Pcount++;
-                }
+                
                 else if (row.C10 == "HD")
                 {
                     Ycount = Ycount + 0.5;
@@ -512,7 +506,14 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                 {
                     Bcount++;
                 }
-                
+                else if (row.C10.Contains("P"))
+                {
+                    if (!Dayname(10, Month, Year))
+                    {
+                        WKWeekend++;
+                    }
+                    Pcount++;
+                }
                 if (!Dayname(11, Month, Year) && row.C11 == "AB")
                 {
                     DateTime day = new DateTime(Year, Month, 11);
@@ -525,14 +526,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C11 = "-";
                     }
                 }
-                else if (row.C11.Contains("P"))
-                {
-                    if (!Dayname(11, Month, Year))
-                    {
-                        WKWeekend++;
-                    }
-                    Pcount++;
-                }
+               
                 else if (row.C11 == "HD")
                 {
                     Ycount = Ycount + 0.5;
@@ -545,7 +539,14 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                 {
                     Bcount++;
                 }
-                
+                else if (row.C11.Contains("P"))
+                {
+                    if (!Dayname(11, Month, Year))
+                    {
+                        WKWeekend++;
+                    }
+                    Pcount++;
+                }
                 if (!Dayname(12, Month, Year) && row.C12 == "AB")
                 {
                     DateTime day = new DateTime(Year, Month, 12);
@@ -558,14 +559,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C12 = "-";
                     }
                 }
-                else if (row.C12.Contains("P"))
-                {
-                    if (!Dayname(12, Month, Year))
-                    {
-                        WKWeekend++;
-                    }
-                    Pcount++;
-                }
+                
                 else if (row.C12 == "HD")
                 {
                     Ycount = Ycount + 0.5;
@@ -578,7 +572,14 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                 {
                     Bcount++;
                 }
-                
+                else if (row.C12.Contains("P"))
+                {
+                    if (!Dayname(12, Month, Year))
+                    {
+                        WKWeekend++;
+                    }
+                    Pcount++;
+                }
                 if (!Dayname(13, Month, Year) && row.C13 == "AB")
                 {
                     DateTime day = new DateTime(Year, Month, 13);
@@ -591,14 +592,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C13 = "-";
                     }
                 }
-                else if (row.C13.Contains("P"))
-                {
-                    if (!Dayname(13, Month, Year))
-                    {
-                        WKWeekend++;
-                    }
-                    Pcount++;
-                }
+                
                 else if (row.C13 == "HD")
                 {
                     Ycount = Ycount + 0.5;
@@ -611,7 +605,14 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                 { 
                     Bcount++;
                 }
-                
+                else if (row.C13.Contains("P"))
+                {
+                    if (!Dayname(13, Month, Year))
+                    {
+                        WKWeekend++;
+                    }
+                    Pcount++;
+                }
                 if (!Dayname(14, Month, Year) && row.C14 == "AB")
                 {
                     DateTime day = new DateTime(Year, Month, 14);
@@ -624,10 +625,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C14 = "-";
                     }
                 }
-                else if (row.C14.Contains("P"))
-                {
-                    Pcount++;
-                }
+               
                 else if (row.C14 == "HD")
                 {
                     Ycount = Ycount + 0.5;
@@ -640,7 +638,14 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                 {
                     Bcount++;
                 }
-                
+                else if (row.C13.Contains("P"))
+                {
+                    if (!Dayname(14, Month, Year))
+                    {
+                        WKWeekend++;
+                    }
+                    Pcount++;
+                }
                 if (!Dayname(15, Month, Year) && row.C15 == "AB")
                 {
                     DateTime day = new DateTime(Year, Month, 15);
@@ -653,14 +658,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C15 = "-";
                     }
                 }
-                else if (row.C15.Contains("P"))
-                {
-                    if(!Dayname(15, Month, Year))
-                    {
-                        WKWeekend++;
-                    }
-                    Pcount++;
-                }
+               
                 else if (row.C15 == "HD")
                 {
                     Ycount = Ycount + 0.5;
@@ -673,7 +671,14 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                 {
                     Bcount++;
                 }
-               
+                else if (row.C15.Contains("P"))
+                {
+                    if (!Dayname(15, Month, Year))
+                    {
+                        WKWeekend++;
+                    }
+                    Pcount++;
+                }
                 if (!Dayname(16, Month, Year) && row.C16 == "AB")
                 {
                     DateTime day = new DateTime(Year, Month, 16);
@@ -686,14 +691,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C16 = "-";
                     }
                 }
-                else if (row.C16.Contains("P"))
-                {
-                    if (!Dayname(16, Month, Year))
-                    {
-                        WKWeekend++;
-                    }
-                    Pcount++;
-                }
+                
                 else if (row.C16 == "HD")
                 {
                     Ycount = Ycount + 0.5;
@@ -706,7 +704,14 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                 {
                     Bcount++;
                 }
-                
+                else if (row.C16.Contains("P"))
+                {
+                    if (!Dayname(16, Month, Year))
+                    {
+                        WKWeekend++;
+                    }
+                    Pcount++;
+                }
                 if (!Dayname(17, Month, Year) && row.C17 == "AB")
                 {
                     DateTime day = new DateTime(Year, Month, 17);
@@ -719,14 +724,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C17 = "-";
                     }
                 }
-                else if (row.C17.Contains("P"))
-                {
-                    if (!Dayname(17, Month, Year))
-                    {
-                        WKWeekend++;
-                    }
-                    Pcount++;
-                }
+                
                 else if (row.C17 == "HD")
                 {
                     Ycount = Ycount + 0.5;
@@ -739,7 +737,14 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                 {
                     Bcount++;
                 }
-                
+                else if (row.C17.Contains("P"))
+                {
+                    if (!Dayname(17, Month, Year))
+                    {
+                        WKWeekend++;
+                    }
+                    Pcount++;
+                }
                 if (!Dayname(18, Month, Year) && row.C18 == "AB")
                 {
                     DateTime day = new DateTime(Year, Month, 18);
@@ -752,14 +757,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C18 = "-";
                     }
                 }
-                else if (row.C18.Contains("P"))
-                {
-                    if (!Dayname(18, Month, Year))
-                    {
-                        WKWeekend++;
-                    }
-                    Pcount++;
-                }
+                
                 else if (row.C18 == "HD")
                 {
                     Ycount = Ycount + 0.5;
@@ -772,7 +770,14 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                 {
                     Bcount++;
                 }
-                
+                else if (row.C18.Contains("P"))
+                {
+                    if (!Dayname(18, Month, Year))
+                    {
+                        WKWeekend++;
+                    }
+                    Pcount++;
+                }
                 if (!Dayname(19, Month, Year) && row.C19 == "AB")
                 {
                     DateTime day = new DateTime(Year, Month, 19);
@@ -785,14 +790,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C19 = "-";
                     }
                 }
-                else if (row.C19.Contains("P"))
-                {
-                    if (!Dayname(19, Month, Year))
-                    {
-                        WKWeekend++;
-                    }
-                    Pcount++;
-                }
+                
                 else if (row.C19 == "HD")
                 {
                     Ycount = Ycount + 0.5;
@@ -805,7 +803,14 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                 {
                     Bcount++;
                 }
-                
+                else if (row.C19.Contains("P"))
+                {
+                    if (!Dayname(19, Month, Year))
+                    {
+                        WKWeekend++;
+                    }
+                    Pcount++;
+                }
                 if (!Dayname(20, Month, Year) && row.C20 == "AB")
                 {
                     DateTime day = new DateTime(Year, Month, 20);
@@ -818,14 +823,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C20 = "-";
                     }
                 }
-                else if (row.C20.Contains("P"))
-                {
-                    if (!Dayname(20, Month, Year))
-                    {
-                        WKWeekend++;
-                    }
-                    Pcount++;
-                }
+                
                 else if (row.C20 == "HD")
                 {
                     Ycount = Ycount + 0.5;
@@ -838,7 +836,14 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                 {
                     Bcount++;
                 }
-                
+                else if (row.C20.Contains("P"))
+                {
+                    if (!Dayname(20, Month, Year))
+                    {
+                        WKWeekend++;
+                    }
+                    Pcount++;
+                }
                 if (!Dayname(21, Month, Year) && row.C21 == "AB")
                 {
                     DateTime day = new DateTime(Year, Month, 21);
@@ -851,14 +856,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C21 = "-";
                     }
                 }
-                else if (row.C21.Contains("P"))
-                {
-                    if (!Dayname(21, Month, Year))
-                    {
-                        WKWeekend++;
-                    }
-                    Pcount++;
-                }
+                
                 else if (row.C21 == "HD")
                 {
                     Ycount = Ycount + 0.5;
@@ -871,7 +869,14 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                 {
                     Bcount++;
                 }
-                
+                else if (row.C21.Contains("P"))
+                {
+                    if (!Dayname(21, Month, Year))
+                    {
+                        WKWeekend++;
+                    }
+                    Pcount++;
+                }
                 if (!Dayname(22, Month, Year) && row.C22 == "AB")
                 {
                     DateTime day = new DateTime(Year, Month, 22);
@@ -884,14 +889,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C22 = "-";
                     }
                 }
-                else if (row.C22.Contains("P"))
-                {
-                    if (!Dayname(22, Month, Year))
-                    {
-                        WKWeekend++;
-                    }
-                    Pcount++;
-                }
+                
                 else if (row.C22 == "HD")
                 {
                     Ycount = Ycount + 0.5;
@@ -904,7 +902,14 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                 {
                     Bcount++;
                 }
-                
+                else if (row.C22.Contains("P"))
+                {
+                    if (!Dayname(22, Month, Year))
+                    {
+                        WKWeekend++;
+                    }
+                    Pcount++;
+                }
                 if (!Dayname(23, Month, Year) && row.C23 == "AB")
                 {
                     DateTime day = new DateTime(Year, Month, 23);
@@ -917,14 +922,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C23 = "-";
                     }
                 }
-                else if (row.C23.Contains("P"))
-                {
-                    if (!Dayname(23, Month, Year))
-                    {
-                        WKWeekend++;
-                    }
-                    Pcount++;
-                }
+                
                 else if (row.C23 == "HD")
                 {
                     Ycount = Ycount + 0.5;
@@ -937,7 +935,14 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                 {
                     Bcount++;
                 }
-                
+                else if (row.C23.Contains("P"))
+                {
+                    if (!Dayname(23, Month, Year))
+                    {
+                        WKWeekend++;
+                    }
+                    Pcount++;
+                }
                 if (!Dayname(24, Month, Year) && row.C24 == "AB")
                 {
                     DateTime day = new DateTime(Year, Month, 24);
@@ -950,14 +955,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C24 = "-";
                     }
                 }
-                else if (row.C24.Contains("P"))
-                {
-                    if (!Dayname(24, Month, Year))
-                    {
-                        WKWeekend++;
-                    }
-                    Pcount++;
-                }
+                
                 else if (row.C24 == "HD")
                 {
                     Ycount = Ycount + 0.5;
@@ -970,7 +968,14 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                 {
                     Bcount++;
                 }
-                
+                else if (row.C24.Contains("P"))
+                {
+                    if (!Dayname(24, Month, Year))
+                    {
+                        WKWeekend++;
+                    }
+                    Pcount++;
+                }
                 if (!Dayname(25, Month, Year) && row.C25 == "AB")
                 {
                     DateTime day = new DateTime(Year, Month, 25);
@@ -983,14 +988,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C25 = "-";
                     }
                 }
-                else if (row.C25.Contains("P"))
-                {
-                    if (!Dayname(25, Month, Year))
-                    {
-                        WKWeekend++;
-                    }
-                    Pcount++;
-                }
+                
                 else if (row.C25 == "HD")
                 {
                     Ycount = Ycount + 0.5;
@@ -1003,7 +1001,14 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                 {
                     Bcount++;
                 }
-                
+                else if (row.C25.Contains("P"))
+                {
+                    if (!Dayname(25, Month, Year))
+                    {
+                        WKWeekend++;
+                    }
+                    Pcount++;
+                }
                 if (!Dayname(26, Month, Year) && row.C26 == "AB")
                 {
                     DateTime day = new DateTime(Year, Month, 26);
@@ -1016,14 +1021,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C26 = "-";
                     }
                 }
-                else if (row.C26.Contains("P"))
-                {
-                    if (!Dayname(26, Month, Year))
-                    {
-                        WKWeekend++;
-                    }
-                    Pcount++;
-                }
+                
                 else if (row.C26 == "HD")
                 {
                     Ycount = Ycount + 0.5;
@@ -1036,7 +1034,14 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                 {
                     Bcount++;
                 }
-                
+                else if (row.C26.Contains("P"))
+                {
+                    if (!Dayname(26, Month, Year))
+                    {
+                        WKWeekend++;
+                    }
+                    Pcount++;
+                }
                 if (!Dayname(27, Month, Year) && row.C27 == "AB")
                 {
                     DateTime day = new DateTime(Year, Month, 27);
@@ -1049,14 +1054,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C27 = "-";
                     }
                 }
-                else if (row.C27.Contains("P"))
-                {
-                    if (!Dayname(27, Month, Year))
-                    {
-                        WKWeekend++;
-                    }
-                    Pcount++;
-                }
+                
                 else if (row.C27 == "HD")
                 {
                     Ycount = Ycount + 0.5;
@@ -1069,7 +1067,14 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                 {
                     Bcount++;
                 }
-                
+                else if (row.C27.Contains("P"))
+                {
+                    if (!Dayname(27, Month, Year))
+                    {
+                        WKWeekend++;
+                    }
+                    Pcount++;
+                }
                 if (!Dayname(28, Month, Year) && row.C28 == "AB")
                 {
                     DateTime day = new DateTime(Year, Month, 28);
@@ -1082,14 +1087,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C28 = "-";
                     }
                 }
-                else if (row.C28.Contains("P"))
-                {
-                    if (!Dayname(28, Month, Year))
-                    {
-                        WKWeekend++;
-                    }
-                    Pcount++;
-                }
+                
                 else if (row.C28 == "HD")
                 {
                     Ycount = Ycount + 0.5;
@@ -1102,7 +1100,14 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                 {
                     Bcount++;
                 }
-                
+                else if (row.C28.Contains("P"))
+                {
+                    if (!Dayname(28, Month, Year))
+                    {
+                        WKWeekend++;
+                    }
+                    Pcount++;
+                }
                 if (!Dayname(29, Month, Year) && row.C29 == "AB")
                 {
                     DateTime day = new DateTime(Year, Month, 29);
@@ -1115,14 +1120,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         row.C29 = "-";
                     }
                 }
-                else if (row.C29.Contains("P"))
-                {
-                    if (!Dayname(29, Month, Year))
-                    {
-                        WKWeekend++;
-                    }
-                    Pcount++;
-                }
+                
                 else if (row.C29 == "HD")
                 {
                     Ycount = Ycount + 0.5;
@@ -1135,7 +1133,14 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                 {
                     Bcount++;
                 }
-                
+                else if (row.C29.Contains("P"))
+                {
+                    if (!Dayname(29, Month, Year))
+                    {
+                        WKWeekend++;
+                    }
+                    Pcount++;
+                }
 
                 if (row.C30 != null)
                 {
@@ -1151,14 +1156,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                             row.C30 = "-";
                         }
                     }
-                    else if (row.C30.Contains("P"))
-                    {
-                        if (!Dayname(30, Month, Year))
-                        {
-                            WKWeekend++;
-                        }
-                        Pcount++;
-                    }
+                   
                     else if (row.C30 == "HD")
                     {
                         Ycount = Ycount + 0.5;
@@ -1171,7 +1169,14 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                     {
                         Bcount++;
                     }
-                    
+                    else if (row.C30.Contains("P"))
+                    {
+                        if (!Dayname(30, Month, Year))
+                        {
+                            WKWeekend++;
+                        }
+                        Pcount++;
+                    }
                 }
 
                 if (row.C31 != null)
@@ -1188,14 +1193,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                             row.C31 = "-";
                         }
                     }
-                    else if (row.C31.Contains("P"))
-                    {
-                        if (!Dayname(31, Month, Year))
-                        {
-                            WKWeekend++;
-                        }
-                        Pcount++;
-                    }
+                   
                     else if (row.C31 == "HD")
                     {
                         Ycount = Ycount + 0.5;
@@ -1208,7 +1206,14 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                     {
                         Bcount++;
                     }
-                    
+                    else if (row.C31.Contains("P"))
+                    {
+                        if (!Dayname(31, Month, Year))
+                        {
+                            WKWeekend++;
+                        }
+                        Pcount++;
+                    }
                 }
                 row.Pcount = Pcount + Ycount;
                 row.Bcount = Bcount;
@@ -1225,7 +1230,140 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                 return adjustedNW;
         }
 
-        
+        public ActionResult ExportHRFormat(int? Month, int? Year, string Section, string Agency,DateTime? DateFrom, DateTime? DateTo)
+        {
+            try
+            {
+                string templateFilename = "HRFormatAttendance_TimeInOut.xlsx";
+                string dir = Path.GetTempPath();
+                string datetimeToday = DateTime.Now.ToString("yyMMddhhmmss");
+                string GroupSection = Section;
+
+                string filename = string.Format("HRFormatAttendance_TimeInOut{0}_{1}.xlsx", datetimeToday, GroupSection);
+                FileInfo newFile = new FileInfo(Path.Combine(dir, filename));
+                string apptemplatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"TemplateFiles\ExportReports\", templateFilename);
+                FileInfo templateFile = new FileInfo(apptemplatePath);
+
+                using (ExcelPackage package = new ExcelPackage(newFile, templateFile))  //-- With template.
+                {
+
+                    List<GET_RP_AttendanceMonitoring_TimeINOUT_HRExport_D_Result> list = new List<GET_RP_AttendanceMonitoring_TimeINOUT_HRExport_D_Result>();
+                    db.Database.CommandTimeout = 0;
+                    list = db.GET_RP_AttendanceMonitoring_TimeINOUT_HRExport_D(Month,Year,Section, Agency, DateFrom, DateTo).ToList();
+                    //list = list.Where(x => x.ModifiedStatus.ToLower() == "active").ToList();
+                    ExcelWorksheet ExportData = package.Workbook.Worksheets["AMSSheet"];
+
+                    int start = 2;
+                    for (int i = 0; i < list.Count; i++)
+                    {
+                        ExportData.Cells["A" + start].Value = list[i].EmpNo;
+                        ExportData.Cells["B" + start].Value = list[i].Date;
+                        ExportData.Cells["C" + start].Value = list[i].LogType;
+                        ExportData.Cells["D" + start].Value = list[i].TimeTap;
+                        start++;
+                    }
+                    
+                    return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename);
+                }
+            }
+            catch (Exception err)
+            {
+                Error_Logs error = new Error_Logs();
+                error.PageModule = "Master - Employee";
+                error.ErrorLog = err.Message;
+                error.DateLog = DateTime.Now;
+                error.Username = user.UserName;
+                db.Error_Logs.Add(error);
+                db.SaveChanges();
+            }
+            return Json(new { }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult WrongShift(int? Month, int? Year, string Section, string Agency, DateTime? DateFrom, DateTime? DateTo, string Shift)
+        {
+            try
+            {
+                string templateFilename = "WrongShift.xlsx";
+                string dir = Path.GetTempPath();
+                string datetimeToday = DateTime.Now.ToString("yyMMddhhmmss");
+                string GroupSection = Section;
+
+                string filename = string.Format("WrongShift{0}_{1}.xlsx", datetimeToday, GroupSection);
+                FileInfo newFile = new FileInfo(Path.Combine(dir, filename));
+                string apptemplatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"TemplateFiles\ExportReports\", templateFilename);
+                FileInfo templateFile = new FileInfo(apptemplatePath);
+
+                using (ExcelPackage package = new ExcelPackage(newFile, templateFile))  //-- With template.
+                {
+
+                    List<GET_RP_WrongShift_Result> list = new List<GET_RP_WrongShift_Result>();
+                    db.Database.CommandTimeout = 0;
+
+                    if (Shift == "Day" || Shift == "Night")
+                    {
+                        list = db.GET_RP_WrongShift(Month, Year, Section, Agency, DateFrom, DateTo, Shift).ToList();
+                        //list = list.Where(x => x.ModifiedStatus.ToLower() == "active").ToList();
+                        ExcelWorksheet ExportData = package.Workbook.Worksheets["AMSSheet"];
+
+                        int start = 2;
+                        for (int i = 0; i < list.Count; i++)
+                        {
+                            ExportData.Cells["A" + start].Value = list[i].EmpNo;
+                            ExportData.Cells["B" + start].Value = list[i].EmployeeName;
+                            ExportData.Cells["C" + start].Value = list[i].Date;
+                            ExportData.Cells["D" + start].Value = list[i].TimeTap;
+                            ExportData.Cells["E" + start].Value = list[i].Shifts;
+                            ExportData.Cells["F" + start].Value = list[i].Section;
+                            start++;
+                        }
+                    }
+                    else
+                    {
+                        List<GET_RP_WrongShift_Result> listDay = new List<GET_RP_WrongShift_Result>();
+                        List<GET_RP_WrongShift_Result> listNight = new List<GET_RP_WrongShift_Result>();
+                        listDay = db.GET_RP_WrongShift(Month, Year, Section, Agency, DateFrom, DateTo, "Day").ToList();
+                        listNight = db.GET_RP_WrongShift(Month, Year, Section, Agency, DateFrom, DateTo, "Night").ToList();
+
+                        ExcelWorksheet ExportData = package.Workbook.Worksheets["AMSSheet"];
+
+                        int start = 2;
+                        for (int i = 0; i < listDay.Count; i++)
+                        {
+                            ExportData.Cells["A" + start].Value = listDay[i].EmpNo;
+                            ExportData.Cells["B" + start].Value = listDay[i].EmployeeName;
+                            ExportData.Cells["C" + start].Value = listDay[i].Date;
+                            ExportData.Cells["D" + start].Value = listDay[i].TimeTap;
+                            ExportData.Cells["E" + start].Value = listDay[i].Shifts;
+                            ExportData.Cells["F" + start].Value = listDay[i].Section;
+                            start++;
+                        }
+                        for (int i = 0; i < listNight.Count; i++)
+                        {
+                            ExportData.Cells["A" + start].Value = listNight[i].EmpNo;
+                            ExportData.Cells["B" + start].Value = listNight[i].EmployeeName;
+                            ExportData.Cells["C" + start].Value = listNight[i].Date;
+                            ExportData.Cells["D" + start].Value = listNight[i].TimeTap;
+                            ExportData.Cells["E" + start].Value = listNight[i].Shifts;
+                            ExportData.Cells["F" + start].Value = listNight[i].Section;
+                            start++;
+                        }
+                    }
+
+                    return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename);
+                }
+            }
+            catch (Exception err)
+            {
+                Error_Logs error = new Error_Logs();
+                error.PageModule = "Master - Employee";
+                error.ErrorLog = err.Message;
+                error.DateLog = DateTime.Now;
+                error.Username = user.UserName;
+                db.Error_Logs.Add(error);
+                db.SaveChanges();
+            }
+            return Json(new { }, JsonRequestBehavior.AllowGet);
+        }
 
         public WTGlobal GetHeaderVs2(List<GET_RP_AttendanceMonitoring_Result> list)
         {
@@ -2402,9 +2540,11 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                     }
                 }
             }
-            if (peremployeeAttendance2 > 0)
+            double divisor = 0;
+            if (peremployeeAttendance > 0)
             {
-                double c = (double)wt.DayShiftCountnow / (double)peremployeeAttendance;
+                divisor = (double)peremployeeAttendance + (double)peremployeeAttendance2;
+                double c = (double)wt.DayShiftCountnow / divisor;
                 double Ppercentage = c * 100;
                 wt.DayShiftper = Math.Round((decimal)Ppercentage, 2);
                 
@@ -2418,7 +2558,8 @@ namespace Brothers_WMS.Areas.Summary.Controllers
 
             if (peremployeeAttendance2 > 0)
             {
-                double c1 = (double)wt.NightshiftCountnow / (double)peremployeeAttendance2;
+                divisor = (double)peremployeeAttendance + (double)peremployeeAttendance2;
+                double c1 = (double)wt.NightshiftCountnow / divisor;
                 double Ppercentage2 = c1 * 100;
 
                 wt.NightShiftper = Math.Round((decimal)Ppercentage2, 2);
@@ -3557,6 +3698,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                     Pr.Add("P(N)");
                     Pr.Add("TR(D)");
                     Pr.Add("TR(N)");
+                    Pr.Add("TR");
                     for (int i = 0; i < dt.Rows.Count; i++)
                     {
                         if (!Pr.Contains(dt.Rows[i][dday].ToString()))
@@ -4062,8 +4204,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
             jsonResult.MaxJsonLength = int.MaxValue;
             return jsonResult;
         }
-
-      
+        
         #endregion
 
 
@@ -4194,8 +4335,6 @@ namespace Brothers_WMS.Areas.Summary.Controllers
 
 
         #region EmployeeShift
-
-
         public ActionResult GETEmployeeShift(string Month, string Year, string Section, string Agency)
         {
             SqlConnection conn = new SqlConnection(Connection_String.AMSDB);
@@ -4248,8 +4387,6 @@ namespace Brothers_WMS.Areas.Summary.Controllers
         #endregion
 
         #region Employee Time in out
-
-
         public ActionResult GETEmployeeTimeinout(string Month, string Year, string Section, string Agency)
         {
             SqlConnection conn = new SqlConnection(Connection_String.AMSDB);

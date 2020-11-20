@@ -86,45 +86,55 @@ namespace Brothers_WMS.Areas.Correction.Controllers
                
 
             }
-            M_Section_ApproverStatus checker = (from c in db.M_Section_ApproverStatus where c.RefNo == CSRefnow select c).FirstOrDefault();
 
-            if (checker == null)
-            {
-                #region GET approver & Email
-                //string SectionID = (from c in db.M_Cost_Center_List
-                //                    where c.Cost_Center == Section
-                //                    select c.ID).FirstOrDefault().ToString();
-                List<M_Section_Approver> approver = (from c in db.M_Section_Approver
-                                                     where c.Section == Section
-                                                     && c.Position != "GeneralManager"
-                                                     && c.Position != "FactoryGeneralManager"
-                                                     select c).ToList();
+            #region Generate CS Status
+            db.AF_EmailCSRequestApprovers();
+            #endregion
 
 
-                #endregion
-                #region Generate OT Status
-                foreach (M_Section_Approver approv in approver)
-                {
-                    M_Section_ApproverStatus approverstat = new M_Section_ApproverStatus();
-                    approverstat.Position = approv.Position;
-                    approverstat.EmployeeNo = approv.EmployeeNo;
-                    approverstat.Section = Section;
-                    approverstat.RefNo = CSRefnow;
-                    approverstat.Approved = 0;
-                    approverstat.OverTimeType = "";
-                    approverstat.CreateID = user.UserName;
-                    approverstat.CreateDate = DateTime.Now;;
-                    approverstat.UpdateID = user.UserName;
-                    approverstat.UpdateDate = DateTime.Now;;
-                    db.M_Section_ApproverStatus.Add(approverstat);
-                    db.SaveChanges();
-                }
+            #region REmoved
+            //M_Section_ApproverStatus checker = (from c in db.M_Section_ApproverStatus where c.RefNo == CSRefnow select c).FirstOrDefault();
 
-                #endregion
-            }
+            //if (checker == null)
+            //{
+            //    #region GET approver & Email
+            //    //string SectionID = (from c in db.M_Cost_Center_List
+            //    //                    where c.Cost_Center == Section
+            //    //                    select c.ID).FirstOrDefault().ToString();
+            //    List<M_Section_Approver> approver = (from c in db.M_Section_Approver
+            //                                         where c.Section == Section
+            //                                         && c.Position != "GeneralManager"
+            //                                         && c.Position != "FactoryGeneralManager"
+            //                                         select c).ToList();
 
-            db.AF_EmailCSRequest(CSRefnow);
 
+            //    #endregion
+            //    #region Generate CS Status
+
+
+            //    db.AF_EmailCSRequestApprovers();
+            //    //foreach (M_Section_Approver approv in approver)
+            //    //{
+            //    //    M_Section_ApproverStatus approverstat = new M_Section_ApproverStatus();
+            //    //    approverstat.Position = approv.Position;
+            //    //    approverstat.EmployeeNo = approv.EmployeeNo;
+            //    //    approverstat.Section = Section;
+            //    //    approverstat.RefNo = CSRefnow;
+            //    //    approverstat.Approved = 0;
+            //    //    approverstat.OverTimeType = "";
+            //    //    approverstat.CreateID = user.UserName;
+            //    //    approverstat.CreateDate = DateTime.Now;
+            //    //    approverstat.UpdateID = user.UserName;
+            //    //    approverstat.UpdateDate = DateTime.Now;
+            //    //    db.M_Section_ApproverStatus.Add(approverstat);
+            //    //    db.SaveChanges();
+            //    //}
+
+            //    #endregion
+            //}
+
+            //db.AF_EmailCSRequest(CSRefnow);
+            #endregion
             return Json(new { CSRefnow = CSRefnow }, JsonRequestBehavior.AllowGet);
         }
 

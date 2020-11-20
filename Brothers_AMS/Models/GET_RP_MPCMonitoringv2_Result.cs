@@ -15,17 +15,19 @@ namespace Brothers_WMS.Models
     {
         public Nullable<long> Rownum { get; set; }
         public int Prio { get; set; }
-        public Nullable<System.DateTime> InDate { get; set; }
+        public string InDate { get; set; }
         public string TimeIn { get; set; }
-        public Nullable<System.DateTime> InDateOut { get; set; }
+        public string InDateOut { get; set; }
         public string TimeOut { get; set; }
         public string Shift { get; set; }
+        public string ChangeShift { get; set; }
+        public string OrigShift { get; set; }
         public string Line { get; set; }
         public string Skill { get; set; }
         public string EmpNo { get; set; }
         public string EmployeeName { get; set; }
         public string Date_Hired { get; set; }
-        public Nullable<System.DateTime> DateCertified { get; set; }
+        public string DateCertified { get; set; }
         public string Status { get; set; }
         public long TTID { get; set; }
         public string Certified { get; set; }

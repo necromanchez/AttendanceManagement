@@ -49,7 +49,7 @@ namespace Brothers_WMS.Controllers
         }
         private double hex2Dec(string strHex)
         {
-            return Convert.ToInt16(strHex, 16);
+            return Convert.ToInt64(strHex, 16);
         }
         
         public ActionResult GetEmployeeDetails(double RFID)
@@ -58,7 +58,7 @@ namespace Brothers_WMS.Controllers
             {
 
                 string SourceValue = dec2Hex(Convert.ToInt64(RFID));
-                string Hexvalue = SourceValue.Substring(SourceValue.Length - 4);
+                string Hexvalue = SourceValue.Substring(SourceValue.Length - 4).ToUpper();
                 string Prefix = SourceValue.Remove(SourceValue.Length - 4).ToUpper();
                 string THERFID = hex2Dec(Hexvalue).ToString();
                 string Empnumber = "";
@@ -69,7 +69,8 @@ namespace Brothers_WMS.Controllers
                 //string CurStatus = (from c in db.M_Employee_Status where c.EmployNo ==)
                 DateTime? NOW = db.TT_GETTIME().FirstOrDefault();
 
-                employee = (from c in db.M_Employee_Master_List where c.RFID == rawrfid && c.Status.ToLower() == "active" select c).FirstOrDefault();
+
+                employee = (from c in db.M_Employee_Master_List where c.RFID == rawrfid && (from x in db.M_Employee_Status where x.EmployNo == c.EmpNo orderby x.ID descending select x.Status).FirstOrDefault().ToLower().ToString() == "active" select c).FirstOrDefault();
 
                 if (employee == null)
                 {
@@ -122,7 +123,7 @@ namespace Brothers_WMS.Controllers
 
                 employee.Section = (from c in db.M_Cost_Center_List where c.Cost_Center == CostCode select c.GroupSection).FirstOrDefault();
 
-                AF_ChangeSchedulefiling checkCS = (from c in db.AF_ChangeSchedulefiling where c.EmployeeNo == employee.EmpNo && c.Status == c.StatusMax && (c.DateFrom <= servertimechecker && c.DateTo >= servertimechecker) select c).FirstOrDefault();
+                AF_ChangeSchedulefiling checkCS = (from c in db.AF_ChangeSchedulefiling where c.EmployeeNo == employee.EmpNo && c.Status == c.StatusMax && (c.DateFrom <= servertimechecker && c.DateTo >= servertimechecker) orderby c.ID descending select c).FirstOrDefault();
                 long? CurrentSchedule = 0;
                 if (checkCS != null)
                 {
@@ -175,8 +176,6 @@ namespace Brothers_WMS.Controllers
                     Skilllist = db.GET_TT_ProcessAvailable(Convert.ToInt64(LineID), THERFID).OrderBy(x => x.Skill).ToList();
                     UnSkilllist = db.GET_TT_ProcessAvailable_Uncertified(Convert.ToInt64(LineID), THERFID).OrderBy(x => x.Skill).ToList();
                 }
-
-                //List<GET_TT_ProcessNotAvailable_Result> UnSkilllist = db.GET_TT_ProcessNotAvailable(LineID).ToList();
                 return Json(new { Skilllist = Skilllist, UnSkilllist = UnSkilllist }, JsonRequestBehavior.AllowGet);
             }
             else
@@ -210,7 +209,7 @@ namespace Brothers_WMS.Controllers
                     DateTime? NOW = db.TT_GETTIME().FirstOrDefault();
                     long? CurrentSchedule = (from c in db.M_Employee_Master_List_Schedule where c.EmployeeNo == Empno where c.EffectivityDate <= NOW && c.ScheduleID != null orderby c.UpdateDate descending select c.ScheduleID).FirstOrDefault();
                     DateTime? servertimechecker = db.TT_GETTIME().FirstOrDefault();
-                    AF_ChangeSchedulefiling checkCS = (from c in db.AF_ChangeSchedulefiling where c.EmployeeNo == Empno && c.Status == c.StatusMax  && (c.DateFrom <= servertimechecker && c.DateTo >= servertimechecker) select c).FirstOrDefault(); 
+                    AF_ChangeSchedulefiling checkCS = (from c in db.AF_ChangeSchedulefiling where c.EmployeeNo == Empno && c.Status == c.StatusMax  && (c.DateFrom <= servertimechecker && c.DateTo >= servertimechecker) orderby c.ID descending select c).FirstOrDefault(); 
                     
                    
                     string ScheduleName = (from c in db.M_Schedule where c.ID == CurrentSchedule select c.Type).FirstOrDefault();
@@ -247,6 +246,7 @@ namespace Brothers_WMS.Controllers
 
                                         if (checkCS != null)
                                         {
+                                            timein.ScheduleID = checkCS.Schedule;
                                             timein.CSRef_No = checkCS.CS_RefNo;
                                             timein.CS_ScheduleID = checkCS.Schedule;
                                         }
@@ -273,6 +273,7 @@ namespace Brothers_WMS.Controllers
                                         {
                                             checklastIN.CSRef_No = checkCS.CS_RefNo;
                                             checklastIN.CS_ScheduleID = checkCS.Schedule;
+                                            checklastIN.ScheduleID = checkCS.Schedule;
                                         }
                                         checklastIN.TimeOut = db.TT_GETTIME().FirstOrDefault();
                                         db.Entry(checklastIN).State = EntityState.Modified;     //Out in Line A and in to Line B
@@ -319,6 +320,7 @@ namespace Brothers_WMS.Controllers
                                         {
                                             timein.CSRef_No = checkCS.CS_RefNo;
                                             timein.CS_ScheduleID = checkCS.Schedule;
+                                            timein.ScheduleID = checkCS.Schedule;
                                         }
 
                                         db.T_TimeInOut.Add(timein);
@@ -350,7 +352,8 @@ namespace Brothers_WMS.Controllers
                                         {
                                             timein.CSRef_No = checkCS.CS_RefNo;
                                             timein.CS_ScheduleID = checkCS.Schedule;
-                                        }
+                                            timein.ScheduleID = checkCS.Schedule;
+                                    }
 
                                         db.T_TimeInOut.Add(timein);
                                         db.SaveChanges();
@@ -380,6 +383,7 @@ namespace Brothers_WMS.Controllers
                                         {
                                             timein.CSRef_No = checkCS.CS_RefNo;
                                             timein.CS_ScheduleID = checkCS.Schedule;
+                                            timein.ScheduleID = checkCS.Schedule;
                                         }
 
                                         db.T_TimeInOut.Add(timein);
@@ -427,6 +431,7 @@ namespace Brothers_WMS.Controllers
                                         {
                                             timein.CSRef_No = checkCS.CS_RefNo;
                                             timein.CS_ScheduleID = checkCS.Schedule;
+                                            timein.ScheduleID = checkCS.Schedule;
                                         }
 
 
@@ -449,6 +454,7 @@ namespace Brothers_WMS.Controllers
                                         {
                                             checklastIN.CSRef_No = checkCS.CS_RefNo;
                                             checklastIN.CS_ScheduleID = checkCS.Schedule;
+                                            checklastIN.ScheduleID = checkCS.Schedule;
                                         }
                                         checklastIN.TimeOut = db.TT_GETTIME().FirstOrDefault();
                                         db.Entry(checklastIN).State = EntityState.Modified;
@@ -482,6 +488,7 @@ namespace Brothers_WMS.Controllers
                                         {
                                             timein.CSRef_No = checkCS.CS_RefNo;
                                             timein.CS_ScheduleID = checkCS.Schedule;
+                                            timein.ScheduleID = checkCS.Schedule;
                                         }
 
                                         db.T_TimeInOut.Add(timein);
@@ -503,6 +510,7 @@ namespace Brothers_WMS.Controllers
                                         {
                                             checklastIN.CSRef_No = checkCS.CS_RefNo;
                                             checklastIN.CS_ScheduleID = checkCS.Schedule;
+                                            checklastIN.ScheduleID = checkCS.Schedule;
                                         }
                                         checklastIN.TimeOut = db.TT_GETTIME().FirstOrDefault();
                                         db.Entry(checklastIN).State = EntityState.Modified;
@@ -545,6 +553,7 @@ namespace Brothers_WMS.Controllers
                                         {
                                             timein.CSRef_No = checkCS.CS_RefNo;
                                             timein.CS_ScheduleID = checkCS.Schedule;
+                                            timein.ScheduleID = checkCS.Schedule;
                                         }
 
                                         db.T_TimeInOut.Add(timein);
@@ -569,6 +578,7 @@ namespace Brothers_WMS.Controllers
                                         {
                                             checklastIN.CSRef_No = checkCS.CS_RefNo;
                                             checklastIN.CS_ScheduleID = checkCS.Schedule;
+                                            checklastIN.ScheduleID = checkCS.Schedule;
                                         }
 
                                         checklastIN.TimeOut = db.TT_GETTIME().FirstOrDefault();
@@ -587,6 +597,7 @@ namespace Brothers_WMS.Controllers
                                         {
                                             timein.CSRef_No = checkCS.CS_RefNo;
                                             timein.CS_ScheduleID = checkCS.Schedule;
+                                            timein.ScheduleID = checkCS.Schedule;
                                         }
                                         db.T_TimeInOut.Add(timein);
                                         db.SaveChanges();
@@ -617,6 +628,7 @@ namespace Brothers_WMS.Controllers
                                         {
                                             timein.CSRef_No = checkCS.CS_RefNo;
                                             timein.CS_ScheduleID = checkCS.Schedule;
+                                            timein.ScheduleID = checkCS.Schedule;
                                         }
 
                                         db.T_TimeInOut.Add(timein);
@@ -647,6 +659,7 @@ namespace Brothers_WMS.Controllers
                                         {
                                             timein.CSRef_No = checkCS.CS_RefNo;
                                             timein.CS_ScheduleID = checkCS.Schedule;
+                                            timein.ScheduleID = checkCS.Schedule;
                                         }
 
                                         db.T_TimeInOut.Add(timein);
@@ -677,6 +690,7 @@ namespace Brothers_WMS.Controllers
                                         {
                                             timein.CSRef_No = checkCS.CS_RefNo;
                                             timein.CS_ScheduleID = checkCS.Schedule;
+                                            timein.ScheduleID = checkCS.Schedule;
                                         }
 
                                         db.T_TimeInOut.Add(timein);
@@ -724,6 +738,7 @@ namespace Brothers_WMS.Controllers
                                         {
                                             timein.CSRef_No = checkCS.CS_RefNo;
                                             timein.CS_ScheduleID = checkCS.Schedule;
+                                            timein.ScheduleID = checkCS.Schedule;
                                         }
 
 
@@ -746,6 +761,7 @@ namespace Brothers_WMS.Controllers
                                         {
                                             checklastIN.CSRef_No = checkCS.CS_RefNo;
                                             checklastIN.CS_ScheduleID = checkCS.Schedule;
+                                            checklastIN.ScheduleID = checkCS.Schedule;
                                         }
                                         checklastIN.TimeOut = db.TT_GETTIME().FirstOrDefault();
                                         db.Entry(checklastIN).State = EntityState.Modified;
@@ -777,6 +793,7 @@ namespace Brothers_WMS.Controllers
                                         {
                                             timein.CSRef_No = checkCS.CS_RefNo;
                                             timein.CS_ScheduleID = checkCS.Schedule;
+                                            timein.ScheduleID = checkCS.Schedule;
                                         }
 
                                         db.T_TimeInOut.Add(timein);
@@ -798,6 +815,7 @@ namespace Brothers_WMS.Controllers
                                         {
                                             checklastIN.CSRef_No = checkCS.CS_RefNo;
                                             checklastIN.CS_ScheduleID = checkCS.Schedule;
+                                            checklastIN.ScheduleID = checkCS.Schedule;
                                         }
                                         checklastIN.TimeOut = db.TT_GETTIME().FirstOrDefault();
                                         db.Entry(checklastIN).State = EntityState.Modified;

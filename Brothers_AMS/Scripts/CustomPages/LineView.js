@@ -1,7 +1,7 @@
 ﻿
 (function () {
     
-    Dropdown_selectL('Section', "/Helper/GetDropdown_SectionAMS");
+    Dropdown_selectEmpSectionLINEVIEW('Section', "/Helper/GetDropdown_SectionAMS");
 
     $("#loading_modal").modal("show")
     $("#Section").on("change", Initializedpage);
@@ -104,7 +104,7 @@ function GetEmployess(ProcessID, LineID) {
                  else {
                      photo = '/Content/images/2014-09-16-Anoynmous-The-Rise-of-Personal-Networks.jpg';
                  }
-                 var idred = (returnData.Employees[y].Skill == null) ? "style='color:red'" : "";
+                var idred = (returnData.Employees[y].Skill == null) ? "style='color:red'" : "style='color:#53af00'";
                  var EmpName = (returnData.Employees[y].EmployeeName != null) ? returnData.Employees[y].EmployeeName.replace(/[^A-Z0-9]/ig, "") : "";
                  theLineView += "<tr id=" + returnData.Employees[y].EmpNo + "rmv>" +
                                  "<td class='photohere'>" + "<img class='direct-chat-img' src=" + photo + " alt='Message User Image'></td>" +
@@ -255,15 +255,18 @@ function Initializedpage() {
                     if (arrLine[0].SM != 0) {
                         thecolor = (arrLine[0].CurrentCount == arrLine[0].Count) ? "#7AFF89" : thecolor;
                     }
+
+                    var thelinecolor = (arrLine[0].CurrentCount == arrLine[0].Countprocess && arrLine[0].Countprocess > 0) ? "#A3F087" : "";
+
                     theLineView += "<div class='col-md-3'>" +
                                                 "    <div class='box-header with-border collapsed' style='background-color:" + thecolor + "'>" +
-                                                "        <div class='box-header with-border collapsed' onclick=showpros('" + arrLine[0].LineID + "','" + idmain + "') id=cc" + arrLine[0].LineID + "_" + idmain + " data-toggle='collapse' data-parent='#accordion' href='#" + idmain + "' aria-expanded='false'>" +
+                        "        <div class='box-header with-border collapsed' onclick=showpros('" + arrLine[0].LineID + "','" + idmain + "') id=cc" + arrLine[0].LineID + "_" + idmain + " data-toggle='collapse' data-parent='#accordion' href='#" + idmain + "' aria-expanded='false' style='background-color:"+thelinecolor+"'>" +
 
                                              
                                                 
-                                                "            <div class=row>" +
+                                                "            <div class=row >" +
                                                      "            <div class=col-9>" +
-                                                       "            <h3 class='box-title'>" + ii + "</h3>" +
+                                                        "            <h3 class='box-title'>" + ii + "</h3>" +
                                                      "            </div>" +
                                                       "            <div class=col-3>" +
                                                      "            <h3 class='box-title'><i class='fa fa-users'></i> " + arrLine[0].CurrentCount +
@@ -413,8 +416,10 @@ function SearchEmployee() {
                 $("#Cerhere").css('backgroundColor', '#FFA4A4');
             }
             else {
-                $("#Cerhere").css('backgroundColor', '#83FB90');
+                $("#Cerhere").css('backgroundColor', '#53af00');
             }
+
+          
 
         },
         error: function (xhr, ajaxOptions, thrownError) {

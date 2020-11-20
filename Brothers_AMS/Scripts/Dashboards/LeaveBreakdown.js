@@ -106,10 +106,10 @@ function GraphStartLeaveBreakdown(datahere) {
                     var HeadCountdata = [Iterator, leavedataType.HeadCount];
                     UNKLeave.push(HeadCountdata);
                     break;
-                case "AB":
-                    var HeadCountdata = [Iterator, leavedataType.HeadCount];
-                    ABLeave.push(HeadCountdata);
-                    break;
+                //case "AB":
+                //    var HeadCountdata = [Iterator, leavedataType.HeadCount];
+                //    ABLeave.push(HeadCountdata);
+                //    break;
 
             };
             tcount += leavedataType.HeadCount;
@@ -195,16 +195,16 @@ function GraphStartLeaveBreakdown(datahere) {
         color: "#FF0000"
     };
 
-    var ABSet = {
-        label: "No Leave Count",
-        data: ABLeave,
-        bars: bar_options,
-        stack: true,
-        color: "#F39D9D"
-    };
+    //var ABSet = {
+    //    label: "No Leave Count",
+    //    data: ABLeave,
+    //    bars: bar_options,
+    //    stack: true,
+    //    color: "#F39D9D"
+    //};
 
     
-    data = [TotaloutSet, UNKSet, VLSet, SLSet, MLSet, ELSet, ABSet];//[VLSet,UNKSet, totalSet, Overalltotal];
+    data = [TotaloutSet, UNKSet, VLSet, SLSet, MLSet, ELSet];//[VLSet,UNKSet, totalSet, Overalltotal];
   
     var tickis = finalticks;
     function degreeFormatter4(v, axis) {
@@ -260,6 +260,10 @@ function GraphStartLeaveBreakdown(datahere) {
         });
     }
 
-    $("#loading_modalD_Leave").modal("hide");
+    Graph5 = true;
+
+    if (Graph1 == true && Graph2 == true && Graph3 == true && Graph4 == true && Graph5 == true) {
+        $("#loading_modalD_AttendanceRate").modal("hide");
+    }
 
 }

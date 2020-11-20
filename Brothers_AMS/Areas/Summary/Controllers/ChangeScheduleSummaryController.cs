@@ -18,8 +18,22 @@ namespace Brothers_WMS.Areas.Summary.Controllers
         // GET: Summary/ChangeScheduleSummary
         Brothers_AMSDBEntities db = new Brothers_AMSDBEntities();
         M_Users user = (M_Users)System.Web.HttpContext.Current.Session["user"];
-        public ActionResult ChangeScheduleSummary()
+        public ActionResult ChangeScheduleSummary(string RefNo, string CSType, string Status)
         {
+            Session["RefNoCS"] = RefNo;
+            Session["CSType"] = (CSType == null) ? "" : CSType;
+            Session["SumStatus"] = (Status == null) ? "" : Status;
+            CSType = (CSType == null) ? "" : CSType;
+            //if ((RefNo != null && CSType != null) || Status != null)
+            //{
+            //    List<string> result = db.EmailPrompter(RefNo, "", user.UserName, "CS").ToList();
+            //    if (result.Count > 0)
+            //    {
+            //        return Redirect("http://apbiphwb08:2020/Correction/ApproverChangeSchedule/ApproverChangeSchedule?Approved=" + result[0]);
+            //        //return Redirect("http://apbiphwb08:2020/Correction/ApproverChangeSchedule/ApproverChangeSchedule?Approved=" + result[0]);
+            //        //return Redirect("http://localhost:49710/Correction/ApproverChangeSchedule/ApproverChangeSchedule?Approved=" + result[0]);
+            //    }
+            //}
             return View();
         }
 
@@ -35,15 +49,23 @@ namespace Brothers_WMS.Areas.Summary.Controllers
             DateTo = (DateTo == null) ? db.TT_GETTIME().FirstOrDefault() : DateTo;
             int start = Convert.ToInt32(Request["start"]);
             int length = Convert.ToInt32(Request["length"]);
-            string searchValue = (Session["RNO"] != null) ? Session["RNO"].ToString() : Request["search[value]"];
+            //string searchValue = (Session["RNO"] != null) ? Session["RNO"].ToString() : Request["search[value]"];
             string sortColumnName = Request["columns[" + Request["order[0][column]"] + "][name]"];
             string sortDirection = Request["order[0][dir]"];
+            string searchValue = (Session["RefNoCS"] != null) ? Session["RefNoCS"].ToString() : Request["search[value]"];
+            string searchValueStatus = (Session["SumStatus"] != null) ? Session["SumStatus"].ToString() : Request["search[value]"];
 
             List<GET_AF_CSSummary_Result> list = db.GET_AF_CSSummary(Refno, Section, DateFrom, DateTo, Status).ToList();
 
             if (!string.IsNullOrEmpty(searchValue))//filter
             {
                 list = list.Where(x => x.CS_RefNo.ToLower().Contains(searchValue.ToLower())).ToList<GET_AF_CSSummary_Result>();
+                int stt = (searchValueStatus != null) ? Convert.ToInt32(searchValueStatus) : 0;
+                if(stt != 0)
+                {
+                    list = list.Where(x => x.Status == stt).ToList<GET_AF_CSSummary_Result>();
+                }
+                
             }
             if (sortColumnName != "" && sortColumnName != null)
             {
@@ -168,6 +190,51 @@ namespace Brothers_WMS.Areas.Summary.Controllers
             return Json(new { }, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult ExportChangeSchedule(string Section,DateTime? DateFrom, DateTime? DateTo, string Status)
+        {
+            try
+            {
+               
+                string templateFilename = "CSexport.xlsx";
+                string dir = Path.GetTempPath();
+                string datetimeToday = DateTime.Now.ToString("yyMMddhhmmss");
+                string GroupSection = Section;
 
+                string filename = string.Format("ChangeScheduleSummary{0}_{1}.xlsx", datetimeToday, GroupSection);
+                FileInfo newFile = new FileInfo(Path.Combine(dir, filename));
+                string apptemplatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"TemplateFiles\StandardTemplate\", templateFilename);
+                FileInfo templateFile = new FileInfo(apptemplatePath);
+
+                using (ExcelPackage package = new ExcelPackage(newFile, templateFile))  //-- With template.
+                {
+
+                    List<GET_AF_CSSummaryDetailExport_Result> list = new List<GET_AF_CSSummaryDetailExport_Result>();
+                   
+                    list = db.GET_AF_CSSummaryDetailExport(GroupSection,DateFrom,DateTo,Status).ToList();
+                    
+                    ExcelWorksheet ExportData = package.Workbook.Worksheets["AMSSheet"];
+                    int start = 2;
+                  
+                   
+                    for (int i = 0; i < list.Count; i++)
+                    {
+                        ExportData.Cells["A" + start].Value = i + 1;
+                        ExportData.Cells["B" + start].Value = list[i].CS_RefNo;
+                        ExportData.Cells["C" + start].Value = list[i].EmployeeNo;
+                        ExportData.Cells["D" + start].Value = list[i].EmployeeName;
+                        ExportData.Cells["E" + start].Value = list[i].Section;
+                        ExportData.Cells["F" + start].Value = list[i].Reason;
+                        ExportData.Cells["G" + start].Value = list[i].DateFrom;
+                        ExportData.Cells["H" + start].Value = list[i].DateTo;
+                        ExportData.Cells["I" + start].Value = list[i].CSin;
+                        ExportData.Cells["J" + start].Value = list[i].CSout;
+                        start++;
+                    }
+                    return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename);
+                }
+            }
+            catch (Exception err) { }
+            return Json(new { }, JsonRequestBehavior.AllowGet);
+        }
     }
 }

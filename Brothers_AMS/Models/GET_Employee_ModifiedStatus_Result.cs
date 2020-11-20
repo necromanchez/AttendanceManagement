@@ -15,6 +15,8 @@ namespace Brothers_WMS.Models
     {
         public string EmployNo { get; set; }
         public string Status { get; set; }
+        public string DateResigned { get; set; }
+        public string HRStatus { get; set; }
         public Nullable<System.DateTime> UpdateDate { get; set; }
         public string UpdateID { get; set; }
     }

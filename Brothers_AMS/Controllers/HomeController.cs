@@ -280,5 +280,55 @@ namespace Brothers_WMS.Controllers
 
         #endregion
 
+        #region MONTHLY Department
+
+        public ActionResult Get_MonthlyDashboard_Department(int Year, string Agency, string Shift, long? Line, string GroupSection)
+        {
+            string Department = Session["chosendashgroupDepartment"].ToString();
+            db.Database.CommandTimeout = 0;
+            List<Department_Dashboard_ManpowerAttendanceRate_Monthly_Result> AttendanceRateMonthly = db.Department_Dashboard_ManpowerAttendanceRate_Monthly(Year, Agency, Shift, Line, Department).ToList();
+            List<Department_Dashboard_AbsentRate_Monthly_Result> AbsentRateMonthly = db.Department_Dashboard_AbsentRate_Monthly(Year, Agency, Shift, Line, Department).ToList();
+            List<Department_Dashboard_LeaveBreakDown_Monthly_Result> LeaveBreakdownMonthly = db.Department_Dashboard_LeaveBreakDown_Monthly(Year, Agency, Shift, Line, Department).ToList();
+            List<Department_Dashboard_AWOLandResignRate_Monthly_Result> AwolandResignedMonthly = db.Department_Dashboard_AWOLandResignRate_Monthly(Year, Agency, Shift, Line, Department).ToList();
+            List<Department_Dashboard_OvertimeRate_Monthly_Result> OTRateMonthly = db.Department_Dashboard_OvertimeRate_Monthly(Year, Agency, Shift, Line, Department).ToList();
+
+
+            Session["chosendashgroupDepartment"] = "";
+            return Json(new
+            {
+                AttendanceRateMonthly = AttendanceRateMonthly,
+                AbsentRateMonthly = AbsentRateMonthly,
+                LeaveBreakdownMonthly = LeaveBreakdownMonthly,
+                AwolandResignedMonthly = AwolandResignedMonthly,
+                OTRateMonthly = OTRateMonthly
+            }, JsonRequestBehavior.AllowGet);
+        }
+        #endregion
+
+        #region Yearly Department
+        public ActionResult Get_YearlyDashboard_Department(string Agency, string Shift, long? Line, string GroupSection)
+        {
+            string Department = Session["chosendashgroupDepartment"].ToString();
+            db.Database.CommandTimeout = 0;
+            List<Department_Dashboard_ManpowerAttendanceRate_Yearly_Result> AttendanceRateYearly = db.Department_Dashboard_ManpowerAttendanceRate_Yearly(Agency, Shift, Line, Department).ToList();
+            List<Department_Dashboard_AbsentRate_Yearly_Result> AbsentRateYearly = db.Department_Dashboard_AbsentRate_Yearly(Agency, Shift, Line, Department).ToList();
+            List<Department_Dashboard_LeaveBreakDown_Yearly_Result> LeaveBreakdownYearly = db.Department_Dashboard_LeaveBreakDown_Yearly(Agency, Shift, Line, Department).ToList();
+            List<Department_Dashboard_AWOLandResignRate_Yearly_Result> AwolandResignedYearly = db.Department_Dashboard_AWOLandResignRate_Yearly(Agency, Shift, Line, Department).ToList();
+            List<Department_Dashboard_OvertimeRate_Yearly_Result> OTRateYearly = db.Department_Dashboard_OvertimeRate_Yearly(Agency, Shift, Line, Department).ToList();
+
+
+            Session["chosendashgroupDepartment"] = "";
+            return Json(new
+            {
+                AttendanceRateYearly = AttendanceRateYearly,
+                AbsentRateYearly = AbsentRateYearly,
+                LeaveBreakdownYearly = LeaveBreakdownYearly,
+                AwolandResignedYearly = AwolandResignedYearly,
+                OTRateYearly = OTRateYearly
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+
+        #endregion
     }
 }

@@ -76,7 +76,7 @@ function Initializedpage_OTHours() {
                     { title: "Employee Name", data: "EmployeeName", name: "EmployeeName" },
                     { title: "Position", data: "Position", name: "Position"  },
                     { title: "Cost Center", data: "CostCode", name: "CostCode" },
-                    { title: "Schedule", data: "Schedule", name: "Schedule" },
+                    { title: "Current Schedule", data: "Schedule", name: "Schedule" },
                       //{ data: "Schedule", visible: false },
                       {
                           title: "Process", data: function (x) {

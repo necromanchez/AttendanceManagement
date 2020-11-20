@@ -16,6 +16,7 @@ namespace Brothers_WMS.Models
         public long LineID { get; set; }
         public string Line { get; set; }
         public Nullable<int> CurrentCount { get; set; }
+        public Nullable<int> Countprocess { get; set; }
         public string Section { get; set; }
     }
 }

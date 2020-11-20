@@ -1,5 +1,41 @@
-﻿function Initializedpage_EmployeeTimeinout() {
+﻿function initDatePicker(dp) {
+    
+
+    var months = $("#Month").val() < 10 ? '0' + $("#Month").val() : $("#Month").val();
+
+    var lastDay = new Date($("#Year").val(), $("#Month").val(), 0).getDate();
+    var minDate = $("#Year").val() + '-' + months + '-' + '01';
+    var maxDate = $("#Year").val() + '-' + months + '-' + lastDay;
+    
+    $('#' + dp).datepicker({
+        todayBtn: "linked",
+        orientation: "top right",
+        autoclose: true,
+        todayHighlight: true,
+        minDate: new Date(minDate),
+        maxDate: new Date(maxDate),
+    });
+}
+
+function Initializedpage_EmployeeTimeinout() {
     var d = new Date();
+    initDatePicker("hrDateFrom");
+    initDatePicker("hrDateTo");
+
+   
+    //$('#hrDateFrom').attr('min', minDate);
+    //$('#hrDateTo').attr('min', minDate);
+
+    //$('#hrDateFrom').attr('max', maxDate);
+    //$('#hrDateTo').attr('max', maxDate);
+
+    //$('#wsDateFrom').attr('min', minDate);
+    //$('#wsDateTo').attr('min', minDate);
+
+    //$('#wsDateFrom').attr('max', maxDate);
+    //$('#wsDateTo').attr('max', maxDate);
+
+
     $.ajax({
         url: '../WorkTimeSummary/GETEmployeeTimeinout',
         data: {
@@ -27,7 +63,14 @@
                     {
                         extend: 'excel',
                         title: "WorkTimeSummary_TimeInandOut" + formatDate(d) + "_" + selectedSection
+                    },
+                    {
+                        text: 'HR Format',
+                        action: function (e, dt, node, config) {
+                            $("#HRExportmodal").modal("show");
+                        }
                     }
+                    
                 ],
                 scrollCollapse: true,
                 order: [0, "asc"],
@@ -42,7 +85,7 @@
                     { title: "Employee Name", data: "EmployeeName", name: "EmployeeName" },
                     { title: "Position", data: "Position", name: "Position" },
                     { title: "Cost Center", data: "CostCode", name: "CostCode" },
-                    { title: "Schedule", data: "Schedule", visible: true },
+                    { title: "Current Schedule", data: "Schedule", visible: true },
                     {
                         title: "Process", data: function (x) {
 

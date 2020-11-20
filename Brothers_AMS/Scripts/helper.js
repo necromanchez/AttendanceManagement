@@ -34,7 +34,7 @@ function Dropdown_selectEmpCompany(id, url) {
 }
 
 function Dropdown_selectEmpSection(id, url) {
-    var option = '<option value="">All Sections' + getlongadjWorktimeSelect() + '</option>';
+    var option = '<option value="">All Sections' + getlongadj() + '</option>';
     $('#' + id).html(option);
     $.ajax({
         url: url,
@@ -42,7 +42,30 @@ function Dropdown_selectEmpSection(id, url) {
         dataType: 'JSON',
     }).done(function (data, textStatus, xhr) {
         $.each(data.list, function (i, x) {
-            option = '<option value="' + x.value + '">' + x.text + getlongadjWorktimeSelect() + '</option>';
+            option = '<option value="' + x.value + '">' + x.text + getlongadjLineView() + '</option>';
+
+            //$('.selectpicker').selectpicker('refresh');
+            $('#' + id).append(option);
+        });
+        var idd = "select2-" + id + "-container";
+        document.getElementById(idd).style.whiteSpace = "nowrap";
+        document.getElementById(id).style.whiteSpace = "nowrap";
+
+    }).fail(function (xhr, textStatus, errorThrown) {
+        console.log(errorThrown, textStatus);
+    });
+}
+
+function Dropdown_selectEmpSectionLINEVIEW(id, url) {
+    var option = '<option value="">All Sections' + getlongadj() + '</option>';
+    $('#' + id).html(option);
+    $.ajax({
+        url: url,
+        type: 'GET',
+        dataType: 'JSON',
+    }).done(function (data, textStatus, xhr) {
+        $.each(data.list, function (i, x) {
+            option = '<option value="' + x.value + '">' + x.text + getlongadjLineView() + '</option>';
 
             //$('.selectpicker').selectpicker('refresh');
             $('#' + id).append(option);
@@ -232,7 +255,7 @@ function getlongadj2() {
 
 function getlongadj() {
     var lo = "";
-    for (var x = 0; x < 37; x++) {
+    for (var x = 0; x < 30; x++) {
         lo += "&ensp;";
     }
     return lo;
@@ -257,7 +280,7 @@ function getlongadjLineView() {
 
 function getshort() {
     var lo = "";
-    for (var x = 0; x < 12; x++) {
+    for (var x = 0; x < 10; x++) {
         lo += "&ensp;";
     }
     return lo;
@@ -354,7 +377,9 @@ function Dropdown_selectFileType(id) {
         //$('.selectpicker').selectpicker('refresh');
         $('#' + id).append(option);
     });
-
+    var idd = "select2-" + id + "-container";
+    document.getElementById(idd).style.whiteSpace = "nowrap";
+    document.getElementById(id).style.whiteSpace = "nowrap";
 }
 
 function Dropdown_selectOT(id) {
@@ -386,6 +411,22 @@ function Dropdown_selectApp(id) {
 
 }
 
+
+function Dropdown_selectAppCS(id) {
+    var option = '<option value="">--SELECT--' + getlong() + '</option>';
+    var daa = ["Cancelled", "Rejected", "Pending", "Ongoing", "Approved"];
+    var data = ["-10", "-1", "0", "1", "2"];
+    $('#' + id).html(option);
+
+    $.each(daa, function (i, x) {
+        option = '<option value="' + data[i] + '">' + x + getlongadjWorktimeSelect() + '</option>';
+
+        //$('.selectpicker').selectpicker('refresh');
+        $('#' + id).append(option);
+    });
+
+}
+
 function Dropdown_selectMP(id, url) {
     var option = '<option value="">--SELECT--' + getlong() + '</option>';
     $('#' + id).html(option);
@@ -400,6 +441,9 @@ function Dropdown_selectMP(id, url) {
             //$('.selectpicker').selectpicker('refresh');
             $('#' + id).append(option);
         });
+        var idd = "select2-" + id + "-container";
+        document.getElementById(idd).style.whiteSpace = "nowrap";
+        document.getElementById(id).style.whiteSpace = "nowrap";
         //GetUser();
 
     }).fail(function (xhr, textStatus, errorThrown) {
@@ -449,7 +493,7 @@ function SuccessTap_confirm() {
 
 function ContinueApproved() {
     swal({
-        title: "Uncheck Employees will not be approve",
+        title: "Uncheck Employees will be rejected",
         //text: "You will not be able to recover this imaginary file!",   
         type: "warning",
         showCancelButton: true,
@@ -461,9 +505,11 @@ function ContinueApproved() {
     }, function (isConfirm) {
         if (isConfirm) {
             GlobalAcceptance = true;
-            $("#btnApprovedRequest").click();
+            $("#loading_modal").modal("hide");
+            ApprovedCS();
         } else {
             swal("Cancelled", "Cancelled", "error");
+            $("#loading_modal").modal("hide");
         }
     });
 }

@@ -99,6 +99,7 @@ namespace Brothers_WMS.Areas.Masters.Controllers
             try
             {
                 db.M_SP_ImportEmployeeFromITSystem();
+                db.M_SP_ImportEmployeeFromITSystem_forMaintenance(user.UserName);
                 return Json(new { msg = "Success" }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception err)
@@ -898,6 +899,10 @@ namespace Brothers_WMS.Areas.Masters.Controllers
             col_UpdateDate.DefaultValue = DateTime.Now;
             dt.Columns.Add(col_UpdateDate);
 
+            DataColumn col_HRUpdateDate = new System.Data.DataColumn("HRUpdateDate", typeof(System.DateTime));
+            col_HRUpdateDate.DefaultValue = DateTime.Now;
+            dt.Columns.Add(col_HRUpdateDate);
+
             //DataColumn col_Row = new System.Data.DataColumn("Row", typeof(System.Int32));
             //col_Row.AutoIncrement = true;
             //col_Row.AutoIncrementSeed = 1;
@@ -1150,13 +1155,13 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                                     db.Error_Logs.Add(error);
                                     db.SaveChanges();
                                 }
-                                cmdExcel.CommandText = "SELECT EmployeeNumber, Status FROM [" + sheetName + "$] WHERE EmployeeNumber <> '' AND Status <> ''";//ung * is column name, ung sheetname ay settings
+                                cmdExcel.CommandText = "SELECT EmployeeNumber, HRStatus, Status FROM [" + sheetName + "$] WHERE EmployeeNumber <> '' AND Status <> ''";//ung * is column name, ung sheetname ay settings
                                 odaExcel.SelectCommand = cmdExcel;
                                 odaExcel.Fill(dt);
                                 dt = DataRequired(dt, DateTime.Now.ToLongDateString());
 
 
-                                cmdExcel.CommandText = "SELECT EmployeeNumber, Status FROM [" + sheetName + "$] WHERE EmployeeNumber <> '' AND (Status IS NULL OR Status = '')";//ung * is column name, ung sheetname ay settings
+                                cmdExcel.CommandText = "SELECT EmployeeNumber, Status FROM [" + sheetName + "$] WHERE EmployeeNumber <> '' AND (Status IS NULL OR Status = '' OR HRStatus IS NULL OR HRStatus = '')";//ung * is column name, ung sheetname ay settings
                                 odaExcel.SelectCommand = cmdExcel;
                                 odaExcel.Fill(dtchecker);
 
@@ -1176,9 +1181,11 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                                         using (SqlBulkCopy bulk = new SqlBulkCopy(conString2))
                                         {
                                             bulk.ColumnMappings.Add("EmployeeNumber", "EmployNo");
+                                            bulk.ColumnMappings.Add("HRStatus", "HRStatus");
                                             bulk.ColumnMappings.Add("Status", "Status");
                                             bulk.ColumnMappings.Add("UpdateID", "Update_ID");
                                             bulk.ColumnMappings.Add("UpdateDate", "UpdateDate");
+                                            bulk.ColumnMappings.Add("HRUpdateDate", "HRUpdateDate");
                                             bulk.DestinationTableName = "M_Employee_Status";
                                             bulk.WriteToServer(dt);
                                         }
@@ -1732,7 +1739,8 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                         ExportData.Cells["A" + start].Value = i+1;
                         ExportData.Cells["B"+start].Value = list[i].EmpNo;
                         ExportData.Cells["C"+start].Value = list[i].Family_Name + ", " + list[i].First_Name;
-                        ExportData.Cells["D" + start].Value = list[i].ModifiedStatus;
+                        ExportData.Cells["D" + start].Value = list[i].Status;
+                        ExportData.Cells["E" + start].Value = list[i].ModifiedStatus;
                         start++;
                     }
 
@@ -1986,16 +1994,34 @@ namespace Brothers_WMS.Areas.Masters.Controllers
             return Json(new { data = list, draw = Request["draw"], recordsTotal = totalrows, recordsFiltered = totalrowsafterfiltering }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult UpdateStatus(string EmpNo, string Status)
+        public ActionResult UpdateStatus(string EmpNo, string Status, string DateResigned)
         {
-            M_Employee_Status EmpStatus = new M_Employee_Status();
-            EmpStatus.EmployNo = EmpNo;
-            EmpStatus.HRStatus = (from c in db.M_Employee_Master_List where c.EmpNo == EmpNo select c.Status).FirstOrDefault();
-            EmpStatus.Status = Status;
-            EmpStatus.Update_ID = user.UserName;
-            EmpStatus.UpdateDate = DateTime.Now;
-            db.M_Employee_Status.Add(EmpStatus);
-            db.SaveChanges();
+            try
+            {
+                M_Employee_Status EmpStatus = new M_Employee_Status();
+                EmpStatus.EmployNo = EmpNo;
+                EmpStatus.HRStatus = (from c in db.M_Employee_Master_List where c.EmpNo == EmpNo select c.Status).FirstOrDefault();
+                EmpStatus.Status = Status;
+                EmpStatus.Update_ID = user.UserName;
+                EmpStatus.UpdateDate = DateTime.Now;
+                EmpStatus.DateResigned = (DateResigned == "")?null:DateResigned;
+                db.M_Employee_Status.Add(EmpStatus);
+                db.SaveChanges();
+
+
+                M_Employee_Master_List Employee = new M_Employee_Master_List();
+                Employee = (from u in db.M_Employee_Master_List.ToList()
+                            where u.EmpNo == EmpNo
+                            select u).FirstOrDefault();
+                Employee.Date_Resigned = (DateResigned == "") ? null : DateResigned;
+                db.Entry(Employee).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+            catch(Exception err)
+            {
+
+            }
+
             return Json(new { }, JsonRequestBehavior.AllowGet);
         }
 
@@ -2183,5 +2209,8 @@ namespace Brothers_WMS.Areas.Masters.Controllers
             }
             return Json(new { }, JsonRequestBehavior.AllowGet);
         }
+
+
+       
     }
 }

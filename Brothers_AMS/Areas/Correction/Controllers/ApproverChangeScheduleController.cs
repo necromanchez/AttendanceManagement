@@ -24,20 +24,20 @@ namespace Brothers_WMS.Areas.Correction.Controllers
             Session["RefNoCS"] = RefNo;
             Session["CSType"] = (CSType == null)?"":CSType;
             CSType = (CSType == null) ? "" : CSType;
-            if ((RefNo != null && CSType != null) || Approved != null)
-            {
-                List<string> result = db.EmailPrompter(RefNo, "", user.UserName,"CS").ToList();
-                if (result.Count > 0)
-                {
-                    return Redirect("http://apbiphwb08:2020/Correction/ApproverChangeSchedule/ApproverChangeSchedule?Approved=" + result[0]);
-                    //return Redirect("http://apbiphwb08:2020/Correction/ApproverChangeSchedule/ApproverChangeSchedule?Approved=" + result[0]);
-                    //return Redirect("http://localhost:49710/Correction/ApproverChangeSchedule/ApproverChangeSchedule?Approved=" + result[0]);
-                }
-            }
+            //if ((RefNo != null && CSType != null) || Approved != null)
+            //{
+            //    List<string> result = db.EmailPrompter(RefNo, "", user.UserName,"CS").ToList();
+            //    if (result.Count > 0)
+            //    {
+            //        return Redirect("http://apbiphwb08:2020/Correction/ApproverChangeSchedule/ApproverChangeSchedule?Approved=" + result[0]);
+            //        //return Redirect("http://apbiphwb08:2020/Correction/ApproverChangeSchedule/ApproverChangeSchedule?Approved=" + result[0]);
+            //        //return Redirect("http://localhost:49710/Correction/ApproverChangeSchedule/ApproverChangeSchedule?Approved=" + result[0]);
+            //    }
+            //}
             return View();
         }
 
-        public ActionResult GetApproverCSList()
+        public ActionResult GetApproverCSList(string Section, DateTime? DateFrom, DateTime? DateTo)
         {
             int start = Convert.ToInt32(Request["start"]);
             int length = Convert.ToInt32(Request["length"]);
@@ -45,8 +45,8 @@ namespace Brothers_WMS.Areas.Correction.Controllers
             string sortColumnName = Request["columns[" + Request["order[0][column]"] + "][name]"];
             string sortDirection = Request["order[0][dir]"];
 
-            string supersection = (user.CostCode != null) ? (from c in db.M_Cost_Center_List where c.Cost_Center == user.CostCode select c.GroupSection).FirstOrDefault() : "";
-            List<GET_AF_CSRequest_Result> list = db.GET_AF_CSRequest(supersection).ToList();
+            string supersection = (user.CostCode != null) ? (from c in db.M_Cost_Center_List where c.Cost_Center == user.CostCode select c.GroupSection).FirstOrDefault() : Section;
+            List<GET_AF_CSRequest_Result> list = db.GET_AF_CSRequest(supersection, DateFrom, DateTo).ToList();
             string searchValue = (Session["RefNoCS"] != null) ? Session["RefNoCS"].ToString() : Request["search[value]"];
 
             if (!string.IsNullOrEmpty(searchValue))//filter
@@ -233,15 +233,14 @@ namespace Brothers_WMS.Areas.Correction.Controllers
             //}
             #region update Approver Status
             string refno = GetApproved[0].CS_RefNo;
-            string pos = (ifalter == "alter") ? "Alternative " + Position[currentstatus] : Position[currentstatus - 1];
+            //string pos = (ifalter == "alter") ? "Alternative " + Position[currentstatus] : Position[currentstatus - 1];
             M_Section_ApproverStatus approverstatus = (from c in db.M_Section_ApproverStatus
                                                        where c.RefNo == refno
                                                        && c.EmployeeNo == user.UserName
-                                                       && c.Position == pos
+                                                       //&& c.Position == pos
                                                        select c).FirstOrDefault();
 
             approverstatus.ApprovedDate = db.TT_GETTIME().FirstOrDefault();
-
             approverstatus.Approved = 1;
             db.Entry(approverstatus).State = EntityState.Modified;
             db.SaveChanges();
@@ -259,12 +258,14 @@ namespace Brothers_WMS.Areas.Correction.Controllers
 
         public ActionResult RejectedCS(List<AF_CSModel> GetApproved, string ifalter)
         {
-            string[] Position = { "", "Supervisor", "Manager", "GeneralManager" };
+            string[] Position = { "Supervisor", "Manager" };
             int currentstatus = 0;
+            string CSRefNo = "";
             foreach (AF_CSModel otrequest in GetApproved)
             {
                 if (otrequest.Approved == true)
                 {
+                    CSRefNo = otrequest.CS_RefNo;
                     AF_ChangeSchedulefiling otfile = new AF_ChangeSchedulefiling();
                     otfile = (from c in db.AF_ChangeSchedulefiling where c.CS_RefNo == otrequest.CS_RefNo && c.EmployeeNo == otrequest.EmployeeNo select c).FirstOrDefault();
                     currentstatus = (otfile.Status + 1) * -1;
@@ -272,20 +273,22 @@ namespace Brothers_WMS.Areas.Correction.Controllers
                     db.Entry(otfile).State = EntityState.Modified;
                     db.SaveChanges();
                 }
-
+              
             }
             #region update Approver Status
-            //string refno = GetApproved[0].CS_RefNo;
-            //string pos = (ifalter == "alter") ? "Alternative " + Position[currentstatus] : Position[currentstatus];
-            //M_Section_ApproverStatus approverstatus = (from c in db.M_Section_ApproverStatus
-            //                                           where c.RefNo == refno
-            //                                           && c.EmployeeNo == user.UserName
-            //                                           && c.Position == pos
-            //                                           select c).FirstOrDefault();
+            string refno = GetApproved[0].CS_RefNo;
+            db.AF_EmailCSRequest_Rejected(CSRefNo);
+            //string pos = (ifalter == "alter") ? "Alternative " + Position[currentstatus*-1] : Position[currentstatus*-1];
+            M_Section_ApproverStatus approverstatus = (from c in db.M_Section_ApproverStatus
+                                                       where c.RefNo == refno
+                                                       && c.EmployeeNo == user.UserName
+                                                       //&& c.Position == pos
+                                                       select c).FirstOrDefault();
 
 
-            //approverstatus.Approved = -1;
-            //db.Entry(approverstatus).State = EntityState.Modified;
+            approverstatus.Approved = 1;
+            approverstatus.ApprovedDate = db.TT_GETTIME().FirstOrDefault();
+            db.Entry(approverstatus).State = EntityState.Modified;
             db.SaveChanges();
 
             #endregion
@@ -293,44 +296,44 @@ namespace Brothers_WMS.Areas.Correction.Controllers
             return Json(new { }, JsonRequestBehavior.AllowGet);
         }
 
-        //public ActionResult CancelledRefNo(List<string> RefNo)
-        //{
-        //    List<string> EmpnoCannotCancel = new List<string>();
-        //    foreach (string data in RefNo)
-        //    {
-        //        long ID = Convert.ToInt64(data.Replace("CS_here_", ""));
-        //        AF_ChangeSchedulefiling csrequest = (from c in db.AF_ChangeSchedulefiling where c.ID == ID select c).FirstOrDefault();
-        //        if (csrequest.CreateID == user.UserName)
-        //        {
-        //            csrequest.Status = -10;
-        //            db.Entry(csrequest).State = EntityState.Modified;
-        //            db.SaveChanges();
-        //        }
-        //        else
-        //        {
-        //            EmpnoCannotCancel.Add(csrequest.EmployeeNo);
-        //        }
-        //    }
-        //    return Json(new { EmpnoCannotCancel= EmpnoCannotCancel }, JsonRequestBehavior.AllowGet);
-        //}
-
-        public ActionResult CancelledRefNo(string RefNo)
+        public ActionResult CancelledRefNo(List<string> RefNo)
         {
-          
-                List<AF_ChangeSchedulefiling> csrequest = (from c in db.AF_ChangeSchedulefiling where c.CS_RefNo == RefNo select c).ToList();
-                foreach(AF_ChangeSchedulefiling a in csrequest)
+            List<string> EmpnoCannotCancel = new List<string>();
+            foreach (string data in RefNo)
+            {
+                long ID = Convert.ToInt64(data.Replace("CS_here_", ""));
+                AF_ChangeSchedulefiling csrequest = (from c in db.AF_ChangeSchedulefiling where c.ID == ID select c).FirstOrDefault();
+                if (csrequest.CreateID == user.UserName)
                 {
-               
-                    a.Status = -10;
-                    db.Entry(a).State = EntityState.Modified;
+                    csrequest.Status = -10;
+                    db.Entry(csrequest).State = EntityState.Modified;
                     db.SaveChanges();
-               
-
                 }
-                
-               
-            return Json(new { EmpnoCannotCancel = "" }, JsonRequestBehavior.AllowGet);
+                else
+                {
+                    EmpnoCannotCancel.Add(csrequest.EmployeeNo);
+                }
+            }
+            return Json(new { EmpnoCannotCancel = EmpnoCannotCancel }, JsonRequestBehavior.AllowGet);
         }
+
+        //public ActionResult CancelledRefNo(string RefNo)
+        //{
+
+        //        List<AF_ChangeSchedulefiling> csrequest = (from c in db.AF_ChangeSchedulefiling where c.CS_RefNo == RefNo select c).ToList();
+        //        foreach(AF_ChangeSchedulefiling a in csrequest)
+        //        {
+
+        //            a.Status = -10;
+        //            db.Entry(a).State = EntityState.Modified;
+        //            db.SaveChanges();
+
+
+        //        }
+
+
+        //    return Json(new { EmpnoCannotCancel = "" }, JsonRequestBehavior.AllowGet);
+        //}
 
 
         public void SendTheMail(string RefNo)

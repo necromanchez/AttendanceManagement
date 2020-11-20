@@ -1,5 +1,5 @@
 ﻿$(function () {
-
+    
     GetUser();
     Dropdown_select('LineID2', "/Helper/GetDropdown_LineProcessTeamLogin?Sectiongroup=" + $("#Section").val());
     Dropdown_selectEmpSection('Section', "/Helper/GetDropdown_SectionAMS?Dgroup=");
@@ -177,20 +177,10 @@
 
 
 
-    var dtToday = new Date();
+   
 
-    var month = dtToday.getMonth() + 1;
-    var day = dtToday.getDate()+1;
-    var year = dtToday.getFullYear();
-    if (month < 10)
-        month = '0' + month.toString();
-    if (day < 10)
-        day = '0' + day.toString();
-
-    var maxDate = year + '-' + month + '-' + day;
-    //alert(maxDate);
-    $('#EffectivitySchedchosen').attr('min', maxDate);
-
+  
+    initDatePicker('EffectivitySchedchosen');
 
 
     $("#DupRFID").on("click", function () {
@@ -234,8 +224,55 @@
         });
     });
 
+    initDatePicker2('EffectivityResigned');
+    $(".resd").hide();
+    $("#EmployeeStatus").on("change", function () {
+        if ($("#EmployeeStatus").val().toUpperCase() != "ACTIVE") {
+            $(".resd").show();
+            
+        }
+        else {
+            $(".resd").hide();
+            $("#EffectivityResigned").val("");
+        }
+
+    })
 })
 
+function initDatePicker(dp) {
+    var dtToday = new Date();
+
+    var month = dtToday.getMonth() + 1;
+    var day = dtToday.getDate() + 1;
+    var year = dtToday.getFullYear();
+    if (month < 10)
+        month = '0' + month.toString();
+    if (day < 10)
+        day = '0' + day.toString();
+    var maxDate = year + '-' + month + '-' + day;
+    //alert(maxDate);
+    $('#' + dp).attr('min', maxDate);
+    $('#' + dp).datepicker({
+        todayBtn: "linked",
+        //orientation: "top right",
+        autoclose: true,
+        todayHighlight: true,
+        minDate: new Date(maxDate),
+        //maxDate: '+30Y'
+    });
+}
+
+function initDatePicker2(dp) {
+    
+    $('#' + dp).datepicker({
+        todayBtn: "linked",
+        //orientation: "top right",
+        autoclose: true,
+        todayHighlight: true,
+        //minDate: new Date(maxDate),
+        //maxDate: '+30Y'
+    });
+}
 function GetEmployeeCount(Section) {
     $.ajax({
         url: '../Employee/GetEmployee_StatusProcessShift',
@@ -282,9 +319,7 @@ function Initializepage() {
             data: { supersection: $("#Section").val(), Status: $("#Status").val(), MStatus: $("#MStatus").val() }
         },
         displayStart: pagecount,
-      
-        //lengthMenu: [10, 100, 500, 1000, 5000, 10000, "All"],
-        //lengthMenu: [[10, 50, 100], [10, 50, 100]],
+        ordering: false,
         lengthMenu: [[10, 50, 100], [10, 50, 100]],
         lengthChange: true,
         serverSide: "true",
@@ -293,7 +328,6 @@ function Initializepage() {
         language: {
             "processing": "processing... please wait"
         },
-        //dom: 'Bfrtip',
         destroy: true,
         columns: [
             {
@@ -884,7 +918,8 @@ function SaveStatus() {
         dataType: 'json',
         data: {
             EmpNo: $("#EmployNoStatus").val(),
-            Status: $("#EmployeeStatus").val()
+            Status: $("#EmployeeStatus").val(),
+            DateResigned: $("#EffectivityResigned").val()
         },
         success: function (response) {
 
@@ -937,13 +972,15 @@ function StatusTable(Empno) {
         destroy: true,
         autoWidth: false,
         columns: [
-            { title: "Status", data: "Status", sWidth: "25%" },
-            { title: "Update By", data: "UpdateID", sWidth: "15%" },
+            { title: "HR Status",  data: "HRStatus" },
+            { title: "Status", data: "Status" },
+            { title: "Resigned Date", data: "DateResigned" },
+            { title: "Update By", data: "UpdateID"},
             //{ title: "Update Date", data: "UpdateDate",sWidth: "10%" },
             {
                 title: "Update Date", data: function (x) {
                     return (x.UpdateDate != null) ? moment(x.UpdateDate).format("MM/DD/YYYY") : ""
-                }, name: "UpdateDate", sWidth: "10%"
+                }, name: "UpdateDate"
             },
 
 
@@ -1062,6 +1099,7 @@ function ScheduleTable(Empno) {
             datatype: "json"
         },
         serverSide: "true",
+        scrollX: true,
         order: [0, "desc"],
         processing: "true",
         autowidth: true,
@@ -1070,26 +1108,30 @@ function ScheduleTable(Empno) {
         },
         //dom: 'Bfrtip',
         destroy: true,
-        autoWidth: false,
+        initComplete: function () {
+            //alert("asd");
+            var table = $('#SchedulehistoryCStable').DataTable();
+            table.ajax.reload();
+        },
         columns: [
-            { title: "Reference No", data: "CS_RefNo", sWidth: "20%" },
-            { title: "Schedule", data: "ScheduleName", sWidth: "20%" },
-            { title: "Shift", data: "ScheduleShift", sWidth: "15%" },
+            { title: "Reference No", data: "CS_RefNo" },
+            { title: "Schedule", data: "ScheduleName" },
+            { title: "Shift", data: "ScheduleShift" },
             {
                 title: "Date From", data: function (x) {
                     return (x.DateFrom != null) ? moment(x.DateFrom).format("MM/DD/YYYY") : ""
-                }, name: "DateFrom", sWidth: "10%"
+                }, name: "DateFrom"
             },
             {
                 title: "Date To", data: function (x) {
                     return (x.DateTo != null) ? moment(x.DateTo).format("MM/DD/YYYY") : ""
-                }, name: "DateTo", sWidth: "10%"
+                }, name: "DateTo"
             },
-            { title: "Update By", data: "UpdateID", sWidth: "15%" },
+            { title: "Update By", data: "UpdateID" },
             {
                 title: "Update Date", data: function (x) {
                     return (x.UpdateDate != null) ? moment(x.UpdateDate).format("MM/DD/YYYY") : ""
-                }, name: "UpdateDate", sWidth: "10%"
+                }, name: "UpdateDate"
             },
 
 

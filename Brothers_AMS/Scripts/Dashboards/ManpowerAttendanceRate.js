@@ -1,6 +1,13 @@
 ﻿ var a = "";
 var MYear, MAgency, MLine, MShift;
 var Filter = {};
+
+var Graph1 = false;
+var Graph2 = false;
+var Graph3 = false;
+var Graph4 = false;
+var Graph5 = false;
+
 $(function () {
     $("#Sectiond").prop("disabled", true);
     $("#Departmentd").on("change", function () {
@@ -103,6 +110,12 @@ $(function () {
 
 
     $("#Generatenow").on("click", function () {
+       
+         Graph1 = false;
+         Graph2 = false;
+         Graph3 = false;
+         Graph4 = false;
+         Graph5 = false;
         $.ajax({
             url: '/Home/ChangeSection',
             type: 'POST',
@@ -142,10 +155,10 @@ $(function () {
                         //$("#loading_modalD").modal("show");
 
                         if ($("#Bigchosen").val() == "Mon") {
-                            //MonthlyDashboard();
+                            MonthlyDashboard_Department();
                         }
                         else if ($("#Bigchosen").val() == "Yer") {
-                           // YearlyDashboard();
+                            YearlyDashboard_Department();
                         }
                         else {
                             GET_AttendanceRate_Department();// GET_AttendanceRate();
@@ -187,6 +200,7 @@ $(function () {
                             LeaveBreakDown();
                             GetAWOLResignedRate();
                             GetOvertimeRate();
+                          
                         }
                     }
                     else {
@@ -196,6 +210,7 @@ $(function () {
                         LeaveBreakDown();
                         GetAWOLResignedRate();
                         GetOvertimeRate();
+                      
 
                     }
                 }
@@ -279,8 +294,7 @@ function GetUser() {
 
 
 function GET_AttendanceRate() {
-    
-    //$("#loading_modalD_AttendanceRate").modal("show");
+    $("#loading_modalD_AttendanceRate").modal("show");
     $.ajax({
         url: '/Home/GET_ManPowerAttendanceRate',
         type: 'POST',
@@ -296,7 +310,7 @@ function GET_AttendanceRate() {
 
 function GET_AttendanceRate_Department() {
 
-    //$("#loading_modalD_AttendanceRate").modal("show");
+    $("#loading_modalD_AttendanceRate").modal("show");
     $.ajax({
         url: '/Home/GET_ManPowerAttendanceRate_Department',
         type: 'POST',
@@ -512,7 +526,13 @@ function GraphStart(datahere) {
             }
         });
     }
-    $("#loading_modalD_AttendanceRate").modal("hide");
+
+    Graph1 = true;
+
+    if (Graph1 == true && Graph2 == true && Graph3 == true && Graph4 == true && Graph5 == true) {
+        $("#loading_modalD_AttendanceRate").modal("hide");
+    }
+    
 
 
 

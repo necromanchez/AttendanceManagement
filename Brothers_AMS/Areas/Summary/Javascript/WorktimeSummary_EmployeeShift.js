@@ -7,6 +7,8 @@
 
 function Initializedpage_EmployeeShift() {
     var d = new Date();
+    initDatePicker("wsDateFrom");
+    initDatePicker("wsDateTo");
     $.ajax({
         url: '../WorkTimeSummary/GETEmployeeShift',
         data: {
@@ -22,6 +24,7 @@ function Initializedpage_EmployeeShift() {
             var obj = JSON.parse(returnData.data);
             $('#EmployeeShifttbl').DataTable({
                 data: obj,
+               
                 scrollX: true,
                 pageLength: 10,
                 //lengthMenu: [10, 100, 500, 1000, 5000],
@@ -34,22 +37,26 @@ function Initializedpage_EmployeeShift() {
                     {
                         extend: 'excel',
                         title: "WorkTimeSummary_Shift" + formatDate(d) + "_" + selectedSection
+                    },
+                    {
+                        text: 'Wrong Shift',
+                        action: function (e, dt, node, config) {
+                            $("#WrongShiftmodal").modal("show");
+                        }
                     }
                 ],
-                scrollCollapse: true,
-                order: [0, "asc"],
-                processing: "true",
                 scrollY: "600px",
                 //scrollX: "1000px",
                 scrollCollapse: true,
-               // lengthChange: false,
+                order: [0, "asc"],
+                processing: "true",
                 columns: [
                     { title: "No", data: "Rownum", className: "reloadclass", name:"Rownum" },
                     { title: "Employee No", data: "EmpNo", name: "EmpNo" },
                     { title: "Employee Name", data: "EmployeeName", name: "EmployeeName" },
                     { title: "Position", data: "Position", name: "Position" },
                     { title: "Cost Center", data: "CostCode", name: "CostCode" },
-                    { title: "Schedule", data: "Schedule", name: "Schedule" },
+                    { title: "Current Schedule", data: "Schedule", name: "Schedule" },
                     {
                         title: "Process", data: function (x) {
 

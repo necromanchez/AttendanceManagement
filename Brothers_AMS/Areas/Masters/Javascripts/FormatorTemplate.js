@@ -77,7 +77,7 @@ function Initializepage() {
         lengthMenu: [10, 50, 100],
         
         lengthChange: true,
-       
+        ordering: false,
         serverSide: "true",
         order: [0, "asc"],
         processing: "true",

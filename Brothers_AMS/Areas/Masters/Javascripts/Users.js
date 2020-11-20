@@ -137,7 +137,7 @@ function Initializepage() {
         lengthMenu: [[10, 50, 100], [10, 50, 100]],
 
         lengthChange: true,
-
+        scrollY: "600px",
         scrollCollapse: true,
         serverSide: "true",
         order: [0, "asc"],
@@ -388,7 +388,7 @@ function Initializepage_Normal() {
         lengthMenu: [[10, 50, 100], [10, 50, 100]],
 
         lengthChange: true,
-
+        scrollY: "600px",
         scrollCollapse: true,
         serverSide: "true",
         order: [0, "asc"],

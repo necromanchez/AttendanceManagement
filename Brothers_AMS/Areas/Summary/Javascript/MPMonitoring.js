@@ -140,6 +140,7 @@ function Initializepage() {
             lengthChange: true,
             scrollX: true,
             //scrollCollapse: true,
+            scrollY: "600px",
             serverSide: "true",
             order: [0, "asc"],
             sorting:true,
@@ -157,18 +158,26 @@ function Initializepage() {
             columns: [
                 {   title: "No", data: "Rownum", name: "Rownum" },
                 {
-                    title: "Date", data: function (x) {
-                        return (x.InDate != null) ? moment(x.InDate).format("MM/DD/YYYY") : ""
-                    }, name: "InDate"
+                    title: "Date", data: "InDate", name: "InDate"
                 },
                 {   title: "Time In", data: "TimeIn", name: "TimeIn" },
                 {
-                    title: "Date Out", data: function (x) {
-                        return (x.InDateOut != null) ? moment(x.InDateOut).format("MM/DD/YYYY") : ""
-                    }, name: "InDateOut"
+                    title: "Date Out", data:"InDateOut" , name: "InDateOut"
                 },
                 {   title: "Time Out", data: "TimeOut", name: "TimeOut" },
-                {   title: "Shift", data: "Shift", name: "Shift" },
+                {
+                    title: "Shift", data: function (x) {
+                        var certified = "Orig";
+                        if (x.ChangeShift == "Green") {
+                            return "<label class= 'Certified' style='16px !important;color:green' data-toggle='tooltip' title='"+x.OrigShift+"'>" + x.Shift + "</label>"
+                            //return "<a href='#' data-toggle='tooltip' title='Hooray!'>Hover over me</a>"
+                        }
+                        else {
+                            return "<label class= 'Orig' style='16px !important'>" + x.Shift + "</label>"
+                        }
+
+                       
+                    }, name: "Shift" },
                 {   title: "Line", data: "Line", name: "Line" },
                 {   title: "Process", data: "Skill", name: "Skill" },
                 {   title: "Employee No", data: "EmpNo", name: "EmpNo" },
@@ -178,7 +187,7 @@ function Initializepage() {
                         if (x.TrueColor == "Green") {
                             certified = 'Certified';
                         }
-                        else if (x.TrueColor == "Black") {
+                        else if (x.TrueColor == "Black" || x.Skill == "No Process") {
                             certified = "Orig";
                         }
                         else {
@@ -189,9 +198,7 @@ function Initializepage() {
                 },
                 {   title: "Date Hired", data: "Date_Hired", name: "Date_Hired"},
                 {
-                    title: "Date Registered", data: function (x) {
-                        return (x.DateCertified != null) ? moment(x.DateCertified).format("MM/DD/YYYY") : "-"
-                    }, name: "DateCertified"
+                    title: "Date Registered", data: "DateCertified", name: "DateCertified"
                 },
                 {   title: "Status", data: "Status", name: "Status" },
             ],

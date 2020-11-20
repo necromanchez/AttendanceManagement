@@ -90,11 +90,11 @@
             });
             $('.empmod').prop('checked', true);
         }
-        //else {
-        //    $('.empmod').each(function (i, obj) {
-        //        chosend_EmpNo.remove(obj.id);
-        //    }); $('.empmod').prop('checked', false);
-        //}
+        else {
+            $('.empmod').each(function (i, obj) {
+                chosend_EmpNo.remove(obj.id);
+            }); $('.empmod').prop('checked', false);
+        }
     })
 
     $("#btnconfirm").on("click", function () {
@@ -116,6 +116,7 @@
                             type: 'GET',
                             datatype: 'json',
                             traditional: true,
+                            ordering:false,
                             contentType: 'application/json; charset=utf-8',
                             data: {
                                 ChosenEmployees: EmployeeList,
@@ -127,7 +128,7 @@
                             }
                         },
                         lengthMenu: [[10, 50, 100], [10, 50, 100]],
-                        
+                        pageLength: 10000,
                         lengthChange: false,
                         scrollY: "600px",
                         scrollCollapse: true,
@@ -262,6 +263,7 @@
     $("#BIPH_Agency").on("change", function () { $("#FileType").prop("disabled", false); })
     //$("#FileType").on("change", function () { $("#Line_Team").prop("disabled", false); })
     $("#Line_Team").on("change", function () { $("#Schedule").prop("disabled", false); })
+    $("#checkall_emp").on("click", function () { $("#Schedule").prop("disabled", false);})
     $("#Schedule").on("change", function () { $("#DateFrom").prop("disabled", false); $("#DateTo").prop("disabled", false); })
     $("#DateTo").on("change", function () { $("#CSType").prop("disabled", false); })
     Initializepage();
@@ -296,9 +298,9 @@ function Initializepage() {
             }
         },
         //ordering:false,
-        lengthMenu: [10, 20, 30, 50],
-        pagelength: 10,
-        lengthChange: false,
+        ordering: false,
+        lengthMenu: [[10, 50, 100], [10, 50, 100]],
+        lengthChange: true,
         serverSide: "true",
         order: [0, "asc"],
         processing: "true",
@@ -384,32 +386,60 @@ function initDatePicker(dp) {
 }
 
 function SaveCS() {
-    var datanow = $("#ChangeScheduleForm").serialize();
-    var tabledata = $('#ChosenEmployeeTable').DataTable();
-    var reasons = [];
-    var EmpNo = [];
 
-    var data = tabledata.rows().data();
-    //for (var x = 0; x < data.length; x++) {
-    //    reasons.push(tabledata.context[0].aoData[x].anCells[7].lastChild.value);
-    //    EmpNo.push(tabledata.context[0].aoData[x].anCells[0].lastChild.data);
-    //}
-    for (var x = 0; x < data.length; x++) {
-        reasons.push(tabledata.context[0].aoData[x].anCells[6].lastChild.value);
-        EmpNo.push(tabledata.context[0].aoData[x].anCells[0].lastChild.data);
-    }
-    $.ajax({
-        url: '../ChangeSchedule/SaveCS',
-        data: datanow + "&Reasons=" + reasons + "&EmployeeNos=" + EmpNo,
-        type: 'POST',
-        datatype: "json",
-        success: function (returnData) {
-            notify("Saved!", "CS Successfully Filed", "success");
-        },
-        error: function (xhr, ajaxOptions, thrownError) {
-            notify("Saved!", "CS Successfully Filed", "success");
+    var validateReason = validReason();
+
+    if (validateReason) {
+
+        var datanow = $("#ChangeScheduleForm").serialize();
+        var tabledata = $('#ChosenEmployeeTable').DataTable();
+        var reasons = [];
+        var EmpNo = [];
+
+        var data = tabledata.rows().data();
+        //for (var x = 0; x < data.length; x++) {
+        //    reasons.push(tabledata.context[0].aoData[x].anCells[7].lastChild.value);
+        //    EmpNo.push(tabledata.context[0].aoData[x].anCells[0].lastChild.data);
+        //}
+        for (var x = 0; x < data.length; x++) {
+            reasons.push(tabledata.context[0].aoData[x].anCells[6].lastChild.value);
+            EmpNo.push(tabledata.context[0].aoData[x].anCells[0].lastChild.data);
         }
+        $.ajax({
+            url: '../ChangeSchedule/SaveCS',
+            data: datanow + "&Reasons=" + reasons + "&EmployeeNos=" + EmpNo,
+            type: 'POST',
+            datatype: "json",
+            success: function (returnData) {
+                notify("Saved!", "CS Successfully Filed", "success");
+                $("#ConfirmChangeSchedule").modal("hide");
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                notify("Saved!", "CS Successfully Filed", "success");
+                $("#ConfirmChangeSchedule").modal("hide");
+            }
+        });
+    }
+    else {
+        swal("Reason required");
+        //notify("Reason!", "Reason required", "warning");
+    }
+}
+
+
+function validReason() {
+    var valid = true;
+    $(".PPos").each(function (index) {
+        $(this).closest('tr').css("background-color", "inherit");
+        if ($(this).val() == "") {
+            valid = false;
+            $(this).closest('tr').css("background-color", "#FF6666");
+        }
+       
+        //console.log(index + ": " + $(this).text());
     });
+
+    return valid;
 }
 
 function DownloadTemplate() {
@@ -439,5 +469,7 @@ function Dropdown_selectCS(id) {
         //$('.selectpicker').selectpicker('refresh');
         $('#' + id).append(option);
     });
-
+    var idd = "select2-" + id + "-container";
+    document.getElementById(idd).style.whiteSpace = "nowrap";
+    document.getElementById(id).style.whiteSpace = "nowrap";
 }

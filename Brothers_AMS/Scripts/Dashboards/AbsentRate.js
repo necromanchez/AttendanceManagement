@@ -22,7 +22,7 @@
 
 
 function AbsentRate() {
-    $("#loading_modalD_AbsentRate").modal("show");
+    //$("#loading_modalD_AbsentRate").modal("show");
     $.ajax({
         url: '/Home/GET_AbsentRate',
         type: 'POST',
@@ -37,7 +37,7 @@ function AbsentRate() {
 }
 
 function AbsentRate_Department() {
-    $("#loading_modalD_AbsentRate").modal("show");
+    //$("#loading_modalD_AbsentRate").modal("show");
     $.ajax({
         url: '/Home/GET_AbsentRate_Department',
         type: 'POST',
@@ -332,5 +332,9 @@ function GraphStartAbsentRate(datahere) {
             });
        
     }
-    $("#loading_modalD_AbsentRate").modal("hide");
+    Graph2 = true;
+
+    if (Graph1 == true && Graph2 == true && Graph3 == true && Graph4 == true && Graph5 == true) {
+        $("#loading_modalD_AttendanceRate").modal("hide");
+    }
 }

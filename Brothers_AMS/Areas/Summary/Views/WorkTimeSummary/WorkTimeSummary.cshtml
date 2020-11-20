@@ -25,9 +25,13 @@
     }
 }
 <style>
+    .modal-open .ui-datepicker {
+        z-index: 2000 !important
+    }
     .resized2 {
         width: 146.813px !important;
     }
+
     .hehetable {
         border: 1px solid black;
     }
@@ -47,9 +51,9 @@
     table.dataTable tbody td {
         white-space: nowrap;
     }
+
     .select2-selection__rendered {
         margin-right: 180px !important;
-      
     }
 </style>
 <!-- Main CSS -->
@@ -150,7 +154,7 @@
                 <li class="nav-item"> <a class="nav-link reloadtbl" href="#EmployeeTime" data-toggle="tab" id="TTi">Employee TimeIn/Timeout</a></li>
                 <li class="nav-item"> <a class="nav-link reloadtbl" href="#ABdetails" data-toggle="tab" id="AD">Absent Details</a></li>
 
-                @*      <li class="nav-item"> <a class="nav-link" data-toggle="tab" id="GetActualTap">Employee Tap</a></li>*@
+       
                 <li class="nav-item"> <a class="nav-link reloadtbl" href="#tapDetails" data-toggle="tab" id="TabD">Employee Tap</a></li>
             </ul>
 
@@ -178,10 +182,10 @@
                                             <div class="box-body">
                                                 <div class="row">
                                                     @*<section class="content-header ">
-                                                        <h2>
-                                                            <span class="changehead">Month</span>
-                                                        </h2>
-                                                    </section>*@
+                                                            <h2>
+                                                                <span class="changehead">Month</span>
+                                                            </h2>
+                                                        </section>*@
                                                 </div>
 
                                                 <div class="row theshow">
@@ -205,7 +209,7 @@
                                                                 <td class="tablewew"><span id="total">0</span></td>
                                                                 <td class="tablewew"><span id="per">0</span></td>
                                                             </tr>
-                                                         
+
                                                         </table>
                                                     </div>
                                                     <div class="col-md-4">
@@ -230,7 +234,7 @@
                                                                 <td class="tablewew"><span id="totalML">0</span></td>
                                                                 <td class="tablewew"><span id="totalNW">0</span></td>
                                                             </tr>
-                                                           
+
                                                         </table>
                                                     </div>
                                                     <div class="col-md-4">
@@ -305,7 +309,7 @@
 
 
                                             <div class="box-body">
-                                                
+
 
                                                 <div class="row theshow">
                                                     <div class="col-12">
@@ -348,7 +352,7 @@
 
 
                                             <div class="box-body">
-                                                
+
                                                 <div class="row theshow">
                                                     <div class="col-12">
                                                         <table id="AttenanceTbl_OTHours" class="table table-bordered table-striped ">
@@ -387,7 +391,7 @@
 
                                 <div class="row">
                                     <div class="col-12">
-                                      
+
                                         <div class="row theshow">
                                             <div class="box-body">
                                                 <table class="table table-hover" id="AbsentDetailsTable">
@@ -428,7 +432,7 @@
 
 
                                             <div class="box-body">
-                                               
+
 
                                                 <div class="row theshow">
                                                     <div class="col-12">
@@ -473,7 +477,7 @@
 
 
                                             <div class="box-body">
-                                               
+
                                                 <div class="row theshow">
                                                     <div class="col-12">
                                                         <table id="Employeetimetbl" class="table table-bordered table-striped ">
@@ -525,20 +529,20 @@
                                                     <div class="col-md-2">
                                                         <div class="form-group">
                                                             <div class="input-group">
-                                                                <span class="input-group-addon"  style="width: 90px;">Date To</span>
+                                                                <span class="input-group-addon" style="width: 90px;">Date To</span>
                                                                 <input type="text" class="form-control step fil" style="width:45px" id="DateFilter2" name="DateFilter2">
                                                             </div>
                                                         </div>
                                                     </div>
                                                     @*<div class="col-md-4">
-            <div class="form-group">
-                <div class="input-group">
-                    <select class="form-control" style="width: 168.789px !important;" name="Sectiontap" id="Sectiontap"></select>
-                </div>
-            </div>
-        </div>*@
+                                                            <div class="form-group">
+                                                                <div class="input-group">
+                                                                    <select class="form-control" style="width: 168.789px !important;" name="Sectiontap" id="Sectiontap"></select>
+                                                                </div>
+                                                            </div>
+                                                        </div>*@
                                                 </div>
-                                                
+
                                                 <div class="">
                                                     <table class="table table-striped table-no-bordered table-hover" style="width:100%;" id="TapTable"></table>
                                                 </div>
@@ -547,7 +551,7 @@
                                         <!-- /.box -->
                                     </div>
                                 </div>
-                               
+
 
 
                             </div>
@@ -572,6 +576,116 @@
 
 
 
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="ModalPageAccess" aria-hidden="true" id="HRExportmodal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalCenterTitle">HR Export Format</h5>
+                    <button type="button" class="close" id="closepagemodal" aria-label="Close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="" method="POST" role="form" id="hrformat">
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon" style="width:100px">Date From</span>
+                                    <input type="text" class="form-control" id="hrDateFrom" name="hrDateFrom">
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon" style="width:100px">Date To</span>
+                                    <input type="text" class="form-control" id="hrDateTo" name="hrDateTo">
+                                </div>
+
+                            </div>
+                        </div>
+                        @*<div class="col-md-8">
+                          
+
+                        </div>*@
+
+                    </div>
+
+
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button id="ExportHRdata" type="button" class="btn btn-block btn-success btn-lg"><i class="fa fa-file-excel-o"></i> Export</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="ModalPageAccess" aria-hidden="true" id="WrongShiftmodal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalCenterTitle">Wrong Shift Employees</h5>
+                    <button type="button" class="close" id="closepagemodal" aria-label="Close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="" method="POST" role="form" id="wrongshiftformat">
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon" style="width:100px">Date From</span>
+                                    <input type="text" class="form-control" id="wsDateFrom" name="wsDateFrom">
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon" style="width:100px">Date To</span>
+                                    <input type="text" class="form-control" id="wsDateTo" name="wsDateTo">
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon" style="width:100px">Shift</span>
+                                    <select class="form-control" id="Shift" name="Shift">
+                                        <option value="">All Shift</option>
+                                        <option value="Day">Day Shift</option>
+                                        <option value="Night">Night Shift</option>
+                                    </select>
+                                </div>
+
+                            </div>
+                        </div>
+                        @*<div class="col-md-8">
+
+
+        </div>*@
+
+                    </div>
+
+
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button id="Exportwsdata" type="button" class="btn btn-block btn-success btn-lg"><i class="fa fa-file-excel-o"></i> Export</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="modal fade bannerformmodal" tabindex="-1" role="dialog" aria-labelledby="bannerformmodal" aria-hidden="true" id="ProcessModal">
     <div class="modal-dialog modal-lg">

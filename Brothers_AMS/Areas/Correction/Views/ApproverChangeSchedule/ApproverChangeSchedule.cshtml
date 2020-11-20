@@ -3,7 +3,11 @@
     ViewBag.Title = "ApproverChangeSchedule";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+<style>
+    .resized {
+        width: 146.813px !important;
+    }
+</style>
 <link href="~/Content/assets/vendor_components/select2/dist/css/select2.min.css" rel="stylesheet" />
 <section class="content-header">
     <h1>
@@ -12,12 +16,52 @@
 </section>
 <section class="content">
     <div class="box box-primary">
+        <div class="box-body pad">
+
+            <form action="" method="POST" role="form">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon resized">Section</span>
+                                <select class="form-control autof select2" id="Section" name="Section"></select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon resized">Date From</span>
+                                <input type="text" class="form-control autof" id="DateFrom" name="DateFrom">
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon resized">Date To</span>
+                                <input type="text" class="form-control autof" id="DateTo" name="DateTo">
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+              
+            </form>
+
+        </div>
         <div class="box-body">
             <table id="ChangeScheduleApprovertable" class="table table-bordered table-striped table-responsive">
                 <thead>
                 </thead>
-                <tbody>
-                </tbody>
+                <tbody></tbody>
             </table>
         </div>
     </div>

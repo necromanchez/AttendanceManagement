@@ -26,14 +26,11 @@ namespace Brothers_WMS.Controllers
         }
         private double hex2Dec(string strHex)
         {
-            return Convert.ToInt16(strHex, 16);
+            return Convert.ToInt64(strHex, 16);
         }
 
         public ActionResult GetCurrentSection()
         {
-            //string sectionnow = (from w in db.M_Users.ToList()
-            //                     where w.IsDeleted == false && w.Status == true && w.UserName == user.UserName
-            //                     select w.Section).FirstOrDefault();
             string sectionnow = user.Section;
             return Json(new { sectionnow = sectionnow }, JsonRequestBehavior.AllowGet);
         }
@@ -262,6 +259,7 @@ namespace Brothers_WMS.Controllers
 
         public ActionResult GetDropdown_LineProcessTeamwithSection(string CostCode, string RFID, string GroupSection)
         {
+           
             long removezero = (RFID != "") ? Convert.ToInt64(RFID) : 0;
             if(CostCode == "undefined" || CostCode == "" || CostCode == "null")
             {

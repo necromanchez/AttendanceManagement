@@ -8,10 +8,8 @@ var selectedSection = "";
 
 
 $(function () {
-    //Initializedpage();
-   // Dropdown_selectMPMain2('Section', "/Helper/GetDropdown_SectionAMS");
-   
 
+    
     Dropdown_selectEmpCompany('BIPH_Agency', "/Helper/GetDropdown_Agency");
     Dropdown_selectYear("Year");
     Dropdown_selectMonth("Month");
@@ -40,9 +38,11 @@ $(function () {
     $(".theshow").hide();
     $("#Search").on("click", function () {
         // $("#loading_modal").modal("show")
+
+       
         goagain = true;
-        $(".reloadtbl").removeClass("active");
-        $("#PAB").addClass("active");
+        //$(".reloadtbl").removeClass("active");
+        //$("#PAB").addClass("active");
         $(".theshow").show();
         generatego = true;
         GenerateDaysname();
@@ -51,8 +51,91 @@ $(function () {
             type: 'POST',
             dataType: 'JSON',
             success: function (returnData) {
-                Initializedpage();
-                InitializepageTT();
+                //Initializedpage();
+                //InitializepageTT();
+
+                var x = $('ul#tabs').find('li').find('a.active').attr('id');
+                switch (x) {
+                    case "TabD":
+                        $("#tapDetails").show();
+                        if (TTMagic) {
+                            $("#tapDetails").show();
+                        }
+                        else {
+                            //$("#loading_modal").modal("show");
+                            InitializepageTT();
+                            TTMagic = true;
+                        }
+                        break;
+                    case "PAB":
+                        //var table = $('#AttenanceTbl').DataTable();
+
+                        //if (!table.data().any()) {
+
+                        //    Initializedpage();
+                        //}
+                        //else {
+                            $("#PresentAbsent").show();
+                            Initializedpage();
+                        //}
+
+                        break;
+                    case "DB":
+                        if (DTRMagic) {
+                            $("#DTRBreak").show();
+                        }
+                        else {
+                            $("#loading_modal").modal("show");
+                            Initializedpage_WorkingHours();
+                            DTRMagic = true;
+                        }
+                        break;
+                    case "OTM":
+                        if (OTMagic) {
+                            $("#OTV").show();
+                        }
+                        else {
+                            $("#loading_modal").modal("show");
+                            Initializedpage_OTHours();
+                            OTMagic = true;
+                        }
+                        break;
+                    case "ES":
+                        if (EmpShiftMagic) {
+                            $("#EmployeeSchedule").show();
+                        }
+                        else {
+                            $("#loading_modal").modal("show");
+                            Initializedpage_EmployeeShift();
+                            EmpShiftMagic = true;
+                        }
+
+                        break;
+                    case "TTi":
+                        if (ETTMagic) {
+                            $("#EmployeeTime").show();
+                        }
+                        else {
+                            $("#loading_modal").modal("show");
+                            Initializedpage_EmployeeTimeinout();
+                            ETTMagic = true;
+                        }
+
+                        break;
+                    case "AD":
+                        if (ADMagic) {
+                            $("#ABdetails").show();
+                        }
+                        else {
+                            $("#loading_modal").modal("show");
+                            Initializepage_AbsentDetails();
+                            ADMagic = true;
+                        }
+
+                        break;
+                }
+
+
             }
         });
        
@@ -64,13 +147,6 @@ $(function () {
         $("#tapDetails").hide();
     });
    
-   
-
-    //$(".reloadtbl").on("click", function () {
-    //    $(".reloadclass").trigger("click");
-    //    //$(".reloadclass").trigger("click");
-    //});
-
     $('#tabs').on('shown.bs.tab', function (event) {
         var x = $(event.target)[0].id;         // active tab
         $(".padhider").hide();
@@ -161,8 +237,24 @@ $(function () {
         //var y = $(event.relatedTarget).text();  // previous tab
 
     });
-   
-   
+    
+
+    //$("#hrDateFrom").datepicker().datepicker("setDate", new Date());
+    //$("#hrDateTo").datepicker().datepicker("setDate", new Date());
+    $("#ExportHRdata").on("click", function () {
+        if ($("#hrDateFrom").val() != "" && $("#hrDateTo").val() != "") {
+           
+            window.open('../WorkTimeSummary/ExportHRFormat?Month=' + $("#Month").val() + '&Year=' + $("#Year").val() + '&Section=' + $("#Section").val() + '&Agency=' + $("#BIPH_Agency").val() + '&DateFrom=' + $("#hrDateFrom").val() + '&DateTo=' + $("#hrDateTo").val())
+        }
+    });
+
+    $("#Exportwsdata").on("click", function () {
+        if ($("#wsDateFrom").val() != "" && $("#wsDateTo").val() != "") {
+            
+            window.open('../WorkTimeSummary/WrongShift?Month=' + $("#Month").val() + '&Year=' + $("#Year").val() + '&Section=' + $("#Section").val() + '&Agency=' + $("#BIPH_Agency").val() + '&DateFrom=' + $("#wsDateFrom").val() + '&DateTo=' + $("#wsDateTo").val() + '&Shift=' + $("#Shift").val())
+        }
+    });
+    //$("#HRExportmodal").modal("show");
 });
 var table1;
 var theDayShift = 0;
@@ -376,7 +468,9 @@ function ShowOutput(data) {
 }
 
 function Initializedpage() {
+
    
+
     $("#loading_modal").modal("show");
     $('#AttenanceTbl').DataTable({
         ajax: {
@@ -424,7 +518,7 @@ function Initializedpage() {
             { title: "EmployeeName", data: "EmployeeName", name: "EmployeeName" },
             { title: "Position", data: "Position", name: "Position"},
             { title: "CostCode", data: "CostCode", name: "CostCode"},
-            { title: "Schedule", data: "Schedule", visible: true },
+            { title: "Current Schedule", data: "Schedule", visible: true },
             {
                 title: "Process", data: function (x) {
 

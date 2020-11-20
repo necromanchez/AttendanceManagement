@@ -75,6 +75,7 @@ function Initializepage() {
         serverSide: "true",
         order: [0, "asc"],
         processing: "true",
+        ordering:false,
         language: {
             "processing": "processing... please wait"
         },

@@ -88,13 +88,13 @@ function Initializepage() {
             { title: "Create By", data: "CreateID", name:"CreateID" },
             {
                 title: "Create Date", data: function (x) {
-                    return (x.CreateDate != null) ? moment(x.CreateDate).format("MM/DD/YYYY") : ""
+                    return (x.CreateDate != null) ? moment(x.CreateDate).format("YYYY-MM-DD") : ""
                 }, name: "CreateDate"
             },
             { title: "Updated By", data: "Updatedby", name: "Updatedby" },
             {
                 title: "Update Date", data: function (x) {
-                    return (x.UpdateDate != null) ? moment(x.UpdateDate).format("MM/DD/YYYY") : ""
+                    return (x.UpdateDate != null) ? moment(x.UpdateDate).format("YYYY-MM-DD") : ""
                 }, name: "UpdateDate"
             },
             {

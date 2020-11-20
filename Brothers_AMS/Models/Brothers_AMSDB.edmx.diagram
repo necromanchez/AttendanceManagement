@@ -27,7 +27,6 @@
         <EntityTypeShape EntityType="Brothers_AMSDBModel.M_Employee_Master_List" Width="1.5" PointX="17.375" PointY="9.75" />
         <EntityTypeShape EntityType="Brothers_AMSDBModel.T_TimeTap" Width="1.5" PointX="17.375" PointY="6.75" />
         <EntityTypeShape EntityType="Brothers_AMSDBModel.M_Cost_Center_List" Width="1.5" PointX="7.375" PointY="18.75" />
-        <EntityTypeShape EntityType="Brothers_AMSDBModel.M_Employee_Status" Width="1.5" PointX="0.75" PointY="6.75" />
         <EntityTypeShape EntityType="Brothers_AMSDBModel.M_Employee_Master_List_Deleted" Width="1.5" PointX="3.375" PointY="18.75" />
         <EntityTypeShape EntityType="Brothers_AMSDBModel.T_TimeInOut" Width="1.5" PointX="3.375" PointY="6.75" />
         <EntityTypeShape EntityType="Brothers_AMSDBModel.AF_ChangeSchedulefiling" Width="1.5" PointX="0.75" PointY="0.75" />
@@ -35,6 +34,7 @@
         <EntityTypeShape EntityType="Brothers_AMSDBModel.Z_SkillRemoverAll" Width="1.5" PointX="9.375" PointY="4.75" />
         <EntityTypeShape EntityType="Brothers_AMSDBModel.Z_UploadTracker" Width="1.5" PointX="13.375" PointY="0.75" />
         <EntityTypeShape EntityType="Brothers_AMSDBModel.M_Agency" Width="1.5" PointX="5.375" PointY="5.75" />
+        <EntityTypeShape EntityType="Brothers_AMSDBModel.M_Employee_Status" Width="1.5" PointX="0.75" PointY="6.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

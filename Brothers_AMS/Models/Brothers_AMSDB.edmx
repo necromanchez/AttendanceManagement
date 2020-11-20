@@ -274,6 +274,7 @@
           <Property Name="Update_ID" Type="nvarchar" MaxLength="50" />
           <Property Name="HRStatus" Type="nvarchar" MaxLength="20" />
           <Property Name="HRUpdateDate" Type="datetime" />
+          <Property Name="DateResigned" Type="nvarchar" MaxLength="20" />
         </EntityType>
         <EntityType Name="M_LineTeam">
           <Key>
@@ -479,6 +480,10 @@
         <Function Name="AF_EmailCSRequest" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CSRefno" Type="nvarchar(max)" Mode="In" />
         </Function>
+        <Function Name="AF_EmailCSRequest_Rejected" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CSRefno" Type="nvarchar(max)" Mode="In" />
+        </Function>
+        <Function Name="AF_EmailCSRequestApprovers" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="AF_EmailDTRRequest" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="DTRRefno" Type="nvarchar(max)" Mode="In" />
         </Function>
@@ -716,6 +721,8 @@
         </Function>
         <Function Name="GET_AF_CSRequest" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="SectionSuperGroup" Type="nvarchar" Mode="In" />
+          <Parameter Name="DateFrom" Type="datetime" Mode="In" />
+          <Parameter Name="DateTo" Type="datetime" Mode="In" />
         </Function>
         <Function Name="GET_AF_CSRequest_Detail" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CSRefNo" Type="nvarchar" Mode="In" />
@@ -730,6 +737,12 @@
         <Function Name="GET_AF_CSSummaryDetail" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CS_Refno" Type="nvarchar" Mode="In" />
           <Parameter Name="Status" Type="int" Mode="In" />
+        </Function>
+        <Function Name="GET_AF_CSSummaryDetailExport" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Section" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="DateFrom" Type="datetime" Mode="In" />
+          <Parameter Name="DateTo" Type="datetime" Mode="In" />
+          <Parameter Name="Status" Type="nvarchar" Mode="In" />
         </Function>
         <Function Name="GET_AF_DTRExport" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="RefNo" Type="nvarchar" Mode="In" />
@@ -874,6 +887,21 @@
           <Parameter Name="Section" Type="nvarchar" Mode="In" />
           <Parameter Name="Agency" Type="nvarchar" Mode="In" />
         </Function>
+        <Function Name="GET_RP_AttendanceMonitoring_TimeINOUT_HRExport" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Month" Type="int" Mode="In" />
+          <Parameter Name="Year" Type="int" Mode="In" />
+          <Parameter Name="Section" Type="nvarchar" Mode="In" />
+          <Parameter Name="Agency" Type="nvarchar" Mode="In" />
+          <Parameter Name="Date" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="GET_RP_AttendanceMonitoring_TimeINOUT_HRExport_D" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Month" Type="int" Mode="In" />
+          <Parameter Name="Year" Type="int" Mode="In" />
+          <Parameter Name="Section" Type="nvarchar" Mode="In" />
+          <Parameter Name="Agency" Type="nvarchar" Mode="In" />
+          <Parameter Name="DateFROM" Type="datetime" Mode="In" />
+          <Parameter Name="DateTO" Type="datetime" Mode="In" />
+        </Function>
         <Function Name="GET_RP_AttendanceMonitoring_TTWorkingHours" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Month" Type="int" Mode="In" />
           <Parameter Name="Year" Type="int" Mode="In" />
@@ -895,6 +923,15 @@
           <Parameter Name="Line" Type="bigint" Mode="In" />
           <Parameter Name="Process" Type="bigint" Mode="In" />
           <Parameter Name="SectionGroup" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="GET_RP_WrongShift" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Month" Type="int" Mode="In" />
+          <Parameter Name="Year" Type="int" Mode="In" />
+          <Parameter Name="Section" Type="nvarchar" Mode="In" />
+          <Parameter Name="Agency" Type="nvarchar" Mode="In" />
+          <Parameter Name="DateFROM" Type="datetime" Mode="In" />
+          <Parameter Name="DateTO" Type="datetime" Mode="In" />
+          <Parameter Name="Shift" Type="nvarchar" Mode="In" />
         </Function>
         <Function Name="GET_RPMonitoring_Graphv2" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="DateFrom" Type="datetime" Mode="In" />
@@ -965,6 +1002,9 @@
         <Function Name="M_SP_ImportCostCodeFromITSystem" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="M_SP_ImportEmployeeCostCenter" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="M_SP_ImportEmployeeFromITSystem" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="M_SP_ImportEmployeeFromITSystem_forMaintenance" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Username" Type="nvarchar(max)" Mode="In" />
+        </Function>
         <Function Name="M_SP_ImportEmployeePosition" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="M_SP_ImportEmployeeStatus" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="M_SP_LineAccess" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
@@ -1096,9 +1136,6 @@
           <FunctionImport Name="GET_Employee_ModifiedPosition" ReturnType="Collection(Brothers_AMSDBModel.GET_Employee_ModifiedPosition_Result)">
           <Parameter Name="EmployNo" Mode="In" Type="String" />
           </FunctionImport>
-          <FunctionImport Name="GET_Employee_ModifiedStatus" ReturnType="Collection(Brothers_AMSDBModel.GET_Employee_ModifiedStatus_Result)">
-          <Parameter Name="EmployNo" Mode="In" Type="String" />
-          </FunctionImport>
           <FunctionImport Name="GET_Employee_NoAutocompletes" ReturnType="Collection(Brothers_AMSDBModel.GET_Employee_NoAutocompletes_Result)">
             <Parameter Name="Section" Mode="In" Type="String" />
             <Parameter Name="Emp" Mode="In" Type="String" />
@@ -1214,10 +1251,6 @@
           <FunctionImport Name="GET_Employee_NameAutocompletes" ReturnType="Collection(Brothers_AMSDBModel.GET_Employee_NameAutocompletes_Result)">
             <Parameter Name="Name" Mode="In" Type="String" />
             <Parameter Name="Section" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="GET_TT_EmployeeLineView2" ReturnType="Collection(Brothers_AMSDBModel.GET_TT_EmployeeLineView2_Result)">
-            <Parameter Name="Section" Mode="In" Type="String" />
-            <Parameter Name="Shift" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="AF_UpdateApprovedDTR" />
           <EntitySet Name="AF_DTRfiling" EntityType="Brothers_AMSDBModel.AF_DTRfiling" />
@@ -1355,7 +1388,6 @@
             <Parameter Name="Year" Mode="In" Type="Int32" />
             <Parameter Name="Section" Mode="In" Type="String" />
           </FunctionImport>
-          <EntitySet Name="M_Employee_Status" EntityType="Brothers_AMSDBModel.M_Employee_Status" />
           <FunctionImport Name="Dashboard_ManpowerAttendanceRate" ReturnType="Collection(Brothers_AMSDBModel.Dashboard_ManpowerAttendanceRate_Result)">
             <Parameter Name="Month" Mode="In" Type="Int32" />
             <Parameter Name="Year" Mode="In" Type="Int32" />
@@ -1460,22 +1492,6 @@
             <Parameter Name="Certified" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GET_RPMonitoringDropDownShift" ReturnType="Collection(Brothers_AMSDBModel.GET_RPMonitoringDropDownShift_Result)" />
-          <FunctionImport Name="GET_RP_MPCMonitoringv2" ReturnType="Collection(Brothers_AMSDBModel.GET_RP_MPCMonitoringv2_Result)">
-            <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
-            <Parameter Name="DateTo" Mode="In" Type="DateTime" />
-            <Parameter Name="Shift" Mode="In" Type="Int64" />
-            <Parameter Name="Line" Mode="In" Type="Int64" />
-            <Parameter Name="Process" Mode="In" Type="Int64" />
-            <Parameter Name="SectionGroup" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="GET_RP_MPCMonitoringv2ALLShift" ReturnType="Collection(Brothers_AMSDBModel.GET_RP_MPCMonitoringv2ALLShift_Result)">
-            <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
-            <Parameter Name="DateTo" Mode="In" Type="DateTime" />
-            <Parameter Name="Shift" Mode="In" Type="String" />
-            <Parameter Name="Line" Mode="In" Type="Int64" />
-            <Parameter Name="Process" Mode="In" Type="Int64" />
-            <Parameter Name="SectionGroup" Mode="In" Type="String" />
-          </FunctionImport>
           <FunctionImport Name="GET_M_ErrorLogs" ReturnType="Collection(Brothers_AMSDBModel.GET_M_ErrorLogs_Result)">
           <Parameter Name="DateSearch" Mode="In" Type="DateTime" />
           </FunctionImport>
@@ -1487,9 +1503,6 @@
           </FunctionImport>
           <EntitySet Name="Z_UploadTracker" EntityType="Brothers_AMSDBModel.Z_UploadTracker" />
           <EntitySet Name="M_Agency" EntityType="Brothers_AMSDBModel.M_Agency" />
-          <FunctionImport Name="GET_AF_CSRequest" ReturnType="Collection(Brothers_AMSDBModel.GET_AF_CSRequest_Result)">
-          <Parameter Name="SectionSuperGroup" Mode="In" Type="String" />
-          </FunctionImport>
           <FunctionImport Name="GET_AF_CSRequest_Detail" ReturnType="Collection(Brothers_AMSDBModel.GET_AF_CSRequest_Detail_Result)">
           <Parameter Name="CSRefNo" Mode="In" Type="String" />
           </FunctionImport>
@@ -1534,12 +1547,6 @@
             <Parameter Name="Line" Mode="In" Type="Int64" />
             <Parameter Name="Department" Mode="In" Type="String" />
           </FunctionImport>
-          <FunctionImport Name="Department_Dashboard_AbsentRate_Yearly">
-            <Parameter Name="Agency" Mode="In" Type="String" />
-            <Parameter Name="Shift" Mode="In" Type="String" />
-            <Parameter Name="Line" Mode="In" Type="Int64" />
-            <Parameter Name="Department" Mode="In" Type="String" />
-          </FunctionImport>
           <FunctionImport Name="Department_Dashboard_AWOLandResignRate" ReturnType="Collection(Brothers_AMSDBModel.Department_Dashboard_AWOLandResignRate_Result)">
             <Parameter Name="Month" Mode="In" Type="Int32" />
             <Parameter Name="Year" Mode="In" Type="Int32" />
@@ -1571,12 +1578,6 @@
           </FunctionImport>
           <FunctionImport Name="Department_Dashboard_LeaveBreakDown_Monthly" ReturnType="Collection(Brothers_AMSDBModel.Department_Dashboard_LeaveBreakDown_Monthly_Result)">
             <Parameter Name="Year" Mode="In" Type="Int32" />
-            <Parameter Name="Agency" Mode="In" Type="String" />
-            <Parameter Name="Shift" Mode="In" Type="String" />
-            <Parameter Name="Line" Mode="In" Type="Int64" />
-            <Parameter Name="Department" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="Department_Dashboard_LeaveBreakDown_Yearly">
             <Parameter Name="Agency" Mode="In" Type="String" />
             <Parameter Name="Shift" Mode="In" Type="String" />
             <Parameter Name="Line" Mode="In" Type="Int64" />
@@ -1623,6 +1624,84 @@
             <Parameter Name="Shift" Mode="In" Type="String" />
             <Parameter Name="Line" Mode="In" Type="Int64" />
             <Parameter Name="Department" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="Department_Dashboard_AbsentRate_Yearly" ReturnType="Collection(Brothers_AMSDBModel.Department_Dashboard_AbsentRate_Yearly_Result)">
+            <Parameter Name="Agency" Mode="In" Type="String" />
+            <Parameter Name="Shift" Mode="In" Type="String" />
+            <Parameter Name="Line" Mode="In" Type="Int64" />
+            <Parameter Name="Department" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="Department_Dashboard_LeaveBreakDown_Yearly" ReturnType="Collection(Brothers_AMSDBModel.Department_Dashboard_LeaveBreakDown_Yearly_Result)">
+            <Parameter Name="Agency" Mode="In" Type="String" />
+            <Parameter Name="Shift" Mode="In" Type="String" />
+            <Parameter Name="Line" Mode="In" Type="Int64" />
+            <Parameter Name="Department" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="GET_TT_EmployeeLineView2" ReturnType="Collection(Brothers_AMSDBModel.GET_TT_EmployeeLineView2_Result)">
+            <Parameter Name="Section" Mode="In" Type="String" />
+            <Parameter Name="Shift" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="AF_EmailCSRequest_Rejected">
+          <Parameter Name="CSRefno" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="M_SP_ImportEmployeeFromITSystem_forMaintenance">
+          <Parameter Name="Username" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="GET_RP_AttendanceMonitoring_TimeINOUT_HRExport" ReturnType="Collection(Brothers_AMSDBModel.GET_RP_AttendanceMonitoring_TimeINOUT_HRExport_Result)">
+            <Parameter Name="Month" Mode="In" Type="Int32" />
+            <Parameter Name="Year" Mode="In" Type="Int32" />
+            <Parameter Name="Section" Mode="In" Type="String" />
+            <Parameter Name="Agency" Mode="In" Type="String" />
+            <Parameter Name="Date" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="GET_RP_AttendanceMonitoring_TimeINOUT_HRExport_D" ReturnType="Collection(Brothers_AMSDBModel.GET_RP_AttendanceMonitoring_TimeINOUT_HRExport_D_Result)">
+            <Parameter Name="Month" Mode="In" Type="Int32" />
+            <Parameter Name="Year" Mode="In" Type="Int32" />
+            <Parameter Name="Section" Mode="In" Type="String" />
+            <Parameter Name="Agency" Mode="In" Type="String" />
+            <Parameter Name="DateFROM" Mode="In" Type="DateTime" />
+            <Parameter Name="DateTO" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="GET_RP_WrongShift" ReturnType="Collection(Brothers_AMSDBModel.GET_RP_WrongShift_Result)">
+            <Parameter Name="Month" Mode="In" Type="Int32" />
+            <Parameter Name="Year" Mode="In" Type="Int32" />
+            <Parameter Name="Section" Mode="In" Type="String" />
+            <Parameter Name="Agency" Mode="In" Type="String" />
+            <Parameter Name="DateFROM" Mode="In" Type="DateTime" />
+            <Parameter Name="DateTO" Mode="In" Type="DateTime" />
+            <Parameter Name="Shift" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="GET_AF_CSRequest" ReturnType="Collection(Brothers_AMSDBModel.GET_AF_CSRequest_Result)">
+            <Parameter Name="SectionSuperGroup" Mode="In" Type="String" />
+            <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
+            <Parameter Name="DateTo" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="GET_AF_CSSummaryDetailExport" ReturnType="Collection(Brothers_AMSDBModel.GET_AF_CSSummaryDetailExport_Result)">
+            <Parameter Name="Section" Mode="In" Type="String" />
+            <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
+            <Parameter Name="DateTo" Mode="In" Type="DateTime" />
+            <Parameter Name="Status" Mode="In" Type="String" />
+          </FunctionImport>
+          <EntitySet Name="M_Employee_Status" EntityType="Brothers_AMSDBModel.M_Employee_Status" />
+          <FunctionImport Name="GET_Employee_ModifiedStatus" ReturnType="Collection(Brothers_AMSDBModel.GET_Employee_ModifiedStatus_Result)">
+          <Parameter Name="EmployNo" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="AF_EmailCSRequestApprovers" />
+          <FunctionImport Name="GET_RP_MPCMonitoringv2" ReturnType="Collection(Brothers_AMSDBModel.GET_RP_MPCMonitoringv2_Result)">
+            <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
+            <Parameter Name="DateTo" Mode="In" Type="DateTime" />
+            <Parameter Name="Shift" Mode="In" Type="Int64" />
+            <Parameter Name="Line" Mode="In" Type="Int64" />
+            <Parameter Name="Process" Mode="In" Type="Int64" />
+            <Parameter Name="SectionGroup" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="GET_RP_MPCMonitoringv2ALLShift" ReturnType="Collection(Brothers_AMSDBModel.GET_RP_MPCMonitoringv2ALLShift_Result)">
+            <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
+            <Parameter Name="DateTo" Mode="In" Type="DateTime" />
+            <Parameter Name="Shift" Mode="In" Type="String" />
+            <Parameter Name="Line" Mode="In" Type="Int64" />
+            <Parameter Name="Process" Mode="In" Type="Int64" />
+            <Parameter Name="SectionGroup" Mode="In" Type="String" />
           </FunctionImport>
           </EntityContainer>
         <ComplexType Name="GET_AF_Approver_Result">
@@ -1740,12 +1819,6 @@
         <ComplexType Name="GET_Employee_ModifiedPosition_Result">
           <Property Type="String" Name="EmployNo" Nullable="true" MaxLength="50" />
           <Property Type="String" Name="Position" Nullable="true" MaxLength="50" />
-          <Property Type="DateTime" Name="UpdateDate" Nullable="true" Precision="23" />
-          <Property Type="String" Name="UpdateID" Nullable="true" MaxLength="81" />
-        </ComplexType>
-        <ComplexType Name="GET_Employee_ModifiedStatus_Result">
-          <Property Type="String" Name="EmployNo" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="Status" Nullable="true" MaxLength="50" />
           <Property Type="DateTime" Name="UpdateDate" Nullable="true" Precision="23" />
           <Property Type="String" Name="UpdateID" Nullable="true" MaxLength="81" />
         </ComplexType>
@@ -2111,12 +2184,6 @@
           <Property Type="String" Name="EmpNo" Nullable="true" MaxLength="20" />
           <Property Type="String" Name="EmployeeName" Nullable="true" MaxLength="61" />
         </ComplexType>
-        <ComplexType Name="GET_TT_EmployeeLineView2_Result">
-          <Property Type="Int64" Name="LineID" Nullable="false" />
-          <Property Type="String" Name="Line" Nullable="true" MaxLength="50" />
-          <Property Type="Int32" Name="CurrentCount" Nullable="true" />
-          <Property Type="String" Name="Section" Nullable="true" MaxLength="50" />
-        </ComplexType>
         <EntityType Name="AF_DTRfiling">
           <Key>
             <PropertyRef Name="ID" />
@@ -2430,18 +2497,6 @@
           <Property Type="String" Name="ID" Nullable="false" />
           <Property Type="String" Name="ScheduleName" Nullable="false" />
         </ComplexType>
-        <EntityType Name="M_Employee_Status">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="EmployNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="HRStatus" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
-          <Property Name="Update_ID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="HRUpdateDate" Type="DateTime" Precision="3" />
-        </EntityType>
         <ComplexType Name="Dashboard_ManpowerAttendanceRate_Result">
           <Property Type="Int32" Name="Year" Nullable="true" />
           <Property Type="Int32" Name="Monthnum" Nullable="true" />
@@ -2740,46 +2795,6 @@
           <Property Type="String" Name="SchedName" Nullable="true" MaxLength="76" />
           <Property Type="Int32" Name="prio" Nullable="false" />
         </ComplexType>
-        <ComplexType Name="GET_RP_MPCMonitoringv2_Result">
-          <Property Type="Int64" Name="Rownum" Nullable="true" />
-          <Property Type="Int32" Name="Prio" Nullable="false" />
-          <Property Type="DateTime" Name="InDate" Nullable="true" />
-          <Property Type="String" Name="TimeIn" Nullable="false" MaxLength="5" />
-          <Property Type="DateTime" Name="InDateOut" Nullable="true" />
-          <Property Type="String" Name="TimeOut" Nullable="false" MaxLength="5" />
-          <Property Type="String" Name="Shift" Nullable="false" MaxLength="73" />
-          <Property Type="String" Name="Line" Nullable="false" MaxLength="50" />
-          <Property Type="String" Name="Skill" Nullable="false" MaxLength="50" />
-          <Property Type="String" Name="EmpNo" Nullable="true" MaxLength="100" />
-          <Property Type="String" Name="EmployeeName" Nullable="true" MaxLength="201" />
-          <Property Type="String" Name="Date_Hired" Nullable="true" MaxLength="100" />
-          <Property Type="DateTime" Name="DateCertified" Nullable="true" Precision="23" />
-          <Property Type="String" Name="Status" Nullable="true" MaxLength="100" />
-          <Property Type="Int64" Name="TTID" Nullable="false" />
-          <Property Type="String" Name="Certified" Nullable="false" MaxLength="5" />
-          <Property Type="Int32" Name="CountTransfer" Nullable="true" />
-          <Property Type="String" Name="TrueColor" Nullable="false" MaxLength="5" />
-        </ComplexType>
-        <ComplexType Name="GET_RP_MPCMonitoringv2ALLShift_Result">
-          <Property Type="Int64" Name="Rownum" Nullable="true" />
-          <Property Type="Int32" Name="Prio" Nullable="false" />
-          <Property Type="DateTime" Name="InDate" Nullable="true" />
-          <Property Type="String" Name="TimeIn" Nullable="false" MaxLength="5" />
-          <Property Type="DateTime" Name="InDateOut" Nullable="true" />
-          <Property Type="String" Name="TimeOut" Nullable="false" MaxLength="5" />
-          <Property Type="String" Name="Shift" Nullable="false" MaxLength="73" />
-          <Property Type="String" Name="Line" Nullable="false" MaxLength="50" />
-          <Property Type="String" Name="Skill" Nullable="false" MaxLength="50" />
-          <Property Type="String" Name="EmpNo" Nullable="true" MaxLength="100" />
-          <Property Type="String" Name="EmployeeName" Nullable="true" MaxLength="201" />
-          <Property Type="String" Name="Date_Hired" Nullable="true" MaxLength="100" />
-          <Property Type="DateTime" Name="DateCertified" Nullable="true" Precision="23" />
-          <Property Type="String" Name="Status" Nullable="true" MaxLength="100" />
-          <Property Type="Int64" Name="TTID" Nullable="false" />
-          <Property Type="String" Name="Certified" Nullable="false" MaxLength="5" />
-          <Property Type="Int32" Name="CountTransfer" Nullable="true" />
-          <Property Type="String" Name="TrueColor" Nullable="false" MaxLength="5" />
-        </ComplexType>
         <ComplexType Name="GET_M_ErrorLogs_Result">
           <Property Type="Int64" Name="Rownum" Nullable="true" />
           <Property Type="Int64" Name="ID" Nullable="false" />
@@ -2881,16 +2896,6 @@
           <Property Name="UpdateDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="TelNo" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
         </EntityType>
-        <ComplexType Name="GET_AF_CSRequest_Result">
-          <Property Type="Int64" Name="Rownum" Nullable="true" />
-          <Property Type="String" Name="CS_RefNo" Nullable="false" MaxLength="50" />
-          <Property Type="String" Name="Section" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="CreateDate" Nullable="true" MaxLength="20" />
-          <Property Type="Int32" Name="Status" Nullable="false" />
-          <Property Type="Int32" Name="StatusMax" Nullable="false" />
-          <Property Type="String" Name="ApprovedSupervisor" Nullable="true" MaxLength="122" />
-          <Property Type="String" Name="ApprovedManager" Nullable="true" MaxLength="122" />
-        </ComplexType>
         <ComplexType Name="GET_AF_CSRequest_Detail_Result">
           <Property Type="Int64" Name="Rownum" Nullable="true" />
           <Property Type="Int64" Name="ID" Nullable="false" />
@@ -3092,6 +3097,142 @@
           <Property Type="Int32" Name="HeadCount" Nullable="true" />
           <Property Type="Decimal" Name="TotalOT" Nullable="true" Precision="38" Scale="2" />
         </ComplexType>
+        <ComplexType Name="Department_Dashboard_AbsentRate_Yearly_Result">
+          <Property Type="Int32" Name="YEAR" Nullable="false" />
+          <Property Type="Int32" Name="TotalDayAbsent" Nullable="false" />
+          <Property Type="Int32" Name="CurrentMPTotalDay" Nullable="false" />
+          <Property Type="Int32" Name="TotalNightAbsent" Nullable="false" />
+          <Property Type="Int32" Name="CurrentMPTotalNight" Nullable="false" />
+          <Property Type="Int32" Name="TotalNoSchedAbsent" Nullable="false" />
+          <Property Type="Int32" Name="CurrentMPTotalNoSched" Nullable="false" />
+          <Property Type="Int32" Name="TotalAbsent" Nullable="false" />
+          <Property Type="Int32" Name="TotalMP" Nullable="false" />
+          <Property Type="Decimal" Name="DayPercent" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="NightPercent" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="NoSchedPercent" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="TotalAbsentPercent" Nullable="true" Precision="18" Scale="2" />
+        </ComplexType>
+        <ComplexType Name="Department_Dashboard_LeaveBreakDown_Yearly_Result">
+          <Property Type="Int32" Name="YEAR" Nullable="false" />
+          <Property Type="String" Name="LeaveType" Nullable="false" MaxLength="2" />
+          <Property Type="Int32" Name="TotalHeadcount" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="GET_TT_EmployeeLineView2_Result">
+          <Property Type="Int64" Name="LineID" Nullable="false" />
+          <Property Type="String" Name="Line" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="CurrentCount" Nullable="true" />
+          <Property Type="Int32" Name="Countprocess" Nullable="true" />
+          <Property Type="String" Name="Section" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="GET_RP_AttendanceMonitoring_TimeINOUT_HRExport_Result">
+          <Property Type="String" Name="EmpNo" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Date" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="LogType" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="TimeTap" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="Shifts" Nullable="true" MaxLength="20" />
+        </ComplexType>
+        <ComplexType Name="GET_RP_AttendanceMonitoring_TimeINOUT_HRExport_D_Result">
+          <Property Type="String" Name="EmpNo" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Date" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="LogType" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="TimeTap" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="Shifts" Nullable="true" MaxLength="20" />
+        </ComplexType>
+        <ComplexType Name="GET_RP_WrongShift_Result">
+          <Property Type="String" Name="EmpNo" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Date" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="LogType" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="TimeTap" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="Shifts" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="EmployeeName" Nullable="true" MaxLength="202" />
+          <Property Type="String" Name="Section" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="GET_AF_CSRequest_Result">
+          <Property Type="Int64" Name="Rownum" Nullable="true" />
+          <Property Type="String" Name="CS_RefNo" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Section" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="CreateDate" Nullable="true" MaxLength="20" />
+          <Property Type="Int32" Name="Status" Nullable="false" />
+          <Property Type="Int32" Name="StatusMax" Nullable="false" />
+          <Property Type="String" Name="ApprovedSupervisor" Nullable="true" MaxLength="122" />
+          <Property Type="String" Name="ApprovedManager" Nullable="true" MaxLength="122" />
+        </ComplexType>
+        <ComplexType Name="GET_AF_CSSummaryDetailExport_Result">
+          <Property Type="Int32" Name="Rownum" Nullable="true" />
+          <Property Type="String" Name="CS_RefNo" Nullable="true" />
+          <Property Type="String" Name="EmployeeNo" Nullable="true" />
+          <Property Type="String" Name="EmployeeName" Nullable="true" />
+          <Property Type="String" Name="Section" Nullable="true" />
+          <Property Type="String" Name="Reason" Nullable="true" />
+          <Property Type="DateTime" Name="DateFrom" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="DateTo" Nullable="true" Precision="23" />
+          <Property Type="String" Name="CSin" Nullable="true" />
+          <Property Type="String" Name="CSout" Nullable="true" />
+        </ComplexType>
+        <EntityType Name="M_Employee_Status">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EmployNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="Update_ID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="HRStatus" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="HRUpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="DateResigned" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <ComplexType Name="GET_Employee_ModifiedStatus_Result">
+          <Property Type="String" Name="EmployNo" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Status" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="DateResigned" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="HRStatus" Nullable="true" MaxLength="20" />
+          <Property Type="DateTime" Name="UpdateDate" Nullable="true" Precision="23" />
+          <Property Type="String" Name="UpdateID" Nullable="false" MaxLength="101" />
+        </ComplexType>
+        <ComplexType Name="GET_RP_MPCMonitoringv2_Result">
+          <Property Type="Int64" Name="Rownum" Nullable="true" />
+          <Property Type="Int32" Name="Prio" Nullable="false" />
+          <Property Type="String" Name="InDate" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="TimeIn" Nullable="false" MaxLength="5" />
+          <Property Type="String" Name="InDateOut" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="TimeOut" Nullable="false" MaxLength="5" />
+          <Property Type="String" Name="Shift" Nullable="false" MaxLength="74" />
+          <Property Type="String" Name="ChangeShift" Nullable="false" MaxLength="5" />
+          <Property Type="String" Name="OrigShift" Nullable="false" MaxLength="76" />
+          <Property Type="String" Name="Line" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Skill" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="EmpNo" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="EmployeeName" Nullable="true" MaxLength="201" />
+          <Property Type="String" Name="Date_Hired" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="DateCertified" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="Status" Nullable="true" MaxLength="50" />
+          <Property Type="Int64" Name="TTID" Nullable="false" />
+          <Property Type="String" Name="Certified" Nullable="false" MaxLength="5" />
+          <Property Type="Int32" Name="CountTransfer" Nullable="true" />
+          <Property Type="String" Name="TrueColor" Nullable="false" MaxLength="5" />
+        </ComplexType>
+        <ComplexType Name="GET_RP_MPCMonitoringv2ALLShift_Result">
+          <Property Type="Int64" Name="Rownum" Nullable="true" />
+          <Property Type="Int32" Name="Prio" Nullable="false" />
+          <Property Type="String" Name="InDate" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="TimeIn" Nullable="false" MaxLength="5" />
+          <Property Type="String" Name="InDateOut" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="TimeOut" Nullable="false" MaxLength="5" />
+          <Property Type="String" Name="Shift" Nullable="false" MaxLength="74" />
+          <Property Type="String" Name="ChangeShift" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="OrigShift" Nullable="false" MaxLength="76" />
+          <Property Type="String" Name="Line" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Skill" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="EmpNo" Nullable="true" />
+          <Property Type="String" Name="EmployeeName" Nullable="true" />
+          <Property Type="String" Name="Date_Hired" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="DateCertified" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="Status" Nullable="true" />
+          <Property Type="String" Name="Certified" Nullable="false" MaxLength="5" />
+          <Property Type="Int32" Name="CountTransfer" Nullable="true" />
+          <Property Type="String" Name="TrueColor" Nullable="false" MaxLength="5" />
+        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -3259,16 +3400,6 @@
               <ComplexTypeMapping TypeName="Brothers_AMSDBModel.GET_Employee_ModifiedPosition_Result">
                 <ScalarProperty Name="EmployNo" ColumnName="EmployNo" />
                 <ScalarProperty Name="Position" ColumnName="Position" />
-                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
-                <ScalarProperty Name="UpdateID" ColumnName="UpdateID" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="GET_Employee_ModifiedStatus" FunctionName="Brothers_AMSDBModel.Store.GET_Employee_ModifiedStatus">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="Brothers_AMSDBModel.GET_Employee_ModifiedStatus_Result">
-                <ScalarProperty Name="EmployNo" ColumnName="EmployNo" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
                 <ScalarProperty Name="UpdateID" ColumnName="UpdateID" />
               </ComplexTypeMapping>
@@ -3671,16 +3802,6 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="GET_TT_EmployeeLineView2" FunctionName="Brothers_AMSDBModel.Store.GET_TT_EmployeeLineView2">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="Brothers_AMSDBModel.GET_TT_EmployeeLineView2_Result">
-                <ScalarProperty Name="LineID" ColumnName="LineID" />
-                <ScalarProperty Name="Line" ColumnName="Line" />
-                <ScalarProperty Name="CurrentCount" ColumnName="CurrentCount" />
-                <ScalarProperty Name="Section" ColumnName="Section" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="AF_UpdateApprovedDTR" FunctionName="Brothers_AMSDBModel.Store.AF_UpdateApprovedDTR" />
           <EntitySetMapping Name="AF_DTRfiling">
             <EntityTypeMapping TypeName="Brothers_AMSDBModel.AF_DTRfiling">
@@ -4076,19 +4197,6 @@
           <FunctionImportMapping FunctionImportName="M_SP_ImportEmployeeCostCenter" FunctionName="Brothers_AMSDBModel.Store.M_SP_ImportEmployeeCostCenter" />
           <FunctionImportMapping FunctionImportName="M_SP_ImportEmployeeFromITSystem" FunctionName="Brothers_AMSDBModel.Store.M_SP_ImportEmployeeFromITSystem" />
           <FunctionImportMapping FunctionImportName="M_SP_ImportEmployeeStatus" FunctionName="Brothers_AMSDBModel.Store.M_SP_ImportEmployeeStatus" />
-          <EntitySetMapping Name="M_Employee_Status">
-            <EntityTypeMapping TypeName="Brothers_AMSDBModel.M_Employee_Status">
-              <MappingFragment StoreEntitySet="M_Employee_Status">
-                <ScalarProperty Name="HRUpdateDate" ColumnName="HRUpdateDate" />
-                <ScalarProperty Name="Update_ID" ColumnName="Update_ID" />
-                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="HRStatus" ColumnName="HRStatus" />
-                <ScalarProperty Name="EmployNo" ColumnName="EmployNo" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="Dashboard_ManpowerAttendanceRate" FunctionName="Brothers_AMSDBModel.Store.Dashboard_ManpowerAttendanceRate">
             <ResultMapping>
               <ComplexTypeMapping TypeName="Brothers_AMSDBModel.Dashboard_ManpowerAttendanceRate_Result">
@@ -4480,54 +4588,6 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="GET_RP_MPCMonitoringv2" FunctionName="Brothers_AMSDBModel.Store.GET_RP_MPCMonitoringv2">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="Brothers_AMSDBModel.GET_RP_MPCMonitoringv2_Result">
-                <ScalarProperty Name="Rownum" ColumnName="Rownum" />
-                <ScalarProperty Name="Prio" ColumnName="Prio" />
-                <ScalarProperty Name="InDate" ColumnName="InDate" />
-                <ScalarProperty Name="TimeIn" ColumnName="TimeIn" />
-                <ScalarProperty Name="InDateOut" ColumnName="InDateOut" />
-                <ScalarProperty Name="TimeOut" ColumnName="TimeOut" />
-                <ScalarProperty Name="Shift" ColumnName="Shift" />
-                <ScalarProperty Name="Line" ColumnName="Line" />
-                <ScalarProperty Name="Skill" ColumnName="Skill" />
-                <ScalarProperty Name="EmpNo" ColumnName="EmpNo" />
-                <ScalarProperty Name="EmployeeName" ColumnName="EmployeeName" />
-                <ScalarProperty Name="Date_Hired" ColumnName="Date_Hired" />
-                <ScalarProperty Name="DateCertified" ColumnName="DateCertified" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="TTID" ColumnName="TTID" />
-                <ScalarProperty Name="Certified" ColumnName="Certified" />
-                <ScalarProperty Name="CountTransfer" ColumnName="CountTransfer" />
-                <ScalarProperty Name="TrueColor" ColumnName="TrueColor" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="GET_RP_MPCMonitoringv2ALLShift" FunctionName="Brothers_AMSDBModel.Store.GET_RP_MPCMonitoringv2ALLShift">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="Brothers_AMSDBModel.GET_RP_MPCMonitoringv2ALLShift_Result">
-                <ScalarProperty Name="Rownum" ColumnName="Rownum" />
-                <ScalarProperty Name="Prio" ColumnName="Prio" />
-                <ScalarProperty Name="InDate" ColumnName="InDate" />
-                <ScalarProperty Name="TimeIn" ColumnName="TimeIn" />
-                <ScalarProperty Name="InDateOut" ColumnName="InDateOut" />
-                <ScalarProperty Name="TimeOut" ColumnName="TimeOut" />
-                <ScalarProperty Name="Shift" ColumnName="Shift" />
-                <ScalarProperty Name="Line" ColumnName="Line" />
-                <ScalarProperty Name="Skill" ColumnName="Skill" />
-                <ScalarProperty Name="EmpNo" ColumnName="EmpNo" />
-                <ScalarProperty Name="EmployeeName" ColumnName="EmployeeName" />
-                <ScalarProperty Name="Date_Hired" ColumnName="Date_Hired" />
-                <ScalarProperty Name="DateCertified" ColumnName="DateCertified" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="TTID" ColumnName="TTID" />
-                <ScalarProperty Name="Certified" ColumnName="Certified" />
-                <ScalarProperty Name="CountTransfer" ColumnName="CountTransfer" />
-                <ScalarProperty Name="TrueColor" ColumnName="TrueColor" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="GET_M_ErrorLogs" FunctionName="Brothers_AMSDBModel.Store.GET_M_ErrorLogs">
             <ResultMapping>
               <ComplexTypeMapping TypeName="Brothers_AMSDBModel.GET_M_ErrorLogs_Result">
@@ -4642,20 +4702,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="GET_AF_CSRequest" FunctionName="Brothers_AMSDBModel.Store.GET_AF_CSRequest">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="Brothers_AMSDBModel.GET_AF_CSRequest_Result">
-                <ScalarProperty Name="Rownum" ColumnName="Rownum" />
-                <ScalarProperty Name="CS_RefNo" ColumnName="CS_RefNo" />
-                <ScalarProperty Name="Section" ColumnName="Section" />
-                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="StatusMax" ColumnName="StatusMax" />
-                <ScalarProperty Name="ApprovedSupervisor" ColumnName="ApprovedSupervisor" />
-                <ScalarProperty Name="ApprovedManager" ColumnName="ApprovedManager" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="GET_AF_CSRequest_Detail" FunctionName="Brothers_AMSDBModel.Store.GET_AF_CSRequest_Detail">
             <ResultMapping>
               <ComplexTypeMapping TypeName="Brothers_AMSDBModel.GET_AF_CSRequest_Detail_Result">
@@ -4808,7 +4854,6 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="Department_Dashboard_AbsentRate_Yearly" FunctionName="Brothers_AMSDBModel.Store.Department_Dashboard_AbsentRate_Yearly" />
           <FunctionImportMapping FunctionImportName="Department_Dashboard_AWOLandResignRate" FunctionName="Brothers_AMSDBModel.Store.Department_Dashboard_AWOLandResignRate">
             <ResultMapping>
               <ComplexTypeMapping TypeName="Brothers_AMSDBModel.Department_Dashboard_AWOLandResignRate_Result">
@@ -4862,7 +4907,6 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="Department_Dashboard_LeaveBreakDown_Yearly" FunctionName="Brothers_AMSDBModel.Store.Department_Dashboard_LeaveBreakDown_Yearly" />
           <FunctionImportMapping FunctionImportName="Department_Dashboard_ManpowerAttendanceRate" FunctionName="Brothers_AMSDBModel.Store.Department_Dashboard_ManpowerAttendanceRate">
             <ResultMapping>
               <ComplexTypeMapping TypeName="Brothers_AMSDBModel.Department_Dashboard_ManpowerAttendanceRate_Result">
@@ -4932,6 +4976,190 @@
                 <ScalarProperty Name="Year" ColumnName="Year" />
                 <ScalarProperty Name="HeadCount" ColumnName="HeadCount" />
                 <ScalarProperty Name="TotalOT" ColumnName="TotalOT" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="Department_Dashboard_AbsentRate_Yearly" FunctionName="Brothers_AMSDBModel.Store.Department_Dashboard_AbsentRate_Yearly">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Brothers_AMSDBModel.Department_Dashboard_AbsentRate_Yearly_Result">
+                <ScalarProperty Name="YEAR" ColumnName="YEAR" />
+                <ScalarProperty Name="TotalDayAbsent" ColumnName="TotalDayAbsent" />
+                <ScalarProperty Name="CurrentMPTotalDay" ColumnName="CurrentMPTotalDay" />
+                <ScalarProperty Name="TotalNightAbsent" ColumnName="TotalNightAbsent" />
+                <ScalarProperty Name="CurrentMPTotalNight" ColumnName="CurrentMPTotalNight" />
+                <ScalarProperty Name="TotalNoSchedAbsent" ColumnName="TotalNoSchedAbsent" />
+                <ScalarProperty Name="CurrentMPTotalNoSched" ColumnName="CurrentMPTotalNoSched" />
+                <ScalarProperty Name="TotalAbsent" ColumnName="TotalAbsent" />
+                <ScalarProperty Name="TotalMP" ColumnName="TotalMP" />
+                <ScalarProperty Name="DayPercent" ColumnName="DayPercent" />
+                <ScalarProperty Name="NightPercent" ColumnName="NightPercent" />
+                <ScalarProperty Name="NoSchedPercent" ColumnName="NoSchedPercent" />
+                <ScalarProperty Name="TotalAbsentPercent" ColumnName="TotalAbsentPercent" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="Department_Dashboard_LeaveBreakDown_Yearly" FunctionName="Brothers_AMSDBModel.Store.Department_Dashboard_LeaveBreakDown_Yearly">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Brothers_AMSDBModel.Department_Dashboard_LeaveBreakDown_Yearly_Result">
+                <ScalarProperty Name="YEAR" ColumnName="YEAR" />
+                <ScalarProperty Name="LeaveType" ColumnName="LeaveType" />
+                <ScalarProperty Name="TotalHeadcount" ColumnName="TotalHeadcount" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GET_TT_EmployeeLineView2" FunctionName="Brothers_AMSDBModel.Store.GET_TT_EmployeeLineView2">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Brothers_AMSDBModel.GET_TT_EmployeeLineView2_Result">
+                <ScalarProperty Name="LineID" ColumnName="LineID" />
+                <ScalarProperty Name="Line" ColumnName="Line" />
+                <ScalarProperty Name="CurrentCount" ColumnName="CurrentCount" />
+                <ScalarProperty Name="Countprocess" ColumnName="Countprocess" />
+                <ScalarProperty Name="Section" ColumnName="Section" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="AF_EmailCSRequest_Rejected" FunctionName="Brothers_AMSDBModel.Store.AF_EmailCSRequest_Rejected" />
+          <FunctionImportMapping FunctionImportName="M_SP_ImportEmployeeFromITSystem_forMaintenance" FunctionName="Brothers_AMSDBModel.Store.M_SP_ImportEmployeeFromITSystem_forMaintenance" />
+          <FunctionImportMapping FunctionImportName="GET_RP_AttendanceMonitoring_TimeINOUT_HRExport" FunctionName="Brothers_AMSDBModel.Store.GET_RP_AttendanceMonitoring_TimeINOUT_HRExport">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Brothers_AMSDBModel.GET_RP_AttendanceMonitoring_TimeINOUT_HRExport_Result">
+                <ScalarProperty Name="EmpNo" ColumnName="EmpNo" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="LogType" ColumnName="LogType" />
+                <ScalarProperty Name="TimeTap" ColumnName="TimeTap" />
+                <ScalarProperty Name="Shifts" ColumnName="Shifts" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GET_RP_AttendanceMonitoring_TimeINOUT_HRExport_D" FunctionName="Brothers_AMSDBModel.Store.GET_RP_AttendanceMonitoring_TimeINOUT_HRExport_D">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Brothers_AMSDBModel.GET_RP_AttendanceMonitoring_TimeINOUT_HRExport_D_Result">
+                <ScalarProperty Name="EmpNo" ColumnName="EmpNo" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="LogType" ColumnName="LogType" />
+                <ScalarProperty Name="TimeTap" ColumnName="TimeTap" />
+                <ScalarProperty Name="Shifts" ColumnName="Shifts" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GET_RP_WrongShift" FunctionName="Brothers_AMSDBModel.Store.GET_RP_WrongShift">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Brothers_AMSDBModel.GET_RP_WrongShift_Result">
+                <ScalarProperty Name="EmpNo" ColumnName="EmpNo" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="LogType" ColumnName="LogType" />
+                <ScalarProperty Name="TimeTap" ColumnName="TimeTap" />
+                <ScalarProperty Name="Shifts" ColumnName="Shifts" />
+                <ScalarProperty Name="EmployeeName" ColumnName="EmployeeName" />
+                <ScalarProperty Name="Section" ColumnName="Section" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GET_AF_CSRequest" FunctionName="Brothers_AMSDBModel.Store.GET_AF_CSRequest">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Brothers_AMSDBModel.GET_AF_CSRequest_Result">
+                <ScalarProperty Name="Rownum" ColumnName="Rownum" />
+                <ScalarProperty Name="CS_RefNo" ColumnName="CS_RefNo" />
+                <ScalarProperty Name="Section" ColumnName="Section" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="StatusMax" ColumnName="StatusMax" />
+                <ScalarProperty Name="ApprovedSupervisor" ColumnName="ApprovedSupervisor" />
+                <ScalarProperty Name="ApprovedManager" ColumnName="ApprovedManager" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GET_AF_CSSummaryDetailExport" FunctionName="Brothers_AMSDBModel.Store.GET_AF_CSSummaryDetailExport">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Brothers_AMSDBModel.GET_AF_CSSummaryDetailExport_Result">
+                <ScalarProperty Name="Rownum" ColumnName="Rownum" />
+                <ScalarProperty Name="CS_RefNo" ColumnName="CS_RefNo" />
+                <ScalarProperty Name="EmployeeNo" ColumnName="EmployeeNo" />
+                <ScalarProperty Name="EmployeeName" ColumnName="EmployeeName" />
+                <ScalarProperty Name="Section" ColumnName="Section" />
+                <ScalarProperty Name="Reason" ColumnName="Reason" />
+                <ScalarProperty Name="DateFrom" ColumnName="DateFrom" />
+                <ScalarProperty Name="DateTo" ColumnName="DateTo" />
+                <ScalarProperty Name="CSin" ColumnName="CSin" />
+                <ScalarProperty Name="CSout" ColumnName="CSout" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="M_Employee_Status">
+            <EntityTypeMapping TypeName="Brothers_AMSDBModel.M_Employee_Status">
+              <MappingFragment StoreEntitySet="M_Employee_Status">
+                <ScalarProperty Name="DateResigned" ColumnName="DateResigned" />
+                <ScalarProperty Name="HRUpdateDate" ColumnName="HRUpdateDate" />
+                <ScalarProperty Name="HRStatus" ColumnName="HRStatus" />
+                <ScalarProperty Name="Update_ID" ColumnName="Update_ID" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="EmployNo" ColumnName="EmployNo" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="GET_Employee_ModifiedStatus" FunctionName="Brothers_AMSDBModel.Store.GET_Employee_ModifiedStatus">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Brothers_AMSDBModel.GET_Employee_ModifiedStatus_Result">
+                <ScalarProperty Name="EmployNo" ColumnName="EmployNo" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="DateResigned" ColumnName="DateResigned" />
+                <ScalarProperty Name="HRStatus" ColumnName="HRStatus" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="UpdateID" ColumnName="UpdateID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="AF_EmailCSRequestApprovers" FunctionName="Brothers_AMSDBModel.Store.AF_EmailCSRequestApprovers" />
+          <FunctionImportMapping FunctionImportName="GET_RP_MPCMonitoringv2" FunctionName="Brothers_AMSDBModel.Store.GET_RP_MPCMonitoringv2">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Brothers_AMSDBModel.GET_RP_MPCMonitoringv2_Result">
+                <ScalarProperty Name="Rownum" ColumnName="Rownum" />
+                <ScalarProperty Name="Prio" ColumnName="Prio" />
+                <ScalarProperty Name="InDate" ColumnName="InDate" />
+                <ScalarProperty Name="TimeIn" ColumnName="TimeIn" />
+                <ScalarProperty Name="InDateOut" ColumnName="InDateOut" />
+                <ScalarProperty Name="TimeOut" ColumnName="TimeOut" />
+                <ScalarProperty Name="Shift" ColumnName="Shift" />
+                <ScalarProperty Name="ChangeShift" ColumnName="ChangeShift" />
+                <ScalarProperty Name="OrigShift" ColumnName="OrigShift" />
+                <ScalarProperty Name="Line" ColumnName="Line" />
+                <ScalarProperty Name="Skill" ColumnName="Skill" />
+                <ScalarProperty Name="EmpNo" ColumnName="EmpNo" />
+                <ScalarProperty Name="EmployeeName" ColumnName="EmployeeName" />
+                <ScalarProperty Name="Date_Hired" ColumnName="Date_Hired" />
+                <ScalarProperty Name="DateCertified" ColumnName="DateCertified" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="TTID" ColumnName="TTID" />
+                <ScalarProperty Name="Certified" ColumnName="Certified" />
+                <ScalarProperty Name="CountTransfer" ColumnName="CountTransfer" />
+                <ScalarProperty Name="TrueColor" ColumnName="TrueColor" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GET_RP_MPCMonitoringv2ALLShift" FunctionName="Brothers_AMSDBModel.Store.GET_RP_MPCMonitoringv2ALLShift">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Brothers_AMSDBModel.GET_RP_MPCMonitoringv2ALLShift_Result">
+                <ScalarProperty Name="Rownum" ColumnName="Rownum" />
+                <ScalarProperty Name="Prio" ColumnName="Prio" />
+                <ScalarProperty Name="InDate" ColumnName="InDate" />
+                <ScalarProperty Name="TimeIn" ColumnName="TimeIn" />
+                <ScalarProperty Name="InDateOut" ColumnName="InDateOut" />
+                <ScalarProperty Name="TimeOut" ColumnName="TimeOut" />
+                <ScalarProperty Name="Shift" ColumnName="Shift" />
+                <ScalarProperty Name="ChangeShift" ColumnName="ChangeShift" />
+                <ScalarProperty Name="OrigShift" ColumnName="OrigShift" />
+                <ScalarProperty Name="Line" ColumnName="Line" />
+                <ScalarProperty Name="Skill" ColumnName="Skill" />
+                <ScalarProperty Name="EmpNo" ColumnName="EmpNo" />
+                <ScalarProperty Name="EmployeeName" ColumnName="EmployeeName" />
+                <ScalarProperty Name="Date_Hired" ColumnName="Date_Hired" />
+                <ScalarProperty Name="DateCertified" ColumnName="DateCertified" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Certified" ColumnName="Certified" />
+                <ScalarProperty Name="CountTransfer" ColumnName="CountTransfer" />
+                <ScalarProperty Name="TrueColor" ColumnName="TrueColor" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

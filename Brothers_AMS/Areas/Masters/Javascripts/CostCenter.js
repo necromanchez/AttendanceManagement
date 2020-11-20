@@ -14,11 +14,12 @@ function Initializepage() {
         lengthMenu: [[10, 50, 100], [10, 50, 100]],
         
         lengthChange: true,
-       
+        ordering:false,
         scrollCollapse: true,
         serverSide: "true",
         order: [0, "asc"],
         processing: "true",
+         scrollY: "600px",
         language: {
             "processing": "processing... please wait"
         },

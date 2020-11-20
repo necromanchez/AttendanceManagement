@@ -1,5 +1,5 @@
 ﻿$(function () {
-    Dropdown_selectMPMain2('SectionGroup', "/Helper/GetDropdown_SectionAMS");
+    Dropdown_selectEmpSection('SectionGroup', "/Helper/GetDropdown_SectionAMS");
     $("#SectionGroup").on("change", Initializepage);
     //$('#Skillmodal').on('hidden.bs.modal', function (e) {
     //    setTimeout(function () { location.reload(); }, 1000);
@@ -89,6 +89,7 @@ function Initializepage() {
         serverSide: "true",
         order: [0, "asc"],
         processing: "true",
+        scrollY: "600px",
         language: {
             "processing": "processing... please wait"
         },

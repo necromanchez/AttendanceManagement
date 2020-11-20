@@ -32,6 +32,40 @@
 }
 
 
+function YearlyDashboard_Department() {
+    $("#loading_modalD_Yearly").modal("show");
+    $.ajax({
+        url: '/Home/Get_YearlyDashboard_Department',
+        type: 'POST',
+        data: {
+            Agency: MAgency,
+            Line: MLine,
+            Shift: MShift,
+            GroupSection: $("#Sectiond").val()
+        },
+        datatype: "json",
+        success: function (returnData) {
+            GraphAttendanceRate_Yearly(returnData.AttendanceRateYearly);
+            GraphStartAbsentRate_Yearly(returnData.AbsentRateYearly);
+            var LeaveGroupData = returnData.LeaveBreakdownYearly;
+            var groupedDateSet = _.mapValues(_.groupBy(LeaveGroupData, 'Year'),
+                clist => clist.map(Year => _.omit(Year, 'Year')));
+            GraphStartLeaveBreakdown_Yearly(groupedDateSet);
+
+            var statusGroupData = returnData.AwolandResignedYearly;
+            var groupedDateSet2 = _.mapValues(_.groupBy(statusGroupData, 'Year'),
+                clist => clist.map(Year => _.omit(Year, 'Year')));
+            GraphStartGET_AWOLandResignrate_Yearly(groupedDateSet2);
+
+            GraphStartOTrate_Yearly(returnData.OTRateYearly);
+
+            $("#loading_modalD_Yearly").modal("hide");
+        }
+    });
+
+}
+
+
 function GraphAttendanceRate_Yearly(datahere) {
     var finalticks = [];
     var Present = [];
@@ -50,13 +84,13 @@ function GraphAttendanceRate_Yearly(datahere) {
         var Tickshere = [Iterator, x.Year];
         var Presentdata = [Iterator, x.PresentTotal];
         var Absentdata = [Iterator, x.AbsentTotal];
-        var PresentInactivedata = [Iterator, x.PresentInactive];
+        //var PresentInactivedata = [Iterator, x.PresentInactive];
         var MLCountdata = [Iterator, x.MLTotal];
         var NWCountdata = [Iterator, x.NWTotal];
         var Percentdata = [Iterator, x.Percentage];
 
         Present.push(Presentdata);
-        PresentInactive.push(PresentInactivedata);
+        //PresentInactive.push(PresentInactivedata);
         Absent.push(Absentdata);
         MLCount.push(MLCountdata);
         NWCount.push(NWCountdata);
@@ -91,14 +125,14 @@ function GraphAttendanceRate_Yearly(datahere) {
         fillColor: { colors: [{ opacity: 1 }, { opacity: 1 }] },
 
     };
-    var PresentInactiveSet = {
-        label: "Present Inactive Employees",
-        data: PresentInactive,
-        bars: bar_options,
-        fill: true,
-        fillColor: { colors: [{ opacity: 1 }, { opacity: 1 }] },
+    //var PresentInactiveSet = {
+    //    label: "Present Inactive Employees",
+    //    data: PresentInactive,
+    //    bars: bar_options,
+    //    fill: true,
+    //    fillColor: { colors: [{ opacity: 1 }, { opacity: 1 }] },
 
-    };
+    //};
 
     var AbsentSet = {
         label: 'Absent',
@@ -146,10 +180,10 @@ function GraphAttendanceRate_Yearly(datahere) {
         data.push(AbsentSet);
         data.push(MLCountSet);
         data.push(NWCountSet);
-        data.push(PresentInactiveSet);
+        //data.push(PresentInactiveSet);
         data.push(totalSet);
-        columncount = 6;
-        colored = ['#4E8EFF', '#FD8D86', '#F2FC86', '#929495', '#7CE7FF', 'red']
+        columncount = 5;
+        colored = ['#4E8EFF', '#FF6666', '#04B404', '#929495', 'red']
     }
     else {
         data.push(PresentSet);
@@ -158,7 +192,7 @@ function GraphAttendanceRate_Yearly(datahere) {
         data.push(NWCountSet);
         data.push(totalSet);
         columncount = 5;
-        colored = ['#4E8EFF', '#FD8D86', '#F2FC86', '#929495', 'red']
+        colored = ['#4E8EFF', '#FF6666', '#04B404', '#929495', 'red']
 
     }
     var tickis = finalticks;//MonthDay;//finalticks2[0];
