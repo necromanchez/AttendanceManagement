@@ -659,7 +659,7 @@ namespace Brothers_WMS.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AF_UpdateApprovedSchedule_old");
         }
     
-        public virtual int GET_RP_AttendanceMonitoring_Shift(Nullable<int> month, Nullable<int> year, string section, string agency)
+        public virtual int GET_RP_AttendanceMonitoring_Shift(Nullable<int> month, Nullable<int> year, string section, string agency, Nullable<int> pageCount, Nullable<int> rowCount, string searchvalue)
         {
             var monthParameter = month.HasValue ?
                 new ObjectParameter("Month", month) :
@@ -677,7 +677,19 @@ namespace Brothers_WMS.Models
                 new ObjectParameter("Agency", agency) :
                 new ObjectParameter("Agency", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("GET_RP_AttendanceMonitoring_Shift", monthParameter, yearParameter, sectionParameter, agencyParameter);
+            var pageCountParameter = pageCount.HasValue ?
+                new ObjectParameter("PageCount", pageCount) :
+                new ObjectParameter("PageCount", typeof(int));
+    
+            var rowCountParameter = rowCount.HasValue ?
+                new ObjectParameter("RowCount", rowCount) :
+                new ObjectParameter("RowCount", typeof(int));
+    
+            var searchvalueParameter = searchvalue != null ?
+                new ObjectParameter("Searchvalue", searchvalue) :
+                new ObjectParameter("Searchvalue", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("GET_RP_AttendanceMonitoring_Shift", monthParameter, yearParameter, sectionParameter, agencyParameter, pageCountParameter, rowCountParameter, searchvalueParameter);
         }
     
         public virtual int GET_RP_AttendanceMonitoring_TimeINOUT(Nullable<int> month, Nullable<int> year, string section, string agency, Nullable<int> pageCount, Nullable<int> rowCount, string searchvalue)
@@ -1531,7 +1543,7 @@ namespace Brothers_WMS.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GET_UserDetails_Export_Result>("GET_UserDetails_Export", costCodeParameter);
         }
     
-        public virtual ObjectResult<TT_EmployeeTaps_Result> TT_EmployeeTaps(string sectionGroup, Nullable<System.DateTime> datechosen, Nullable<System.DateTime> datechosenEnd, string agency)
+        public virtual ObjectResult<TT_EmployeeTaps_Result> TT_EmployeeTaps(string sectionGroup, Nullable<System.DateTime> datechosen, Nullable<System.DateTime> datechosenEnd, string agency, string searchvalue, Nullable<int> pageCount, Nullable<int> rowCount, ObjectParameter totalCount)
         {
             var sectionGroupParameter = sectionGroup != null ?
                 new ObjectParameter("SectionGroup", sectionGroup) :
@@ -1549,7 +1561,19 @@ namespace Brothers_WMS.Models
                 new ObjectParameter("Agency", agency) :
                 new ObjectParameter("Agency", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<TT_EmployeeTaps_Result>("TT_EmployeeTaps", sectionGroupParameter, datechosenParameter, datechosenEndParameter, agencyParameter);
+            var searchvalueParameter = searchvalue != null ?
+                new ObjectParameter("Searchvalue", searchvalue) :
+                new ObjectParameter("Searchvalue", typeof(string));
+    
+            var pageCountParameter = pageCount.HasValue ?
+                new ObjectParameter("PageCount", pageCount) :
+                new ObjectParameter("PageCount", typeof(int));
+    
+            var rowCountParameter = rowCount.HasValue ?
+                new ObjectParameter("RowCount", rowCount) :
+                new ObjectParameter("RowCount", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<TT_EmployeeTaps_Result>("TT_EmployeeTaps", sectionGroupParameter, datechosenParameter, datechosenEndParameter, agencyParameter, searchvalueParameter, pageCountParameter, rowCountParameter, totalCount);
         }
     
         public virtual ObjectResult<Department_Dashboard_AbsentRate_Result> Department_Dashboard_AbsentRate(Nullable<int> month, Nullable<int> year, string agency, string shift, Nullable<long> line, string department)
@@ -2097,7 +2121,7 @@ namespace Brothers_WMS.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AF_EmailCSRequestApprovers");
         }
     
-        public virtual ObjectResult<GET_RP_MPCMonitoringv2ALLShift_Result> GET_RP_MPCMonitoringv2ALLShift(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string shift, Nullable<long> line, Nullable<long> process, string sectionGroup)
+        public virtual ObjectResult<GET_RP_MPCMonitoringv2ALLShift_Result> GET_RP_MPCMonitoringv2ALLShift(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string shift, Nullable<long> line, Nullable<long> process, string sectionGroup, Nullable<int> pageCount, Nullable<int> rowCount, string searchvalue, string certified, ObjectParameter totalCount)
         {
             var dateFromParameter = dateFrom.HasValue ?
                 new ObjectParameter("DateFrom", dateFrom) :
@@ -2123,7 +2147,23 @@ namespace Brothers_WMS.Models
                 new ObjectParameter("SectionGroup", sectionGroup) :
                 new ObjectParameter("SectionGroup", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GET_RP_MPCMonitoringv2ALLShift_Result>("GET_RP_MPCMonitoringv2ALLShift", dateFromParameter, dateToParameter, shiftParameter, lineParameter, processParameter, sectionGroupParameter);
+            var pageCountParameter = pageCount.HasValue ?
+                new ObjectParameter("PageCount", pageCount) :
+                new ObjectParameter("PageCount", typeof(int));
+    
+            var rowCountParameter = rowCount.HasValue ?
+                new ObjectParameter("RowCount", rowCount) :
+                new ObjectParameter("RowCount", typeof(int));
+    
+            var searchvalueParameter = searchvalue != null ?
+                new ObjectParameter("Searchvalue", searchvalue) :
+                new ObjectParameter("Searchvalue", typeof(string));
+    
+            var certifiedParameter = certified != null ?
+                new ObjectParameter("Certified", certified) :
+                new ObjectParameter("Certified", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GET_RP_MPCMonitoringv2ALLShift_Result>("GET_RP_MPCMonitoringv2ALLShift", dateFromParameter, dateToParameter, shiftParameter, lineParameter, processParameter, sectionGroupParameter, pageCountParameter, rowCountParameter, searchvalueParameter, certifiedParameter, totalCount);
         }
     
         public virtual ObjectResult<GET_RP_AttendanceMonitoring_COUNT_Result> GET_RP_AttendanceMonitoring_COUNT(Nullable<int> month, Nullable<int> year, string section, string agency, string searchvalue)
@@ -2151,7 +2191,7 @@ namespace Brothers_WMS.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GET_RP_AttendanceMonitoring_COUNT_Result>("GET_RP_AttendanceMonitoring_COUNT", monthParameter, yearParameter, sectionParameter, agencyParameter, searchvalueParameter);
         }
     
-        public virtual ObjectResult<GET_RP_MPCMonitoringv2_Result> GET_RP_MPCMonitoringv2(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, Nullable<long> shift, Nullable<long> line, Nullable<long> process, string sectionGroup, Nullable<int> pageCount, Nullable<int> rowCount, string searchvalue)
+        public virtual ObjectResult<GET_RP_MPCMonitoringv2_Result> GET_RP_MPCMonitoringv2(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, Nullable<long> shift, Nullable<long> line, Nullable<long> process, string sectionGroup, Nullable<int> pageCount, Nullable<int> rowCount, string searchvalue, string certified, ObjectParameter totalCount)
         {
             var dateFromParameter = dateFrom.HasValue ?
                 new ObjectParameter("DateFrom", dateFrom) :
@@ -2189,40 +2229,11 @@ namespace Brothers_WMS.Models
                 new ObjectParameter("Searchvalue", searchvalue) :
                 new ObjectParameter("Searchvalue", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GET_RP_MPCMonitoringv2_Result>("GET_RP_MPCMonitoringv2", dateFromParameter, dateToParameter, shiftParameter, lineParameter, processParameter, sectionGroupParameter, pageCountParameter, rowCountParameter, searchvalueParameter);
-        }
+            var certifiedParameter = certified != null ?
+                new ObjectParameter("Certified", certified) :
+                new ObjectParameter("Certified", typeof(string));
     
-        public virtual ObjectResult<GET_RP_MPCMonitoringv2_Count_Result> GET_RP_MPCMonitoringv2_Count(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, Nullable<long> shift, Nullable<long> line, Nullable<long> process, string sectionGroup, string searchvalue)
-        {
-            var dateFromParameter = dateFrom.HasValue ?
-                new ObjectParameter("DateFrom", dateFrom) :
-                new ObjectParameter("DateFrom", typeof(System.DateTime));
-    
-            var dateToParameter = dateTo.HasValue ?
-                new ObjectParameter("DateTo", dateTo) :
-                new ObjectParameter("DateTo", typeof(System.DateTime));
-    
-            var shiftParameter = shift.HasValue ?
-                new ObjectParameter("Shift", shift) :
-                new ObjectParameter("Shift", typeof(long));
-    
-            var lineParameter = line.HasValue ?
-                new ObjectParameter("Line", line) :
-                new ObjectParameter("Line", typeof(long));
-    
-            var processParameter = process.HasValue ?
-                new ObjectParameter("Process", process) :
-                new ObjectParameter("Process", typeof(long));
-    
-            var sectionGroupParameter = sectionGroup != null ?
-                new ObjectParameter("SectionGroup", sectionGroup) :
-                new ObjectParameter("SectionGroup", typeof(string));
-    
-            var searchvalueParameter = searchvalue != null ?
-                new ObjectParameter("Searchvalue", searchvalue) :
-                new ObjectParameter("Searchvalue", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GET_RP_MPCMonitoringv2_Count_Result>("GET_RP_MPCMonitoringv2_Count", dateFromParameter, dateToParameter, shiftParameter, lineParameter, processParameter, sectionGroupParameter, searchvalueParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GET_RP_MPCMonitoringv2_Result>("GET_RP_MPCMonitoringv2", dateFromParameter, dateToParameter, shiftParameter, lineParameter, processParameter, sectionGroupParameter, pageCountParameter, rowCountParameter, searchvalueParameter, certifiedParameter, totalCount);
         }
     
         public virtual ObjectResult<GET_Employee_Details_Count_Result> GET_Employee_Details_Count(string sectionSuperGroup, Nullable<int> pageCount, Nullable<int> rowCount, string searchvalue, string status, string mStatus)
@@ -2252,6 +2263,31 @@ namespace Brothers_WMS.Models
                 new ObjectParameter("MStatus", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GET_Employee_Details_Count_Result>("GET_Employee_Details_Count", sectionSuperGroupParameter, pageCountParameter, rowCountParameter, searchvalueParameter, statusParameter, mStatusParameter);
+        }
+    
+        public virtual ObjectResult<TT_EmployeeTaps_COUNT_Result> TT_EmployeeTaps_COUNT(string sectionGroup, Nullable<System.DateTime> datechosen, Nullable<System.DateTime> datechosenEnd, string agency, string searchvalue)
+        {
+            var sectionGroupParameter = sectionGroup != null ?
+                new ObjectParameter("SectionGroup", sectionGroup) :
+                new ObjectParameter("SectionGroup", typeof(string));
+    
+            var datechosenParameter = datechosen.HasValue ?
+                new ObjectParameter("Datechosen", datechosen) :
+                new ObjectParameter("Datechosen", typeof(System.DateTime));
+    
+            var datechosenEndParameter = datechosenEnd.HasValue ?
+                new ObjectParameter("DatechosenEnd", datechosenEnd) :
+                new ObjectParameter("DatechosenEnd", typeof(System.DateTime));
+    
+            var agencyParameter = agency != null ?
+                new ObjectParameter("Agency", agency) :
+                new ObjectParameter("Agency", typeof(string));
+    
+            var searchvalueParameter = searchvalue != null ?
+                new ObjectParameter("Searchvalue", searchvalue) :
+                new ObjectParameter("Searchvalue", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<TT_EmployeeTaps_COUNT_Result>("TT_EmployeeTaps_COUNT", sectionGroupParameter, datechosenParameter, datechosenEndParameter, agencyParameter, searchvalueParameter);
         }
     
         public virtual ObjectResult<GET_Position_Dropdown_Result> GET_Position_Dropdown(string sectionSuperGroup)

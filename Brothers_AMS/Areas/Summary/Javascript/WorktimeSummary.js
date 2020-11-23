@@ -319,7 +319,7 @@ function HeaderData() {
         type: 'GET',
         dataType: 'JSON',
         success: function (returnData) {
-            $("#loading_modal").modal("hide");
+            $(".headspin").hide();
             $("#DStotal").text(returnData.header.DayShiftCountnow);
             $("#DSper").text(returnData.header.DayShiftper + "%");
             $("#NStotal").text(returnData.header.NightshiftCountnow);
@@ -476,9 +476,7 @@ function ShowOutput(data) {
 }
 
 function Initializedpage() {
-
-   
-
+    $(".headspin").show();
     $("#loading_modal").modal("show");
     $('#AttenanceTbl').DataTable({
         ajax: {

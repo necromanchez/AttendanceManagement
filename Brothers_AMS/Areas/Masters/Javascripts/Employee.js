@@ -6,7 +6,7 @@
     Dropdown_select('Status', "/Helper/GetDropdown_EmployeeStatus?Sectiongroup="+$("#Section").val() +"&MStatus=false");
     Dropdown_select('MStatus', "/Helper/GetDropdown_EmployeeStatus?Sectiongroup=" + $("#Section").val() + "&MStatus=true");
     Dropdown_select('EmployeeStatus', "/Helper/GetDropdown_EmployeeStatus?Sectiongroup=" + $("#Section").val() +"&MStatus=false");//"/Helper/GetDropdown_EmployeeStatus");
-    Dropdown_select('EmployeePos', "/Helper/GetDropdown_EmployeePosition?Sectiongroup=" + $("#Section").val());
+    
    
    
 
@@ -907,6 +907,7 @@ function UpdateStatus(empno) {
 
 function UpdatePosition(empno) {
     $("#EmployNoPos").val(empno);
+    Dropdown_select('EmployeePos', "/Helper/GetDropdown_EmployeePosition?Sectiongroup=" + $("#Section").val());
     $("#UpdatePositionModal").modal("show");
     PositionTable(empno);
 }

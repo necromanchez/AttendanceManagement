@@ -2,6 +2,7 @@
 using Brothers_WMS.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Core.Objects;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -25,48 +26,22 @@ namespace Brothers_WMS.Areas.Summary.Controllers
             //Server Side Parameter
            
             searchdate2 = searchdate2.AddHours(23).AddMinutes(59).AddSeconds(59);
-            int start = Convert.ToInt32(Request["start"]);
+            int start = (Convert.ToInt32(Request["start"]) == 0) ? 0 : (Convert.ToInt32(Request["start"]) / Convert.ToInt32(Request["length"]));
             int length = Convert.ToInt32(Request["length"]);
             string searchValue = Request["search[value]"];
             string sortColumnName = Request["columns[" + Request["order[0][column]"] + "][name]"];
             string sortDirection = Request["order[0][dir]"];
             db.Database.CommandTimeout = 0;
+            ObjectParameter totalCount = new ObjectParameter("TotalCount", typeof(int));
             List<TT_EmployeeTaps_Result> list = new List<TT_EmployeeTaps_Result>();
-            list = (from c in db.TT_EmployeeTaps(Sectiontap, searchdate, searchdate2, Agency)
-                    orderby c.TapDate descending
-                    select c).ToList();
+            list = db.TT_EmployeeTaps(Sectiontap, searchdate, searchdate2, searchValue, Agency, start, length, totalCount).ToList();
 
-            if (!string.IsNullOrEmpty(searchValue))//filter
-            {
-                #region null remover
-                list = list.Where(xx => xx.Employee_RFID != null).ToList();
-                list = list.Where(xx => xx.EmployeeName != null).ToList();
-                list = list.Where(xx => xx.Type != null).ToList();
-                list = list.Where(xx => xx.Taptype != null).ToList();
-                #endregion
-                list = list.Where(x => x.Employee_RFID.ToLower().Contains(searchValue.ToLower())
-                                    || x.EmployeeName.ToLower().Contains(searchValue.ToLower())
-                                    || x.Type.ToLower().Contains(searchValue.ToLower())
-                                    || x.EmployeeNo.ToLower().Contains(searchValue.ToLower())
-                                    || x.Taptype.ToLower().Contains(searchValue.ToLower())).ToList<TT_EmployeeTaps_Result>();
-            }
-            if (sortColumnName != "" && sortColumnName != null)
-            {
-                if (sortDirection == "asc")
-                {
-                    list = list.OrderBy(x => TypeHelper.GetPropertyValue(x, sortColumnName)).ToList();
-                }
-                else
-                {
-                    list = list.OrderByDescending(x => TypeHelper.GetPropertyValue(x, sortColumnName)).ToList();
-                }
-            }
-            int totalrows = list.Count;
-            int totalrowsafterfiltering = list.Count;
+            int? totalrows = Convert.ToInt32(totalCount.Value);//list.Count;
+            int? totalrowsafterfiltering = Convert.ToInt32(totalCount.Value);//list.Count;
 
 
             //paging
-            list = list.Skip(start).Take(length).ToList<TT_EmployeeTaps_Result>();
+            // list = list.Skip(start).Take(length).ToList<TT_EmployeeTaps_Result>();
             return Json(new { data = list, draw = Request["draw"], recordsTotal = totalrows, recordsFiltered = totalrowsafterfiltering }, JsonRequestBehavior.AllowGet);
         }
     }

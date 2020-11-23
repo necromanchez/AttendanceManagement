@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'C:\Users\chest\Desktop\AMSGit\AttendanceManagement\Brothers_AMS\Models\Brothers_AMSDB.edmx'. 
+﻿// T4 code generation is enabled for model 'C:\Users\ce.ragas\Desktop\AMSgit\AttendanceManagement\Brothers_AMS\Models\Brothers_AMSDB.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.

@@ -1,4 +1,4 @@
-ALTER PROCEDURE [dbo].[GET_Position_Dropdown]
+CREATE PROCEDURE [dbo].[GET_Position_Dropdown]
 --DECLARE
 	@SectionSuperGroup NVARCHAR(50) = ''
 	

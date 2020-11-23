@@ -32,8 +32,7 @@ function InitializepageTT() {
                 title: "EmployeeTap" + formatDate(d) + "_" + selectedSection
             }
         ],
-        //lengthMenu: [10, 100, 500, 1000, 5000],
-        //lengthMenu: [[10, 50, 100], [10, 50, 100]],
+        ordering:false,
         lengthMenu: [[10, 50, 100], [10, 50, 100]],
         lengthChange: true,
         serverSide: "true",

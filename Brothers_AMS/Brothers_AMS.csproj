@@ -522,9 +522,6 @@
     <Compile Include="Models\GET_RP_MPCMonitoringv2ALLShift_Result.cs">
       <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\GET_RP_MPCMonitoringv2_Count_Result.cs">
-      <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\GET_RP_MPCMonitoringv2_Result.cs">
       <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
     </Compile>
@@ -646,6 +643,9 @@
     </Compile>
     <Compile Include="Models\ScheduleModel.cs" />
     <Compile Include="Models\SkillsModel.cs" />
+    <Compile Include="Models\TT_EmployeeTaps_COUNT_Result.cs">
+      <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\TT_EmployeeTaps_Result.cs">
       <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
     </Compile>

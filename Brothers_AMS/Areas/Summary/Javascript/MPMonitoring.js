@@ -10,7 +10,7 @@ var selectedSection = "";
 
 
 $(function () {
-    
+    $(".headspin").hide();
     $("#DateFrom").datepicker().datepicker("setDate", dateStr);
     $("#DateTo").datepicker().datepicker("setDate", dTo);
     //Initializepage();
@@ -106,6 +106,7 @@ function GetUser() {
 
 function Initializepage() {
     // GraphData();
+    $(".headspin").show();
     $("#loading_modal").modal("show")
     var Filter = {
         DateFrom: $("#DateFrom").val(),
@@ -135,7 +136,7 @@ function Initializepage() {
                     }
                 },
             ],
-            //lengthMenu: [10, 100, 500, 1000, 5000, 10000, "All"],
+            ordering: false,
             lengthMenu: [[10, 50, 100], [10, 50, 100]],
             lengthChange: true,
             scrollX: true,
@@ -169,7 +170,7 @@ function Initializepage() {
                     title: "Shift", data: function (x) {
                         var certified = "Orig";
                         if (x.ChangeShift == "Green") {
-                            return "<label class= 'Certified' style='16px !important;color:green' data-toggle='tooltip' title='"+x.OrigShift+"'>" + x.Shift + "</label>"
+                            return "<label class= 'Certified' style='16px !important;color:green' data-toggle='tooltip' title='Original Shift: "+x.OrigShift+"'>" + x.Shift + "</label>"
                             //return "<a href='#' data-toggle='tooltip' title='Hooray!'>Hover over me</a>"
                         }
                         else {
@@ -236,6 +237,7 @@ function GetManPowerGraph() {
         data: Filter,
         datatype: "json",
         success: function (returnData) {
+            $(".headspin").hide();
             for (var x = 0; x < returnData.graphlist.length; x++) {
                 returnData.graphlist[x].InDate = moment(returnData.graphlist[x].InDate).format("MM/DD/YYYY")
             }

@@ -11,7 +11,7 @@ namespace Brothers_WMS.Models
 {
     using System;
     
-    public partial class GET_RP_MPCMonitoringv2_Count_Result
+    public partial class TT_EmployeeTaps_COUNT_Result
     {
         public string Result { get; set; }
         public Nullable<int> TotalCount { get; set; }

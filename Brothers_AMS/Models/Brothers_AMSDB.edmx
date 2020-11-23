@@ -906,6 +906,9 @@
           <Parameter Name="Year" Type="int" Mode="In" />
           <Parameter Name="Section" Type="nvarchar" Mode="In" />
           <Parameter Name="Agency" Type="nvarchar" Mode="In" />
+          <Parameter Name="PageCount" Type="int" Mode="In" />
+          <Parameter Name="RowCount" Type="int" Mode="In" />
+          <Parameter Name="Searchvalue" Type="nvarchar" Mode="In" />
         </Function>
         <Function Name="GET_RP_AttendanceMonitoring_TimeINOUT" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Month" Type="int" Mode="In" />
@@ -947,15 +950,8 @@
           <Parameter Name="PageCount" Type="int" Mode="In" />
           <Parameter Name="RowCount" Type="int" Mode="In" />
           <Parameter Name="Searchvalue" Type="nvarchar" Mode="In" />
-        </Function>
-        <Function Name="GET_RP_MPCMonitoringv2_Count" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="DateFrom" Type="datetime" Mode="In" />
-          <Parameter Name="DateTo" Type="datetime" Mode="In" />
-          <Parameter Name="Shift" Type="bigint" Mode="In" />
-          <Parameter Name="Line" Type="bigint" Mode="In" />
-          <Parameter Name="Process" Type="bigint" Mode="In" />
-          <Parameter Name="SectionGroup" Type="nvarchar" Mode="In" />
-          <Parameter Name="Searchvalue" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="Certified" Type="nvarchar" Mode="In" />
+          <Parameter Name="TotalCount" Type="int" Mode="InOut" />
         </Function>
         <Function Name="GET_RP_MPCMonitoringv2ALLShift" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="DateFrom" Type="datetime" Mode="In" />
@@ -964,6 +960,11 @@
           <Parameter Name="Line" Type="bigint" Mode="In" />
           <Parameter Name="Process" Type="bigint" Mode="In" />
           <Parameter Name="SectionGroup" Type="nvarchar" Mode="In" />
+          <Parameter Name="PageCount" Type="int" Mode="In" />
+          <Parameter Name="RowCount" Type="int" Mode="In" />
+          <Parameter Name="Searchvalue" Type="nvarchar" Mode="In" />
+          <Parameter Name="Certified" Type="nvarchar" Mode="In" />
+          <Parameter Name="TotalCount" Type="int" Mode="InOut" />
         </Function>
         <Function Name="GET_RP_WrongShift" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Month" Type="int" Mode="In" />
@@ -1075,6 +1076,10 @@
           <Parameter Name="Datechosen" Type="datetime" Mode="In" />
           <Parameter Name="DatechosenEnd" Type="datetime" Mode="In" />
           <Parameter Name="Agency" Type="nvarchar" Mode="In" />
+          <Parameter Name="Searchvalue" Type="nvarchar" Mode="In" />
+          <Parameter Name="PageCount" Type="int" Mode="In" />
+          <Parameter Name="RowCount" Type="int" Mode="In" />
+          <Parameter Name="TotalCount" Type="int" Mode="InOut" />
         </Function>
         <Function Name="TT_GETPendingTimeKeeping" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="RFID" Type="nvarchar" Mode="In" />
@@ -1324,6 +1329,9 @@
             <Parameter Name="Year" Mode="In" Type="Int32" />
             <Parameter Name="Section" Mode="In" Type="String" />
             <Parameter Name="Agency" Mode="In" Type="String" />
+            <Parameter Name="PageCount" Mode="In" Type="Int32" />
+            <Parameter Name="RowCount" Mode="In" Type="Int32" />
+            <Parameter Name="Searchvalue" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GET_RP_AttendanceMonitoring_TimeINOUT">
             <Parameter Name="Month" Mode="In" Type="Int32" />
@@ -1583,6 +1591,10 @@
             <Parameter Name="Datechosen" Mode="In" Type="DateTime" />
             <Parameter Name="DatechosenEnd" Mode="In" Type="DateTime" />
             <Parameter Name="Agency" Mode="In" Type="String" />
+            <Parameter Name="Searchvalue" Mode="In" Type="String" />
+            <Parameter Name="PageCount" Mode="In" Type="Int32" />
+            <Parameter Name="RowCount" Mode="In" Type="Int32" />
+            <Parameter Name="TotalCount" Mode="InOut" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="Department_Dashboard_AbsentRate" ReturnType="Collection(Brothers_AMSDBModel.Department_Dashboard_AbsentRate_Result)">
             <Parameter Name="Month" Mode="In" Type="Int32" />
@@ -1746,6 +1758,11 @@
             <Parameter Name="Line" Mode="In" Type="Int64" />
             <Parameter Name="Process" Mode="In" Type="Int64" />
             <Parameter Name="SectionGroup" Mode="In" Type="String" />
+            <Parameter Name="PageCount" Mode="In" Type="Int32" />
+            <Parameter Name="RowCount" Mode="In" Type="Int32" />
+            <Parameter Name="Searchvalue" Mode="In" Type="String" />
+            <Parameter Name="Certified" Mode="In" Type="String" />
+            <Parameter Name="TotalCount" Mode="InOut" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GET_RP_AttendanceMonitoring_COUNT" ReturnType="Collection(Brothers_AMSDBModel.GET_RP_AttendanceMonitoring_COUNT_Result)">
             <Parameter Name="Month" Mode="In" Type="Int32" />
@@ -1764,15 +1781,8 @@
             <Parameter Name="PageCount" Mode="In" Type="Int32" />
             <Parameter Name="RowCount" Mode="In" Type="Int32" />
             <Parameter Name="Searchvalue" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="GET_RP_MPCMonitoringv2_Count" ReturnType="Collection(Brothers_AMSDBModel.GET_RP_MPCMonitoringv2_Count_Result)">
-            <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
-            <Parameter Name="DateTo" Mode="In" Type="DateTime" />
-            <Parameter Name="Shift" Mode="In" Type="Int64" />
-            <Parameter Name="Line" Mode="In" Type="Int64" />
-            <Parameter Name="Process" Mode="In" Type="Int64" />
-            <Parameter Name="SectionGroup" Mode="In" Type="String" />
-            <Parameter Name="Searchvalue" Mode="In" Type="String" />
+            <Parameter Name="Certified" Mode="In" Type="String" />
+            <Parameter Name="TotalCount" Mode="InOut" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GET_Employee_Details_Count" ReturnType="Collection(Brothers_AMSDBModel.GET_Employee_Details_Count_Result)">
             <Parameter Name="SectionSuperGroup" Mode="In" Type="String" />
@@ -1781,6 +1791,13 @@
             <Parameter Name="Searchvalue" Mode="In" Type="String" />
             <Parameter Name="Status" Mode="In" Type="String" />
             <Parameter Name="MStatus" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="TT_EmployeeTaps_COUNT" ReturnType="Collection(Brothers_AMSDBModel.TT_EmployeeTaps_COUNT_Result)">
+            <Parameter Name="SectionGroup" Mode="In" Type="String" />
+            <Parameter Name="Datechosen" Mode="In" Type="DateTime" />
+            <Parameter Name="DatechosenEnd" Mode="In" Type="DateTime" />
+            <Parameter Name="Agency" Mode="In" Type="String" />
+            <Parameter Name="Searchvalue" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GET_Position_Dropdown" ReturnType="Collection(Brothers_AMSDBModel.GET_Position_Dropdown_Result)">
           <Parameter Name="SectionSuperGroup" Mode="In" Type="String" />
@@ -3319,11 +3336,11 @@
           <Property Type="Int32" Name="CountTransfer" Nullable="true" />
           <Property Type="String" Name="TrueColor" Nullable="false" MaxLength="5" />
         </ComplexType>
-        <ComplexType Name="GET_RP_MPCMonitoringv2_Count_Result">
+        <ComplexType Name="GET_Employee_Details_Count_Result">
           <Property Type="String" Name="Result" Nullable="false" MaxLength="6" />
           <Property Type="Int32" Name="TotalCount" Nullable="true" />
         </ComplexType>
-        <ComplexType Name="GET_Employee_Details_Count_Result">
+        <ComplexType Name="TT_EmployeeTaps_COUNT_Result">
           <Property Type="String" Name="Result" Nullable="false" MaxLength="6" />
           <Property Type="Int32" Name="TotalCount" Nullable="true" />
         </ComplexType>
@@ -5266,14 +5283,6 @@
                 <ScalarProperty Name="Certified" ColumnName="Certified" />
                 <ScalarProperty Name="CountTransfer" ColumnName="CountTransfer" />
                 <ScalarProperty Name="TrueColor" ColumnName="TrueColor" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="GET_RP_MPCMonitoringv2_Count" FunctionName="Brothers_AMSDBModel.Store.GET_RP_MPCMonitoringv2_Count">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="Brothers_AMSDBModel.GET_RP_MPCMonitoringv2_Count_Result">
-                <ScalarProperty Name="Result" ColumnName="Result" />
-                <ScalarProperty Name="TotalCount" ColumnName="TotalCount" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

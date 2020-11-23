@@ -5,6 +5,7 @@ using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Entity.Core.Objects;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
@@ -59,49 +60,16 @@ namespace Brothers_WMS.Areas.Summary.Controllers
             {
                 db.Database.CommandTimeout = 0;
                 List<GET_RP_MPCMonitoringv2_Result> list = new List<GET_RP_MPCMonitoringv2_Result>();
-               
+                ObjectParameter totalCount = new ObjectParameter("TotalCount", typeof(int));
                 long shift = Convert.ToInt64(Filter.Shift);
-                list = db.GET_RP_MPCMonitoringv2(Filter.DateFrom, Filter.DateTo, shift, Filter.Line, Filter.Process, section, start,length, searchValue).ToList();
-                GET_RP_MPCMonitoringv2_Count_Result totalcount = db.GET_RP_MPCMonitoringv2_Count(Filter.DateFrom, Filter.DateTo, shift, Filter.Line, Filter.Process, section, searchValue).FirstOrDefault();
+                list = db.GET_RP_MPCMonitoringv2(Filter.DateFrom, Filter.DateTo, shift, Filter.Line, Filter.Process, section, start,length, searchValue, Filter.Certified, totalCount).ToList();
+                //GET_RP_MPCMonitoringv2_Count_Result totalcount = db.GET_RP_MPCMonitoringv2_Count(Filter.DateFrom, Filter.DateTo, shift, Filter.Line, Filter.Process, section, searchValue).FirstOrDefault();
                 System.Web.HttpContext.Current.Session["MPresult"] = Filter;
 
-                switch (Filter.Certified)
-                {
-                    case "Certified":
-                        list = list.Where(x => x.TrueColor == "Green" || x.TrueColor == "Black").ToList();
-                        break;
-                    case "Uncertified":
-                        list = list.Where(x => x.TrueColor == "Red").ToList();
-                        break;
-                }
-                if (!string.IsNullOrEmpty(searchValue))//filter
-                {
-                    #region null remover
-                    list = list.Where(xx => xx.EmpNo != null).ToList();
-                    //list = list.Where(xx => xx.Shift != null).ToList();//To search all
-                    //list = list.Where(xx => xx.Line != null).ToList();
-                    //list = list.Where(xx => xx.Skill != null).ToList();
-                    #endregion
-                    list = list.Where(x => x.EmployeeName.ToLower().Contains(searchValue.ToLower())
-                                        || x.EmpNo.ToLower().Contains(searchValue.ToLower())).ToList<GET_RP_MPCMonitoringv2_Result>();
-                }
-                //if (sortColumnName != "" && sortColumnName != null)
-                //{
-                //    if (sortDirection == "asc")
-                //    {
-                //        list = list.OrderBy(x => TypeHelper.GetPropertyValue(x, sortColumnName)).ToList();
-                //    }
-                //    else
-                //    {
-                //        list = list.OrderByDescending(x => TypeHelper.GetPropertyValue(x, sortColumnName)).ToList();
-                //    }
-                //}
-                int? totalrows = totalcount.TotalCount;// list.Count;
-                int? totalrowsafterfiltering = totalcount.TotalCount;// list.Count;
+               
+                int? totalrows = Convert.ToInt32(totalCount.Value);//list.Count;
+                int? totalrowsafterfiltering = Convert.ToInt32(totalCount.Value);//list.Count;
 
-                //paging
-                //list = list.Skip(start).Take(length).ToList<GET_RP_MPCMonitoringv2_Result>();
-                //return Json(new { data = list, draw = Request["draw"], recordsTotal = totalrows, recordsFiltered = totalrowsafterfiltering }, JsonRequestBehavior.AllowGet);
 
                 var jsonResult = Json(new { data = list, draw = Request["draw"], recordsTotal = totalrows, recordsFiltered = totalrowsafterfiltering }, JsonRequestBehavior.AllowGet);
                 jsonResult.MaxJsonLength = int.MaxValue;
@@ -111,49 +79,14 @@ namespace Brothers_WMS.Areas.Summary.Controllers
             {
                 db.Database.CommandTimeout = 0;
                 List<GET_RP_MPCMonitoringv2ALLShift_Result> list = new List<GET_RP_MPCMonitoringv2ALLShift_Result>();
-                
-                list = db.GET_RP_MPCMonitoringv2ALLShift(Filter.DateFrom, Filter.DateTo, Filter.Shift, Filter.Line, Filter.Process, section).ToList();
+                ObjectParameter totalCount = new ObjectParameter("TotalCount", typeof(int));
+
+                list = db.GET_RP_MPCMonitoringv2ALLShift(Filter.DateFrom, Filter.DateTo, Filter.Shift, Filter.Line, Filter.Process, section, start, length, searchValue, Filter.Certified, totalCount).ToList();
 
                 System.Web.HttpContext.Current.Session["MPresult"] = Filter;
 
-                switch (Filter.Certified)
-                {
-                    case "Certified":
-                        list = list.Where(x => x.TrueColor == "Green" || x.TrueColor == "Black").ToList();
-                        break;
-                    case "Uncertified":
-                        list = list.Where(x => x.TrueColor == "Red").ToList();
-                        break;
-                }
-                if (!string.IsNullOrEmpty(searchValue))//filter
-                {
-                    #region null remover
-                    list = list.Where(xx => xx.EmpNo != null).ToList();
-                    //list = list.Where(xx => xx.Shift != null).ToList();//To search all
-                    //list = list.Where(xx => xx.Line != null).ToList();
-                    //list = list.Where(xx => xx.Skill != null).ToList();
-                    #endregion
-                    list = list.Where(x => x.EmployeeName.ToLower().Contains(searchValue.ToLower())
-                                        || x.EmpNo.ToLower().Contains(searchValue.ToLower())).ToList<GET_RP_MPCMonitoringv2ALLShift_Result>();
-                }
-                if (sortColumnName != "" && sortColumnName != null)
-                {
-                    if (sortDirection == "asc")
-                    {
-                        list = list.OrderBy(x => TypeHelper.GetPropertyValue(x, sortColumnName)).ToList();
-                    }
-                    else
-                    {
-                        list = list.OrderByDescending(x => TypeHelper.GetPropertyValue(x, sortColumnName)).ToList();
-                    }
-                }
-                int totalrows = list.Count;
-                int totalrowsafterfiltering = list.Count;
-
-                //paging
-                list = list.Skip(start).Take(length).ToList<GET_RP_MPCMonitoringv2ALLShift_Result>();
-                //return Json(new { data = list, draw = Request["draw"], recordsTotal = totalrows, recordsFiltered = totalrowsafterfiltering }, JsonRequestBehavior.AllowGet);
-
+                int? totalrows = Convert.ToInt32(totalCount.Value);//list.Count;
+                int? totalrowsafterfiltering = Convert.ToInt32(totalCount.Value);//list.Count;
                 var jsonResult = Json(new { data = list, draw = Request["draw"], recordsTotal = totalrows, recordsFiltered = totalrowsafterfiltering }, JsonRequestBehavior.AllowGet);
                 jsonResult.MaxJsonLength = int.MaxValue;
                 return jsonResult;
@@ -236,7 +169,9 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                     long shift = Convert.ToInt64(Filter.Shift);
                     string section = (Filter.Section == null) ? "" : Filter.Section;
                     List<GET_RP_MPCMonitoringv2_Result> list = new List<GET_RP_MPCMonitoringv2_Result>();
-                    list = db.GET_RP_MPCMonitoringv2(Filter.DateFrom, Filter.DateTo, shift, Filter.Line, Filter.Process, section,0,1000000,"").ToList(); //(List<GET_RP_MPCMonitoringv2_Result>)System.Web.HttpContext.Current.Session["MPresult"]; //db.GET_RP_MPCMonitoringv2(Filter.DateFrom, Filter.DateTo, shift, Filter.Line, Filter.Process, section).ToList();
+                    ObjectParameter totalCount = new ObjectParameter("TotalCount", typeof(int));
+
+                    list = db.GET_RP_MPCMonitoringv2(Filter.DateFrom, Filter.DateTo, shift, Filter.Line, Filter.Process, section,0,1000000,"","", totalCount).ToList(); //(List<GET_RP_MPCMonitoringv2_Result>)System.Web.HttpContext.Current.Session["MPresult"]; //db.GET_RP_MPCMonitoringv2(Filter.DateFrom, Filter.DateTo, shift, Filter.Line, Filter.Process, section).ToList();
                     ExcelWorksheet ExportData = package.Workbook.Worksheets["Sheet1"];
                     int start = 2;
 
