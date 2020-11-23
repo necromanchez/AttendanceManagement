@@ -82,7 +82,7 @@ namespace Brothers_WMS.Controllers
                                  && c.Password == pass
                                  && c.IsDeleted == false
                                  select c).FirstOrDefault();
-                check.CostCode = (from c in db.M_Employee_CostCenter where c.EmployNo == user.UserName orderby c.UpdateDate_AMS descending select c.CostCenter_AMS).FirstOrDefault();
+                check.CostCode = (from c in db.M_Employee_CostCenter where c.EmployNo == user.UserName orderby c.ID descending select c.CostCenter_AMS).FirstOrDefault();
                 string CostCodenow = check.CostCode;
                 check.Section = (from c in db.M_Cost_Center_List where c.Cost_Center == CostCodenow select c.GroupSection).FirstOrDefault();
 

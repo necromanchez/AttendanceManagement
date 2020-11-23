@@ -120,7 +120,7 @@ namespace Brothers_WMS.Areas.Masters.Controllers
             System.Web.HttpContext.Current.Session["Searchvaluenow"] = Request["search[value]"];
 
             //Server Side Parameter
-            int start = Convert.ToInt32(Request["start"]);
+            int start = (Convert.ToInt32(Request["start"]) == 0) ? 0 : (Convert.ToInt32(Request["start"]) / Convert.ToInt32(Request["length"]));
             int length = Convert.ToInt32(Request["length"]);
             string searchValue = Request["search[value]"];
             string sortColumnName = Request["columns[" + Request["order[0][column]"] + "][name]"];
@@ -128,59 +128,43 @@ namespace Brothers_WMS.Areas.Masters.Controllers
 
             List<GET_Employee_Details_Result> list = new List<GET_Employee_Details_Result>();
             supersection = (supersection == null) ? (from c in db.M_Cost_Center_List where c.Cost_Center == user.CostCode select c.GroupSection).FirstOrDefault() : supersection;
-            list = db.GET_Employee_Details(supersection).ToList();
+            list = db.GET_Employee_Details(supersection, start, length, searchValue,Status, MStatus).ToList();
+            GET_Employee_Details_Count_Result totalCount = db.GET_Employee_Details_Count(supersection, start, length, searchValue,Status,MStatus).FirstOrDefault();
             
-            if (!string.IsNullOrEmpty(searchValue))//filter
-            {
-                #region null remover
-                //list = list.Where(xx => xx.EmpNo != null).ToList();
-                //list = list.Where(xx => xx.First_Name != null).ToList();
-                //list = list.Where(xx => xx.Family_Name != null).ToList();
-                //list = list.Where(xx => xx.CostCenter_AMS != null).ToList();
-                //list = list.Where(xx => xx.RFID != null).ToList();
-                #endregion
-                list = list.Where(x => x.First_Name.ToLower().Contains(searchValue.ToLower())
-                || x.Family_Name.ToLower().Contains(searchValue.ToLower())
-                || x.EmpNo.ToLower().Contains(searchValue.ToLower())
-                //|| x.CostCenter_AMS.Contains(searchValue)
-                || x.MainRFID.Contains(searchValue)
-                ).ToList<GET_Employee_Details_Result>();
-                
-            }
-            if (!string.IsNullOrEmpty(MStatus))
-            {
+            //if (!string.IsNullOrEmpty(MStatus))
+            //{
                
-                    list = list.Where(x => x.ModifiedStatus.ToLower() == MStatus.ToLower()).ToList();
+            //        list = list.Where(x => x.ModifiedStatus.ToLower() == MStatus.ToLower()).ToList();
                 
-            }
+            //}
            
-            if (!string.IsNullOrEmpty(Status))
-            {
+            //if (!string.IsNullOrEmpty(Status))
+            //{
                 
-                    list = list.Where(x => x.Status.ToLower() == Status.ToLower()).ToList();
+            //        list = list.Where(x => x.Status.ToLower() == Status.ToLower()).ToList();
                
-            }
+            //}
 
 
 
 
-            if (sortColumnName != "" && sortColumnName != null)
-            {
-                if (sortDirection == "asc")
-                {
-                    list = list.OrderBy(x => TypeHelper.GetPropertyValue(x, sortColumnName)).ToList();
-                }
-                else
-                {
-                    list = list.OrderByDescending(x => TypeHelper.GetPropertyValue(x, sortColumnName)).ToList();
-                }
-            }
-            int totalrows = list.Count;
-            int totalrowsafterfiltering = list.Count;
+            //if (sortColumnName != "" && sortColumnName != null)
+            //{
+            //    if (sortDirection == "asc")
+            //    {
+            //        list = list.OrderBy(x => TypeHelper.GetPropertyValue(x, sortColumnName)).ToList();
+            //    }
+            //    else
+            //    {
+            //        list = list.OrderByDescending(x => TypeHelper.GetPropertyValue(x, sortColumnName)).ToList();
+            //    }
+            //}
+            int? totalrows = totalCount.TotalCount;// list.Count;
+            int? totalrowsafterfiltering = totalCount.TotalCount;// list.Count;
 
 
             //paging
-            list = list.Skip(start).Take(length).ToList<GET_Employee_Details_Result>();
+            //list = list.Skip(start).Take(length).ToList<GET_Employee_Details_Result>();
            // return Json(new { data = list, draw = Request["draw"], recordsTotal = totalrows, recordsFiltered = totalrowsafterfiltering }, JsonRequestBehavior.AllowGet);
             var jsonResult = Json(new { data = list, draw = Request["draw"], recordsTotal = totalrows, recordsFiltered = totalrowsafterfiltering }, JsonRequestBehavior.AllowGet);
             jsonResult.MaxJsonLength = int.MaxValue;
@@ -1364,7 +1348,7 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                 {
                     List<GET_Employee_Details_Result> list = new List<GET_Employee_Details_Result>();
                     CostCode = (user.CostCode == CostCode) ? "" : CostCode;
-                    list = db.GET_Employee_Details(GroupSection).ToList();
+                    list = db.GET_Employee_Details(GroupSection, 0, 100000, "","","").ToList();
                     list = list.Where(xx => xx.ModifiedStatus != null).ToList();
                     list = list.Where(x => x.ModifiedStatus.ToLower() == "active").ToList();
                     ExcelWorksheet ExportData = package.Workbook.Worksheets["AMSSheet"];
@@ -1559,7 +1543,7 @@ namespace Brothers_WMS.Areas.Masters.Controllers
 
                     List<GET_Employee_Details_Result> list = new List<GET_Employee_Details_Result>();
                     CostCode = (user.CostCode == CostCode) ? "" : CostCode;
-                    list = db.GET_Employee_Details(GroupSection).ToList();
+                    list = db.GET_Employee_Details(GroupSection, 0, 100000, "", "", "").ToList();
                     list = list.Where(x => x.SkillCount == 0).ToList();
                     list = list.Where(x => x.ModifiedStatus.ToLower() == "active").ToList();
                     ExcelWorksheet ExportData = package.Workbook.Worksheets["AMSSheet"];
@@ -1619,7 +1603,7 @@ namespace Brothers_WMS.Areas.Masters.Controllers
 
                     List<GET_Employee_Details_Result> list = new List<GET_Employee_Details_Result>();
                     CostCode = (user.CostCode == CostCode) ? "" : CostCode;
-                    list = db.GET_Employee_Details(GroupSection).ToList();
+                    list = db.GET_Employee_Details(GroupSection, 0, 100000, "", "", "").ToList();
                     list = list.Where(x => x.Status.ToLower() == "active").ToList();
                     ExcelWorksheet ExportData = package.Workbook.Worksheets["AMSSheet"];
                     int start = 2;
@@ -1710,7 +1694,7 @@ namespace Brothers_WMS.Areas.Masters.Controllers
 
                     List<GET_Employee_Details_Result> list = new List<GET_Employee_Details_Result>();
                     CostCode = (user.CostCode == CostCode) ? "" : CostCode;
-                    list = db.GET_Employee_Details(GroupSection).ToList();
+                    list = db.GET_Employee_Details(GroupSection, 0, 100000, "", "", "").ToList();
                     //list = list.Where(x => x.ModifiedStatus.ToLower() == "active").ToList();
                     ExcelWorksheet ExportData = package.Workbook.Worksheets["AMSSheet"];
                     ExcelWorksheet ExportData2 = package.Workbook.Worksheets["Instructions"];
@@ -1793,7 +1777,7 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                 {
 
                     List<GET_Employee_Details_Result> list = new List<GET_Employee_Details_Result>();
-                    list = db.GET_Employee_Details(GroupSection).ToList();
+                    list = db.GET_Employee_Details(GroupSection, 0, 100000, "", "", "").ToList();
                     list = list.Where(x => x.ModifiedStatus.ToLower() == "active").ToList();
                     ExcelWorksheet ExportData = package.Workbook.Worksheets["AMSSheet"];
                     ExcelWorksheet ExportData2 = package.Workbook.Worksheets["Instructions"];
@@ -2057,7 +2041,7 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                 using (ExcelPackage package = new ExcelPackage(newFile, templateFile))  //-- With template.
                 {
                     ExcelWorksheet ExportData = package.Workbook.Worksheets["Employee List"];
-                    List<GET_Employee_Details_Result> list = db.GET_Employee_Details(GroupSection).ToList();
+                    List<GET_Employee_Details_Result> list = db.GET_Employee_Details(GroupSection, 0, 100000, "", "", "").ToList();
                     list = list.Where(x => x.ModifiedStatus != null).ToList();
                     if (Status == "Active")
                     {
@@ -2147,7 +2131,7 @@ namespace Brothers_WMS.Areas.Masters.Controllers
 
                     List<GET_Employee_Details_Result> list = new List<GET_Employee_Details_Result>();
                     CostCode = (user.CostCode == CostCode) ? "" : CostCode;
-                    list = db.GET_Employee_Details(GroupSection).ToList();
+                    list = db.GET_Employee_Details(GroupSection, 0, 100000, "", "", "").ToList();
                     list = list.Where(x => x.Schedule == null).ToList();
                     list = list.Where(x => x.ModifiedStatus.ToLower() == "active").ToList();
                     ExcelWorksheet ExportData = package.Workbook.Worksheets["AMSSheet"];

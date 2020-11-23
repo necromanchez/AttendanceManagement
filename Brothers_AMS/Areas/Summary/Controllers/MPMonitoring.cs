@@ -37,7 +37,8 @@ namespace Brothers_WMS.Areas.Summary.Controllers
         {
             //Filter.DateTo = Filter.DateTo.AddHours(23).AddMinutes(59).AddSeconds(59);
             //Server Side Parameter
-            int start = Convert.ToInt32(Request["start"]);
+          
+            int start = (Convert.ToInt32(Request["start"]) == 0) ? 0 : (Convert.ToInt32(Request["start"]) / Convert.ToInt32(Request["length"])); //Convert.ToInt32(Request["start"]);
             int length = Convert.ToInt32(Request["length"]);
             string searchValue = Request["search[value]"];
             string sortColumnName = Request["columns[" + Request["order[0][column]"] + "][name]"];
@@ -58,10 +59,10 @@ namespace Brothers_WMS.Areas.Summary.Controllers
             {
                 db.Database.CommandTimeout = 0;
                 List<GET_RP_MPCMonitoringv2_Result> list = new List<GET_RP_MPCMonitoringv2_Result>();
-
+               
                 long shift = Convert.ToInt64(Filter.Shift);
-                list = db.GET_RP_MPCMonitoringv2(Filter.DateFrom, Filter.DateTo, shift, Filter.Line, Filter.Process, section).ToList();
-
+                list = db.GET_RP_MPCMonitoringv2(Filter.DateFrom, Filter.DateTo, shift, Filter.Line, Filter.Process, section, start,length, searchValue).ToList();
+                GET_RP_MPCMonitoringv2_Count_Result totalcount = db.GET_RP_MPCMonitoringv2_Count(Filter.DateFrom, Filter.DateTo, shift, Filter.Line, Filter.Process, section, searchValue).FirstOrDefault();
                 System.Web.HttpContext.Current.Session["MPresult"] = Filter;
 
                 switch (Filter.Certified)
@@ -84,22 +85,22 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                     list = list.Where(x => x.EmployeeName.ToLower().Contains(searchValue.ToLower())
                                         || x.EmpNo.ToLower().Contains(searchValue.ToLower())).ToList<GET_RP_MPCMonitoringv2_Result>();
                 }
-                if (sortColumnName != "" && sortColumnName != null)
-                {
-                    if (sortDirection == "asc")
-                    {
-                        list = list.OrderBy(x => TypeHelper.GetPropertyValue(x, sortColumnName)).ToList();
-                    }
-                    else
-                    {
-                        list = list.OrderByDescending(x => TypeHelper.GetPropertyValue(x, sortColumnName)).ToList();
-                    }
-                }
-                int totalrows = list.Count;
-                int totalrowsafterfiltering = list.Count;
+                //if (sortColumnName != "" && sortColumnName != null)
+                //{
+                //    if (sortDirection == "asc")
+                //    {
+                //        list = list.OrderBy(x => TypeHelper.GetPropertyValue(x, sortColumnName)).ToList();
+                //    }
+                //    else
+                //    {
+                //        list = list.OrderByDescending(x => TypeHelper.GetPropertyValue(x, sortColumnName)).ToList();
+                //    }
+                //}
+                int? totalrows = totalcount.TotalCount;// list.Count;
+                int? totalrowsafterfiltering = totalcount.TotalCount;// list.Count;
 
                 //paging
-                list = list.Skip(start).Take(length).ToList<GET_RP_MPCMonitoringv2_Result>();
+                //list = list.Skip(start).Take(length).ToList<GET_RP_MPCMonitoringv2_Result>();
                 //return Json(new { data = list, draw = Request["draw"], recordsTotal = totalrows, recordsFiltered = totalrowsafterfiltering }, JsonRequestBehavior.AllowGet);
 
                 var jsonResult = Json(new { data = list, draw = Request["draw"], recordsTotal = totalrows, recordsFiltered = totalrowsafterfiltering }, JsonRequestBehavior.AllowGet);
@@ -235,7 +236,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                     long shift = Convert.ToInt64(Filter.Shift);
                     string section = (Filter.Section == null) ? "" : Filter.Section;
                     List<GET_RP_MPCMonitoringv2_Result> list = new List<GET_RP_MPCMonitoringv2_Result>();
-                    list = db.GET_RP_MPCMonitoringv2(Filter.DateFrom, Filter.DateTo, shift, Filter.Line, Filter.Process, section).ToList(); //(List<GET_RP_MPCMonitoringv2_Result>)System.Web.HttpContext.Current.Session["MPresult"]; //db.GET_RP_MPCMonitoringv2(Filter.DateFrom, Filter.DateTo, shift, Filter.Line, Filter.Process, section).ToList();
+                    list = db.GET_RP_MPCMonitoringv2(Filter.DateFrom, Filter.DateTo, shift, Filter.Line, Filter.Process, section,0,1000000,"").ToList(); //(List<GET_RP_MPCMonitoringv2_Result>)System.Web.HttpContext.Current.Session["MPresult"]; //db.GET_RP_MPCMonitoringv2(Filter.DateFrom, Filter.DateTo, shift, Filter.Line, Filter.Process, section).ToList();
                     ExcelWorksheet ExportData = package.Workbook.Worksheets["Sheet1"];
                     int start = 2;
 

@@ -1230,6 +1230,155 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                 return adjustedNW;
         }
 
+        private List<GET_RP_AttendanceMonitoring_Result> test2(int Month, int Year, string Section, DataTable dt)
+        {
+            List<GET_RP_AttendanceMonitoring_Result> convertedList = new List<GET_RP_AttendanceMonitoring_Result>();
+
+            try
+            {
+                convertedList = (from rw in dt.AsEnumerable()
+                                 select new GET_RP_AttendanceMonitoring_Result()
+                                 {
+                                     Rownum = Convert.ToInt32(rw["Rownum"]),
+                                     //RFID = Convert.ToString(rw["RFID"]),
+                                     EmpNo = Convert.ToString(rw["EmpNo"]),
+                                     EmployeeName = Convert.ToString(rw["EmployeeName"]),
+                                     Position = Convert.ToString(rw["Position"]),
+                                     Schedule = Convert.ToString(rw["Schedule"]),
+                                     CostCode = Convert.ToString(rw["CostCode"]),
+                                     //Status = Convert.ToString(rw["Status"]),
+                                     C1 = Convert.ToString(rw["1"]),
+                                     C2 = Convert.ToString(rw["2"]),
+                                     C3 = Convert.ToString(rw["3"]),
+                                     C4 = Convert.ToString(rw["4"]),
+                                     C5 = Convert.ToString(rw["5"]),
+                                     C6 = Convert.ToString(rw["6"]),
+                                     C7 = Convert.ToString(rw["7"]),
+                                     C8 = Convert.ToString(rw["8"]),
+                                     C9 = Convert.ToString(rw["9"]),
+                                     C10 = Convert.ToString(rw["10"]),
+                                     C11 = Convert.ToString(rw["11"]),
+                                     C12 = Convert.ToString(rw["12"]),
+                                     C13 = Convert.ToString(rw["13"]),
+                                     C14 = Convert.ToString(rw["14"]),
+                                     C15 = Convert.ToString(rw["15"]),
+                                     C16 = Convert.ToString(rw["16"]),
+                                     C17 = Convert.ToString(rw["17"]),
+                                     C18 = Convert.ToString(rw["18"]),
+                                     C19 = Convert.ToString(rw["19"]),
+                                     C20 = Convert.ToString(rw["20"]),
+                                     C21 = Convert.ToString(rw["21"]),
+                                     C22 = Convert.ToString(rw["22"]),
+                                     C23 = Convert.ToString(rw["23"]),
+                                     C24 = Convert.ToString(rw["24"]),
+                                     C25 = Convert.ToString(rw["25"]),
+                                     C26 = Convert.ToString(rw["26"]),
+                                     C27 = Convert.ToString(rw["27"]),
+                                     C28 = Convert.ToString(rw["28"]),
+                                     C29 = Convert.ToString(rw["29"]),
+                                     C30 = Convert.ToString(rw["30"]),
+                                     C31 = Convert.ToString(rw["31"]),
+
+                                 }).ToList();
+            }
+            catch (Exception err)
+            {
+                try
+                {
+                    convertedList = (from rw in dt.AsEnumerable()
+                                     select new GET_RP_AttendanceMonitoring_Result()
+                                     {
+                                         Rownum = Convert.ToInt32(rw["Rownum"]),
+                                         //RFID = Convert.ToString(rw["RFID"]),
+                                         EmpNo = Convert.ToString(rw["EmpNo"]),
+                                         EmployeeName = Convert.ToString(rw["EmployeeName"]),
+                                         Position = Convert.ToString(rw["Position"]),
+                                         Schedule = Convert.ToString(rw["Schedule"]),
+                                         CostCode = Convert.ToString(rw["CostCode"]),
+                                         //Status = Convert.ToString(rw["Status"]),
+                                         C1 = Convert.ToString(rw["1"]),
+                                         C2 = Convert.ToString(rw["2"]),
+                                         C3 = Convert.ToString(rw["3"]),
+                                         C4 = Convert.ToString(rw["4"]),
+                                         C5 = Convert.ToString(rw["5"]),
+                                         C6 = Convert.ToString(rw["6"]),
+                                         C7 = Convert.ToString(rw["7"]),
+                                         C8 = Convert.ToString(rw["8"]),
+                                         C9 = Convert.ToString(rw["9"]),
+                                         C10 = Convert.ToString(rw["10"]),
+                                         C11 = Convert.ToString(rw["11"]),
+                                         C12 = Convert.ToString(rw["12"]),
+                                         C13 = Convert.ToString(rw["13"]),
+                                         C14 = Convert.ToString(rw["14"]),
+                                         C15 = Convert.ToString(rw["15"]),
+                                         C16 = Convert.ToString(rw["16"]),
+                                         C17 = Convert.ToString(rw["17"]),
+                                         C18 = Convert.ToString(rw["18"]),
+                                         C19 = Convert.ToString(rw["19"]),
+                                         C20 = Convert.ToString(rw["20"]),
+                                         C21 = Convert.ToString(rw["21"]),
+                                         C22 = Convert.ToString(rw["22"]),
+                                         C23 = Convert.ToString(rw["23"]),
+                                         C24 = Convert.ToString(rw["24"]),
+                                         C25 = Convert.ToString(rw["25"]),
+                                         C26 = Convert.ToString(rw["26"]),
+                                         C27 = Convert.ToString(rw["27"]),
+                                         C28 = Convert.ToString(rw["28"]),
+                                         C29 = Convert.ToString(rw["29"]),
+                                         C30 = Convert.ToString(rw["30"]),
+
+                                     }).ToList();
+                }
+                catch (Exception err2)
+                {
+                    convertedList = (from rw in dt.AsEnumerable()
+                                     select new GET_RP_AttendanceMonitoring_Result()
+                                     {
+                                         Rownum = Convert.ToInt32(rw["Rownum"]),
+                                         //RFID = Convert.ToString(rw["RFID"]),
+                                         EmpNo = Convert.ToString(rw["EmpNo"]),
+                                         EmployeeName = Convert.ToString(rw["EmployeeName"]),
+                                         Position = Convert.ToString(rw["Position"]),
+                                         Schedule = Convert.ToString(rw["Schedule"]),
+                                         CostCode = Convert.ToString(rw["CostCode"]),
+                                         //Status = Convert.ToString(rw["Status"]),
+                                         C1 = Convert.ToString(rw["1"]),
+                                         C2 = Convert.ToString(rw["2"]),
+                                         C3 = Convert.ToString(rw["3"]),
+                                         C4 = Convert.ToString(rw["4"]),
+                                         C5 = Convert.ToString(rw["5"]),
+                                         C6 = Convert.ToString(rw["6"]),
+                                         C7 = Convert.ToString(rw["7"]),
+                                         C8 = Convert.ToString(rw["8"]),
+                                         C9 = Convert.ToString(rw["9"]),
+                                         C10 = Convert.ToString(rw["10"]),
+                                         C11 = Convert.ToString(rw["11"]),
+                                         C12 = Convert.ToString(rw["12"]),
+                                         C13 = Convert.ToString(rw["13"]),
+                                         C14 = Convert.ToString(rw["14"]),
+                                         C15 = Convert.ToString(rw["15"]),
+                                         C16 = Convert.ToString(rw["16"]),
+                                         C17 = Convert.ToString(rw["17"]),
+                                         C18 = Convert.ToString(rw["18"]),
+                                         C19 = Convert.ToString(rw["19"]),
+                                         C20 = Convert.ToString(rw["20"]),
+                                         C21 = Convert.ToString(rw["21"]),
+                                         C22 = Convert.ToString(rw["22"]),
+                                         C23 = Convert.ToString(rw["23"]),
+                                         C24 = Convert.ToString(rw["24"]),
+                                         C25 = Convert.ToString(rw["25"]),
+                                         C26 = Convert.ToString(rw["26"]),
+                                         C27 = Convert.ToString(rw["27"]),
+                                         C28 = Convert.ToString(rw["28"]),
+                                         C29 = Convert.ToString(rw["29"]),
+                                     }).ToList();
+                }
+            }
+           
+
+            return convertedList;
+        }
+
         public ActionResult ExportHRFormat(int? Month, int? Year, string Section, string Agency,DateTime? DateFrom, DateTime? DateTo)
         {
             try
@@ -3892,10 +4041,42 @@ namespace Brothers_WMS.Areas.Summary.Controllers
             return Json(new {Actual = Leave }, JsonRequestBehavior.AllowGet);
         }
         
-        public ActionResult GETHEADER()
+        public ActionResult GETHEADER(int Month, int Year, string Section, bool go, string Agency)
         {
-            WTGlobal Header = (WTGlobal)System.Web.HttpContext.Current.Session["WT"];
-            return Json(new { header = Header }, JsonRequestBehavior.AllowGet);
+            //WTGlobal Header = (WTGlobal)System.Web.HttpContext.Current.Session["WT"];
+            DataTable dt = new DataTable();
+            GET_RP_AttendanceMonitoring_COUNT_Result totalCount = db.GET_RP_AttendanceMonitoring_COUNT(Month, Year, Section, Agency, "").FirstOrDefault();
+            SqlConnection conn = new SqlConnection(Connection_String.AMSDB);
+            SqlCommand cmdSql = new SqlCommand();
+            cmdSql.Connection = conn;
+            cmdSql.CommandType = CommandType.StoredProcedure;
+            cmdSql.CommandText = @"dbo.GET_RP_AttendanceMonitoring";
+
+            cmdSql.Parameters.Clear();
+            cmdSql.Parameters.Add("@Month", SqlDbType.Int).Value = Month;
+            cmdSql.Parameters.Add("@Year", SqlDbType.Int).Value = Year;
+            cmdSql.Parameters.Add("@Section", SqlDbType.NVarChar).Value = Section;
+            cmdSql.Parameters.Add("@Agency", SqlDbType.NVarChar).Value = Agency;
+            cmdSql.Parameters.Add("@PageCount", SqlDbType.Int).Value = 0;
+            cmdSql.Parameters.Add("@RowCount", SqlDbType.Int).Value = totalCount.TotalCount;
+            cmdSql.Parameters.Add("@Searchvalue", SqlDbType.NVarChar).Value = "";
+
+            cmdSql.CommandTimeout = 0;
+            conn.Open();
+
+
+            SqlDataReader sdr = cmdSql.ExecuteReader();
+            //TotalCount = Convert.ToInt32(outputparameter.Value);
+            dt.Load(sdr);
+
+            //wt.globawt = dt;
+            cmdSql.Dispose();
+            conn.Close();
+
+            List<GET_RP_AttendanceMonitoring_Result> list = test(Month, Year, Section, dt);
+            WTGlobal header = GetHeaderVs2(list);
+           
+            return Json(new { header = header }, JsonRequestBehavior.AllowGet);
         }
 
 
@@ -3911,14 +4092,17 @@ namespace Brothers_WMS.Areas.Summary.Controllers
 
         public ActionResult GeAttendanceMonitoringList(int Month, int Year, string Section, bool go, string Agency)
         {
+            //int TotalCount=1;
             try
             {
                 DataTable dt = new DataTable();
-                int start = Convert.ToInt32(Request["start"]);
+                int start = (Convert.ToInt32(Request["start"]) == 0)?0:(Convert.ToInt32(Request["start"])/ Convert.ToInt32(Request["length"]));
                 int length = Convert.ToInt32(Request["length"]);
                 string searchValue = Request["search[value]"];
                 string sortColumnName = Request["columns[" + Request["order[0][column]"] + "][name]"];
                 string sortDirection = Request["order[0][dir]"];
+
+                GET_RP_AttendanceMonitoring_COUNT_Result totalCount = db.GET_RP_AttendanceMonitoring_COUNT(Month, Year, Section, Agency, searchValue).FirstOrDefault();
                 SqlConnection conn = new SqlConnection(Connection_String.AMSDB);
                 SqlCommand cmdSql = new SqlCommand();
                 cmdSql.Connection = conn;
@@ -3930,63 +4114,29 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                 cmdSql.Parameters.Add("@Year", SqlDbType.Int).Value = Year;
                 cmdSql.Parameters.Add("@Section", SqlDbType.NVarChar).Value = Section;
                 cmdSql.Parameters.Add("@Agency", SqlDbType.NVarChar).Value = Agency;
+                cmdSql.Parameters.Add("@PageCount", SqlDbType.Int).Value = start;
+                cmdSql.Parameters.Add("@RowCount", SqlDbType.Int).Value = length;
+                cmdSql.Parameters.Add("@Searchvalue", SqlDbType.NVarChar).Value = searchValue;
+               
                 cmdSql.CommandTimeout = 0;
                 conn.Open();
 
-                //if (System.Web.HttpContext.Current.Session["ExportWT"] == null)
-                //{
-                    SqlDataReader sdr = cmdSql.ExecuteReader();
-                    dt.Load(sdr);
-                //}
-
-                //else
-                //{
-                   // dt = (DataTable)System.Web.HttpContext.Current.Session["ExportWT"];
-                //}
-
-
+              
+                SqlDataReader sdr = cmdSql.ExecuteReader();
+                //TotalCount = Convert.ToInt32(outputparameter.Value);
+                dt.Load(sdr);
+               
                 //wt.globawt = dt;
                 cmdSql.Dispose();
                 conn.Close();
                 
                 List<GET_RP_AttendanceMonitoring_Result> list = test(Month, Year, Section, dt);
                 WTGlobal header = GetHeaderVs2(list);
-                //WTGlobal header = GetHeaderData(Month, Year, Section, list);
                 System.Web.HttpContext.Current.Session["WT"] = header;
-                //System.Web.HttpContext.Current.Session["ExportWT"] = dt;
-
-                if (!string.IsNullOrEmpty(searchValue))//filter
-                {
-                    list = list.Where(x => x.EmpNo.ToLower().Contains(searchValue.ToLower())
-                                        || x.EmployeeName.ToLower().Contains(searchValue.ToLower())).ToList<GET_RP_AttendanceMonitoring_Result>();
-                }
-                if (sortColumnName != "" && sortColumnName != null)
-                {
-                    if (sortDirection == "asc")
-                    {
-                        list = list.OrderBy(x => TypeHelper.GetPropertyValue(x, sortColumnName)).ToList();
-                    }
-                    else
-                    {
-                        list = list.OrderByDescending(x => TypeHelper.GetPropertyValue(x, sortColumnName)).ToList();
-                    }
-                }
-                else
-                {
-                    list = list.OrderBy(x => x.Rownum).ToList();
-                }
-
                
-
-                int totalrows = list.Count;
-                int totalrowsafterfiltering = list.Count;
-
-
-                //paging
-                list = list.Skip(start).Take(length).ToList<GET_RP_AttendanceMonitoring_Result>();
-
-
-              
+                int totalrows = totalCount.TotalCount;//list.Count;
+                int totalrowsafterfiltering = totalCount.TotalCount;
+                
                 //return Json(new { header=header,data = list, draw = Request["draw"], recordsTotal = totalrows, recordsFiltered = totalrowsafterfiltering }, JsonRequestBehavior.AllowGet);
                 var jsonResult = Json(new { data = list, draw = Request["draw"], recordsTotal = totalrows, recordsFiltered = totalrowsafterfiltering }, JsonRequestBehavior.AllowGet);
                 jsonResult.MaxJsonLength = int.MaxValue;
@@ -4000,6 +4150,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                 error.DateLog = DateTime.Now;
                 error.Username = user.UserName;
                 db.Error_Logs.Add(error);
+                //TotalCount = 1;
                 db.SaveChanges();
                 return Json(new { data = "" }, JsonRequestBehavior.AllowGet);
             }
@@ -4017,8 +4168,9 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                 FileInfo newFile = new FileInfo(Path.Combine(dir, filename));
                 string apptemplatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"TemplateFiles\ExportReports\", templateFilename);
                 FileInfo templateFile = new FileInfo(apptemplatePath);
+                GET_RP_AttendanceMonitoring_COUNT_Result totalCount = db.GET_RP_AttendanceMonitoring_COUNT(Month, Year, Section, Agency, "").FirstOrDefault();
 
-                
+
                 SqlConnection conn = new SqlConnection(Connection_String.AMSDB);
                 SqlCommand cmdSql = new SqlCommand();
                 cmdSql.Connection = conn;
@@ -4030,6 +4182,9 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                 cmdSql.Parameters.Add("@Year", SqlDbType.Int).Value = Year;
                 cmdSql.Parameters.Add("@Section", SqlDbType.NVarChar).Value = Section;
                 cmdSql.Parameters.Add("@Agency", SqlDbType.NVarChar).Value = Agency;
+                cmdSql.Parameters.Add("@PageCount", SqlDbType.Int).Value = 0;
+                cmdSql.Parameters.Add("@RowCount", SqlDbType.Int).Value = totalCount.TotalCount;
+                cmdSql.Parameters.Add("@Searchvalue", SqlDbType.NVarChar).Value = "";
 
                 cmdSql.CommandTimeout = 0;
                 conn.Open();
@@ -4335,8 +4490,12 @@ namespace Brothers_WMS.Areas.Summary.Controllers
 
 
         #region EmployeeShift
-        public ActionResult GETEmployeeShift(string Month, string Year, string Section, string Agency)
+        public ActionResult GETEmployeeShift(int Month, int Year, string Section, string Agency)
         {
+            int start = (Convert.ToInt32(Request["start"]) == 0) ? 0 : (Convert.ToInt32(Request["start"]) / Convert.ToInt32(Request["length"]));
+            int length = Convert.ToInt32(Request["length"]);
+            string searchValue = Request["search[value]"];
+            GET_RP_AttendanceMonitoring_COUNT_Result totalCount = db.GET_RP_AttendanceMonitoring_COUNT(Month, Year, Section, Agency, searchValue).FirstOrDefault();
             SqlConnection conn = new SqlConnection(Connection_String.AMSDB);
             SqlCommand cmdSql = new SqlCommand();
             cmdSql.Connection = conn;
@@ -4349,46 +4508,137 @@ namespace Brothers_WMS.Areas.Summary.Controllers
             cmdSql.Parameters.Add("@Year", SqlDbType.Int).Value = Year;
             cmdSql.Parameters.Add("@Section", SqlDbType.NVarChar).Value = Section;
             cmdSql.Parameters.Add("@Agency", SqlDbType.NVarChar).Value = Agency;
-            
+            cmdSql.Parameters.Add("@PageCount", SqlDbType.Int).Value = start;
+            cmdSql.Parameters.Add("@RowCount", SqlDbType.Int).Value = length;
+            cmdSql.Parameters.Add("@Searchvalue", SqlDbType.NVarChar).Value = searchValue;
+            cmdSql.CommandTimeout = 0;
+
+          
             conn.Open();
            
-            var dt = new DataTable();
-
-            //if (System.Web.HttpContext.Current.Session["ExportShift"] == null)
-            //{
-                SqlDataReader sdr = cmdSql.ExecuteReader();
-                dt.Load(sdr);
-            //}
-
-            //else
-            //{
-            //    dt = (DataTable)System.Web.HttpContext.Current.Session["ExportShift"];
-            //}
+           var dt = new DataTable();
+           
+            SqlDataReader sdr = cmdSql.ExecuteReader();
+            dt.Load(sdr);
            
             cmdSql.Dispose();
             conn.Close();
-
-            var list = JsonConvert.SerializeObject(dt,
-                Formatting.None,
-                new JsonSerializerSettings()
-                {
-                    ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
-                });
-
-            //return Content(list, "application/json");
-            int totalrows = list.Length;
-            int totalrowsafterfiltering = list.Length;
+            List<GET_RP_AttendanceMonitoring_Result> list = test2(Month, Year, Section, dt);
+            
+            int totalrows = totalCount.TotalCount;//list.Length;
+            int totalrowsafterfiltering = totalCount.TotalCount; //list.Length;
 
             var jsonResult = Json(new { data = list, draw = Request["draw"], recordsTotal = totalrows, recordsFiltered = totalrowsafterfiltering }, JsonRequestBehavior.AllowGet);
             jsonResult.MaxJsonLength = int.MaxValue;
             return jsonResult;
         }
 
+        public ActionResult ExportEmployeeShift(int Month, int Year, string Section, string Agency)
+        {
+            try
+            {
+                string templateFilename = "WorkTimeSummary2.xlsx";
+                string dir = Path.GetTempPath();
+                string datetimeToday = DateTime.Now.ToString("yyMMddhhmmss");
+                DataTable dt = new DataTable();
+                string filename = string.Format("WorkTimeSummary_EmployeeShift{0}_{1}.xlsx", datetimeToday, Section);
+                FileInfo newFile = new FileInfo(Path.Combine(dir, filename));
+                string apptemplatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"TemplateFiles\ExportReports\", templateFilename);
+                FileInfo templateFile = new FileInfo(apptemplatePath);
+                GET_RP_AttendanceMonitoring_COUNT_Result totalCount = db.GET_RP_AttendanceMonitoring_COUNT(Month, Year, Section, Agency, "").FirstOrDefault();
+
+
+                SqlConnection conn = new SqlConnection(Connection_String.AMSDB);
+                SqlCommand cmdSql = new SqlCommand();
+                cmdSql.Connection = conn;
+                cmdSql.CommandType = CommandType.StoredProcedure;
+                cmdSql.CommandText = @"dbo.GET_RP_AttendanceMonitoring_Shift";
+
+                cmdSql.Parameters.Clear();
+                cmdSql.Parameters.Add("@Month", SqlDbType.Int).Value = Month;
+                cmdSql.Parameters.Add("@Year", SqlDbType.Int).Value = Year;
+                cmdSql.Parameters.Add("@Section", SqlDbType.NVarChar).Value = Section;
+                cmdSql.Parameters.Add("@Agency", SqlDbType.NVarChar).Value = Agency;
+                cmdSql.Parameters.Add("@PageCount", SqlDbType.Int).Value = 0;
+                cmdSql.Parameters.Add("@RowCount", SqlDbType.Int).Value = totalCount.TotalCount;
+                cmdSql.Parameters.Add("@Searchvalue", SqlDbType.NVarChar).Value = "";
+
+                cmdSql.CommandTimeout = 0;
+                conn.Open();
+
+
+                SqlDataReader sdr = cmdSql.ExecuteReader();
+                dt.Load(sdr);
+
+
+                using (ExcelPackage package = new ExcelPackage(newFile, templateFile))  //-- With template.
+                {
+
+                    // dt = (DataTable)System.Web.HttpContext.Current.Session["ExportWT"];
+                    List<GET_RP_AttendanceMonitoring_Result> list = new List<GET_RP_AttendanceMonitoring_Result>();
+                    list = test(Month, Year, Section, dt); //db.GET_RP_MPCMonitoringv2(Filter.DateFrom, Filter.DateTo, shift, Filter.Line, Filter.Process, section).ToList();
+                    ExcelWorksheet ExportData = package.Workbook.Worksheets["AMSSheet"];
+                    int start = 2;
+
+                    for (int i = 0; i < list.Count; i++)
+                    {
+                        ExportData.Cells["A" + start].Value = list[i].Rownum;
+                        ExportData.Cells["B" + start].Value = list[i].EmpNo;
+                        ExportData.Cells["C" + start].Value = list[i].EmployeeName;
+                        ExportData.Cells["D" + start].Value = list[i].Position;
+                        ExportData.Cells["E" + start].Value = list[i].CostCode;
+                        ExportData.Cells["F" + start].Value = list[i].Schedule;
+                        ExportData.Cells["G" + start].Value = list[i].C1;
+                        ExportData.Cells["H" + start].Value = list[i].C2;
+                        ExportData.Cells["I" + start].Value = list[i].C3;
+                        ExportData.Cells["J" + start].Value = list[i].C4;
+                        ExportData.Cells["K" + start].Value = list[i].C5;
+                        ExportData.Cells["L" + start].Value = list[i].C6;
+                        ExportData.Cells["M" + start].Value = list[i].C7;
+                        ExportData.Cells["N" + start].Value = list[i].C8;
+                        ExportData.Cells["O" + start].Value = list[i].C9;
+                        ExportData.Cells["P" + start].Value = list[i].C10;
+                        ExportData.Cells["Q" + start].Value = list[i].C11;
+                        ExportData.Cells["R" + start].Value = list[i].C12;
+                        ExportData.Cells["S" + start].Value = list[i].C13;
+                        ExportData.Cells["T" + start].Value = list[i].C14;
+                        ExportData.Cells["U" + start].Value = list[i].C15;
+                        ExportData.Cells["V" + start].Value = list[i].C16;
+                        ExportData.Cells["W" + start].Value = list[i].C17;
+                        ExportData.Cells["X" + start].Value = list[i].C18;
+                        ExportData.Cells["Y" + start].Value = list[i].C19;
+                        ExportData.Cells["Z" + start].Value = list[i].C20;
+                        ExportData.Cells["AA" + start].Value = list[i].C21;
+                        ExportData.Cells["AB" + start].Value = list[i].C22;
+                        ExportData.Cells["AC" + start].Value = list[i].C23;
+                        ExportData.Cells["AD" + start].Value = list[i].C24;
+                        ExportData.Cells["AE" + start].Value = list[i].C25;
+                        ExportData.Cells["AF" + start].Value = list[i].C26;
+                        ExportData.Cells["AG" + start].Value = list[i].C27;
+                        ExportData.Cells["AH" + start].Value = list[i].C28;
+                        ExportData.Cells["AI" + start].Value = list[i].C28;
+                        ExportData.Cells["AJ" + start].Value = list[i].C30;
+                        ExportData.Cells["AK" + start].Value = list[i].C31;
+
+
+                        start++;
+                    }
+                    return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename);
+                }
+            }
+            catch (Exception err) { }
+            return Json(new { }, JsonRequestBehavior.AllowGet);
+        }
         #endregion
 
         #region Employee Time in out
-        public ActionResult GETEmployeeTimeinout(string Month, string Year, string Section, string Agency)
+        public ActionResult GETEmployeeTimeinout(int Month, int Year, string Section, string Agency)
         {
+
+            int start = (Convert.ToInt32(Request["start"]) == 0) ? 0 : (Convert.ToInt32(Request["start"]) / Convert.ToInt32(Request["length"]));
+            int length = Convert.ToInt32(Request["length"]);
+            string searchValue =  Request["search[value]"];
+            GET_RP_AttendanceMonitoring_COUNT_Result totalCount = db.GET_RP_AttendanceMonitoring_COUNT(Month, Year, Section, Agency, searchValue).FirstOrDefault();
             SqlConnection conn = new SqlConnection(Connection_String.AMSDB);
             SqlCommand cmdSql = new SqlCommand();
             cmdSql.Connection = conn;
@@ -4400,39 +4650,134 @@ namespace Brothers_WMS.Areas.Summary.Controllers
             cmdSql.Parameters.Add("@Year", SqlDbType.Int).Value = Year;
             cmdSql.Parameters.Add("@Section", SqlDbType.NVarChar).Value = Section;
             cmdSql.Parameters.Add("@Agency", SqlDbType.NVarChar).Value = Agency;
+            cmdSql.Parameters.Add("@PageCount", SqlDbType.Int).Value = start;
+            cmdSql.Parameters.Add("@RowCount", SqlDbType.Int).Value = length;
+            cmdSql.Parameters.Add("@Searchvalue", SqlDbType.NVarChar).Value = searchValue;
             cmdSql.CommandTimeout = 0;
 
             conn.Open();
            
             var dt = new DataTable();
-            //if (System.Web.HttpContext.Current.Session["ExportTT"] == null)
-            //{
-                SqlDataReader sdr = cmdSql.ExecuteReader();
-                dt.Load(sdr);
-            //}
-            //else
-            //{
-            //    dt = (DataTable)System.Web.HttpContext.Current.Session["ExportTT"];
-            //}
+           
+            SqlDataReader sdr = cmdSql.ExecuteReader();
+            dt.Load(sdr);
+           
             cmdSql.Dispose();
             conn.Close();
-
-            var list = JsonConvert.SerializeObject(dt,
-                Formatting.None,
-                new JsonSerializerSettings()
-                {
-                    ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
-                });
+            List<GET_RP_AttendanceMonitoring_Result> list = test2(Month, Year, Section, dt);
+            //var list = JsonConvert.SerializeObject(dt,
+            //    Formatting.None,
+            //    new JsonSerializerSettings()
+            //    {
+            //        ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+            //    });
 
             //return Content(list, "application/json");
-            int totalrows = list.Length;
-            int totalrowsafterfiltering = list.Length;
+            int totalrows = totalCount.TotalCount;//list.Length;
+            int totalrowsafterfiltering = totalCount.TotalCount; //list.Length;
 
             var jsonResult = Json(new { data = list, draw = Request["draw"], recordsTotal = totalrows, recordsFiltered = totalrowsafterfiltering }, JsonRequestBehavior.AllowGet);
             jsonResult.MaxJsonLength = int.MaxValue;
             return jsonResult;
         }
 
+        public ActionResult ExportEmployeeTimeinout(int Month, int Year, string Section, string Agency)
+        {
+            try
+            {
+                string templateFilename = "WorkTimeSummary2.xlsx";
+                string dir = Path.GetTempPath();
+                string datetimeToday = DateTime.Now.ToString("yyMMddhhmmss");
+                DataTable dt = new DataTable();
+                string filename = string.Format("WorkTimeSummary_TimeinOut{0}_{1}.xlsx", datetimeToday, Section);
+                FileInfo newFile = new FileInfo(Path.Combine(dir, filename));
+                string apptemplatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"TemplateFiles\ExportReports\", templateFilename);
+                FileInfo templateFile = new FileInfo(apptemplatePath);
+                GET_RP_AttendanceMonitoring_COUNT_Result totalCount = db.GET_RP_AttendanceMonitoring_COUNT(Month, Year, Section, Agency, "").FirstOrDefault();
+
+
+                SqlConnection conn = new SqlConnection(Connection_String.AMSDB);
+                SqlCommand cmdSql = new SqlCommand();
+                cmdSql.Connection = conn;
+                cmdSql.CommandType = CommandType.StoredProcedure;
+                cmdSql.CommandText = @"dbo.GET_RP_AttendanceMonitoring_TimeINOUT";
+
+                cmdSql.Parameters.Clear();
+                cmdSql.Parameters.Add("@Month", SqlDbType.Int).Value = Month;
+                cmdSql.Parameters.Add("@Year", SqlDbType.Int).Value = Year;
+                cmdSql.Parameters.Add("@Section", SqlDbType.NVarChar).Value = Section;
+                cmdSql.Parameters.Add("@Agency", SqlDbType.NVarChar).Value = Agency;
+                cmdSql.Parameters.Add("@PageCount", SqlDbType.Int).Value = 0;
+                cmdSql.Parameters.Add("@RowCount", SqlDbType.Int).Value = totalCount.TotalCount;
+                cmdSql.Parameters.Add("@Searchvalue", SqlDbType.NVarChar).Value = "";
+
+                cmdSql.CommandTimeout = 0;
+                conn.Open();
+
+
+                SqlDataReader sdr = cmdSql.ExecuteReader();
+                dt.Load(sdr);
+
+
+                using (ExcelPackage package = new ExcelPackage(newFile, templateFile))  //-- With template.
+                {
+
+                    // dt = (DataTable)System.Web.HttpContext.Current.Session["ExportWT"];
+                    List<GET_RP_AttendanceMonitoring_Result> list = new List<GET_RP_AttendanceMonitoring_Result>();
+                    list = test(Month, Year, Section, dt); //db.GET_RP_MPCMonitoringv2(Filter.DateFrom, Filter.DateTo, shift, Filter.Line, Filter.Process, section).ToList();
+                    ExcelWorksheet ExportData = package.Workbook.Worksheets["AMSSheet"];
+                    int start = 2;
+
+                    for (int i = 0; i < list.Count; i++)
+                    {
+                        ExportData.Cells["A" + start].Value = list[i].Rownum;
+                        ExportData.Cells["B" + start].Value = list[i].EmpNo;
+                        ExportData.Cells["C" + start].Value = list[i].EmployeeName;
+                        ExportData.Cells["D" + start].Value = list[i].Position;
+                        ExportData.Cells["E" + start].Value = list[i].CostCode;
+                        ExportData.Cells["F" + start].Value = list[i].Schedule;
+                        ExportData.Cells["G" + start].Value = list[i].C1;
+                        ExportData.Cells["H" + start].Value = list[i].C2;
+                        ExportData.Cells["I" + start].Value = list[i].C3;
+                        ExportData.Cells["J" + start].Value = list[i].C4;
+                        ExportData.Cells["K" + start].Value = list[i].C5;
+                        ExportData.Cells["L" + start].Value = list[i].C6;
+                        ExportData.Cells["M" + start].Value = list[i].C7;
+                        ExportData.Cells["N" + start].Value = list[i].C8;
+                        ExportData.Cells["O" + start].Value = list[i].C9;
+                        ExportData.Cells["P" + start].Value = list[i].C10;
+                        ExportData.Cells["Q" + start].Value = list[i].C11;
+                        ExportData.Cells["R" + start].Value = list[i].C12;
+                        ExportData.Cells["S" + start].Value = list[i].C13;
+                        ExportData.Cells["T" + start].Value = list[i].C14;
+                        ExportData.Cells["U" + start].Value = list[i].C15;
+                        ExportData.Cells["V" + start].Value = list[i].C16;
+                        ExportData.Cells["W" + start].Value = list[i].C17;
+                        ExportData.Cells["X" + start].Value = list[i].C18;
+                        ExportData.Cells["Y" + start].Value = list[i].C19;
+                        ExportData.Cells["Z" + start].Value = list[i].C20;
+                        ExportData.Cells["AA" + start].Value = list[i].C21;
+                        ExportData.Cells["AB" + start].Value = list[i].C22;
+                        ExportData.Cells["AC" + start].Value = list[i].C23;
+                        ExportData.Cells["AD" + start].Value = list[i].C24;
+                        ExportData.Cells["AE" + start].Value = list[i].C25;
+                        ExportData.Cells["AF" + start].Value = list[i].C26;
+                        ExportData.Cells["AG" + start].Value = list[i].C27;
+                        ExportData.Cells["AH" + start].Value = list[i].C28;
+                        ExportData.Cells["AI" + start].Value = list[i].C28;
+                        ExportData.Cells["AJ" + start].Value = list[i].C30;
+                        ExportData.Cells["AK" + start].Value = list[i].C31;
+                     
+
+                        start++;
+                    }
+                    return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename);
+                }
+            }
+            catch (Exception err) { }
+            return Json(new { }, JsonRequestBehavior.AllowGet);
+        }
+        
         #endregion
     }
 }

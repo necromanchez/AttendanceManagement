@@ -132,7 +132,7 @@ namespace Brothers_WMS.Controllers
 
         public ActionResult GetDropdown_EmployeePosition(string Sectiongroup)
         {
-            List<GET_Employee_Details_Result> listmain = db.GET_Employee_Details(Sectiongroup).ToList();
+            List<GET_Position_Dropdown_Result> listmain = db.GET_Position_Dropdown(Sectiongroup).ToList();
             var list = (from w in listmain
                         select new { text = w.Position, value = w.Position }).Distinct().ToList();
             return Json(new { list = list }, JsonRequestBehavior.AllowGet);

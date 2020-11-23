@@ -197,6 +197,7 @@ $(function () {
                     break;
                 case "ES":
                     if (EmpShiftMagic) {
+                       
                         $("#EmployeeSchedule").show();
                     }
                     else {
@@ -204,7 +205,7 @@ $(function () {
                         Initializedpage_EmployeeShift();
                         EmpShiftMagic = true;
                     }
-
+                  
                     break;
                 case "TTi":
                     if (ETTMagic) {
@@ -308,6 +309,13 @@ function GetYear() {
 function HeaderData() {
     $.ajax({
         url: '../WorkTimeSummary/GETHEADER',
+        data: {
+            Month: $("#Month").val(),
+            Year: $("#Year").val(),
+            Section: selectedSection,// $("#Section").val(),
+            Agency: $("#BIPH_Agency").val(),
+            go: goagain
+        },
         type: 'GET',
         dataType: 'JSON',
         success: function (returnData) {
@@ -485,7 +493,7 @@ function Initializedpage() {
             type: "GET",
             datatype: "json",
         },
-        
+        ordering:false,
         lengthChange: true,
         lengthMenu: [[10, 50, 100], [10, 50, 100]],
         pagelength: 10,

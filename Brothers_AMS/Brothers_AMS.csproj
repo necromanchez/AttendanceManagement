@@ -432,6 +432,9 @@
     <Compile Include="Models\GET_Employee_CostCenter_Result.cs">
       <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\GET_Employee_Details_Count_Result.cs">
+      <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\GET_Employee_Details_Result.cs">
       <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
     </Compile>
@@ -486,6 +489,9 @@
     <Compile Include="Models\GET_M_SP_LineTeam_Result.cs">
       <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\GET_Position_Dropdown_Result.cs">
+      <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\GET_RPMonitoringDropDownShift_Result.cs">
       <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
     </Compile>
@@ -500,6 +506,9 @@
     <Compile Include="Models\GET_RP_AbsentDetails_Result.cs">
       <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\GET_RP_AttendanceMonitoring_COUNT_Result.cs">
+      <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\GET_RP_AttendanceMonitoring_Process_Result.cs">
       <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
     </Compile>
@@ -511,6 +520,9 @@
       <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\GET_RP_MPCMonitoringv2ALLShift_Result.cs">
+      <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GET_RP_MPCMonitoringv2_Count_Result.cs">
       <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\GET_RP_MPCMonitoringv2_Result.cs">
@@ -2347,6 +2359,7 @@
     <Content Include="TemplateFiles\ExportReports\HRFormatAttendance_TimeInOut.xlsx" />
     <Content Include="TemplateFiles\ExportReports\WrongShift.xlsx" />
     <Content Include="TemplateFiles\StandardTemplate\CSexport.xlsx" />
+    <Content Include="TemplateFiles\ExportReports\WorkTimeSummary2.xlsx" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
