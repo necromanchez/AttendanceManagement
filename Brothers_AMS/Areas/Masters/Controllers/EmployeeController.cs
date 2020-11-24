@@ -2053,9 +2053,10 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                     }
                     
                     int start = 2;
+                    int rownumber = 1;
                     foreach (GET_Employee_Details_Result item in list)
                     {
-                        ExportData.Cells["A" + start].Value = item.Rownum;
+                        ExportData.Cells["A" + start].Value = rownumber;
                         ExportData.Cells["B" + start].Value = item.REFID;
                         ExportData.Cells["C" + start].Value = item.ADID;
                         ExportData.Cells["D" + start].Value = item.EmpNo;
@@ -2083,6 +2084,7 @@ namespace Brothers_WMS.Areas.Masters.Controllers
                         ExportData.Cells["Z" + start].Value = item.CostCenter_EXPROD;
                         ExportData.Cells["AA" + start].Value = item.Date_Resigned;
                         start++;
+                        rownumber++;
                     }
 
 

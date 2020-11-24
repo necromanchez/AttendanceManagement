@@ -307,7 +307,7 @@ var currentSectionuser = "";
 var pagecount = 0;
 function Initializepage() {
     $("#loading_modal").modal("show");
-    GetEmployeeCount($("#Section").val());
+  
 
     $("#btnuploadskill").prop("disabled", true);
     $("#theskillimage").hide();
@@ -478,7 +478,7 @@ function Initializepage() {
                 //table.column(26).visible(false);
                 
             $("#loading_modal").modal("hide");
-
+            GetEmployeeCount($("#Section").val());
 
         }
     });
