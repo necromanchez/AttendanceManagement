@@ -491,29 +491,7 @@ function SuccessTap_confirm() {
     });
 }
 
-function ContinueApproved() {
-    swal({
-        title: "Uncheck Employees will be rejected",
-        //text: "You will not be able to recover this imaginary file!",   
-        type: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#DD6B55",
-        confirmButtonText: "Yes",
-        cancelButtonText: "No",
-        closeOnConfirm: true,
-        closeOnCancel: true
-    }, function (isConfirm) {
-        if (isConfirm) {
-            GlobalAcceptance = true;
-            $("#loading_modal").modal("hide");
-            ApprovedCS();
-        } else {
-            swal("Cancelled", "Cancelled", "error");
-            $("#loading_modal").modal("hide");
-        }
-    });
-}
-var GlobalAcceptance = false;
+
 
 
 function validateForm(data) {
@@ -937,3 +915,28 @@ function getParameterByName(name, url) {
     if (!results[2]) return '';
     return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
+
+
+function ContinueApproved() {
+    swal({
+        title: "Uncheck Employees will be rejected",
+        //text: "You will not be able to recover this imaginary file!",   
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Yes",
+        cancelButtonText: "No",
+        closeOnConfirm: true,
+        closeOnCancel: true
+    }, function (isConfirm) {
+        if (isConfirm) {
+            GlobalAcceptance = true;
+            $("#loading_modal").modal("hide");
+            ApprovedCS();
+        } else {
+            swal("Cancelled", "Cancelled", "error");
+            $("#loading_modal").modal("hide");
+        }
+    });
+}
+var GlobalAcceptance = false;

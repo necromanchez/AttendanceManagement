@@ -395,7 +395,7 @@ function ApprovedCS() {
         }
         ApprovedCSrows.push(item);
     });
-    if (allrow || GlobalAcceptance) {
+    //if (allrow || GlobalAcceptance) {
         $("#loading_modal").modal("show");
         $.ajax({
             url: '../ApproverChangeSchedule/ApprovedCS',
@@ -431,10 +431,10 @@ function ApprovedCS() {
                
             }
         });
-    }
-    else {
-        ContinueApproved();
-    }
+    //}
+    //else {
+    //    ContinueApproved();
+    //}
 
 }
 

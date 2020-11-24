@@ -11,10 +11,7 @@ var timer;
 
 
 (function () {
-
-   
-   
-
+    
     $("#empDetails").hide();
     $("#requestrow").hide();
     GetComip();

@@ -3,7 +3,7 @@
     $("#checkall_emp").prop("disabled", true);
     Dropdown_selectEmpCompany('BIPH_Agency', "/Helper/GetDropdown_Agency");
     //Dropdown_select('Section', "/Helper/GetDropdown_Section");
-    Dropdown_selectMP('Line_Team', "/Helper/GetDropdown_LineProcessTeamLogin");
+    
     GetcurrentSection('Section', "/Helper/GetCurrentSection");
     Dropdown_selectFileType("FileType");
     Dropdown_selectCS("CSType");
@@ -49,6 +49,8 @@
                 //background-color:#F6F9D3;
                 $("#Line_Team").val('');
                 $("#EmployeeNo").val('');
+               
+
             }
             else {
                 $("#checkall_emp").prop("disabled", false);
@@ -65,7 +67,7 @@
                         $("#Line_Team").val('');
                         $("#EmployeeNo").val('');
                         single = false;
-                        //
+                        Dropdown_selectMP('Line_Team', "/Helper/GetDropdown_LineProcessTeamLogin?Sectiongroup=" + $("#Section").val());
                     }
                 });
 
@@ -262,11 +264,15 @@
     $("#EmployeeNo").on("focusout", function () { $("#Schedule").prop("disabled", false); })
     $("#BIPH_Agency").on("change", function () { $("#FileType").prop("disabled", false); })
     //$("#FileType").on("change", function () { $("#Line_Team").prop("disabled", false); })
-    $("#Line_Team").on("change", function () { $("#Schedule").prop("disabled", false); })
+    $("#Line_Team").on("change", function () {
+        $("#Schedule").prop("disabled", false);
+        $("#loading_modal").modal("show");
+        Initializepage();
+    })
     $("#checkall_emp").on("click", function () { $("#Schedule").prop("disabled", false);})
     $("#Schedule").on("change", function () { $("#DateFrom").prop("disabled", false); $("#DateTo").prop("disabled", false); })
     $("#DateTo").on("change", function () { $("#CSType").prop("disabled", false); })
-    Initializepage();
+    //Initializepage();
 })
 var single = false;
 var chosend_EmpNo = [];
@@ -283,6 +289,7 @@ Array.prototype.remove = function () {
 }
 
 function Initializepage() {
+   
     $('#ChangeScheduleTable').DataTable({
         ajax: {
             url: '../OT/GetEmployeeList',
