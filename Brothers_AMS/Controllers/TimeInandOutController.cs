@@ -1045,6 +1045,13 @@ namespace Brothers_WMS.Controllers
             return Json(new { }, JsonRequestBehavior.AllowGet);
 
         }
+
+        public ActionResult NoInChecker(string EmpNo)
+        {
+            TT_NoInChecker_Result result = db.TT_NoInChecker(EmpNo, DateTime.Now).FirstOrDefault();
+            bool noin = (result.Value == 0) ? true : false;
+            return Json(new { noin= noin }, JsonRequestBehavior.AllowGet);
+        }
     
     }
 }

@@ -2298,5 +2298,18 @@ namespace Brothers_WMS.Models
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GET_Position_Dropdown_Result>("GET_Position_Dropdown", sectionSuperGroupParameter);
         }
+    
+        public virtual ObjectResult<TT_NoInChecker_Result> TT_NoInChecker(string empNo, Nullable<System.DateTime> timeOut)
+        {
+            var empNoParameter = empNo != null ?
+                new ObjectParameter("EmpNo", empNo) :
+                new ObjectParameter("EmpNo", typeof(string));
+    
+            var timeOutParameter = timeOut.HasValue ?
+                new ObjectParameter("TimeOut", timeOut) :
+                new ObjectParameter("TimeOut", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<TT_NoInChecker_Result>("TT_NoInChecker", empNoParameter, timeOutParameter);
+        }
     }
 }

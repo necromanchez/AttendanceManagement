@@ -368,7 +368,17 @@ function GetAttendanceDetail(re) {
 }
 
 function selectprocess(processID) {
+    if (processID == 0) {
+        CheckerNoIn(processID);
+    }
+    else {
+        GoTap(processID);
+    }
+    
 
+}
+
+function GoTap(processID) {
     if ($("#IDno").val() != "") {
         $.ajax({
             url: '/TimeInandOut/SaveTimein',
@@ -382,15 +392,8 @@ function selectprocess(processID) {
             type: 'POST',
             datatype: "json",
             success: function (returnData) {
-                //jacob
-                console.log(selectedemployee);
-                //$('#Line').prop('selectedIndex', 0);
-                //msg("Recorded.", "center");
-                
                 $('#Line').trigger("change");
                 GetAttendanceDetail("stop");
-                //$('#theprocessList').html('');
-                //$('#theprocessList_Active').html('');
                 $("#IDno").val("");
                 $("#IDno").focus();
 
@@ -409,8 +412,8 @@ function selectprocess(processID) {
     else {
         msg("No Valid RFID.", "warning");
     }
-
 }
+
 
 function modeassign(mod) {
     mode = mod;
@@ -525,6 +528,131 @@ function TTResult(ID,Type) {
             SuccessTap_confirm();
         }
 
+    });
+}
+
+function CheckerNoIn(processID) {
+    $.ajax({
+        url: '/TimeInandOut/NoInChecker',
+        data: {
+            EmpNo: selectedemployee.EmpNo,
+
+        },
+        type: 'GET',
+        dataType: 'JSON',
+        success: function (returnData) {
+            if (returnData.noin) {
+                ContinueTapNoin(processID);
+            }
+            else {
+                GoTap(processID);
+            }
+        }
+
+    });
+}
+
+function ContinueTapNoin(processID) {
+    swal({
+        title: "You have not Time In yet",
+        //text: "You will not be able to recover this imaginary file!",   
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Yes",
+        cancelButtonText: "No",
+        closeOnConfirm: true,
+        closeOnCancel: true
+    }, function (isConfirm) {
+        if (isConfirm) {
+            GoTap(processID);
+        }
+        else {
+            refresh();
+        }
+    });
+}
+
+
+function refresh() {
+
+    var ss = $("#IDno").val();
+    $("#Line").prop("disabled", false);
+    $.ajax({
+        url: '/TimeInandOut/GetEmployeeDetails',
+        data: {
+            RFID: $("#IDno").val(),
+            //LineID: $("#Line").val()
+        },
+        type: 'GET',
+        datatype: "json",
+        success: function (returnData) {
+            if (returnData.employee != null && returnData.employee != "") {
+
+                if (returnData.HRInactive) {
+                    swal("Employee HR Status Inactive, Please contact your Section's PIC");
+                }
+
+
+                if (all == false) {
+                    Dropdown_select2('Line', "/Helper/GetDropdown_LineProcessTeamwithSection?CostCode=" + returnData.CostCode + "&RFID=" + $("#IDno").val());
+
+                }
+                else {
+                    Dropdown_select2('Line', "/Helper/GetDropdown_LineProcessTeamwithSection?CostCode=" + returnData.CostCode + "&RFID=" + "");
+
+                }
+                //$("#Line").trigger("change");
+                currentSection = returnData.CostCode;
+                GetAttendanceDetail("go");
+                selectedemployee = returnData.employee;
+                console.log(returnData.employee);
+                var photo = (returnData.employee.EmployeePhoto == '') ? '/Content/images/2014-09-16-Anoynmous-The-Rise-of-Personal-Networks.jpg' : "/PictureResources/EmployeePhoto/" + returnData.employee.EmployeePhoto;
+                $("#employeephoto").attr({ "src": photo });
+                $("#namae").text(returnData.employee.First_Name + " " + returnData.employee.Family_Name);
+                $("#Position").text(returnData.employee.Position);
+                $("#Status").text(returnData.employee.Status);
+                $("#EmpNumber").text(returnData.employee.EmpNo);
+                $("#Section").text(returnData.employee.Section);
+                $("#Company").text(returnData.employee.Company);
+
+                var Schedulename = "";
+                if (returnData.ScheduleName == null) {
+                    Schedulename = "No Schedule Assigned";
+                    $("#Schedulename").css('color', 'red');
+                }
+                else {
+                    Schedulename = returnData.ScheduleName;
+                }
+                $("#Schedulename").text(Schedulename);
+                $("#empDetails").show();
+                $("#TimeIns").text(thetime);
+               
+
+                if (returnData.employee.First_Name == "undefined") {
+                    $('#IDno').val("");
+                    $("#IDno").focus();
+                    swal("Please Tap in Again");
+
+
+                }
+
+                setTimeout(function () {
+                    location.reload();
+                }, 300000);
+
+            }
+            else {
+                swal("Employee does not exist");
+                $("#IDno").val("");
+                $("#namae").text("");
+                $("#Position").text("");
+                $("#Status").text("");
+                $("#TimeIns").text("");
+                $("#employeephoto").attr({ "src": "/Content/images/2014-09-16-Anoynmous-The-Rise-of-Personal-Networks.jpg" });
+
+            }
+        }
     });
 }
 

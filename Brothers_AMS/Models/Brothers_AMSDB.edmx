@@ -1088,6 +1088,10 @@
           <Parameter Name="RFID" Type="nvarchar" Mode="In" />
         </Function>
         <Function Name="TT_GETTIME" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="TT_NoInChecker" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="EmpNo" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="TimeOut" Type="datetime" Mode="In" />
+        </Function>
         <Function Name="TT_TimeInAccept" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ProcessID" Type="nvarchar" Mode="In" />
           <Parameter Name="EmpNo" Type="nvarchar" Mode="In" />
@@ -1801,6 +1805,10 @@
           </FunctionImport>
           <FunctionImport Name="GET_Position_Dropdown" ReturnType="Collection(Brothers_AMSDBModel.GET_Position_Dropdown_Result)">
           <Parameter Name="SectionSuperGroup" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="TT_NoInChecker" ReturnType="Collection(Brothers_AMSDBModel.TT_NoInChecker_Result)">
+            <Parameter Name="EmpNo" Mode="In" Type="String" />
+            <Parameter Name="TimeOut" Mode="In" Type="DateTime" />
           </FunctionImport>
           </EntityContainer>
         <ComplexType Name="GET_AF_Approver_Result">
@@ -3347,6 +3355,10 @@
         <ComplexType Name="GET_Position_Dropdown_Result">
           <Property Type="String" Name="Pos" Nullable="false" MaxLength="3" />
           <Property Type="String" Name="Position" Nullable="true" MaxLength="100" />
+        </ComplexType>
+        <ComplexType Name="TT_NoInChecker_Result">
+          <Property Type="String" Name="Result" Nullable="false" MaxLength="6" />
+          <Property Type="Int32" Name="Value" Nullable="true" />
         </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
@@ -5299,6 +5311,14 @@
               <ComplexTypeMapping TypeName="Brothers_AMSDBModel.GET_Position_Dropdown_Result">
                 <ScalarProperty Name="Pos" ColumnName="Pos" />
                 <ScalarProperty Name="Position" ColumnName="Position" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="TT_NoInChecker" FunctionName="Brothers_AMSDBModel.Store.TT_NoInChecker">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Brothers_AMSDBModel.TT_NoInChecker_Result">
+                <ScalarProperty Name="Result" ColumnName="Result" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

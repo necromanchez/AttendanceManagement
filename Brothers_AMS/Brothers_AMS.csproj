@@ -655,6 +655,9 @@
     <Compile Include="Models\TT_GETPendingTimeKeeping_Result.cs">
       <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\TT_NoInChecker_Result.cs">
+      <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\T_TimeInOut.cs">
       <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
     </Compile>
@@ -954,7 +957,6 @@
     <Content Include="Content\assets\vendor_components\jquery-slimscroll\jquery.slimscroll.min.js" />
     <Content Include="Content\assets\vendor_components\jquery-sparkline\dist\jquery.sparkline.js" />
     <Content Include="Content\assets\vendor_components\jquery-sparkline\dist\jquery.sparkline.min.js" />
-    <Content Include="Content\assets\vendor_components\jquery-steps-master\build\jquery.steps.js" />
     <Content Include="Content\assets\vendor_components\jquery-toast-plugin-master\src\jquery.toast.css" />
     <Content Include="Content\assets\vendor_components\jquery-toast-plugin-master\src\jquery.toast.js" />
     <Content Include="Content\assets\vendor_components\jquery-ui\jquery-ui.js" />
@@ -2370,6 +2372,7 @@
     <Folder Include="Areas\Summary\Models\" />
     <Folder Include="Areas\Summary\Views\Shared\" />
     <Folder Include="Areas\Summary\Views\WorktimeEmployeeShift\" />
+    <Folder Include="Content\assets\vendor_components\jquery-steps-master\build\" />
     <Folder Include="TemplateFiles\OTBatchfiles\" />
     <Folder Include="Uploads\" />
     <Folder Include="Views\Helper\" />
