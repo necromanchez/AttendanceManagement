@@ -110,7 +110,12 @@ $(function () {
 
 
     $("#Generatenow").on("click", function () {
-       
+
+        $(".graph_2").show();
+        $(".graph_3").show();
+        $(".graph_4").show();
+        $(".graph_5").show();
+
          Graph1 = false;
          Graph2 = false;
          Graph3 = false;
@@ -529,9 +534,9 @@ function GraphStart(datahere) {
 
     Graph1 = true;
 
-    if (Graph1 == true && Graph2 == true && Graph3 == true && Graph4 == true && Graph5 == true) {
+    //if (Graph1 == true && Graph2 == true && Graph3 == true && Graph4 == true && Graph5 == true) {
         $("#loading_modalD_AttendanceRate").modal("hide");
-    }
+    //}
     
 
 

@@ -175,8 +175,8 @@ function GraphStartOTrate(datahere) {
 
     }
     Graph4 = true;
-
-    if (Graph1 == true && Graph2 == true && Graph3 == true && Graph4 == true && Graph5 == true) {
-        $("#loading_modalD_AttendanceRate").modal("hide");
-    }
+    $(".graph_5").hide();
+    //if (Graph1 == true && Graph2 == true && Graph3 == true && Graph4 == true && Graph5 == true) {
+    //    $("#loading_modalD_AttendanceRate").modal("hide");
+    //}
 }
