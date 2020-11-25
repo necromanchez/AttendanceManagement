@@ -189,6 +189,7 @@ namespace Brothers_WMS.Areas.Correction.Controllers
             string[] Position = {"Supervisor", "Manager"};
             int currentstatus = 0;
             int stat = 0, statmax = 0;
+            string refno = GetApproved[0].CS_RefNo;
             foreach (AF_CSModel csrequest in GetApproved)
             {
                 if (csrequest.Approved == true)
@@ -207,6 +208,9 @@ namespace Brothers_WMS.Areas.Correction.Controllers
 
                     stat = csfile.Status;
                     statmax = csfile.StatusMax;
+
+
+                   
                 }
                 else
                 {
@@ -214,29 +218,24 @@ namespace Brothers_WMS.Areas.Correction.Controllers
                     csfile = (from c in db.AF_ChangeSchedulefiling where c.Status > -1 && c.CS_RefNo == csrequest.CS_RefNo && c.EmployeeNo == csrequest.EmployeeNo select c).FirstOrDefault();
                     currentstatus = csfile.Status + 1;
                     csfile.Status = (csrequest.Approved == true) ? currentstatus : currentstatus - (currentstatus * 2);
-                    if(csfile.Status >= csfile.StatusMax)
+                    if (csfile.Status >= csfile.StatusMax)
                     {
                         csfile.Status = 2;
                     }
                     db.Entry(csfile).State = EntityState.Modified;
                     db.SaveChanges();
                 }
-             
+
 
             }
-
             
-
-            //if (csfile.Status > 0)
-            //{
-           //// 
-            //}
             #region update Approver Status
-            string refno = GetApproved[0].CS_RefNo;
+
             //string pos = (ifalter == "alter") ? "Alternative " + Position[currentstatus] : Position[currentstatus - 1];
             M_Section_ApproverStatus approverstatus = (from c in db.M_Section_ApproverStatus
                                                        where c.RefNo == refno
                                                        && c.EmployeeNo == user.UserName
+                                                       //&& c.EmployeeNo_CSRequest == csrequest.EmployeeNo
                                                        //&& c.Position == pos
                                                        select c).FirstOrDefault();
 

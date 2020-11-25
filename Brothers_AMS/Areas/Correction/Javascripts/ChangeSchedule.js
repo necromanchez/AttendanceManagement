@@ -1,7 +1,7 @@
 ﻿$(function () {
     $("#ALLtbl").hide();
     $("#checkall_emp").prop("disabled", true);
-    Dropdown_selectEmpCompany('BIPH_Agency', "/Helper/GetDropdown_Agency");
+    Dropdown_selectEmpCompany_RemoveAllAgency('BIPH_Agency', "/Helper/GetDropdown_Agency");
     //Dropdown_select('Section', "/Helper/GetDropdown_Section");
     
     GetcurrentSection('Section', "/Helper/GetCurrentSection");

@@ -4,6 +4,7 @@ using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Core.Objects;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -164,11 +165,12 @@ namespace Brothers_WMS.Areas.Correction.Controllers
                 string apptemplatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"TemplateFiles\StandardTemplate\", templateFilename);
                 FileInfo templateFile = new FileInfo(apptemplatePath);
                 M_Employee_Master_List current = (from c in db.M_Employee_Master_List where c.EmpNo == user.UserName select c).FirstOrDefault();
+                ObjectParameter totalCount = new ObjectParameter("TotalCount", typeof(int));
 
                 using (ExcelPackage package = new ExcelPackage(newFile, templateFile))  //-- With template.
                 {
                     List<GET_Employee_OTFiling_Result> list = new List<GET_Employee_OTFiling_Result>();
-                    list = db.GET_Employee_OTFiling(Agency, user.CostCode, lineID, "").ToList();
+                    list = db.GET_Employee_OTFiling(Agency, user.CostCode, lineID, "",0,100000,"", totalCount).ToList();
                     if (!string.IsNullOrEmpty(searchnow))//filter
                     {
                         #region null remover

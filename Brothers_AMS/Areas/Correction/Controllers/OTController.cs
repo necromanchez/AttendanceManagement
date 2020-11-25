@@ -5,6 +5,7 @@ using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Core.Objects;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Json;
@@ -41,12 +42,12 @@ namespace Brothers_WMS.Areas.Correction.Controllers
             System.Web.HttpContext.Current.Session["Searchvalueot"] = Request["search[value]"];
             System.Web.HttpContext.Current.Session["lINEID"] = lINEID;
 
-            int start = Convert.ToInt32(Request["start"]);
+            int start = (Convert.ToInt32(Request["start"]) == 0) ? 0 : (Convert.ToInt32(Request["start"]) / Convert.ToInt32(Request["length"]));
             int length = Convert.ToInt32(Request["length"]);
             string searchValue = Request["search[value]"];
             string sortColumnName = Request["columns[" + Request["order[0][column]"] + "][name]"];
             string sortDirection = Request["order[0][dir]"];
-
+            ObjectParameter totalCount = new ObjectParameter("TotalCount", typeof(int));
             List<GET_Employee_OTFiling_Result> list = new List<GET_Employee_OTFiling_Result>();
               
             string currentRefno = "";
@@ -54,7 +55,7 @@ namespace Brothers_WMS.Areas.Correction.Controllers
             {
                 case "OT":
                     currentRefno = helper.GenerateOTRef();
-                    list = db.GET_Employee_OTFiling(Agency, user.CostCode, lINEID, employeeNo).ToList();
+                    list = db.GET_Employee_OTFiling(Agency, user.CostCode, lINEID, employeeNo, start, length, searchValue, totalCount).ToList();
                     list = list.OrderBy(x => x.EmpNo).ToList();
                     //list = list.Where(x => x.Section == user.CostCode).ToList();
                     //List<AF_OTfiling> AlreadyApplied = (from c in db.AF_OTfiling where c.OT_RefNo == currentRefno && c.Status >= 0 select c).ToList();
@@ -62,7 +63,7 @@ namespace Brothers_WMS.Areas.Correction.Controllers
                     break;
                 case "CS":
                     currentRefno = helper.GenerateCSRef();
-                    list = db.GET_Employee_OTFiling(Agency, user.CostCode, lINEID, employeeNo).ToList();
+                    list = db.GET_Employee_OTFiling(Agency, user.CostCode, lINEID, employeeNo, start, length, searchValue, totalCount).ToList();
                     list = list.OrderBy(x => x.EmpNo).ToList();
                     //if (Schedule != null)
                     //{
@@ -75,7 +76,7 @@ namespace Brothers_WMS.Areas.Correction.Controllers
                     break;
                 case "DTR":
                     currentRefno = helper.GenerateDTRRef();
-                    list = db.GET_Employee_OTFiling(Agency, user.CostCode, lINEID, employeeNo).ToList();
+                    list = db.GET_Employee_OTFiling(Agency, user.CostCode, lINEID, employeeNo, start, length, searchValue, totalCount).ToList();
                     list = list.OrderBy(x => x.EmpNo).ToList();
                     // list = list.Where(x => x.Section == user.Section).ToList();
                     // List<AF_DTRfiling> AlreadyApplieddtr = (from c in db.AF_DTRfiling where c.DTR_RefNo == currentRefno && c.Status >= 0 select c).ToList();
@@ -94,34 +95,8 @@ namespace Brothers_WMS.Areas.Correction.Controllers
                        where ChosenEmployees.Contains(c.EmpNo)
                        select c).ToList();
             }
-            if (!string.IsNullOrEmpty(searchValue))//filter
-            {
-                #region null remover
-                list = list.Where(xx => xx.EmpNo != null).ToList();
-                list = list.Where(xx => xx.First_Name != null).ToList();
-                list = list.Where(xx => xx.Family_Name != null).ToList();
-                #endregion
-                list = list.Where(x => x.EmpNo.ToLower().Contains(searchValue.ToLower())
-                || x.Family_Name.ToLower().Contains(searchValue.ToLower())
-                || x.First_Name.ToLower().Contains(searchValue.ToLower())).ToList<GET_Employee_OTFiling_Result>();
-            }
-            //if (sortColumnName != "" && sortColumnName != null)
-            //{
-            //    if (sortDirection == "asc")
-            //    {
-            //        list = list.OrderBy(x => TypeHelper.GetPropertyValue(x, sortColumnName)).ToList();
-            //    }
-            //    else
-            //    {
-            //        list = list.OrderByDescending(x => TypeHelper.GetPropertyValue(x, sortColumnName)).ToList();
-            //    }
-            //}
-            int totalrows = list.Count;
-            int totalrowsafterfiltering = list.Count;
-
-
-            //paging
-            list = list.Skip(start).Take(length).ToList<GET_Employee_OTFiling_Result>();
+            int? totalrows = Convert.ToInt32(totalCount.Value);//list.Count;
+            int? totalrowsafterfiltering = Convert.ToInt32(totalCount.Value);//list.Count;
             return Json(new { data = list, draw = Request["draw"], recordsTotal = totalrows, recordsFiltered = totalrowsafterfiltering }, JsonRequestBehavior.AllowGet);
         }
         public ActionResult SaveOT(AF_OTfiling Filing, string Purposes, string EmployeeNos)
@@ -291,10 +266,12 @@ namespace Brothers_WMS.Areas.Correction.Controllers
                 string apptemplatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"TemplateFiles\StandardTemplate\", templateFilename);
                 FileInfo templateFile = new FileInfo(apptemplatePath);
                 M_Employee_Master_List current = (from c in db.M_Employee_Master_List where c.EmpNo == user.UserName select c).FirstOrDefault();
+                ObjectParameter totalCount = new ObjectParameter("TotalCount", typeof(int));
+
                 using (ExcelPackage package = new ExcelPackage(newFile, templateFile))  //-- With template.
                 {
                     List<GET_Employee_OTFiling_Result> list = new List<GET_Employee_OTFiling_Result>();
-                    list = db.GET_Employee_OTFiling(Agency, user.CostCode, lineID, "").ToList();
+                    list = db.GET_Employee_OTFiling(Agency, user.CostCode, lineID, "",0,100000,"", totalCount).ToList();
                     if (!string.IsNullOrEmpty(searchnow))//filter
                     {
                         #region null remover

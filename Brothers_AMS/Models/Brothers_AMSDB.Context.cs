@@ -52,11 +52,11 @@ namespace Brothers_WMS.Models
         public virtual DbSet<M_Employee_Master_List_Deleted> M_Employee_Master_List_Deleted { get; set; }
         public virtual DbSet<T_TimeInOut> T_TimeInOut { get; set; }
         public virtual DbSet<AF_ChangeSchedulefiling> AF_ChangeSchedulefiling { get; set; }
-        public virtual DbSet<M_Section_ApproverStatus> M_Section_ApproverStatus { get; set; }
         public virtual DbSet<Z_SkillRemoverAll> Z_SkillRemoverAll { get; set; }
         public virtual DbSet<Z_UploadTracker> Z_UploadTracker { get; set; }
         public virtual DbSet<M_Agency> M_Agency { get; set; }
         public virtual DbSet<M_Employee_Status> M_Employee_Status { get; set; }
+        public virtual DbSet<M_Section_ApproverStatus> M_Section_ApproverStatus { get; set; }
     
         public virtual int AF_EmailCSRequest(string cSRefno)
         {
@@ -1249,7 +1249,7 @@ namespace Brothers_WMS.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GET_DuplicateRFID_Result>("GET_DuplicateRFID");
         }
     
-        public virtual ObjectResult<GET_Employee_OTFiling_Result> GET_Employee_OTFiling(string agency, string costCode, Nullable<long> lINEID, string employeeNo)
+        public virtual ObjectResult<GET_Employee_OTFiling_Result> GET_Employee_OTFiling(string agency, string costCode, Nullable<long> lINEID, string employeeNo, Nullable<int> pageCount, Nullable<int> rowCount, string searchvalue, ObjectParameter totalCount)
         {
             var agencyParameter = agency != null ?
                 new ObjectParameter("Agency", agency) :
@@ -1267,7 +1267,19 @@ namespace Brothers_WMS.Models
                 new ObjectParameter("EmployeeNo", employeeNo) :
                 new ObjectParameter("EmployeeNo", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GET_Employee_OTFiling_Result>("GET_Employee_OTFiling", agencyParameter, costCodeParameter, lINEIDParameter, employeeNoParameter);
+            var pageCountParameter = pageCount.HasValue ?
+                new ObjectParameter("PageCount", pageCount) :
+                new ObjectParameter("PageCount", typeof(int));
+    
+            var rowCountParameter = rowCount.HasValue ?
+                new ObjectParameter("RowCount", rowCount) :
+                new ObjectParameter("RowCount", typeof(int));
+    
+            var searchvalueParameter = searchvalue != null ?
+                new ObjectParameter("Searchvalue", searchvalue) :
+                new ObjectParameter("Searchvalue", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GET_Employee_OTFiling_Result>("GET_Employee_OTFiling", agencyParameter, costCodeParameter, lINEIDParameter, employeeNoParameter, pageCountParameter, rowCountParameter, searchvalueParameter, totalCount);
         }
     
         public virtual ObjectResult<GET_FormatTimeKeeping_Result> GET_FormatTimeKeeping()

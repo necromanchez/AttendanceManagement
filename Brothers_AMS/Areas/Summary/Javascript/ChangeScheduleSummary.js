@@ -5,7 +5,7 @@
     Dropdown_selectAppCS("Status");
 
     $('#CSDetails').on('hidden.bs.modal', function (e) {
-        window.location = '../ChangeScheduleSummary/ChangeScheduleSummary';
+        //window.location = '../ChangeScheduleSummary/ChangeScheduleSummary';
     })
     var d = new Date();
 

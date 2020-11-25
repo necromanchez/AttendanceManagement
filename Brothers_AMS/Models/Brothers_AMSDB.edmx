@@ -833,6 +833,10 @@
           <Parameter Name="CostCode" Type="nvarchar" Mode="In" />
           <Parameter Name="LINEID" Type="bigint" Mode="In" />
           <Parameter Name="EmployeeNo" Type="nvarchar" Mode="In" />
+          <Parameter Name="PageCount" Type="int" Mode="In" />
+          <Parameter Name="RowCount" Type="int" Mode="In" />
+          <Parameter Name="Searchvalue" Type="nvarchar" Mode="In" />
+          <Parameter Name="TotalCount" Type="int" Mode="InOut" />
         </Function>
         <Function Name="GET_Employee_ScheduleList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="EmployNo" Type="nvarchar" Mode="In" />
@@ -1504,6 +1508,10 @@
             <Parameter Name="CostCode" Mode="In" Type="String" />
             <Parameter Name="LINEID" Mode="In" Type="Int64" />
             <Parameter Name="EmployeeNo" Mode="In" Type="String" />
+            <Parameter Name="PageCount" Mode="In" Type="Int32" />
+            <Parameter Name="RowCount" Mode="In" Type="Int32" />
+            <Parameter Name="Searchvalue" Mode="In" Type="String" />
+            <Parameter Name="TotalCount" Mode="InOut" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GET_FormatTimeKeeping" ReturnType="Collection(Brothers_AMSDBModel.GET_FormatTimeKeeping_Result)" />
           <FunctionImport Name="GET_M_Section" ReturnType="Collection(Brothers_AMSDBModel.GET_M_Section_Result)">
@@ -1560,7 +1568,6 @@
           <Parameter Name="DateSearch" Mode="In" Type="DateTime" />
           </FunctionImport>
           <EntitySet Name="AF_ChangeSchedulefiling" EntityType="Brothers_AMSDBModel.AF_ChangeSchedulefiling" />
-          <EntitySet Name="M_Section_ApproverStatus" EntityType="Brothers_AMSDBModel.M_Section_ApproverStatus" />
           <EntitySet Name="Z_SkillRemoverAll" EntityType="Brothers_AMSDBModel.Z_SkillRemoverAll" />
           <FunctionImport Name="GET_Employee_ScheduleListChangeShift" ReturnType="Collection(Brothers_AMSDBModel.GET_Employee_ScheduleListChangeShift_Result)">
           <Parameter Name="EmployNo" Mode="In" Type="String" />
@@ -1754,7 +1761,8 @@
           <FunctionImport Name="GET_Employee_ModifiedStatus" ReturnType="Collection(Brothers_AMSDBModel.GET_Employee_ModifiedStatus_Result)">
           <Parameter Name="EmployNo" Mode="In" Type="String" />
           </FunctionImport>
-          <FunctionImport Name="AF_EmailCSRequestApprovers" />
+          <FunctionImport Name="AF_EmailCSRequestApprovers" >
+          </FunctionImport>
           <FunctionImport Name="GET_RP_MPCMonitoringv2ALLShift" ReturnType="Collection(Brothers_AMSDBModel.GET_RP_MPCMonitoringv2ALLShift_Result)">
             <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
             <Parameter Name="DateTo" Mode="In" Type="DateTime" />
@@ -1810,6 +1818,7 @@
             <Parameter Name="EmpNo" Mode="In" Type="String" />
             <Parameter Name="TimeOut" Mode="In" Type="DateTime" />
           </FunctionImport>
+          <EntitySet Name="M_Section_ApproverStatus" EntityType="Brothers_AMSDBModel.M_Section_ApproverStatus" />
           </EntityContainer>
         <ComplexType Name="GET_AF_Approver_Result">
           <Property Type="String" Name="Position" Nullable="false" MaxLength="50" />
@@ -2938,23 +2947,6 @@
           <Property Name="EmployeeAccept" Type="DateTime" Precision="3" />
           <Property Name="ReasonforDecline" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityType Name="M_Section_ApproverStatus">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Section" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="RefNo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="EmployeeNo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Position" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Approved" Type="Int32" Nullable="false" />
-          <Property Name="OverTimeType" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="CreateID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="UpdateID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="UpdateDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="ApprovedDate" Type="DateTime" Precision="3" />
-        </EntityType>
         <EntityType Name="Z_SkillRemoverAll">
           <Key>
             <PropertyRef Name="ID" />
@@ -3360,6 +3352,23 @@
           <Property Type="String" Name="Result" Nullable="false" MaxLength="6" />
           <Property Type="Int32" Name="Value" Nullable="true" />
         </ComplexType>
+        <EntityType Name="M_Section_ApproverStatus">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Section" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="RefNo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeeNo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Position" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Approved" Type="Int32" Nullable="false" />
+          <Property Name="OverTimeType" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreateID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ApprovedDate" Type="DateTime" Precision="3" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -4756,24 +4765,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="M_Section_ApproverStatus">
-            <EntityTypeMapping TypeName="Brothers_AMSDBModel.M_Section_ApproverStatus">
-              <MappingFragment StoreEntitySet="M_Section_ApproverStatus">
-                <ScalarProperty Name="ApprovedDate" ColumnName="ApprovedDate" />
-                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
-                <ScalarProperty Name="UpdateID" ColumnName="UpdateID" />
-                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
-                <ScalarProperty Name="CreateID" ColumnName="CreateID" />
-                <ScalarProperty Name="OverTimeType" ColumnName="OverTimeType" />
-                <ScalarProperty Name="Approved" ColumnName="Approved" />
-                <ScalarProperty Name="Position" ColumnName="Position" />
-                <ScalarProperty Name="EmployeeNo" ColumnName="EmployeeNo" />
-                <ScalarProperty Name="RefNo" ColumnName="RefNo" />
-                <ScalarProperty Name="Section" ColumnName="Section" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Z_SkillRemoverAll">
             <EntityTypeMapping TypeName="Brothers_AMSDBModel.Z_SkillRemoverAll">
               <MappingFragment StoreEntitySet="Z_SkillRemoverAll">
@@ -5322,6 +5313,24 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <EntitySetMapping Name="M_Section_ApproverStatus">
+            <EntityTypeMapping TypeName="Brothers_AMSDBModel.M_Section_ApproverStatus">
+              <MappingFragment StoreEntitySet="M_Section_ApproverStatus">
+                <ScalarProperty Name="ApprovedDate" ColumnName="ApprovedDate" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="UpdateID" ColumnName="UpdateID" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="CreateID" ColumnName="CreateID" />
+                <ScalarProperty Name="OverTimeType" ColumnName="OverTimeType" />
+                <ScalarProperty Name="Approved" ColumnName="Approved" />
+                <ScalarProperty Name="Position" ColumnName="Position" />
+                <ScalarProperty Name="EmployeeNo" ColumnName="EmployeeNo" />
+                <ScalarProperty Name="RefNo" ColumnName="RefNo" />
+                <ScalarProperty Name="Section" ColumnName="Section" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

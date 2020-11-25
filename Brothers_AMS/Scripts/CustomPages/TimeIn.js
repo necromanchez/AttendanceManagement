@@ -554,7 +554,7 @@ function CheckerNoIn(processID) {
 
 function ContinueTapNoin(processID) {
     swal({
-        title: "You have not Time In yet",
+        title: "You have no Time In yet",
         //text: "You will not be able to recover this imaginary file!",   
         type: "warning",
         showCancelButton: true,

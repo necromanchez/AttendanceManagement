@@ -33,6 +33,32 @@ function Dropdown_selectEmpCompany(id, url) {
     });
 }
 
+function Dropdown_selectEmpCompany_RemoveAllAgency(id, url) {
+    var option = '<option value="">--SELECT--' + getlongadjWorktimeSelect() + '</option>';
+    $('#' + id).html(option);
+    $.ajax({
+        url: url,
+        type: 'GET',
+        dataType: 'JSON',
+    }).done(function (data, textStatus, xhr) {
+        $.each(data.list, function (i, x) {
+            if (x.value != "AGENCY") {
+                option = '<option value="' + x.value + '">' + x.text + getlongadjWorktimeSelect() + '</option>';
+
+                //$('.selectpicker').selectpicker('refresh');
+                $('#' + id).append(option);
+            }
+        });
+        var idd = "select2-" + id + "-container";
+        document.getElementById(idd).style.whiteSpace = "nowrap";
+        document.getElementById(id).style.whiteSpace = "nowrap";
+
+    }).fail(function (xhr, textStatus, errorThrown) {
+        console.log(errorThrown, textStatus);
+    });
+}
+
+
 function Dropdown_selectEmpSection(id, url) {
     var option = '<option value="">All Sections' + getlongadj() + '</option>';
     $('#' + id).html(option);
