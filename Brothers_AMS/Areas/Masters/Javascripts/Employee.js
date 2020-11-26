@@ -1063,6 +1063,7 @@ function ScheduleTable(Empno) {
             type: "POST",
             datatype: "json"
         },
+        ordering: false,
         serverSide: "true",
         order: [0, "desc"],
         processing: "true",
@@ -1099,6 +1100,7 @@ function ScheduleTable(Empno) {
             type: "POST",
             datatype: "json"
         },
+        ordering: false,
         serverSide: "true",
         scrollX: true,
         order: [0, "desc"],
@@ -1112,28 +1114,32 @@ function ScheduleTable(Empno) {
         initComplete: function () {
             //alert("asd");
             var table = $('#SchedulehistoryCStable').DataTable();
-            table.ajax.reload();
+            table.columns.adjust();
+            setTimeout(function () { $('#SchedulehistoryCStable').DataTable().ajax.reload(); }, 500);
         },
         columns: [
-            { title: "Reference No", data: "CS_RefNo" },
-            { title: "Schedule", data: "ScheduleName" },
+            { title: "Reference No", data: "CS_RefNo", sWidth: "20%" }, 
+            { title: "Schedule", data: "ScheduleName", sWidth: "20%" }, 
             { title: "Shift", data: "ScheduleShift" },
             {
                 title: "Date From", data: function (x) {
                     return (x.DateFrom != null) ? moment(x.DateFrom).format("MM/DD/YYYY") : ""
-                }, name: "DateFrom"
-            },
+                }, name: "DateFrom", sWidth: "20%"
+            }, 
+            
             {
                 title: "Date To", data: function (x) {
                     return (x.DateTo != null) ? moment(x.DateTo).format("MM/DD/YYYY") : ""
-                }, name: "DateTo"
-            },
-            { title: "Update By", data: "UpdateID" },
+                }, name: "DateTo", sWidth: "20%"
+            }, 
+            
+            { title: "Update By", data: "UpdateID", sWidth: "25%" }, 
             {
                 title: "Update Date", data: function (x) {
                     return (x.UpdateDate != null) ? moment(x.UpdateDate).format("MM/DD/YYYY") : ""
-                }, name: "UpdateDate"
-            },
+                }, name: "UpdateDate", sWidth: "25%"
+            }, 
+            
 
 
         ],

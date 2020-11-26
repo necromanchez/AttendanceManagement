@@ -1396,17 +1396,18 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                 using (ExcelPackage package = new ExcelPackage(newFile, templateFile))  //-- With template.
                 {
 
-                    List<GET_RP_AttendanceMonitoring_TimeINOUT_HRExport_D_Result> list = new List<GET_RP_AttendanceMonitoring_TimeINOUT_HRExport_D_Result>();
+                    List<GET_RP_AttendanceMonitoring_TimeINOUT_HRFormatV2_Result> list = new List<GET_RP_AttendanceMonitoring_TimeINOUT_HRFormatV2_Result>();
                     db.Database.CommandTimeout = 0;
-                    list = db.GET_RP_AttendanceMonitoring_TimeINOUT_HRExport_D(Month,Year,Section, Agency, DateFrom, DateTo).ToList();
+                    //list = db.GET_RP_AttendanceMonitoring_TimeINOUT_HRExport_D(Month,Year,Section, Agency, DateFrom, DateTo).ToList();
                     //list = list.Where(x => x.ModifiedStatus.ToLower() == "active").ToList();
+                    list = db.GET_RP_AttendanceMonitoring_TimeINOUT_HRFormatV2(DateFrom, DateTo, Month, Year, Section, Agency, 0, 100000, "").ToList();
                     ExcelWorksheet ExportData = package.Workbook.Worksheets["AMSSheet"];
 
                     int start = 2;
                     for (int i = 0; i < list.Count; i++)
                     {
                         ExportData.Cells["A" + start].Value = list[i].EmpNo;
-                        ExportData.Cells["B" + start].Value = list[i].Date;
+                        ExportData.Cells["B" + start].Value = list[i].DateLog;
                         ExportData.Cells["C" + start].Value = list[i].LogType;
                         ExportData.Cells["D" + start].Value = list[i].TimeTap;
                         start++;

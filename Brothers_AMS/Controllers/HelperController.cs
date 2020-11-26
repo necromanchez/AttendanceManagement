@@ -226,14 +226,30 @@ namespace Brothers_WMS.Controllers
             //            && w.Section == user.CostCode
             //            orderby w.Line ascending
             //            select new { text = w.Line, value = w.ID }).Distinct().ToList();
-            List<string> GroupLine = (from c in db.M_Cost_Center_List where c.GroupSection == Sectiongroup || Sectiongroup == "null" select c.Cost_Center).ToList();
-            var list = (from w in db.M_LineTeam.ToList()
-                        where w.IsDeleted == false && w.Status == true
-                        //&& w.Section == user.CostCode
-                        && GroupLine.Contains(w.Section)
-                        orderby w.Line ascending
-                        select new { text = w.Line, value = w.ID }).Distinct().ToList();
-            return Json(new { list = list }, JsonRequestBehavior.AllowGet);
+            if(Sectiongroup == "undefined")
+            {
+                Sectiongroup = (from c in db.M_Cost_Center_List where c.Cost_Center == user.CostCode select c.GroupSection).FirstOrDefault();
+                List<string> GroupLine = (from c in db.M_Cost_Center_List where c.GroupSection == Sectiongroup || Sectiongroup == "null" select c.Cost_Center).ToList();
+                var list = (from w in db.M_LineTeam.ToList()
+                            where w.IsDeleted == false && w.Status == true
+                            //&& w.Section == user.CostCode
+                            && GroupLine.Contains(w.Section)
+                            orderby w.Line ascending
+                            select new { text = w.Line, value = w.ID }).Distinct().ToList();
+                return Json(new { list = list }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                List<string> GroupLine = (from c in db.M_Cost_Center_List where c.GroupSection == Sectiongroup || Sectiongroup == "null" select c.Cost_Center).ToList();
+                var list = (from w in db.M_LineTeam.ToList()
+                            where w.IsDeleted == false && w.Status == true
+                            //&& w.Section == user.CostCode
+                            && GroupLine.Contains(w.Section)
+                            orderby w.Line ascending
+                            select new { text = w.Line, value = w.ID }).Distinct().ToList();
+                return Json(new { list = list }, JsonRequestBehavior.AllowGet);
+            }
+            
         }
 
         public ActionResult GetDropdown_LineProcessTeamLoginV2(string CostCode)

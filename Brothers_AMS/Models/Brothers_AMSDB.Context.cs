@@ -2323,5 +2323,46 @@ namespace Brothers_WMS.Models
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<TT_NoInChecker_Result>("TT_NoInChecker", empNoParameter, timeOutParameter);
         }
+    
+        public virtual ObjectResult<GET_RP_AttendanceMonitoring_TimeINOUT_HRFormatV2_Result> GET_RP_AttendanceMonitoring_TimeINOUT_HRFormatV2(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, Nullable<int> month, Nullable<int> year, string section, string agency, Nullable<int> pageCount, Nullable<int> rowCount, string searchvalue)
+        {
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            var monthParameter = month.HasValue ?
+                new ObjectParameter("Month", month) :
+                new ObjectParameter("Month", typeof(int));
+    
+            var yearParameter = year.HasValue ?
+                new ObjectParameter("Year", year) :
+                new ObjectParameter("Year", typeof(int));
+    
+            var sectionParameter = section != null ?
+                new ObjectParameter("Section", section) :
+                new ObjectParameter("Section", typeof(string));
+    
+            var agencyParameter = agency != null ?
+                new ObjectParameter("Agency", agency) :
+                new ObjectParameter("Agency", typeof(string));
+    
+            var pageCountParameter = pageCount.HasValue ?
+                new ObjectParameter("PageCount", pageCount) :
+                new ObjectParameter("PageCount", typeof(int));
+    
+            var rowCountParameter = rowCount.HasValue ?
+                new ObjectParameter("RowCount", rowCount) :
+                new ObjectParameter("RowCount", typeof(int));
+    
+            var searchvalueParameter = searchvalue != null ?
+                new ObjectParameter("Searchvalue", searchvalue) :
+                new ObjectParameter("Searchvalue", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GET_RP_AttendanceMonitoring_TimeINOUT_HRFormatV2_Result>("GET_RP_AttendanceMonitoring_TimeINOUT_HRFormatV2", dateFromParameter, dateToParameter, monthParameter, yearParameter, sectionParameter, agencyParameter, pageCountParameter, rowCountParameter, searchvalueParameter);
+        }
     }
 }

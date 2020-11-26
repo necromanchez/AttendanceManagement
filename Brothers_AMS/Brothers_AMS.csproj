@@ -519,6 +519,9 @@
     <Compile Include="Models\GET_RP_AttendanceMonitoring_TimeINOUT_HRExport_Result.cs">
       <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\GET_RP_AttendanceMonitoring_TimeINOUT_HRFormatV2_Result.cs">
+      <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\GET_RP_MPCMonitoringv2ALLShift_Result.cs">
       <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
     </Compile>
