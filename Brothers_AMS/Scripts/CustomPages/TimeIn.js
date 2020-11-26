@@ -368,14 +368,12 @@ function GetAttendanceDetail(re) {
 }
 
 function selectprocess(processID) {
-    if (processID == 0) {
-        CheckerNoIn(processID);
-    }
-    else {
+    //if (processID == 0) {
+    //    CheckerNoIn(processID);
+    //}
+    //else {
         GoTap(processID);
-    }
-    
-
+    //}
 }
 
 function GoTap(processID) {
