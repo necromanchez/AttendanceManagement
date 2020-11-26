@@ -990,6 +990,18 @@
           <Parameter Name="DateTO" Type="datetime" Mode="In" />
           <Parameter Name="Shift" Type="nvarchar" Mode="In" />
         </Function>
+        <Function Name="GET_RP_WrongShiftV2" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DateFrom" Type="date" Mode="In" />
+          <Parameter Name="DateTo" Type="date" Mode="In" />
+          <Parameter Name="Month" Type="int" Mode="In" />
+          <Parameter Name="Year" Type="int" Mode="In" />
+          <Parameter Name="Section" Type="nvarchar" Mode="In" />
+          <Parameter Name="Agency" Type="nvarchar" Mode="In" />
+          <Parameter Name="PageCount" Type="int" Mode="In" />
+          <Parameter Name="RowCount" Type="int" Mode="In" />
+          <Parameter Name="Searchvalue" Type="nvarchar" Mode="In" />
+          <Parameter Name="Shift" Type="nvarchar" Mode="In" />
+        </Function>
         <Function Name="GET_RPMonitoring_Graphv2" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="DateFrom" Type="datetime" Mode="In" />
           <Parameter Name="DateTo" Type="datetime" Mode="In" />
@@ -1840,6 +1852,18 @@
             <Parameter Name="PageCount" Mode="In" Type="Int32" />
             <Parameter Name="RowCount" Mode="In" Type="Int32" />
             <Parameter Name="Searchvalue" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="GET_RP_WrongShiftV2" ReturnType="Collection(Brothers_AMSDBModel.GET_RP_WrongShiftV2_Result)">
+            <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
+            <Parameter Name="DateTo" Mode="In" Type="DateTime" />
+            <Parameter Name="Month" Mode="In" Type="Int32" />
+            <Parameter Name="Year" Mode="In" Type="Int32" />
+            <Parameter Name="Section" Mode="In" Type="String" />
+            <Parameter Name="Agency" Mode="In" Type="String" />
+            <Parameter Name="PageCount" Mode="In" Type="Int32" />
+            <Parameter Name="RowCount" Mode="In" Type="Int32" />
+            <Parameter Name="Searchvalue" Mode="In" Type="String" />
+            <Parameter Name="Shift" Mode="In" Type="String" />
           </FunctionImport>
           </EntityContainer>
         <ComplexType Name="GET_AF_Approver_Result">
@@ -3399,6 +3423,15 @@
           <Property Type="String" Name="LogType" Nullable="false" MaxLength="3" />
           <Property Type="String" Name="DateLog" Nullable="false" MaxLength="10" />
           <Property Type="String" Name="TimeTap" Nullable="false" MaxLength="5" />
+        </ComplexType>
+        <ComplexType Name="GET_RP_WrongShiftV2_Result">
+          <Property Type="String" Name="EmpNo" Nullable="false" MaxLength="3" />
+          <Property Type="String" Name="EmployeeName" Nullable="false" MaxLength="3" />
+          <Property Type="String" Name="Shift" Nullable="false" MaxLength="3" />
+          <Property Type="String" Name="LogType" Nullable="false" MaxLength="3" />
+          <Property Type="String" Name="Date" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="TimeTap" Nullable="false" MaxLength="5" />
+          <Property Type="String" Name="Section" Nullable="false" MaxLength="5" />
         </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
@@ -5372,6 +5405,19 @@
                 <ScalarProperty Name="LogType" ColumnName="LogType" />
                 <ScalarProperty Name="DateLog" ColumnName="DateLog" />
                 <ScalarProperty Name="TimeTap" ColumnName="TimeTap" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GET_RP_WrongShiftV2" FunctionName="Brothers_AMSDBModel.Store.GET_RP_WrongShiftV2">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Brothers_AMSDBModel.GET_RP_WrongShiftV2_Result">
+                <ScalarProperty Name="EmpNo" ColumnName="EmpNo" />
+                <ScalarProperty Name="EmployeeName" ColumnName="EmployeeName" />
+                <ScalarProperty Name="Shift" ColumnName="Shift" />
+                <ScalarProperty Name="LogType" ColumnName="LogType" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="TimeTap" ColumnName="TimeTap" />
+                <ScalarProperty Name="Section" ColumnName="Section" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

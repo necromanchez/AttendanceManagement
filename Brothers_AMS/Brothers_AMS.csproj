@@ -528,6 +528,9 @@
     <Compile Include="Models\GET_RP_MPCMonitoringv2_Result.cs">
       <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\GET_RP_WrongShiftV2_Result.cs">
+      <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\GET_RP_WrongShift_Result.cs">
       <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
     </Compile>

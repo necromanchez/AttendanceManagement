@@ -1446,12 +1446,12 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                 using (ExcelPackage package = new ExcelPackage(newFile, templateFile))  //-- With template.
                 {
 
-                    List<GET_RP_WrongShift_Result> list = new List<GET_RP_WrongShift_Result>();
+                    List<GET_RP_WrongShiftV2_Result> list = new List<GET_RP_WrongShiftV2_Result>();
                     db.Database.CommandTimeout = 0;
 
-                    if (Shift == "Day" || Shift == "Night")
-                    {
-                        list = db.GET_RP_WrongShift(Month, Year, Section, Agency, DateFrom, DateTo, Shift).ToList();
+                    //if (Shift == "Day" || Shift == "Night")
+                    //{
+                        list = db.GET_RP_WrongShiftV2(DateFrom, DateTo, Month, Year, Section, Agency, 0, 100000, "",Shift).ToList();
                         //list = list.Where(x => x.ModifiedStatus.ToLower() == "active").ToList();
                         ExcelWorksheet ExportData = package.Workbook.Worksheets["AMSSheet"];
 
@@ -1462,42 +1462,42 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                             ExportData.Cells["B" + start].Value = list[i].EmployeeName;
                             ExportData.Cells["C" + start].Value = list[i].Date;
                             ExportData.Cells["D" + start].Value = list[i].TimeTap;
-                            ExportData.Cells["E" + start].Value = list[i].Shifts;
+                            ExportData.Cells["E" + start].Value = list[i].Shift;
                             ExportData.Cells["F" + start].Value = list[i].Section;
                             start++;
                         }
-                    }
-                    else
-                    {
-                        List<GET_RP_WrongShift_Result> listDay = new List<GET_RP_WrongShift_Result>();
-                        List<GET_RP_WrongShift_Result> listNight = new List<GET_RP_WrongShift_Result>();
-                        listDay = db.GET_RP_WrongShift(Month, Year, Section, Agency, DateFrom, DateTo, "Day").ToList();
-                        listNight = db.GET_RP_WrongShift(Month, Year, Section, Agency, DateFrom, DateTo, "Night").ToList();
+                    //}
+                    //else
+                    //{
+                    //    List<GET_RP_WrongShift_Result> listDay = new List<GET_RP_WrongShift_Result>();
+                    //    List<GET_RP_WrongShift_Result> listNight = new List<GET_RP_WrongShift_Result>();
+                    //    listDay = db.GET_RP_WrongShift(Month, Year, Section, Agency, DateFrom, DateTo, "Day").ToList();
+                    //    listNight = db.GET_RP_WrongShift(Month, Year, Section, Agency, DateFrom, DateTo, "Night").ToList();
 
-                        ExcelWorksheet ExportData = package.Workbook.Worksheets["AMSSheet"];
+                    //    ExcelWorksheet ExportData = package.Workbook.Worksheets["AMSSheet"];
 
-                        int start = 2;
-                        for (int i = 0; i < listDay.Count; i++)
-                        {
-                            ExportData.Cells["A" + start].Value = listDay[i].EmpNo;
-                            ExportData.Cells["B" + start].Value = listDay[i].EmployeeName;
-                            ExportData.Cells["C" + start].Value = listDay[i].Date;
-                            ExportData.Cells["D" + start].Value = listDay[i].TimeTap;
-                            ExportData.Cells["E" + start].Value = listDay[i].Shifts;
-                            ExportData.Cells["F" + start].Value = listDay[i].Section;
-                            start++;
-                        }
-                        for (int i = 0; i < listNight.Count; i++)
-                        {
-                            ExportData.Cells["A" + start].Value = listNight[i].EmpNo;
-                            ExportData.Cells["B" + start].Value = listNight[i].EmployeeName;
-                            ExportData.Cells["C" + start].Value = listNight[i].Date;
-                            ExportData.Cells["D" + start].Value = listNight[i].TimeTap;
-                            ExportData.Cells["E" + start].Value = listNight[i].Shifts;
-                            ExportData.Cells["F" + start].Value = listNight[i].Section;
-                            start++;
-                        }
-                    }
+                    //    int start = 2;
+                    //    for (int i = 0; i < listDay.Count; i++)
+                    //    {
+                    //        ExportData.Cells["A" + start].Value = listDay[i].EmpNo;
+                    //        ExportData.Cells["B" + start].Value = listDay[i].EmployeeName;
+                    //        ExportData.Cells["C" + start].Value = listDay[i].Date;
+                    //        ExportData.Cells["D" + start].Value = listDay[i].TimeTap;
+                    //        ExportData.Cells["E" + start].Value = listDay[i].Shifts;
+                    //        ExportData.Cells["F" + start].Value = listDay[i].Section;
+                    //        start++;
+                    //    }
+                    //    for (int i = 0; i < listNight.Count; i++)
+                    //    {
+                    //        ExportData.Cells["A" + start].Value = listNight[i].EmpNo;
+                    //        ExportData.Cells["B" + start].Value = listNight[i].EmployeeName;
+                    //        ExportData.Cells["C" + start].Value = listNight[i].Date;
+                    //        ExportData.Cells["D" + start].Value = listNight[i].TimeTap;
+                    //        ExportData.Cells["E" + start].Value = listNight[i].Shifts;
+                    //        ExportData.Cells["F" + start].Value = listNight[i].Section;
+                    //        start++;
+                    //    }
+                    //}
 
                     return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename);
                 }
@@ -3812,6 +3812,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                     ExcelWorksheet ExportData = package.Workbook.Worksheets["AMSSheet"];
                     //List<GET_RP_AttendanceMonitoring_Result> list = test(Month,Year,Section);// db.GET_RP_AttendanceMonitoring(Month, Year, Section).ToList();
                     DataTable dt = new DataTable();// (DataTable)System.Web.HttpContext.Current.Session["ExportWT"];//ExportsEmployee(Month, Year, Day, Section);
+                    GET_RP_AttendanceMonitoring_COUNT_Result totalCount = db.GET_RP_AttendanceMonitoring_COUNT(Month, Year, Section, "", "").FirstOrDefault();
 
                     SqlConnection conn = new SqlConnection(Connection_String.AMSDB);
                     SqlCommand cmdSql = new SqlCommand();
@@ -3823,6 +3824,10 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                     cmdSql.Parameters.Add("@Month", SqlDbType.Int).Value = Month;
                     cmdSql.Parameters.Add("@Year", SqlDbType.Int).Value = Year;
                     cmdSql.Parameters.Add("@Section", SqlDbType.NVarChar).Value = Section;
+                    cmdSql.Parameters.Add("@Agency", SqlDbType.NVarChar).Value = "";
+                    cmdSql.Parameters.Add("@PageCount", SqlDbType.Int).Value = 0;
+                    cmdSql.Parameters.Add("@RowCount", SqlDbType.Int).Value = totalCount.TotalCount;
+                    cmdSql.Parameters.Add("@Searchvalue", SqlDbType.NVarChar).Value = "";
 
                     cmdSql.CommandTimeout = 0;
                     conn.Open();
@@ -3842,13 +3847,14 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                     //wt.globawt = dt;
                     cmdSql.Dispose();
                     conn.Close();
-                    int dday = Day + 12;
+                    int dday = Day + 5;
                     List<string> Pr = new List<string>();
                     Pr.Add("P(D)");
                     Pr.Add("P(N)");
                     Pr.Add("TR(D)");
                     Pr.Add("TR(N)");
                     Pr.Add("TR");
+                    Pr.Add("-");
                     for (int i = 0; i < dt.Rows.Count; i++)
                     {
                         if (!Pr.Contains(dt.Rows[i][dday].ToString()))
