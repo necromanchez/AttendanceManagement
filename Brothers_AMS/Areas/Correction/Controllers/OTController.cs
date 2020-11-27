@@ -45,6 +45,7 @@ namespace Brothers_WMS.Areas.Correction.Controllers
             int start = (Convert.ToInt32(Request["start"]) == 0) ? 0 : (Convert.ToInt32(Request["start"]) / Convert.ToInt32(Request["length"]));
             int length = Convert.ToInt32(Request["length"]);
             string searchValue = Request["search[value]"];
+            searchValue = (searchValue == null) ? "" : searchValue;
             string sortColumnName = Request["columns[" + Request["order[0][column]"] + "][name]"];
             string sortDirection = Request["order[0][dir]"];
             ObjectParameter totalCount = new ObjectParameter("TotalCount", typeof(int));

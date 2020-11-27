@@ -34,6 +34,12 @@ namespace Brothers_WMS.Areas.Correction.Controllers
             //        //return Redirect("http://localhost:49710/Correction/ApproverChangeSchedule/ApproverChangeSchedule?Approved=" + result[0]);
             //    }
             //}
+            try
+            {
+                db.AF_EmailCSRequestApprovers();
+            }
+            catch(Exception err) { }
+            
             return View();
         }
 
