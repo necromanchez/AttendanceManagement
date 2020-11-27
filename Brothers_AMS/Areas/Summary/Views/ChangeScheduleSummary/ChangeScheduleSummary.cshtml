@@ -26,7 +26,7 @@
             <div class="box-body pad">
 
                 <form action="" method="POST" role="form">
-                    <div class="row">
+                    @*<div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <div class="input-group">
@@ -44,7 +44,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div>*@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
@@ -70,15 +70,23 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <div class="input-group">
+                                    <span class="input-group-addon resized">Section</span>
+                                    <select class="form-control autof select2" id="Section" name="Section"></select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="input-group">
                                     <span class="input-group-addon resized">Approver Status</span>
                                     <select class="form-control autof select2" id="Status" name="Status">
                                         @*<option value="">--SELECT--</option>
-                                        <option value="-2">Cancelled</option>
-                                        <option value="-1">Rejected</option>
-                                        <option value="0">Pending</option>
-                                        <option value="1">Supervisor approved</option>
-                                        <option value="2">Manager approved</option>
-                                        <option value="3">General approved</option>*@
+                        <option value="-2">Cancelled</option>
+                        <option value="-1">Rejected</option>
+                        <option value="0">Pending</option>
+                        <option value="1">Supervisor approved</option>
+                        <option value="2">Manager approved</option>
+                        <option value="3">General approved</option>*@
                                     </select>
                                 </div>
 
@@ -96,8 +104,8 @@
                                     <div class="col-md-6 col-xs-12 no-padding-l">
 
                                         @*<button type="button" class="btn btn-flat bg-green btn-lg btn-block" id="btnExport">
-                                                <i class="fa fa-address-book"></i> Export
-                                            </button>*@
+                            <i class="fa fa-address-book"></i> Export
+                        </button>*@
                                     </div>
                                 </div>
                             </div>

@@ -135,7 +135,7 @@ function Initializepage() {
             data:{supersection:$("#Section").val()}
         },
         lengthMenu: [[10, 50, 100], [10, 50, 100]],
-
+        ordering: false,
         lengthChange: true,
         scrollY: "600px",
         scrollCollapse: true,
@@ -156,7 +156,7 @@ function Initializepage() {
                 var table = $('#UsersTable').DataTable();
                 table.column(10).visible(true);
             }
-
+            setTimeout(function () { $('#UsersTable').DataTable().ajax.reload(); }, 500);
 
         },
         columns: [
@@ -386,7 +386,7 @@ function Initializepage_Normal() {
             data: { supersection: $("#Section").val() }
         },
         lengthMenu: [[10, 50, 100], [10, 50, 100]],
-
+        ordering:false, 
         lengthChange: true,
         scrollY: "600px",
         scrollCollapse: true,
@@ -408,7 +408,7 @@ function Initializepage_Normal() {
                 table.column(10).visible(true);
             }
 
-
+            setTimeout(function () { $('#NormalUserTable').DataTable().ajax.reload(); }, 500);
         },
         columns: [
             { title: "No", data: "Rownum", name: "Rownum" },
