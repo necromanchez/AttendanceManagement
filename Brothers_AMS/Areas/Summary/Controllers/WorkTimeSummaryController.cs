@@ -4472,7 +4472,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                     list = db.GET_RP_AbsentDetails(Month, Year, Section, Agency).ToList();
                     ExcelWorksheet ExportData = package.Workbook.Worksheets["AMSSheet"];
                     int start = 2;
-
+                    list = list.OrderBy(x => x.Date).ToList();
                     for (int i = 0; i < list.Count; i++)
                     {
                         ExportData.Cells["A" + start].Value = list[i].Date;

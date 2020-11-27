@@ -105,7 +105,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
 
         public ActionResult GetManPowerGraph(MPFilterModel Filter)
         {
-            
+            Filter.Shift = (Filter.Shift == null) ? "" : Filter.Shift;
             switch (Filter.Certified)
             {
                 case "Certified":
@@ -123,12 +123,12 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                 }
             }
             string section = (Filter.Section == null) ? "" : Filter.Section;
-           
+
             TimeSpan ts = new TimeSpan(23, 00, 0);
-           
+
             Filter.DateTo = Filter.DateTo = Filter.DateTo.AddHours(23).AddMinutes(59).AddSeconds(59);
 
-            if (Filter.Shift != "Day" && Filter.Shift != "Night")
+            if (Filter.Shift != "Day" && Filter.Shift != "Night" && Filter.Shift != "")
             {
                 long shift = Convert.ToInt64(Filter.Shift);
                 db.Database.CommandTimeout = 0;
@@ -166,34 +166,71 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                 using (ExcelPackage package = new ExcelPackage(newFile, templateFile))  //-- With template.
                 {
                     MPFilterModel Filter = (MPFilterModel)System.Web.HttpContext.Current.Session["MPresult"];
-                    long shift = Convert.ToInt64(Filter.Shift);
+                  
                     string section = (Filter.Section == null) ? "" : Filter.Section;
                     List<GET_RP_MPCMonitoringv2_Result> list = new List<GET_RP_MPCMonitoringv2_Result>();
+                    List<GET_RP_MPCMonitoringv2ALLShift_Result> list2 = new List<GET_RP_MPCMonitoringv2ALLShift_Result>();
                     ObjectParameter totalCount = new ObjectParameter("TotalCount", typeof(int));
 
-                    list = db.GET_RP_MPCMonitoringv2(Filter.DateFrom, Filter.DateTo, shift, Filter.Line, Filter.Process, section,0,1000000,"","", totalCount).ToList(); //(List<GET_RP_MPCMonitoringv2_Result>)System.Web.HttpContext.Current.Session["MPresult"]; //db.GET_RP_MPCMonitoringv2(Filter.DateFrom, Filter.DateTo, shift, Filter.Line, Filter.Process, section).ToList();
-                    ExcelWorksheet ExportData = package.Workbook.Worksheets["Sheet1"];
-                    int start = 2;
-
-                    for (int i = 0; i < list.Count; i++)
+                    if (Filter.Shift != "Day" && Filter.Shift != "Night")
                     {
-                        ExportData.Cells["A" + start].Value = list[i].Rownum;
-                        ExportData.Cells["B" + start].Value = list[i].InDate;
-                        ExportData.Cells["C" + start].Value = list[i].TimeIn;
-                        ExportData.Cells["D" + start].Value = list[i].InDateOut;
-                        ExportData.Cells["E" + start].Value = list[i].TimeOut;
-                        ExportData.Cells["F" + start].Value = list[i].Shift;
-                        ExportData.Cells["G" + start].Value = list[i].Line;
-                        ExportData.Cells["H" + start].Value = list[i].Skill;
-                        ExportData.Cells["I" + start].Value = list[i].EmpNo;
-                        ExportData.Cells["J" + start].Value = list[i].EmployeeName;
-                        ExportData.Cells["K" + start].Value = list[i].Date_Hired;
-                        ExportData.Cells["L" + start].Value = list[i].DateCertified;
-                        ExportData.Cells["M" + start].Value = list[i].Status;
+                        db.Database.CommandTimeout = 0;
+                     
+                       
+                        long shift = Convert.ToInt64(Filter.Shift);
+                        list = db.GET_RP_MPCMonitoringv2(Filter.DateFrom, Filter.DateTo, shift, Filter.Line, Filter.Process, section, 0, 1000000, "", Filter.Certified, totalCount).ToList();
+                        ExcelWorksheet ExportData = package.Workbook.Worksheets["Sheet1"];
+                        int start = 2;
+                        for (int i = 0; i < list.Count; i++)
+                        {
+                            ExportData.Cells["A" + start].Value = list[i].Rownum;
+                            ExportData.Cells["B" + start].Value = list[i].InDate;
+                            ExportData.Cells["C" + start].Value = list[i].TimeIn;
+                            ExportData.Cells["D" + start].Value = list[i].InDateOut;
+                            ExportData.Cells["E" + start].Value = list[i].TimeOut;
+                            ExportData.Cells["F" + start].Value = list[i].Shift;
+                            ExportData.Cells["G" + start].Value = list[i].Line;
+                            ExportData.Cells["H" + start].Value = list[i].Skill;
+                            ExportData.Cells["I" + start].Value = list[i].EmpNo;
+                            ExportData.Cells["J" + start].Value = list[i].EmployeeName;
+                            ExportData.Cells["K" + start].Value = list[i].Date_Hired;
+                            ExportData.Cells["L" + start].Value = list[i].DateCertified;
+                            ExportData.Cells["M" + start].Value = list[i].Status;
 
-                        start++;
+                            start++;
+                        }
+                        return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename);
                     }
-                    return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename);
+                    else
+                    {
+
+                        list2 = db.GET_RP_MPCMonitoringv2ALLShift(Filter.DateFrom, Filter.DateTo, Filter.Shift, Filter.Line, Filter.Process, section, 0, 1000000, "", Filter.Certified, totalCount).ToList();
+
+                        ExcelWorksheet ExportData = package.Workbook.Worksheets["Sheet1"];
+                        int start = 2;
+                        for (int i = 0; i < list2.Count; i++)
+                        {
+                            ExportData.Cells["A" + start].Value = list2[i].Rownum;
+                            ExportData.Cells["B" + start].Value = list2[i].InDate;
+                            ExportData.Cells["C" + start].Value = list2[i].TimeIn;
+                            ExportData.Cells["D" + start].Value = list2[i].InDateOut;
+                            ExportData.Cells["E" + start].Value = list2[i].TimeOut;
+                            ExportData.Cells["F" + start].Value = list2[i].Shift;
+                            ExportData.Cells["G" + start].Value = list2[i].Line;
+                            ExportData.Cells["H" + start].Value = list2[i].Skill;
+                            ExportData.Cells["I" + start].Value = list2[i].EmpNo;
+                            ExportData.Cells["J" + start].Value = list2[i].EmployeeName;
+                            ExportData.Cells["K" + start].Value = list2[i].Date_Hired;
+                            ExportData.Cells["L" + start].Value = list2[i].DateCertified;
+                            ExportData.Cells["M" + start].Value = list2[i].Status;
+
+                            start++;
+                        }
+                        return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename);
+                    }
+                 
+
+                   
                 }
             }
             catch (Exception err) { }
