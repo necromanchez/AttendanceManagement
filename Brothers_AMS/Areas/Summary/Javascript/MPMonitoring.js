@@ -169,8 +169,8 @@ function Initializepage() {
                 {
                     title: "Shift", data: function (x) {
                         var certified = "Orig";
-                        if (x.ChangeShift == "Green") {
-                            return "<label class= 'Certified' style='16px !important;color:green' data-toggle='tooltip' title='Original Shift: "+x.OrigShift+"'>" + x.Shift + "</label>"
+                        if (x.ChangeShift != "Black") {
+                            return "<label class= 'Certified' style='16px !important;color:green' data-toggle='tooltip' title='CS RefNo: " + x.ChangeShift +"&#013;Original Shift: "+x.OrigShift+"'>" + x.Shift + "</label>"
                             //return "<a href='#' data-toggle='tooltip' title='Hooray!'>Hover over me</a>"
                         }
                         else {
