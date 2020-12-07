@@ -143,7 +143,6 @@ function Initializepage() {
             //scrollCollapse: true,
             scrollY: "600px",
             serverSide: "true",
-            order: [0, "asc"],
             sorting:true,
             initComplete: function () {
              
