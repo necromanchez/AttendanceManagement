@@ -476,6 +476,9 @@ function ShowOutput(data) {
 }
 
 function Initializedpage() {
+
+    initDatePicker("DateAdjust");
+    
     $(".headspin").show();
     $("#loading_modal").modal("show");
     $('#AttenanceTbl').DataTable({

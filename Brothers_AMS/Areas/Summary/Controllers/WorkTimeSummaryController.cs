@@ -3868,9 +3868,9 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                             //if (checker != null)
                             //{
                                 ExportData.Cells["A" + start].Value = dt.Rows[i][1].ToString();
-                                ExportData.Cells["B" + start].Value = dt.Rows[i][2].ToString();
+                                ExportData.Cells["B" + start].Value = dt.Rows[i][3].ToString();
                                 ExportData.Cells["C" + start].Value = dt.Rows[i][4].ToString();
-                                ExportData.Cells["D" + start].Value = dt.Rows[i][3].ToString();
+                                ExportData.Cells["D" + start].Value = dt.Rows[i][2].ToString();
                              
                                 ExportData.Cells["E" + start].Value = (dt.Rows[i][dday].ToString() == "AB") ? "AB" : dt.Rows[i][dday].ToString();
                                 start++;
