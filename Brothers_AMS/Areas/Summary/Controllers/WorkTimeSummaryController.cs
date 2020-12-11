@@ -4246,7 +4246,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         ExportData.Cells["AF" + start].Value = list[i].C26;
                         ExportData.Cells["AG" + start].Value = list[i].C27;
                         ExportData.Cells["AH" + start].Value = list[i].C28;
-                        ExportData.Cells["AI" + start].Value = list[i].C28;
+                        ExportData.Cells["AI" + start].Value = list[i].C29;
                         ExportData.Cells["AJ" + start].Value = list[i].C30;
                         ExportData.Cells["AK" + start].Value = list[i].C31;
                         ExportData.Cells["AL" + start].Value = list[i].Pcount;
@@ -4623,7 +4623,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         ExportData.Cells["AF" + start].Value = list[i].C26;
                         ExportData.Cells["AG" + start].Value = list[i].C27;
                         ExportData.Cells["AH" + start].Value = list[i].C28;
-                        ExportData.Cells["AI" + start].Value = list[i].C28;
+                        ExportData.Cells["AI" + start].Value = list[i].C29;
                         ExportData.Cells["AJ" + start].Value = list[i].C30;
                         ExportData.Cells["AK" + start].Value = list[i].C31;
 
@@ -4731,7 +4731,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
 
                     // dt = (DataTable)System.Web.HttpContext.Current.Session["ExportWT"];
                     List<GET_RP_AttendanceMonitoring_Result> list = new List<GET_RP_AttendanceMonitoring_Result>();
-                    list = test(Month, Year, Section, dt); //db.GET_RP_MPCMonitoringv2(Filter.DateFrom, Filter.DateTo, shift, Filter.Line, Filter.Process, section).ToList();
+                    list = test2(Month, Year, Section, dt); //db.GET_RP_MPCMonitoringv2(Filter.DateFrom, Filter.DateTo, shift, Filter.Line, Filter.Process, section).ToList();
                     ExcelWorksheet ExportData = package.Workbook.Worksheets["AMSSheet"];
                     int start = 2;
 
@@ -4771,7 +4771,7 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                         ExportData.Cells["AF" + start].Value = list[i].C26;
                         ExportData.Cells["AG" + start].Value = list[i].C27;
                         ExportData.Cells["AH" + start].Value = list[i].C28;
-                        ExportData.Cells["AI" + start].Value = list[i].C28;
+                        ExportData.Cells["AI" + start].Value = list[i].C29;
                         ExportData.Cells["AJ" + start].Value = list[i].C30;
                         ExportData.Cells["AK" + start].Value = list[i].C31;
                      
