@@ -817,21 +817,49 @@ namespace Brothers_WMS.Controllers
                                             checklastIN.CS_ScheduleID = checkCS.Schedule;
                                             checklastIN.ScheduleID = checkCS.Schedule;
                                         }
-                                        checklastIN.TimeOut = db.TT_GETTIME().FirstOrDefault();
-                                        db.Entry(checklastIN).State = EntityState.Modified;
-                                        db.SaveChanges();
-                                        #region Record Tap
-                                        T_TimeTap Tapemployee = new T_TimeTap();
-                                        Tapemployee.Employee_RFID = Employee.RFID;
-                                        Tapemployee.Tap = db.TT_GETTIME().FirstOrDefault();
-                                        Tapemployee.Taptype = "OUT";
-                                        tapprocess = (from c in db.M_Skills where c.ID == checklastIN.ProcessID select c.Skill).FirstOrDefault();
-                                        Tapemployee.EmpNo = Empno;
-                                        Tapemployee.Type = "With Process " + tapprocess;
-                                        db.T_TimeTap.Add(Tapemployee);
-                                        db.SaveChanges();
-                                        #endregion
-                                    }
+
+                                    TT_GETTIMEOut_Result answer = db.TT_GETTIMEOut(Schedule).FirstOrDefault();
+
+                                        if (answer.Resultanswer)
+                                        {
+                                            checklastIN.TimeOut = db.TT_GETTIME().FirstOrDefault();
+                                            db.Entry(checklastIN).State = EntityState.Modified;
+                                            db.SaveChanges();
+                                            #region Record Tap
+                                            T_TimeTap Tapemployee = new T_TimeTap();
+                                            Tapemployee.Employee_RFID = Employee.RFID;
+                                            Tapemployee.Tap = db.TT_GETTIME().FirstOrDefault();
+                                            Tapemployee.Taptype = "OUT";
+                                            tapprocess = (from c in db.M_Skills where c.ID == checklastIN.ProcessID select c.Skill).FirstOrDefault();
+                                            Tapemployee.EmpNo = Empno;
+                                            Tapemployee.Type = "With Process " + tapprocess;
+                                            db.T_TimeTap.Add(Tapemployee);
+                                            db.SaveChanges();
+                                            #endregion
+                                        }
+                                        else
+                                        {
+                                            T_TimeInOut timein = new T_TimeInOut();
+                                            timein.Employee_RFID = Employee.RFID;
+                                            timein.LineID = LineID;
+                                            timein.ProcessID = ProcessID;
+                                            timein.ScheduleID = CurrentSchedule;
+
+                                            timein.TimeIn = null;
+                                            timein.TimeOut = db.TT_GETTIME().FirstOrDefault();
+                                            timein.EmpNo = Empno;
+                                            if (checkCS != null)
+                                            {
+                                                timein.CSRef_No = checkCS.CS_RefNo;
+                                                timein.CS_ScheduleID = checkCS.Schedule;
+                                                timein.ScheduleID = checkCS.Schedule;
+                                            }
+
+                                            db.T_TimeInOut.Add(timein);
+                                            db.SaveChanges();
+                                        }
+
+                                }
 
                                     break;
                             }

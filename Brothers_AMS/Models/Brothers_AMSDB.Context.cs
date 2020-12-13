@@ -2409,5 +2409,14 @@ namespace Brothers_WMS.Models
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GET_RP_WrongShiftV2_Result>("GET_RP_WrongShiftV2", dateFromParameter, dateToParameter, monthParameter, yearParameter, sectionParameter, agencyParameter, pageCountParameter, rowCountParameter, searchvalueParameter, shiftParameter);
         }
+    
+        public virtual ObjectResult<TT_GETTIMEOut_Result> TT_GETTIMEOut(string shift)
+        {
+            var shiftParameter = shift != null ?
+                new ObjectParameter("Shift", shift) :
+                new ObjectParameter("Shift", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<TT_GETTIMEOut_Result>("TT_GETTIMEOut", shiftParameter);
+        }
     }
 }

@@ -1115,6 +1115,9 @@
           <Parameter Name="RFID" Type="nvarchar" Mode="In" />
         </Function>
         <Function Name="TT_GETTIME" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="TT_GETTIMEOut" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Shift" Type="nvarchar" Mode="In" />
+        </Function>
         <Function Name="TT_NoInChecker" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="EmpNo" Type="nvarchar(max)" Mode="In" />
           <Parameter Name="TimeOut" Type="datetime" Mode="In" />
@@ -1863,6 +1866,9 @@
             <Parameter Name="PageCount" Mode="In" Type="Int32" />
             <Parameter Name="RowCount" Mode="In" Type="Int32" />
             <Parameter Name="Searchvalue" Mode="In" Type="String" />
+            <Parameter Name="Shift" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="TT_GETTIMEOut" ReturnType="Collection(Brothers_AMSDBModel.TT_GETTIMEOut_Result)">
             <Parameter Name="Shift" Mode="In" Type="String" />
           </FunctionImport>
           </EntityContainer>
@@ -3432,6 +3438,10 @@
           <Property Type="String" Name="Date" Nullable="false" MaxLength="10" />
           <Property Type="String" Name="TimeTap" Nullable="false" MaxLength="5" />
           <Property Type="String" Name="Section" Nullable="false" MaxLength="5" />
+        </ComplexType>
+        <ComplexType Name="TT_GETTIMEOut_Result">
+          <Property Type="String" Name="Result" Nullable="false" MaxLength="6" />
+          <Property Type="Boolean" Name="Resultanswer" Nullable="true" />
         </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
@@ -5418,6 +5428,14 @@
                 <ScalarProperty Name="Date" ColumnName="Date" />
                 <ScalarProperty Name="TimeTap" ColumnName="TimeTap" />
                 <ScalarProperty Name="Section" ColumnName="Section" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="TT_GETTIMEOut" FunctionName="Brothers_AMSDBModel.Store.TT_GETTIMEOut">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Brothers_AMSDBModel.TT_GETTIMEOut_Result">
+                <ScalarProperty Name="Result" ColumnName="Result" />
+                <ScalarProperty Name="Resultanswer" ColumnName="Resultanswer" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
