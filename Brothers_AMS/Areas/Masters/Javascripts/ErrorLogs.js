@@ -29,7 +29,10 @@ function Initializepage() {
             { title: "No", data: "Rownum", name: "Rownum" },
             { title: "Module", data: "PageModule",  name: "PageModule" },
             { title: "ErrorLog", data: "ErrorLog", name: "ErrorLog" },
-            { title: "Date Occured", data: "DateLog", name: "DateLog" },
+            {
+                title: "Date Occured", data: function (x) {
+                    return (x.DateLog != null) ? moment(x.DateLog).format("MM/DD/YYYY") : ""
+                }, name: "DateLog"},
             //{
             //    title: "Date Occured", data: function (x) {
             //        var ss = (x.DateLog != null) ? moment(x.DateLog).format("MM/DD/YYYY") : "";

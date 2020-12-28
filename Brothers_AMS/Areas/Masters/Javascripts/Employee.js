@@ -432,7 +432,10 @@ function Initializepage() {
             },
             { data: "SkillCount", name:"SkillCount" },
             {
-                data: "Date_Hired", name: "Date_Hired"
+                //data: "Date_Hired", name: "Date_Hired"
+                data: function (x) {
+                    return (x.Date_Hired != null) ? moment(x.Date_Hired).format("MM/DD/YYYY") : ""
+                }, name: "Date_Hired"
             },
             {
                 data: function (x) {

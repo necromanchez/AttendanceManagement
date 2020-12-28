@@ -100,7 +100,14 @@
     })
 
     $("#btnconfirm").on("click", function () {
-        if ($("#DateFrom").val() <= $("#DateTo").val()) {
+
+        var dat1 = new Date($("#DateFrom").val());
+        var dat2 = new Date($("#DateTo").val());
+        //if (dat1 <= dat2) {
+        //    alert("ok");
+        //}
+
+        if (dat1 <= dat2) {
             var EmployeeList = chosend_EmpNo;// $('input[type="checkbox"][name="employchosen"]:checked').map(function () { return this.id; }).get();
             if (EmployeeList.length > 0) {
                 if ($("#DateFrom").val() != ""

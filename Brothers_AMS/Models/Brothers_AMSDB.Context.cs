@@ -2365,6 +2365,15 @@ namespace Brothers_WMS.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GET_RP_AttendanceMonitoring_TimeINOUT_HRFormatV2_Result>("GET_RP_AttendanceMonitoring_TimeINOUT_HRFormatV2", dateFromParameter, dateToParameter, monthParameter, yearParameter, sectionParameter, agencyParameter, pageCountParameter, rowCountParameter, searchvalueParameter);
         }
     
+        public virtual ObjectResult<TT_GETTIMEOut_Result> TT_GETTIMEOut(string shift)
+        {
+            var shiftParameter = shift != null ?
+                new ObjectParameter("Shift", shift) :
+                new ObjectParameter("Shift", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<TT_GETTIMEOut_Result>("TT_GETTIMEOut", shiftParameter);
+        }
+    
         public virtual ObjectResult<GET_RP_WrongShiftV2_Result> GET_RP_WrongShiftV2(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, Nullable<int> month, Nullable<int> year, string section, string agency, Nullable<int> pageCount, Nullable<int> rowCount, string searchvalue, string shift)
         {
             var dateFromParameter = dateFrom.HasValue ?
@@ -2408,15 +2417,6 @@ namespace Brothers_WMS.Models
                 new ObjectParameter("Shift", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GET_RP_WrongShiftV2_Result>("GET_RP_WrongShiftV2", dateFromParameter, dateToParameter, monthParameter, yearParameter, sectionParameter, agencyParameter, pageCountParameter, rowCountParameter, searchvalueParameter, shiftParameter);
-        }
-    
-        public virtual ObjectResult<TT_GETTIMEOut_Result> TT_GETTIMEOut(string shift)
-        {
-            var shiftParameter = shift != null ?
-                new ObjectParameter("Shift", shift) :
-                new ObjectParameter("Shift", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<TT_GETTIMEOut_Result>("TT_GETTIMEOut", shiftParameter);
         }
     }
 }
