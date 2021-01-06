@@ -495,7 +495,9 @@
           <Parameter Name="Filepath" Type="nvarchar(max)" Mode="In" />
         </Function>
         <Function Name="AF_UpdateApprovedDTR" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
-        <Function Name="AF_UpdateApprovedSchedule" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="AF_UpdateApprovedSchedule" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="RefNoCS" Type="nvarchar" Mode="In" />
+        </Function>
         <Function Name="Dashboard_AbsentRate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Month" Type="int" Mode="In" />
           <Parameter Name="Year" Type="int" Mode="In" />
@@ -1169,7 +1171,6 @@
           <FunctionImport Name="AF_EmailDTRRequest">
           <Parameter Name="DTRRefno" Mode="In" Type="String" />
           </FunctionImport>
-          <FunctionImport Name="AF_UpdateApprovedSchedule" />
           <FunctionImport Name="EmailPrompter" ReturnType="Collection(String)">
             <Parameter Name="RefNo" Mode="In" Type="String" />
             <Parameter Name="Type" Mode="In" Type="String" />
@@ -1870,6 +1871,9 @@
             <Parameter Name="RowCount" Mode="In" Type="Int32" />
             <Parameter Name="Searchvalue" Mode="In" Type="String" />
             <Parameter Name="Shift" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="AF_UpdateApprovedSchedule" ReturnType="Collection(Brothers_AMSDBModel.AF_UpdateApprovedSchedule_Result)">
+            <Parameter Name="RefNoCS" Mode="In" Type="String" />
           </FunctionImport>
           </EntityContainer>
         <ComplexType Name="GET_AF_Approver_Result">
@@ -3443,6 +3447,14 @@
           <Property Type="String" Name="TimeTap" Nullable="false" MaxLength="5" />
           <Property Type="String" Name="Section" Nullable="false" MaxLength="5" />
         </ComplexType>
+        <ComplexType Name="AF_UpdateApprovedSchedule_Result">
+          <Property Type="String" Name="Column1" Nullable="true" MaxLength="50" />
+          <Property Type="Int64" Name="Column2" Nullable="true" />
+          <Property Type="String" Name="Column3" Nullable="true" MaxLength="50" />
+          <Property Type="DateTime" Name="Column4" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="Column5" Nullable="true" Precision="23" />
+          <Property Type="String" Name="Column6" Nullable="true" MaxLength="50" />
+        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -3451,7 +3463,6 @@
         <EntityContainerMapping StorageEntityContainer="Brothers_AMSDBModelStoreContainer" CdmEntityContainer="Brothers_AMSDBEntities">
           <FunctionImportMapping FunctionImportName="AF_EmailCSRequest" FunctionName="Brothers_AMSDBModel.Store.AF_EmailCSRequest" />
           <FunctionImportMapping FunctionImportName="AF_EmailDTRRequest" FunctionName="Brothers_AMSDBModel.Store.AF_EmailDTRRequest" />
-          <FunctionImportMapping FunctionImportName="AF_UpdateApprovedSchedule" FunctionName="Brothers_AMSDBModel.Store.AF_UpdateApprovedSchedule" />
           <FunctionImportMapping FunctionImportName="EmailPrompter" FunctionName="Brothers_AMSDBModel.Store.EmailPrompter" />
           <FunctionImportMapping FunctionImportName="GET_AF_Approver" FunctionName="Brothers_AMSDBModel.Store.GET_AF_Approver">
             <ResultMapping>
@@ -5436,6 +5447,18 @@
                 <ScalarProperty Name="Date" ColumnName="Date" />
                 <ScalarProperty Name="TimeTap" ColumnName="TimeTap" />
                 <ScalarProperty Name="Section" ColumnName="Section" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="AF_UpdateApprovedSchedule" FunctionName="Brothers_AMSDBModel.Store.AF_UpdateApprovedSchedule">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Brothers_AMSDBModel.AF_UpdateApprovedSchedule_Result">
+                <ScalarProperty Name="Column1" ColumnName="Column1" />
+                <ScalarProperty Name="Column2" ColumnName="Column2" />
+                <ScalarProperty Name="Column3" ColumnName="Column3" />
+                <ScalarProperty Name="Column4" ColumnName="Column4" />
+                <ScalarProperty Name="Column5" ColumnName="Column5" />
+                <ScalarProperty Name="Column6" ColumnName="Column6" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

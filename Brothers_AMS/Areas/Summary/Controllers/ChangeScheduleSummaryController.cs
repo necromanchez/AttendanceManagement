@@ -60,12 +60,16 @@ namespace Brothers_WMS.Areas.Summary.Controllers
             if (!string.IsNullOrEmpty(searchValue))//filter
             {
                 list = list.Where(x => x.CS_RefNo.ToLower().Contains(searchValue.ToLower())).ToList<GET_AF_CSSummary_Result>();
-                int stt = (searchValueStatus != null) ? Convert.ToInt32(searchValueStatus) : 0;
-                if(stt != 0)
+                try
                 {
-                    list = list.Where(x => x.Status == stt).ToList<GET_AF_CSSummary_Result>();
+                    int stt = (searchValueStatus != null) ? Convert.ToInt32(searchValueStatus) : 0;
+                    if (stt != 0)
+                    {
+                        list = list.Where(x => x.Status == stt).ToList<GET_AF_CSSummary_Result>();
+                    }
                 }
-                
+                catch (Exception err) { }
+
             }
             if (sortColumnName != "" && sortColumnName != null)
             {

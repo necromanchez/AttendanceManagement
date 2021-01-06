@@ -255,7 +255,7 @@ namespace Brothers_WMS.Areas.Correction.Controllers
             db.AF_EmailCSRequest(refno);
             if (stat == statmax)
             {
-                db.AF_UpdateApprovedSchedule();
+                db.AF_UpdateApprovedSchedule(refno);
                 //SendTheMail(GetApproved[0].CS_RefNo);
             }
             return Json(new { }, JsonRequestBehavior.AllowGet);

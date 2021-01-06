@@ -76,11 +76,6 @@ namespace Brothers_WMS.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AF_EmailDTRRequest", dTRRefnoParameter);
         }
     
-        public virtual int AF_UpdateApprovedSchedule()
-        {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AF_UpdateApprovedSchedule");
-        }
-    
         public virtual ObjectResult<string> EmailPrompter(string refNo, string type, string userName, string refType)
         {
             var refNoParameter = refNo != null ?
@@ -2417,6 +2412,15 @@ namespace Brothers_WMS.Models
                 new ObjectParameter("Shift", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GET_RP_WrongShiftV2_Result>("GET_RP_WrongShiftV2", dateFromParameter, dateToParameter, monthParameter, yearParameter, sectionParameter, agencyParameter, pageCountParameter, rowCountParameter, searchvalueParameter, shiftParameter);
+        }
+    
+        public virtual ObjectResult<AF_UpdateApprovedSchedule_Result> AF_UpdateApprovedSchedule(string refNoCS)
+        {
+            var refNoCSParameter = refNoCS != null ?
+                new ObjectParameter("RefNoCS", refNoCS) :
+                new ObjectParameter("RefNoCS", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<AF_UpdateApprovedSchedule_Result>("AF_UpdateApprovedSchedule", refNoCSParameter);
         }
     }
 }

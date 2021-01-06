@@ -99,7 +99,7 @@
         }
     })
 
-    $("#btnconfirm").on("click", function () {
+    $("#btnconfirm").one("click", function () {
 
         var dat1 = new Date($("#DateFrom").val());
         var dat2 = new Date($("#DateTo").val());

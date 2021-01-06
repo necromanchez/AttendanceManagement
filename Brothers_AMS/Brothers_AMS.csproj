@@ -250,6 +250,9 @@
     <Compile Include="Models\AF_OTfiling_Cumulative.cs">
       <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\AF_UpdateApprovedSchedule_Result.cs">
+      <DependentUpon>Brothers_AMSDB.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\ApproverModel.cs" />
     <Compile Include="Models\Brothers_AMSDB.Context.cs">
       <AutoGen>True</AutoGen>
