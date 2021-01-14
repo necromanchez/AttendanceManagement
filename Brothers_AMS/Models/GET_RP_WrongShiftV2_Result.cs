@@ -15,10 +15,10 @@ namespace Brothers_WMS.Models
     {
         public string EmpNo { get; set; }
         public string EmployeeName { get; set; }
+        public string Section { get; set; }
         public string Shift { get; set; }
         public string LogType { get; set; }
-        public string Date { get; set; }
         public string TimeTap { get; set; }
-        public string Section { get; set; }
+        public string Date { get; set; }
     }
 }

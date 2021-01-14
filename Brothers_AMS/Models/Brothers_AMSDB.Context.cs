@@ -2369,6 +2369,15 @@ namespace Brothers_WMS.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<TT_GETTIMEOut_Result>("TT_GETTIMEOut", shiftParameter);
         }
     
+        public virtual ObjectResult<AF_UpdateApprovedSchedule_Result> AF_UpdateApprovedSchedule(string refNoCS)
+        {
+            var refNoCSParameter = refNoCS != null ?
+                new ObjectParameter("RefNoCS", refNoCS) :
+                new ObjectParameter("RefNoCS", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<AF_UpdateApprovedSchedule_Result>("AF_UpdateApprovedSchedule", refNoCSParameter);
+        }
+    
         public virtual ObjectResult<GET_RP_WrongShiftV2_Result> GET_RP_WrongShiftV2(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, Nullable<int> month, Nullable<int> year, string section, string agency, Nullable<int> pageCount, Nullable<int> rowCount, string searchvalue, string shift)
         {
             var dateFromParameter = dateFrom.HasValue ?
@@ -2412,15 +2421,6 @@ namespace Brothers_WMS.Models
                 new ObjectParameter("Shift", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GET_RP_WrongShiftV2_Result>("GET_RP_WrongShiftV2", dateFromParameter, dateToParameter, monthParameter, yearParameter, sectionParameter, agencyParameter, pageCountParameter, rowCountParameter, searchvalueParameter, shiftParameter);
-        }
-    
-        public virtual ObjectResult<AF_UpdateApprovedSchedule_Result> AF_UpdateApprovedSchedule(string refNoCS)
-        {
-            var refNoCSParameter = refNoCS != null ?
-                new ObjectParameter("RefNoCS", refNoCS) :
-                new ObjectParameter("RefNoCS", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<AF_UpdateApprovedSchedule_Result>("AF_UpdateApprovedSchedule", refNoCSParameter);
         }
     }
 }

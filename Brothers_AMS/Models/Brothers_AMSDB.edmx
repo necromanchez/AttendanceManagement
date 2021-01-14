@@ -1860,6 +1860,9 @@
           <FunctionImport Name="TT_GETTIMEOut" ReturnType="Collection(Brothers_AMSDBModel.TT_GETTIMEOut_Result)">
           <Parameter Name="Shift" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="AF_UpdateApprovedSchedule" ReturnType="Collection(Brothers_AMSDBModel.AF_UpdateApprovedSchedule_Result)">
+          <Parameter Name="RefNoCS" Mode="In" Type="String" />
+          </FunctionImport>
           <FunctionImport Name="GET_RP_WrongShiftV2" ReturnType="Collection(Brothers_AMSDBModel.GET_RP_WrongShiftV2_Result)">
             <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
             <Parameter Name="DateTo" Mode="In" Type="DateTime" />
@@ -1871,9 +1874,6 @@
             <Parameter Name="RowCount" Mode="In" Type="Int32" />
             <Parameter Name="Searchvalue" Mode="In" Type="String" />
             <Parameter Name="Shift" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="AF_UpdateApprovedSchedule" ReturnType="Collection(Brothers_AMSDBModel.AF_UpdateApprovedSchedule_Result)">
-            <Parameter Name="RefNoCS" Mode="In" Type="String" />
           </FunctionImport>
           </EntityContainer>
         <ComplexType Name="GET_AF_Approver_Result">
@@ -3438,15 +3438,6 @@
           <Property Type="String" Name="Result" Nullable="false" MaxLength="6" />
           <Property Type="Boolean" Name="Resultanswer" Nullable="true" />
         </ComplexType>
-        <ComplexType Name="GET_RP_WrongShiftV2_Result">
-          <Property Type="String" Name="EmpNo" Nullable="false" MaxLength="3" />
-          <Property Type="String" Name="EmployeeName" Nullable="false" MaxLength="3" />
-          <Property Type="String" Name="Shift" Nullable="false" MaxLength="3" />
-          <Property Type="String" Name="LogType" Nullable="false" MaxLength="3" />
-          <Property Type="String" Name="Date" Nullable="false" MaxLength="10" />
-          <Property Type="String" Name="TimeTap" Nullable="false" MaxLength="5" />
-          <Property Type="String" Name="Section" Nullable="false" MaxLength="5" />
-        </ComplexType>
         <ComplexType Name="AF_UpdateApprovedSchedule_Result">
           <Property Type="String" Name="Column1" Nullable="true" MaxLength="50" />
           <Property Type="Int64" Name="Column2" Nullable="true" />
@@ -3454,6 +3445,15 @@
           <Property Type="DateTime" Name="Column4" Nullable="true" Precision="23" />
           <Property Type="DateTime" Name="Column5" Nullable="true" Precision="23" />
           <Property Type="String" Name="Column6" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="GET_RP_WrongShiftV2_Result">
+          <Property Type="String" Name="EmpNo" Nullable="false" MaxLength="1" />
+          <Property Type="String" Name="EmployeeName" Nullable="false" MaxLength="1" />
+          <Property Type="String" Name="Section" Nullable="false" MaxLength="1" />
+          <Property Type="String" Name="Shift" Nullable="false" MaxLength="1" />
+          <Property Type="String" Name="LogType" Nullable="false" MaxLength="1" />
+          <Property Type="String" Name="TimeTap" Nullable="false" MaxLength="1" />
+          <Property Type="String" Name="Date" Nullable="false" MaxLength="1" />
         </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
@@ -5437,19 +5437,6 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="GET_RP_WrongShiftV2" FunctionName="Brothers_AMSDBModel.Store.GET_RP_WrongShiftV2">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="Brothers_AMSDBModel.GET_RP_WrongShiftV2_Result">
-                <ScalarProperty Name="EmpNo" ColumnName="EmpNo" />
-                <ScalarProperty Name="EmployeeName" ColumnName="EmployeeName" />
-                <ScalarProperty Name="Shift" ColumnName="Shift" />
-                <ScalarProperty Name="LogType" ColumnName="LogType" />
-                <ScalarProperty Name="Date" ColumnName="Date" />
-                <ScalarProperty Name="TimeTap" ColumnName="TimeTap" />
-                <ScalarProperty Name="Section" ColumnName="Section" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="AF_UpdateApprovedSchedule" FunctionName="Brothers_AMSDBModel.Store.AF_UpdateApprovedSchedule">
             <ResultMapping>
               <ComplexTypeMapping TypeName="Brothers_AMSDBModel.AF_UpdateApprovedSchedule_Result">
@@ -5459,6 +5446,19 @@
                 <ScalarProperty Name="Column4" ColumnName="Column4" />
                 <ScalarProperty Name="Column5" ColumnName="Column5" />
                 <ScalarProperty Name="Column6" ColumnName="Column6" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GET_RP_WrongShiftV2" FunctionName="Brothers_AMSDBModel.Store.GET_RP_WrongShiftV2">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Brothers_AMSDBModel.GET_RP_WrongShiftV2_Result">
+                <ScalarProperty Name="EmpNo" ColumnName="EmpNo" />
+                <ScalarProperty Name="EmployeeName" ColumnName="EmployeeName" />
+                <ScalarProperty Name="Section" ColumnName="Section" />
+                <ScalarProperty Name="Shift" ColumnName="Shift" />
+                <ScalarProperty Name="LogType" ColumnName="LogType" />
+                <ScalarProperty Name="TimeTap" ColumnName="TimeTap" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

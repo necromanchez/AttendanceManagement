@@ -45,8 +45,36 @@ $(function () {
         Initializedpage();
     });
 
-    Initializedpage();
+    GetUser();
+   
 })
+
+
+function GetUser() {
+    $.ajax({
+        url: '/Helper/GetSection',
+        type: 'POST',
+        datatype: "json",
+        success: function (returnData) {
+            if (returnData.usersection != null && returnData.usercost != null) {
+                $('#Section').val(returnData.usersection).trigger('change');
+                $('#Section').val(returnData.usersection);
+
+                selectedSection = returnData.usersection;
+                $("#select2-Section-container").text(returnData.usersection);
+                // $("#Search").trigger("click");
+                $('#Section').prop("disabled", true);
+            }
+            else {
+                $('#Section').prop("disabled", false);
+
+            }
+            Initializedpage();
+
+
+        }
+    });
+}
 
 function initDatePicker(dp) {
     $('#' + dp).datepicker({
