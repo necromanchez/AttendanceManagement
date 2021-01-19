@@ -237,6 +237,24 @@
         }
 
     })
+
+
+    $('#tabs').on('shown.bs.tab', function (event) {
+        setTimeout(function () { $('#SchedulehistoryCStable').DataTable().ajax.reload(); }, 500);
+        setTimeout(function () { $('#Schedulehistory').DataTable().ajax.reload(); }, 500);
+        $(".padhider").hide();
+            var x = $(event.target)[0].id;  
+            switch (x) {
+                case "CS":
+                    $("#SchedulehistoryCS").show();
+                    $("#Schedulehistorytab").hide();
+                    break;
+                case "US":
+                    $("#SchedulehistoryCS").hide();
+                    $("#Schedulehistorytab").show();
+                    break;
+            }
+    });
 })
 
 function initDatePicker(dp) {
@@ -1060,6 +1078,7 @@ function UpdateSchedule(empno) {
 }
 
 function ScheduleTable(Empno) {
+   
     $('#Schedulehistory').DataTable({
         ajax: {
             url: '../Employee/GetEmployeeScheduleList?EmployeeNo=' + Empno,
@@ -1147,6 +1166,7 @@ function ScheduleTable(Empno) {
 
         ],
     });
+   
 }
 
 function DeleteEmpno(EmpNo) {

@@ -854,6 +854,8 @@
         </Function>
         <Function Name="GET_Employee_TimeIns" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="RFID" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="PageCount" Type="int" Mode="In" />
+          <Parameter Name="RowCount" Type="int" Mode="In" />
         </Function>
         <Function Name="GET_EmployeeShift_Process" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="SectionSuperGroup" Type="nvarchar" Mode="In" />
@@ -902,6 +904,9 @@
           <Parameter Name="Year" Type="int" Mode="In" />
           <Parameter Name="Section" Type="nvarchar" Mode="In" />
           <Parameter Name="Agency" Type="nvarchar" Mode="In" />
+          <Parameter Name="PageCount" Type="int" Mode="In" />
+          <Parameter Name="RowCount" Type="int" Mode="In" />
+          <Parameter Name="Searchvalue" Type="nvarchar" Mode="In" />
         </Function>
         <Function Name="GET_RP_AttendanceMonitoring_Process" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="EmpNo" Type="nvarchar" Mode="In" />
@@ -956,6 +961,9 @@
           <Parameter Name="Year" Type="int" Mode="In" />
           <Parameter Name="Section" Type="nvarchar" Mode="In" />
           <Parameter Name="Agency" Type="nvarchar" Mode="In" />
+          <Parameter Name="PageCount" Type="int" Mode="In" />
+          <Parameter Name="RowCount" Type="int" Mode="In" />
+          <Parameter Name="Searchvalue" Type="nvarchar" Mode="In" />
         </Function>
         <Function Name="GET_RP_MPCMonitoringv2" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="DateFrom" Type="datetime" Mode="In" />
@@ -1221,9 +1229,6 @@
             <Parameter Name="Section" Mode="In" Type="String" />
             <Parameter Name="Emp" Mode="In" Type="String" />
           </FunctionImport>
-          <FunctionImport Name="GET_Employee_TimeIns" ReturnType="Collection(Brothers_AMSDBModel.GET_Employee_TimeIns_Result)">
-          <Parameter Name="RFID" Mode="In" Type="String" />
-          </FunctionImport>
           <FunctionImport Name="GET_M_SP_LineTeam" ReturnType="Collection(Brothers_AMSDBModel.GET_M_SP_LineTeam_Result)">
             <Parameter Name="CostCode" Mode="In" Type="String" />
             <Parameter Name="RFID" Mode="In" Type="String" />
@@ -1293,6 +1298,9 @@
             <Parameter Name="Year" Mode="In" Type="Int32" />
             <Parameter Name="Section" Mode="In" Type="String" />
             <Parameter Name="Agency" Mode="In" Type="String" />
+            <Parameter Name="PageCount" Mode="In" Type="Int32" />
+            <Parameter Name="RowCount" Mode="In" Type="Int32" />
+            <Parameter Name="Searchvalue" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="TT_TimeInAccept" ReturnType="Collection(String)">
             <Parameter Name="ProcessID" Mode="In" Type="String" />
@@ -1321,6 +1329,9 @@
             <Parameter Name="Year" Mode="In" Type="Int32" />
             <Parameter Name="Section" Mode="In" Type="String" />
             <Parameter Name="Agency" Mode="In" Type="String" />
+            <Parameter Name="PageCount" Mode="In" Type="Int32" />
+            <Parameter Name="RowCount" Mode="In" Type="Int32" />
+            <Parameter Name="Searchvalue" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="M_SP_AgencyInsert1" />
           <EntitySet Name="RP_AttendanceMonitoring" EntityType="Brothers_AMSDBModel.RP_AttendanceMonitoring" />
@@ -1875,6 +1886,11 @@
             <Parameter Name="Searchvalue" Mode="In" Type="String" />
             <Parameter Name="Shift" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="GET_Employee_TimeIns" ReturnType="Collection(Brothers_AMSDBModel.GET_Employee_TimeIns_Result)">
+            <Parameter Name="RFID" Mode="In" Type="String" />
+            <Parameter Name="PageCount" Mode="In" Type="Int32" />
+            <Parameter Name="RowCount" Mode="In" Type="Int32" />
+          </FunctionImport>
           </EntityContainer>
         <ComplexType Name="GET_AF_Approver_Result">
           <Property Type="String" Name="Position" Nullable="false" MaxLength="50" />
@@ -1997,13 +2013,6 @@
         <ComplexType Name="GET_Employee_NoAutocompletes_Result">
           <Property Type="Int64" Name="ID" Nullable="false" />
           <Property Type="String" Name="EmpNo" Nullable="true" MaxLength="20" />
-        </ComplexType>
-        <ComplexType Name="GET_Employee_TimeIns_Result">
-          <Property Type="String" Name="Employee_RFID" Nullable="true" MaxLength="20" />
-          <Property Type="DateTime" Name="TimeIn" Nullable="true" Precision="23" />
-          <Property Type="DateTime" Name="TimeOut" Nullable="true" Precision="23" />
-          <Property Type="String" Name="Line" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="Skill" Nullable="true" MaxLength="50" />
         </ComplexType>
         <ComplexType Name="GET_M_SP_LineTeam_Result">
           <Property Type="Int64" Name="ID" Nullable="false" />
@@ -3455,6 +3464,13 @@
           <Property Type="String" Name="TimeTap" Nullable="false" MaxLength="1" />
           <Property Type="String" Name="Date" Nullable="false" MaxLength="1" />
         </ComplexType>
+        <ComplexType Name="GET_Employee_TimeIns_Result">
+          <Property Type="String" Name="Employee_RFID" Nullable="true" MaxLength="20" />
+          <Property Type="DateTime" Name="TimeIn" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="TimeOut" Nullable="true" Precision="23" />
+          <Property Type="String" Name="Line" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Skill" Nullable="false" MaxLength="50" />
+        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -3631,17 +3647,6 @@
               <ComplexTypeMapping TypeName="Brothers_AMSDBModel.GET_Employee_NoAutocompletes_Result">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="EmpNo" ColumnName="EmpNo" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="GET_Employee_TimeIns" FunctionName="Brothers_AMSDBModel.Store.GET_Employee_TimeIns">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="Brothers_AMSDBModel.GET_Employee_TimeIns_Result">
-                <ScalarProperty Name="Employee_RFID" ColumnName="Employee_RFID" />
-                <ScalarProperty Name="TimeIn" ColumnName="TimeIn" />
-                <ScalarProperty Name="TimeOut" ColumnName="TimeOut" />
-                <ScalarProperty Name="Line" ColumnName="Line" />
-                <ScalarProperty Name="Skill" ColumnName="Skill" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -5459,6 +5464,17 @@
                 <ScalarProperty Name="LogType" ColumnName="LogType" />
                 <ScalarProperty Name="TimeTap" ColumnName="TimeTap" />
                 <ScalarProperty Name="Date" ColumnName="Date" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GET_Employee_TimeIns" FunctionName="Brothers_AMSDBModel.Store.GET_Employee_TimeIns">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Brothers_AMSDBModel.GET_Employee_TimeIns_Result">
+                <ScalarProperty Name="Employee_RFID" ColumnName="Employee_RFID" />
+                <ScalarProperty Name="TimeIn" ColumnName="TimeIn" />
+                <ScalarProperty Name="TimeOut" ColumnName="TimeOut" />
+                <ScalarProperty Name="Line" ColumnName="Line" />
+                <ScalarProperty Name="Skill" ColumnName="Skill" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

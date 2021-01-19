@@ -249,15 +249,6 @@ namespace Brothers_WMS.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GET_Employee_NoAutocompletes_Result>("GET_Employee_NoAutocompletes", sectionParameter, empParameter);
         }
     
-        public virtual ObjectResult<GET_Employee_TimeIns_Result> GET_Employee_TimeIns(string rFID)
-        {
-            var rFIDParameter = rFID != null ?
-                new ObjectParameter("RFID", rFID) :
-                new ObjectParameter("RFID", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GET_Employee_TimeIns_Result>("GET_Employee_TimeIns", rFIDParameter);
-        }
-    
         public virtual ObjectResult<GET_M_SP_LineTeam_Result> GET_M_SP_LineTeam(string costCode, string rFID)
         {
             var costCodeParameter = costCode != null ?
@@ -471,7 +462,7 @@ namespace Brothers_WMS.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("GET_RP_AttendanceMonitoring", monthParameter, yearParameter, sectionParameter, agencyParameter, pageCountParameter, rowCountParameter, searchvalueParameter);
         }
     
-        public virtual int GET_RP_AttendanceMonitoring_TTWorkingHours(Nullable<int> month, Nullable<int> year, string section, string agency)
+        public virtual int GET_RP_AttendanceMonitoring_TTWorkingHours(Nullable<int> month, Nullable<int> year, string section, string agency, Nullable<int> pageCount, Nullable<int> rowCount, string searchvalue)
         {
             var monthParameter = month.HasValue ?
                 new ObjectParameter("Month", month) :
@@ -489,7 +480,19 @@ namespace Brothers_WMS.Models
                 new ObjectParameter("Agency", agency) :
                 new ObjectParameter("Agency", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("GET_RP_AttendanceMonitoring_TTWorkingHours", monthParameter, yearParameter, sectionParameter, agencyParameter);
+            var pageCountParameter = pageCount.HasValue ?
+                new ObjectParameter("PageCount", pageCount) :
+                new ObjectParameter("PageCount", typeof(int));
+    
+            var rowCountParameter = rowCount.HasValue ?
+                new ObjectParameter("RowCount", rowCount) :
+                new ObjectParameter("RowCount", typeof(int));
+    
+            var searchvalueParameter = searchvalue != null ?
+                new ObjectParameter("Searchvalue", searchvalue) :
+                new ObjectParameter("Searchvalue", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("GET_RP_AttendanceMonitoring_TTWorkingHours", monthParameter, yearParameter, sectionParameter, agencyParameter, pageCountParameter, rowCountParameter, searchvalueParameter);
         }
     
         public virtual ObjectResult<string> TT_TimeInAccept(string processID, string empNo)
@@ -518,7 +521,7 @@ namespace Brothers_WMS.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GET_TT_EmployeeLineViewCount_Result>("GET_TT_EmployeeLineViewCount", lineParameter, shiftParameter);
         }
     
-        public virtual int GET_RP_AttendanceMonitoring_OTBreakDown(Nullable<int> month, Nullable<int> year, string section, string agency)
+        public virtual int GET_RP_AttendanceMonitoring_OTBreakDown(Nullable<int> month, Nullable<int> year, string section, string agency, Nullable<int> pageCount, Nullable<int> rowCount, string searchvalue)
         {
             var monthParameter = month.HasValue ?
                 new ObjectParameter("Month", month) :
@@ -536,7 +539,19 @@ namespace Brothers_WMS.Models
                 new ObjectParameter("Agency", agency) :
                 new ObjectParameter("Agency", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("GET_RP_AttendanceMonitoring_OTBreakDown", monthParameter, yearParameter, sectionParameter, agencyParameter);
+            var pageCountParameter = pageCount.HasValue ?
+                new ObjectParameter("PageCount", pageCount) :
+                new ObjectParameter("PageCount", typeof(int));
+    
+            var rowCountParameter = rowCount.HasValue ?
+                new ObjectParameter("RowCount", rowCount) :
+                new ObjectParameter("RowCount", typeof(int));
+    
+            var searchvalueParameter = searchvalue != null ?
+                new ObjectParameter("Searchvalue", searchvalue) :
+                new ObjectParameter("Searchvalue", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("GET_RP_AttendanceMonitoring_OTBreakDown", monthParameter, yearParameter, sectionParameter, agencyParameter, pageCountParameter, rowCountParameter, searchvalueParameter);
         }
     
         public virtual int M_SP_AgencyInsert1()
@@ -2421,6 +2436,23 @@ namespace Brothers_WMS.Models
                 new ObjectParameter("Shift", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GET_RP_WrongShiftV2_Result>("GET_RP_WrongShiftV2", dateFromParameter, dateToParameter, monthParameter, yearParameter, sectionParameter, agencyParameter, pageCountParameter, rowCountParameter, searchvalueParameter, shiftParameter);
+        }
+    
+        public virtual ObjectResult<GET_Employee_TimeIns_Result> GET_Employee_TimeIns(string rFID, Nullable<int> pageCount, Nullable<int> rowCount)
+        {
+            var rFIDParameter = rFID != null ?
+                new ObjectParameter("RFID", rFID) :
+                new ObjectParameter("RFID", typeof(string));
+    
+            var pageCountParameter = pageCount.HasValue ?
+                new ObjectParameter("PageCount", pageCount) :
+                new ObjectParameter("PageCount", typeof(int));
+    
+            var rowCountParameter = rowCount.HasValue ?
+                new ObjectParameter("RowCount", rowCount) :
+                new ObjectParameter("RowCount", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GET_Employee_TimeIns_Result>("GET_Employee_TimeIns", rFIDParameter, pageCountParameter, rowCountParameter);
         }
     }
 }

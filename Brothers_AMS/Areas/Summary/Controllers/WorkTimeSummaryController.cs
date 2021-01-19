@@ -4318,7 +4318,10 @@ namespace Brothers_WMS.Areas.Summary.Controllers
         #region Working Hours
         public ActionResult GeAttendanceMonitoringList_WorkingHours(int Month, int Year, string Section, string Agency)
         {
-            var dt = new DataTable();
+            int start = (Convert.ToInt32(Request["start"]) == 0) ? 0 : (Convert.ToInt32(Request["start"]) / Convert.ToInt32(Request["length"]));
+            int length = Convert.ToInt32(Request["length"]);
+            string searchValue = Request["search[value]"];
+            GET_RP_AttendanceMonitoring_COUNT_Result totalCount = db.GET_RP_AttendanceMonitoring_COUNT(Month, Year, Section, Agency, searchValue).FirstOrDefault();
             SqlConnection conn = new SqlConnection(Connection_String.AMSDB);
             SqlCommand cmdSql = new SqlCommand();
             cmdSql.Connection = conn;
@@ -4330,37 +4333,31 @@ namespace Brothers_WMS.Areas.Summary.Controllers
             cmdSql.Parameters.Add("@Year", SqlDbType.Int).Value = Year;
             cmdSql.Parameters.Add("@Section", SqlDbType.NVarChar).Value = Section;
             cmdSql.Parameters.Add("@Agency", SqlDbType.NVarChar).Value = Agency;
+            cmdSql.Parameters.Add("@PageCount", SqlDbType.Int).Value = start;
+            cmdSql.Parameters.Add("@RowCount", SqlDbType.Int).Value = length;
+            cmdSql.Parameters.Add("@Searchvalue", SqlDbType.NVarChar).Value = searchValue;
 
             conn.Open();
+            
 
-            //if (System.Web.HttpContext.Current.Session["ExportDTR"] == null)
-            //{
-                SqlDataReader sdr = cmdSql.ExecuteReader();
-                dt.Load(sdr);
-            //}
+            var dt = new DataTable();
 
-            //else
-            //{
-            //    dt = (DataTable)System.Web.HttpContext.Current.Session["ExportDTR"];
-            //}
-          
+            SqlDataReader sdr = cmdSql.ExecuteReader();
+            dt.Load(sdr);
+
             cmdSql.Dispose();
             conn.Close();
-
-
-
-            //System.Web.HttpContext.Current.Session["ExportDTR"] = dt;
-
-            var list = JsonConvert.SerializeObject(dt,
-                Formatting.None,
-                new JsonSerializerSettings()
-                {
-                    ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
-                });
+            List<GET_RP_AttendanceMonitoring_Result> list = test2(Month, Year, Section, dt);
+            //var list = JsonConvert.SerializeObject(dt,
+            //    Formatting.None,
+            //    new JsonSerializerSettings()
+            //    {
+            //        ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+            //    });
 
             //return Content(list, "application/json");
-            int totalrows = list.Length;
-            int totalrowsafterfiltering = list.Length;
+            int totalrows = totalCount.TotalCount;//list.Length;
+            int totalrowsafterfiltering = totalCount.TotalCount; //list.Length;
 
             var jsonResult = Json(new { data = list, draw = Request["draw"], recordsTotal = totalrows, recordsFiltered = totalrowsafterfiltering }, JsonRequestBehavior.AllowGet);
             jsonResult.MaxJsonLength = int.MaxValue;
@@ -4665,10 +4662,10 @@ namespace Brothers_WMS.Areas.Summary.Controllers
             conn.Open();
            
             var dt = new DataTable();
-           
+
             SqlDataReader sdr = cmdSql.ExecuteReader();
             dt.Load(sdr);
-           
+
             cmdSql.Dispose();
             conn.Close();
             List<GET_RP_AttendanceMonitoring_Result> list = test2(Month, Year, Section, dt);

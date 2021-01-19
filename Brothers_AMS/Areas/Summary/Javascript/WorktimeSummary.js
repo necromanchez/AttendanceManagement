@@ -176,24 +176,24 @@ $(function () {
 
                     break;
                 case "DB":
-                    if (DTRMagic) {
-                        $("#DTRBreak").show();
-                    }
-                    else {
-                        $("#loading_modal").modal("show");
-                        Initializedpage_WorkingHours();
-                        DTRMagic = true;
-                    }
+                    //if (DTRMagic) {
+                    //    $("#DTRBreak").show();
+                    //}
+                    //else {
+                    //    $("#loading_modal").modal("show");
+                    //    Initializedpage_WorkingHours();
+                    //    DTRMagic = true;
+                    //}
                     break;
                 case "OTM":
-                    if (OTMagic) {
-                        $("#OTV").show();
-                    }
-                    else {
-                        $("#loading_modal").modal("show");
-                        Initializedpage_OTHours();
-                        OTMagic = true;
-                    }
+                    //if (OTMagic) {
+                    //    $("#OTV").show();
+                    //}
+                    //else {
+                    //    $("#loading_modal").modal("show");
+                    //    Initializedpage_OTHours();
+                    //    OTMagic = true;
+                    //}
                     break;
                 case "ES":
                     if (EmpShiftMagic) {

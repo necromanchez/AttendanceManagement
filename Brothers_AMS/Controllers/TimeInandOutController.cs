@@ -897,11 +897,11 @@ namespace Brothers_WMS.Controllers
             string sortColumnName = Request["columns[" + Request["order[0][column]"] + "][name]"];
             string sortDirection = Request["order[0][dir]"];
             RFID = Convert.ToInt64(RFID).ToString();
-            List<GET_Employee_TimeIns_Result> list = db.GET_Employee_TimeIns(RFID).ToList();
+            List<GET_Employee_TimeIns_Result> list = db.GET_Employee_TimeIns(RFID,start,length).ToList();
             if(list.Count == 0)
             {
                 long removezero = Convert.ToInt64(THERFID);
-                list = db.GET_Employee_TimeIns(removezero.ToString()).ToList();
+                list = db.GET_Employee_TimeIns(removezero.ToString(), start, length).ToList();
             }
 
 

@@ -142,25 +142,23 @@
                                         </div>
                                     </div>
 
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <span class="btn btn-flat btn-file bg-green btn-lg btn-block">
-                                                    @*<a style="color:white" href="../../Correction/Templates/DownloadTemplate?filename=UploadEmployeeSchedule.xlsx"><i class="fa fa-download"></i> Download Schedule Template</a>*@
-                                                    <a style="color:white" id="downloadbtnSchedule"><i class="fa fa-download"></i> Download Schedule Template</a>
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <span class="btn btn-flat btn-file bg-green btn-lg btn-block" id="setsched">
-                                                    @*<i class="fa fa-upload"></i> Upload Schedule<input type="file" onchange="UploadSchedule()" name="UploadedSchedule" id="UploadedSchedule" placeholder="(.xlsx)" accept=".xlsx">*@
-                                                    <i class="fa fa-upload"></i> Upload Schedule
+                                    @*<div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <span class="btn btn-flat btn-file bg-green btn-lg btn-block">
+                        <a style="color:white" id="downloadbtnSchedule"><i class="fa fa-download"></i> Download Schedule Template</a>
+                    </span>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <span class="btn btn-flat btn-file bg-green btn-lg btn-block" id="setsched">
+                        <i class="fa fa-upload"></i> Upload Schedule
 
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
+                    </span>
+                </div>
+            </div>
+        </div>*@
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group">
@@ -189,6 +187,23 @@
                                             <div class="form-group">
                                                 <span class="btn btn-flat btn-file bg-green btn-lg btn-block">
                                                     <i class="fa fa-upload"></i> Upload Position<input type="file" onchange="UploadPosition()" name="UploadedPosition" id="UploadedPosition" placeholder="(.xlsx)" accept=".xlsx">
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            @*<div class="form-group">
+                                                <span class="btn btn-flat btn-file bg-green btn-lg btn-block">
+                                                    <a style="color:white" id="downloadbtnSchedule"><i class="fa fa-download"></i> Download Schedule Template</a>
+                                                </span>
+                                            </div>*@
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <span class="btn btn-flat btn-file bg-green btn-lg btn-block" id="setsched">
+                                                    <i class="fa fa-upload"></i> Upload Schedule
+
                                                 </span>
                                             </div>
                                         </div>
@@ -723,41 +738,17 @@
 
 
                     <ul class="nav nav-tabs" role="tablist" id="tabs">
-                        <li class="nav-item"> <a class="nav-link active reloadtbl" href="#Schedulehistorytab" data-toggle="tab" id="PAB">Uploaded Schedule</a></li>
-                        <li class="nav-item"> <a class="nav-link reloadtbl" href="#SchedulehistoryCS" data-toggle="tab" id="DB">Change Schedule</a></li>
+                        <li class="nav-item"> <a class="nav-link active reloadtbl" href="#SchedulehistoryCS" data-toggle="tab" id="CS">Change Schedule</a></li>
+                        <li class="nav-item"> <a class="nav-link  reloadtbl" href="#Schedulehistorytab" data-toggle="tab" id="US">Uploaded Schedule</a></li>
+
 
                     </ul>
 
                     <div class="tab-content">
 
-                        <div class="tab-pane padhider active" id="Schedulehistorytab">
 
-                            <div class="row">
-                                <div class="col">
-                                    <div class="box">
-                                        <div class="box-body">
-
-                                            <div class="row theshow">
-                                                <div class="col-12">
-                                                    <div class="table-responsive">
-                                                        <table id="Schedulehistory" class="table table-bordered table-striped table-responsive" style="width:100%">
-                                                            <thead>
-                                                            </thead>
-                                                            <tbody></tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
-                                                </div>
-
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- /.col -->
-                            </div>
-
-                        </div>
                         <!-- /.tab-pane -->
-                        <div class="tab-pane padhider" id="SchedulehistoryCS">
+                        <div class="tab-pane padhider active" id="SchedulehistoryCS">
 
                             <div class="row">
                                 <div class="col">
@@ -774,7 +765,34 @@
                                                         </table>
                                                     </div>
                                                 </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /.col -->
+                            </div>
+
+                        </div>
+
+                        <div class="tab-pane padhider" id="Schedulehistorytab">
+
+                            <div class="row">
+                                <div class="col">
+                                    <div class="box">
+                                        <div class="box-body">
+
+                                            <div class="row theshow">
+                                                <div class="col-12">
+                                                    <div class="table-responsive">
+                                                        <table id="Schedulehistory" class="table table-bordered table-striped table-responsive" style="width:100%">
+                                                            <thead>
+                                                            </thead>
+                                                            <tbody></tbody>
+                                                        </table>
+                                                    </div>
                                                 </div>
+                                            </div>
 
                                         </div>
                                     </div>
