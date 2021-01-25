@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Data.Entity.Core.Objects;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
@@ -891,17 +892,18 @@ namespace Brothers_WMS.Controllers
             string Prefix = SourceValue.Remove(SourceValue.Length - 4).ToUpper();
             string THERFID = hex2Dec(Hexvalue).ToString();
             //Server Side Parameter
-            int start = Convert.ToInt32(Request["start"]);
+            int start = (Convert.ToInt32(Request["start"]) == 0) ? 0 : (Convert.ToInt32(Request["start"]) / Convert.ToInt32(Request["length"]));
             int length = Convert.ToInt32(Request["length"]);
             string searchValue = Request["search[value]"];
             string sortColumnName = Request["columns[" + Request["order[0][column]"] + "][name]"];
             string sortDirection = Request["order[0][dir]"];
             RFID = Convert.ToInt64(RFID).ToString();
-            List<GET_Employee_TimeIns_Result> list = db.GET_Employee_TimeIns(RFID,start,length).ToList();
+            ObjectParameter totalCount = new ObjectParameter("TotalCount", typeof(int));
+            List<GET_Employee_TimeIns_Result> list = db.GET_Employee_TimeIns(RFID,start,length, totalCount).ToList();
             if(list.Count == 0)
             {
                 long removezero = Convert.ToInt64(THERFID);
-                list = db.GET_Employee_TimeIns(removezero.ToString(), start, length).ToList();
+                list = db.GET_Employee_TimeIns(removezero.ToString(), start, length, totalCount).ToList();
             }
 
 
@@ -920,11 +922,11 @@ namespace Brothers_WMS.Controllers
                     list = list.OrderByDescending(x => TypeHelper.GetPropertyValue(x, sortColumnName)).ToList();
                 }
             }
-            int totalrows = list.Count;
-            int totalrowsafterfiltering = list.Count;
+            int? totalrows = Convert.ToInt32(totalCount.Value);//list.Count;
+            int? totalrowsafterfiltering = Convert.ToInt32(totalCount.Value);//list.Count;
 
             //paging
-            list = list.Skip(start).Take(length).ToList<GET_Employee_TimeIns_Result>();
+           // list = list.Skip(start).Take(length).ToList<GET_Employee_TimeIns_Result>();
             return Json(new { data = list, draw = Request["draw"], recordsTotal = totalrows, recordsFiltered = totalrowsafterfiltering }, JsonRequestBehavior.AllowGet);
         }
 

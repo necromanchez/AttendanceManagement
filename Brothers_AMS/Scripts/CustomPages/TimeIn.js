@@ -315,11 +315,12 @@ function GetAttendanceDetail(re) {
             type: "POST",
             datatype: "json"
         },
+        ordering: false,
+        lengthMenu: [[10, 50, 100], [10, 50, 100]],
+        lengthChange: true,
         serverSide: "true",
         order: [0, "asc"],
         processing: "true",
-        searching: false,
-        lengthChange: false,
         language: {
             "processing": "processing... please wait"
         },
