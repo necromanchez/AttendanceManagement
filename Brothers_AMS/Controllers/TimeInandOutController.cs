@@ -885,7 +885,7 @@ namespace Brothers_WMS.Controllers
             return Json(new { TheResult = TheResult }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult GetAttendanceDetailsList(string RFID)
+        public ActionResult GetAttendanceDetailsList(string RFID, DateTime DateFrom, DateTime DateTo)
         {
             string SourceValue = dec2Hex(Convert.ToInt64(RFID));
             string Hexvalue = SourceValue.Substring(SourceValue.Length - 4);
@@ -899,11 +899,11 @@ namespace Brothers_WMS.Controllers
             string sortDirection = Request["order[0][dir]"];
             RFID = Convert.ToInt64(RFID).ToString();
             ObjectParameter totalCount = new ObjectParameter("TotalCount", typeof(int));
-            List<GET_Employee_TimeIns_Result> list = db.GET_Employee_TimeIns(RFID,start,length, totalCount).ToList();
+            List<GET_Employee_TimeIns_Result> list = db.GET_Employee_TimeIns(RFID,start,length, DateFrom, DateTo, totalCount).ToList();
             if(list.Count == 0)
             {
                 long removezero = Convert.ToInt64(THERFID);
-                list = db.GET_Employee_TimeIns(removezero.ToString(), start, length, totalCount).ToList();
+                list = db.GET_Employee_TimeIns(removezero.ToString(), start, length, DateFrom, DateTo, totalCount).ToList();
             }
 
 

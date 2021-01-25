@@ -2438,7 +2438,7 @@ namespace Brothers_WMS.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GET_RP_WrongShiftV2_Result>("GET_RP_WrongShiftV2", dateFromParameter, dateToParameter, monthParameter, yearParameter, sectionParameter, agencyParameter, pageCountParameter, rowCountParameter, searchvalueParameter, shiftParameter);
         }
     
-        public virtual ObjectResult<GET_Employee_TimeIns_Result> GET_Employee_TimeIns(string rFID, Nullable<int> pageCount, Nullable<int> rowCount, ObjectParameter totalCount)
+        public virtual ObjectResult<GET_Employee_TimeIns_Result> GET_Employee_TimeIns(string rFID, Nullable<int> pageCount, Nullable<int> rowCount, Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, ObjectParameter totalCount)
         {
             var rFIDParameter = rFID != null ?
                 new ObjectParameter("RFID", rFID) :
@@ -2452,7 +2452,15 @@ namespace Brothers_WMS.Models
                 new ObjectParameter("RowCount", rowCount) :
                 new ObjectParameter("RowCount", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GET_Employee_TimeIns_Result>("GET_Employee_TimeIns", rFIDParameter, pageCountParameter, rowCountParameter, totalCount);
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GET_Employee_TimeIns_Result>("GET_Employee_TimeIns", rFIDParameter, pageCountParameter, rowCountParameter, dateFromParameter, dateToParameter, totalCount);
         }
     }
 }

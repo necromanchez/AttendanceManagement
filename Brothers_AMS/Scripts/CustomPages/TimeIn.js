@@ -11,7 +11,9 @@ var timer;
 
 
 (function () {
-    
+    $(".step").on("change", GetAttendanceDetail);
+    $("#DateFrom").datepicker().datepicker("setDate", new Date());
+    $("#DateTo").datepicker().datepicker("setDate", new Date());
     $("#empDetails").hide();
     $("#requestrow").hide();
     GetComip();
@@ -308,10 +310,15 @@ function readURL(input) {
 }
 
 
-function GetAttendanceDetail(re) {
+function GetAttendanceDetail() {
     $('#AttendanceDetails').DataTable({
         ajax: {
             url: '/TimeInandOut/GetAttendanceDetailsList?RFID=' + $("#IDno").val(),
+            data: {
+                RFID: $("#IDno").val(),
+                DateFrom: $("#DateFrom").val(),
+                DateTo: $("#DateTo").val(),
+            },
             type: "POST",
             datatype: "json"
         },
@@ -360,9 +367,9 @@ function GetAttendanceDetail(re) {
             var row = $("#AttendanceDetails_wrapper tr:first-child");
             $(row).addClass("firstrowhere");
             //GetPendinOT();
-            if (re == "go") {
-                GetPendingTimekeeping();
-            }
+            //if (re == "go") {
+            //    GetPendingTimekeeping();
+            //}
            
         }
     });

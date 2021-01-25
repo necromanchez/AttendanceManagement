@@ -856,6 +856,8 @@
           <Parameter Name="RFID" Type="nvarchar(max)" Mode="In" />
           <Parameter Name="PageCount" Type="int" Mode="In" />
           <Parameter Name="RowCount" Type="int" Mode="In" />
+          <Parameter Name="DateFrom" Type="datetime" Mode="In" />
+          <Parameter Name="DateTo" Type="datetime" Mode="In" />
           <Parameter Name="TotalCount" Type="int" Mode="InOut" />
         </Function>
         <Function Name="GET_EmployeeShift_Process" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
@@ -1891,6 +1893,8 @@
             <Parameter Name="RFID" Mode="In" Type="String" />
             <Parameter Name="PageCount" Mode="In" Type="Int32" />
             <Parameter Name="RowCount" Mode="In" Type="Int32" />
+            <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
+            <Parameter Name="DateTo" Mode="In" Type="DateTime" />
             <Parameter Name="TotalCount" Mode="InOut" Type="Int32" />
           </FunctionImport>
           </EntityContainer>
