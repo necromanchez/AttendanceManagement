@@ -59,7 +59,6 @@ function GetUser() {
             if (returnData.usersection != null && returnData.usercost != null) {
                 $('#Section').val(returnData.usersection).trigger('change');
                 $('#Section').val(returnData.usersection);
-
                 selectedSection = returnData.usersection;
                 $("#select2-Section-container").text(returnData.usersection);
                 // $("#Search").trigger("click");
