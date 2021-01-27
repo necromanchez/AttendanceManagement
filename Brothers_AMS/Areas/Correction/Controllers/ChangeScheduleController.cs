@@ -90,6 +90,7 @@ namespace Brothers_WMS.Areas.Correction.Controllers
 
             #region Generate CS Status
             db.AF_EmailCSRequestApprovers();
+            db.AF_EmailCSRequest(CSRefnow);
             #endregion
 
 
