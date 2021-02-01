@@ -12,7 +12,16 @@ var timer;
 
 (function () {
     $(".step").on("change", GetAttendanceDetail);
-    $("#DateFrom").datepicker().datepicker("setDate", new Date());
+    var todayDate = new Date();
+    todayDate.setDate(todayDate.getDate() - 2);
+    $("#DateFrom").datepicker().datepicker
+        (
+        {
+            format: 'mm/dd/yyyy',
+            startDate: '-7d',
+            setDate: 'today'
+        }
+        ).datepicker("setDate", todayDate);
     $("#DateTo").datepicker().datepicker("setDate", new Date());
     $("#empDetails").hide();
     $("#requestrow").hide();

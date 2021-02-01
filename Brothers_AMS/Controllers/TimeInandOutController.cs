@@ -887,47 +887,54 @@ namespace Brothers_WMS.Controllers
 
         public ActionResult GetAttendanceDetailsList(string RFID, DateTime DateFrom, DateTime DateTo)
         {
-            string SourceValue = dec2Hex(Convert.ToInt64(RFID));
-            string Hexvalue = SourceValue.Substring(SourceValue.Length - 4);
-            string Prefix = SourceValue.Remove(SourceValue.Length - 4).ToUpper();
-            string THERFID = hex2Dec(Hexvalue).ToString();
-            //Server Side Parameter
-            int start = (Convert.ToInt32(Request["start"]) == 0) ? 0 : (Convert.ToInt32(Request["start"]) / Convert.ToInt32(Request["length"]));
-            int length = Convert.ToInt32(Request["length"]);
-            string searchValue = Request["search[value]"];
-            string sortColumnName = Request["columns[" + Request["order[0][column]"] + "][name]"];
-            string sortDirection = Request["order[0][dir]"];
-            RFID = Convert.ToInt64(RFID).ToString();
-            ObjectParameter totalCount = new ObjectParameter("TotalCount", typeof(int));
-            List<GET_Employee_TimeIns_Result> list = db.GET_Employee_TimeIns(RFID,start,length, DateFrom, DateTo, totalCount).ToList();
-            if(list.Count == 0)
+            try
             {
-                long removezero = Convert.ToInt64(THERFID);
-                list = db.GET_Employee_TimeIns(removezero.ToString(), start, length, DateFrom, DateTo, totalCount).ToList();
-            }
-
-
-            if (!string.IsNullOrEmpty(searchValue))//filter
-            {
-                list = list.Where(x => x.Skill.ToLower().Contains(searchValue.ToLower())).ToList<GET_Employee_TimeIns_Result>();
-            }
-            if (sortColumnName != "" && sortColumnName != null)
-            {
-                if (sortDirection == "asc")
+                string SourceValue = dec2Hex(Convert.ToInt64(RFID));
+                string Hexvalue = SourceValue.Substring(SourceValue.Length - 4);
+                string Prefix = SourceValue.Remove(SourceValue.Length - 4).ToUpper();
+                string THERFID = hex2Dec(Hexvalue).ToString();
+                //Server Side Parameter
+                int start = (Convert.ToInt32(Request["start"]) == 0) ? 0 : (Convert.ToInt32(Request["start"]) / Convert.ToInt32(Request["length"]));
+                int length = Convert.ToInt32(Request["length"]);
+                string searchValue = Request["search[value]"];
+                string sortColumnName = Request["columns[" + Request["order[0][column]"] + "][name]"];
+                string sortDirection = Request["order[0][dir]"];
+                RFID = Convert.ToInt64(RFID).ToString();
+                ObjectParameter totalCount = new ObjectParameter("TotalCount", typeof(int));
+                List<GET_Employee_TimeIns_Result> list = db.GET_Employee_TimeIns(RFID, start, length, DateFrom, DateTo, totalCount).ToList();
+                if (list.Count == 0)
                 {
-                    list = list.OrderBy(x => TypeHelper.GetPropertyValue(x, sortColumnName)).ToList();
+                    long removezero = Convert.ToInt64(THERFID);
+                    list = db.GET_Employee_TimeIns(removezero.ToString(), start, length, DateFrom, DateTo, totalCount).ToList();
                 }
-                else
-                {
-                    list = list.OrderByDescending(x => TypeHelper.GetPropertyValue(x, sortColumnName)).ToList();
-                }
-            }
-            int? totalrows = Convert.ToInt32(totalCount.Value);//list.Count;
-            int? totalrowsafterfiltering = Convert.ToInt32(totalCount.Value);//list.Count;
 
-            //paging
-           // list = list.Skip(start).Take(length).ToList<GET_Employee_TimeIns_Result>();
-            return Json(new { data = list, draw = Request["draw"], recordsTotal = totalrows, recordsFiltered = totalrowsafterfiltering }, JsonRequestBehavior.AllowGet);
+
+                if (!string.IsNullOrEmpty(searchValue))//filter
+                {
+                    list = list.Where(x => x.Skill.ToLower().Contains(searchValue.ToLower())).ToList<GET_Employee_TimeIns_Result>();
+                }
+                if (sortColumnName != "" && sortColumnName != null)
+                {
+                    if (sortDirection == "asc")
+                    {
+                        list = list.OrderBy(x => TypeHelper.GetPropertyValue(x, sortColumnName)).ToList();
+                    }
+                    else
+                    {
+                        list = list.OrderByDescending(x => TypeHelper.GetPropertyValue(x, sortColumnName)).ToList();
+                    }
+                }
+                int? totalrows = Convert.ToInt32(totalCount.Value);//list.Count;
+                int? totalrowsafterfiltering = Convert.ToInt32(totalCount.Value);//list.Count;
+
+                //paging
+                // list = list.Skip(start).Take(length).ToList<GET_Employee_TimeIns_Result>();
+                return Json(new { data = list, draw = Request["draw"], recordsTotal = totalrows, recordsFiltered = totalrowsafterfiltering }, JsonRequestBehavior.AllowGet);
+            }
+            catch(Exception err)
+            {
+                return Json(new { }, JsonRequestBehavior.AllowGet);
+            }
         }
 
         [HttpPost]

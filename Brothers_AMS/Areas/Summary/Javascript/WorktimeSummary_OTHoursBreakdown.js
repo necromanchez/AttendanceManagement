@@ -3,32 +3,16 @@ var totalOT = 0;
 
 
 function DataConverter(data) {
-    if (data.toLowerCase().indexOf('inc') > -1) {
-        var res = data.split(" ");
-        data = res[0];
-        return (data == "0.0") ? "<p class='text Adjustbrand'>" + data + "</p>" : "<p class='text-red Adjustbrand'>" + data + "</p>"
-        
-    }
-    //else if (data.toLowerCase().indexOf('noot') > -1) {
-    //    var res = data.split(" ");
-    //    data = res[0];
-    //    if (data > 0) {
-    //        totalOT += parseFloat(data);
-    //    } 
-    //     return (data == "0.0")?"<p class='text Adjustbrand'>" + data + "</p>":"<p class='text-red Adjustbrand'>" + data + "</p>"
-    //}
-    //else if (data.toLowerCase().indexOf('wot') > -1) {
-    //    var res = data.split(" ");
-    //    data = res[0];
-    //    if (data > 0) {
-    //        totalOT += parseFloat(data);
-    //    }
-    //    return "<p class='text-green Adjustbrand'>" + data + "</p>"
-    //}
-    else {
+   
+    if (typeof data !== 'undefined') {
         totalOT += parseFloat(data);
         return "<p class='text Adjustbrand'>" + data + "</p>"
     }
+    else {
+        return "<p class='text Adjustbrand'>" + data + "</p>"
+    }
+       
+
 
 
 }

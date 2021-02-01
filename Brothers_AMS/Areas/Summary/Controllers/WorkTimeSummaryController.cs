@@ -131,47 +131,93 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                                      }).ToList();
                 }
                 catch(Exception err2) {
-                    convertedList = (from rw in dt.AsEnumerable()
-                                     select new GET_RP_AttendanceMonitoring_Result()
-                                     {
-                                         Rownum = Convert.ToInt32(rw["Rownum"]),
-                                         //RFID = Convert.ToString(rw["RFID"]),
-                                         EmpNo = Convert.ToString(rw["EmpNo"]),
-                                         EmployeeName = Convert.ToString(rw["EmployeeName"]),
-                                         Position = Convert.ToString(rw["Position"]),
-                                         Schedule = Convert.ToString(rw["Schedule"]),
-                                         CostCode = Convert.ToString(rw["CostCode"]),
-                                         //Status = Convert.ToString(rw["Status"]),
-                                         C1 = Convert.ToString(rw["1"]),
-                                         C2 = Convert.ToString(rw["2"]),
-                                         C3 = Convert.ToString(rw["3"]),
-                                         C4 = Convert.ToString(rw["4"]),
-                                         C5 = Convert.ToString(rw["5"]),
-                                         C6 = Convert.ToString(rw["6"]),
-                                         C7 = Convert.ToString(rw["7"]),
-                                         C8 = Convert.ToString(rw["8"]),
-                                         C9 = Convert.ToString(rw["9"]),
-                                         C10 = Convert.ToString(rw["10"]),
-                                         C11 = Convert.ToString(rw["11"]),
-                                         C12 = Convert.ToString(rw["12"]),
-                                         C13 = Convert.ToString(rw["13"]),
-                                         C14 = Convert.ToString(rw["14"]),
-                                         C15 = Convert.ToString(rw["15"]),
-                                         C16 = Convert.ToString(rw["16"]),
-                                         C17 = Convert.ToString(rw["17"]),
-                                         C18 = Convert.ToString(rw["18"]),
-                                         C19 = Convert.ToString(rw["19"]),
-                                         C20 = Convert.ToString(rw["20"]),
-                                         C21 = Convert.ToString(rw["21"]),
-                                         C22 = Convert.ToString(rw["22"]),
-                                         C23 = Convert.ToString(rw["23"]),
-                                         C24 = Convert.ToString(rw["24"]),
-                                         C25 = Convert.ToString(rw["25"]),
-                                         C26 = Convert.ToString(rw["26"]),
-                                         C27 = Convert.ToString(rw["27"]),
-                                         C28 = Convert.ToString(rw["28"]),
-                                         C29 = Convert.ToString(rw["29"]),
-                                     }).ToList();
+                    try
+                    {
+                        convertedList = (from rw in dt.AsEnumerable()
+                                         select new GET_RP_AttendanceMonitoring_Result()
+                                         {
+                                             Rownum = Convert.ToInt32(rw["Rownum"]),
+                                             //RFID = Convert.ToString(rw["RFID"]),
+                                             EmpNo = Convert.ToString(rw["EmpNo"]),
+                                             EmployeeName = Convert.ToString(rw["EmployeeName"]),
+                                             Position = Convert.ToString(rw["Position"]),
+                                             Schedule = Convert.ToString(rw["Schedule"]),
+                                             CostCode = Convert.ToString(rw["CostCode"]),
+                                             //Status = Convert.ToString(rw["Status"]),
+                                             C1 = Convert.ToString(rw["1"]),
+                                             C2 = Convert.ToString(rw["2"]),
+                                             C3 = Convert.ToString(rw["3"]),
+                                             C4 = Convert.ToString(rw["4"]),
+                                             C5 = Convert.ToString(rw["5"]),
+                                             C6 = Convert.ToString(rw["6"]),
+                                             C7 = Convert.ToString(rw["7"]),
+                                             C8 = Convert.ToString(rw["8"]),
+                                             C9 = Convert.ToString(rw["9"]),
+                                             C10 = Convert.ToString(rw["10"]),
+                                             C11 = Convert.ToString(rw["11"]),
+                                             C12 = Convert.ToString(rw["12"]),
+                                             C13 = Convert.ToString(rw["13"]),
+                                             C14 = Convert.ToString(rw["14"]),
+                                             C15 = Convert.ToString(rw["15"]),
+                                             C16 = Convert.ToString(rw["16"]),
+                                             C17 = Convert.ToString(rw["17"]),
+                                             C18 = Convert.ToString(rw["18"]),
+                                             C19 = Convert.ToString(rw["19"]),
+                                             C20 = Convert.ToString(rw["20"]),
+                                             C21 = Convert.ToString(rw["21"]),
+                                             C22 = Convert.ToString(rw["22"]),
+                                             C23 = Convert.ToString(rw["23"]),
+                                             C24 = Convert.ToString(rw["24"]),
+                                             C25 = Convert.ToString(rw["25"]),
+                                             C26 = Convert.ToString(rw["26"]),
+                                             C27 = Convert.ToString(rw["27"]),
+                                             C28 = Convert.ToString(rw["28"]),
+                                             C29 = (rw["29"] != null) ? Convert.ToString(rw["29"]) : "",
+                                         }).ToList();
+                    }
+                    catch(Exception err3)
+                    {
+                        convertedList = (from rw in dt.AsEnumerable()
+                                         select new GET_RP_AttendanceMonitoring_Result()
+                                         {
+                                             Rownum = Convert.ToInt32(rw["Rownum"]),
+                                             //RFID = Convert.ToString(rw["RFID"]),
+                                             EmpNo = Convert.ToString(rw["EmpNo"]),
+                                             EmployeeName = Convert.ToString(rw["EmployeeName"]),
+                                             Position = Convert.ToString(rw["Position"]),
+                                             Schedule = Convert.ToString(rw["Schedule"]),
+                                             CostCode = Convert.ToString(rw["CostCode"]),
+                                             //Status = Convert.ToString(rw["Status"]),
+                                             C1 = Convert.ToString(rw["1"]),
+                                             C2 = Convert.ToString(rw["2"]),
+                                             C3 = Convert.ToString(rw["3"]),
+                                             C4 = Convert.ToString(rw["4"]),
+                                             C5 = Convert.ToString(rw["5"]),
+                                             C6 = Convert.ToString(rw["6"]),
+                                             C7 = Convert.ToString(rw["7"]),
+                                             C8 = Convert.ToString(rw["8"]),
+                                             C9 = Convert.ToString(rw["9"]),
+                                             C10 = Convert.ToString(rw["10"]),
+                                             C11 = Convert.ToString(rw["11"]),
+                                             C12 = Convert.ToString(rw["12"]),
+                                             C13 = Convert.ToString(rw["13"]),
+                                             C14 = Convert.ToString(rw["14"]),
+                                             C15 = Convert.ToString(rw["15"]),
+                                             C16 = Convert.ToString(rw["16"]),
+                                             C17 = Convert.ToString(rw["17"]),
+                                             C18 = Convert.ToString(rw["18"]),
+                                             C19 = Convert.ToString(rw["19"]),
+                                             C20 = Convert.ToString(rw["20"]),
+                                             C21 = Convert.ToString(rw["21"]),
+                                             C22 = Convert.ToString(rw["22"]),
+                                             C23 = Convert.ToString(rw["23"]),
+                                             C24 = Convert.ToString(rw["24"]),
+                                             C25 = Convert.ToString(rw["25"]),
+                                             C26 = Convert.ToString(rw["26"]),
+                                             C27 = Convert.ToString(rw["27"]),
+                                             C28 = Convert.ToString(rw["28"]),
+                                         }).ToList();
+                    }
                 }
             }
             List<GET_RP_AttendanceMonitoring_Result> adjustedNW = new List<GET_RP_AttendanceMonitoring_Result>();
@@ -1108,38 +1154,41 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                     }
                     Pcount++;
                 }
-                if (!Dayname(29, Month, Year) && row.C29 == "AB")
+                if (row.C29 != null)
                 {
-                    DateTime day = new DateTime(Year, Month, 29);
-                    if (day <= DateTime.Now)
+                    if (!Dayname(29, Month, Year) && row.C29 == "AB")
                     {
-                        row.C29 = "NW";
+                        DateTime day = new DateTime(Year, Month, 29);
+                        if (day <= DateTime.Now)
+                        {
+                            row.C29 = "NW";
+                        }
+                        else
+                        {
+                            row.C29 = "-";
+                        }
                     }
-                    else
+
+                    else if (row.C29 == "HD")
                     {
-                        row.C29 = "-";
+                        Ycount = Ycount + 0.5;
                     }
-                }
-                
-                else if (row.C29 == "HD")
-                {
-                    Ycount = Ycount + 0.5;
-                }
-                else if (row.C29 == "ML")
-                {
-                    MLcount++;
-                }
-                else if (row.C29 == "AB" || row.C29.Contains("L"))
-                {
-                    Bcount++;
-                }
-                else if (row.C29.Contains("P"))
-                {
-                    if (!Dayname(29, Month, Year))
+                    else if (row.C29 == "ML")
                     {
-                        WKWeekend++;
+                        MLcount++;
                     }
-                    Pcount++;
+                    else if (row.C29 == "AB" || row.C29.Contains("L"))
+                    {
+                        Bcount++;
+                    }
+                    else if (row.C29.Contains("P"))
+                    {
+                        if (!Dayname(29, Month, Year))
+                        {
+                            WKWeekend++;
+                        }
+                        Pcount++;
+                    }
                 }
 
                 if (row.C30 != null)
@@ -1331,47 +1380,93 @@ namespace Brothers_WMS.Areas.Summary.Controllers
                 }
                 catch (Exception err2)
                 {
-                    convertedList = (from rw in dt.AsEnumerable()
-                                     select new GET_RP_AttendanceMonitoring_Result()
-                                     {
-                                         Rownum = Convert.ToInt32(rw["Rownum"]),
-                                         //RFID = Convert.ToString(rw["RFID"]),
-                                         EmpNo = Convert.ToString(rw["EmpNo"]),
-                                         EmployeeName = Convert.ToString(rw["EmployeeName"]),
-                                         Position = Convert.ToString(rw["Position"]),
-                                         Schedule = Convert.ToString(rw["Schedule"]),
-                                         CostCode = Convert.ToString(rw["CostCode"]),
-                                         //Status = Convert.ToString(rw["Status"]),
-                                         C1 = Convert.ToString(rw["1"]),
-                                         C2 = Convert.ToString(rw["2"]),
-                                         C3 = Convert.ToString(rw["3"]),
-                                         C4 = Convert.ToString(rw["4"]),
-                                         C5 = Convert.ToString(rw["5"]),
-                                         C6 = Convert.ToString(rw["6"]),
-                                         C7 = Convert.ToString(rw["7"]),
-                                         C8 = Convert.ToString(rw["8"]),
-                                         C9 = Convert.ToString(rw["9"]),
-                                         C10 = Convert.ToString(rw["10"]),
-                                         C11 = Convert.ToString(rw["11"]),
-                                         C12 = Convert.ToString(rw["12"]),
-                                         C13 = Convert.ToString(rw["13"]),
-                                         C14 = Convert.ToString(rw["14"]),
-                                         C15 = Convert.ToString(rw["15"]),
-                                         C16 = Convert.ToString(rw["16"]),
-                                         C17 = Convert.ToString(rw["17"]),
-                                         C18 = Convert.ToString(rw["18"]),
-                                         C19 = Convert.ToString(rw["19"]),
-                                         C20 = Convert.ToString(rw["20"]),
-                                         C21 = Convert.ToString(rw["21"]),
-                                         C22 = Convert.ToString(rw["22"]),
-                                         C23 = Convert.ToString(rw["23"]),
-                                         C24 = Convert.ToString(rw["24"]),
-                                         C25 = Convert.ToString(rw["25"]),
-                                         C26 = Convert.ToString(rw["26"]),
-                                         C27 = Convert.ToString(rw["27"]),
-                                         C28 = Convert.ToString(rw["28"]),
-                                         C29 = Convert.ToString(rw["29"]),
-                                     }).ToList();
+                    try
+                    {
+                        convertedList = (from rw in dt.AsEnumerable()
+                                         select new GET_RP_AttendanceMonitoring_Result()
+                                         {
+                                             Rownum = Convert.ToInt32(rw["Rownum"]),
+                                             //RFID = Convert.ToString(rw["RFID"]),
+                                             EmpNo = Convert.ToString(rw["EmpNo"]),
+                                             EmployeeName = Convert.ToString(rw["EmployeeName"]),
+                                             Position = Convert.ToString(rw["Position"]),
+                                             Schedule = Convert.ToString(rw["Schedule"]),
+                                             CostCode = Convert.ToString(rw["CostCode"]),
+                                             //Status = Convert.ToString(rw["Status"]),
+                                             C1 = Convert.ToString(rw["1"]),
+                                             C2 = Convert.ToString(rw["2"]),
+                                             C3 = Convert.ToString(rw["3"]),
+                                             C4 = Convert.ToString(rw["4"]),
+                                             C5 = Convert.ToString(rw["5"]),
+                                             C6 = Convert.ToString(rw["6"]),
+                                             C7 = Convert.ToString(rw["7"]),
+                                             C8 = Convert.ToString(rw["8"]),
+                                             C9 = Convert.ToString(rw["9"]),
+                                             C10 = Convert.ToString(rw["10"]),
+                                             C11 = Convert.ToString(rw["11"]),
+                                             C12 = Convert.ToString(rw["12"]),
+                                             C13 = Convert.ToString(rw["13"]),
+                                             C14 = Convert.ToString(rw["14"]),
+                                             C15 = Convert.ToString(rw["15"]),
+                                             C16 = Convert.ToString(rw["16"]),
+                                             C17 = Convert.ToString(rw["17"]),
+                                             C18 = Convert.ToString(rw["18"]),
+                                             C19 = Convert.ToString(rw["19"]),
+                                             C20 = Convert.ToString(rw["20"]),
+                                             C21 = Convert.ToString(rw["21"]),
+                                             C22 = Convert.ToString(rw["22"]),
+                                             C23 = Convert.ToString(rw["23"]),
+                                             C24 = Convert.ToString(rw["24"]),
+                                             C25 = Convert.ToString(rw["25"]),
+                                             C26 = Convert.ToString(rw["26"]),
+                                             C27 = Convert.ToString(rw["27"]),
+                                             C28 = Convert.ToString(rw["28"]),
+                                             C29 = Convert.ToString(rw["29"]),
+                                         }).ToList();
+                    }
+                    catch(Exception err3)
+                    {
+                        convertedList = (from rw in dt.AsEnumerable()
+                                         select new GET_RP_AttendanceMonitoring_Result()
+                                         {
+                                             Rownum = Convert.ToInt32(rw["Rownum"]),
+                                             //RFID = Convert.ToString(rw["RFID"]),
+                                             EmpNo = Convert.ToString(rw["EmpNo"]),
+                                             EmployeeName = Convert.ToString(rw["EmployeeName"]),
+                                             Position = Convert.ToString(rw["Position"]),
+                                             Schedule = Convert.ToString(rw["Schedule"]),
+                                             CostCode = Convert.ToString(rw["CostCode"]),
+                                             //Status = Convert.ToString(rw["Status"]),
+                                             C1 = Convert.ToString(rw["1"]),
+                                             C2 = Convert.ToString(rw["2"]),
+                                             C3 = Convert.ToString(rw["3"]),
+                                             C4 = Convert.ToString(rw["4"]),
+                                             C5 = Convert.ToString(rw["5"]),
+                                             C6 = Convert.ToString(rw["6"]),
+                                             C7 = Convert.ToString(rw["7"]),
+                                             C8 = Convert.ToString(rw["8"]),
+                                             C9 = Convert.ToString(rw["9"]),
+                                             C10 = Convert.ToString(rw["10"]),
+                                             C11 = Convert.ToString(rw["11"]),
+                                             C12 = Convert.ToString(rw["12"]),
+                                             C13 = Convert.ToString(rw["13"]),
+                                             C14 = Convert.ToString(rw["14"]),
+                                             C15 = Convert.ToString(rw["15"]),
+                                             C16 = Convert.ToString(rw["16"]),
+                                             C17 = Convert.ToString(rw["17"]),
+                                             C18 = Convert.ToString(rw["18"]),
+                                             C19 = Convert.ToString(rw["19"]),
+                                             C20 = Convert.ToString(rw["20"]),
+                                             C21 = Convert.ToString(rw["21"]),
+                                             C22 = Convert.ToString(rw["22"]),
+                                             C23 = Convert.ToString(rw["23"]),
+                                             C24 = Convert.ToString(rw["24"]),
+                                             C25 = Convert.ToString(rw["25"]),
+                                             C26 = Convert.ToString(rw["26"]),
+                                             C27 = Convert.ToString(rw["27"]),
+                                             C28 = Convert.ToString(rw["28"]),
+                                         }).ToList();
+                    }
                 }
             }
            
