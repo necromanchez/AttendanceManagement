@@ -17,8 +17,6 @@ using static Brothers_WMS.Controllers.SessionExpire;
 
 namespace Brothers_WMS.Controllers
 {
-    
-
     public class TimeInandOutController : Controller
     {
         // GET: TimeIn
