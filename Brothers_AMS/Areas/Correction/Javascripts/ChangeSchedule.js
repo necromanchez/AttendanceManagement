@@ -99,7 +99,7 @@
         }
     })
 
-    $("#btnconfirm").one("click", function () {
+    $("#btnconfirm").on("click", function () {
 
         var dat1 = new Date($("#DateFrom").val());
         var dat2 = new Date($("#DateTo").val());
@@ -426,10 +426,13 @@ function SaveCS() {
             datatype: "json",
             success: function (returnData) {
                 notify("Saved!", "CS Successfully Filed", "success");
+                //location.reload();
+                chosend_EmpNo = [];
                 $("#ConfirmChangeSchedule").modal("hide");
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 notify("Saved!", "CS Successfully Filed", "success");
+                location.reload();
                 $("#ConfirmChangeSchedule").modal("hide");
             }
         });
