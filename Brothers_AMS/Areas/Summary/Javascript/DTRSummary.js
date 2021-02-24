@@ -235,10 +235,10 @@ function GetDetails(data, status) {
             data: { DTRRefNo: data, status: status },
 
         },
-        dom: 'Bfrtip',
-        buttons: [
-          'csv', 'excel'
-        ],
+        dom: 'frtip',
+        //buttons: [
+        //  'csv', 'excel'
+        //],
         lengthMenu: [[10, 50, 100], [10, 50, 100]],
         
         lengthChange: false,

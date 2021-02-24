@@ -280,10 +280,10 @@ function GetDetails(data, status) {
             data: { CSRefNo: data, status: status },
 
         },
-        dom: 'Bfrtip',
-        buttons: [
-          'excel'
-        ],
+        dom: 'frtip',
+        //buttons: [
+        //  'excel'
+        //],
         //lengthMenu: [[10, 50, 100], [10, 50, 100]],
         
         //lengthChange: false,

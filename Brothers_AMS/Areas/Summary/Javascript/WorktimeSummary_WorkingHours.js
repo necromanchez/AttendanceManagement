@@ -18,13 +18,18 @@ function Initializedpage_WorkingHours() {
             type: "GET",
             datatype: "json",
         },
-
+        dom: 'lBfrtip',
+        buttons: [
+            {
+                extend: 'excel',
+                title: "WorkTimeSummary_OTBreakdown"
+            }
+        ],
         lengthChange: true,
         lengthMenu: [[10, 50, 100], [10, 50, 100]],
         pagelength: 10,
         loadonce: false,
         scrollX: true,
-        dom: 'lfrtip',
         ordering: false,
         serverSide: "true",
         scrollCollapse: true,

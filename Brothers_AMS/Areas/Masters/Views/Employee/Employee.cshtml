@@ -14,10 +14,12 @@
         DupRFID = (List<GET_DuplicateRFID_Result>)(Session["DupRFID"]);
     }
     string UserSection = string.Empty;
+    string Username = string.Empty;
     if ((M_Users)(Session["user"]) != null)
     {
         M_Users UserInfo = (M_Users)(Session["user"]);
         UserSection = UserInfo.Section;
+        Username = UserInfo.UserName;
     }
     else
     {
@@ -83,13 +85,15 @@
             <i class="fa fa-users"></i>
             <h3 class="box-title">Employee Details</h3>
             <h3 class="box-title"><button id="Syncit" type="button" class="btn btn-block btn-primary btn-lg"><i class="fa fa-refresh"></i> Synchronize</button></h3>
-            <h3 class="box-title"><button id="clearallskill" type="button" class="btn btn-block btn-warning btn-lg"><i class="fa fa-refresh"></i> Clear All Process</button></h3>
-            
-            @if (@DupRFID.Count()>1 && @UserSection == null)
+            @if (@Username == "lozanora")
+            {
+                <h3 class="box-title"><button id="clearallskill" type="button" class="btn btn-block btn-warning btn-lg"><i class="fa fa-refresh"></i> Clear All Process</button></h3>
+            }
+            @if (@DupRFID.Count() > 1 && @UserSection == null)
             {
                 <h3 class="box-title"><button id="DupRFID" type="button" class="btn btn-block btn-danger btn-lg"><i class="fa fa-exclamation-triangle"></i> Duplicate RFID</button></h3>
             }
-        </div>
+            </div>
         <div class="row">
             <div class="col-lg-12 col-xl-12">
                 <!-- /.box-header -->

@@ -268,10 +268,10 @@ function GetDetails(data,status, OTType) {
             data: { OTRefNo: data, status: status,OTType:OTType },
 
         },
-        dom: 'Bfrtip',
-        buttons: [
-          'csv', 'excel'
-        ],
+        dom: 'frtip',
+        //buttons: [
+        //  'csv', 'excel'
+        //],
         lengthMenu: [[10, 50, 100], [10, 50, 100]],
         
         lengthChange: false,
