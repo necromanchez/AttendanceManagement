@@ -1372,7 +1372,6 @@
             <Parameter Name="RefNo" Mode="In" Type="String" />
             <Parameter Name="BIPH_Agency" Mode="In" Type="String" />
           </FunctionImport>
-          <FunctionImport Name="AF_UpdateApprovedSchedule_old" />
           <FunctionImport Name="GET_RP_AttendanceMonitoring_Shift">
             <Parameter Name="Month" Mode="In" Type="Int32" />
             <Parameter Name="Year" Mode="In" Type="Int32" />
@@ -1874,9 +1873,6 @@
           <FunctionImport Name="TT_GETTIMEOut" ReturnType="Collection(Brothers_AMSDBModel.TT_GETTIMEOut_Result)">
           <Parameter Name="Shift" Mode="In" Type="String" />
           </FunctionImport>
-          <FunctionImport Name="AF_UpdateApprovedSchedule" ReturnType="Collection(Brothers_AMSDBModel.AF_UpdateApprovedSchedule_Result)">
-          <Parameter Name="RefNoCS" Mode="In" Type="String" />
-          </FunctionImport>
           <FunctionImport Name="GET_RP_WrongShiftV2" ReturnType="Collection(Brothers_AMSDBModel.GET_RP_WrongShiftV2_Result)">
             <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
             <Parameter Name="DateTo" Mode="In" Type="DateTime" />
@@ -1896,6 +1892,9 @@
             <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
             <Parameter Name="DateTo" Mode="In" Type="DateTime" />
             <Parameter Name="TotalCount" Mode="InOut" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="AF_UpdateApprovedSchedule">
+            <Parameter Name="RefNoCS" Mode="In" Type="String" />
           </FunctionImport>
           </EntityContainer>
         <ComplexType Name="GET_AF_Approver_Result">
@@ -3452,14 +3451,6 @@
         <ComplexType Name="TT_GETTIMEOut_Result">
           <Property Type="String" Name="Result" Nullable="false" MaxLength="6" />
           <Property Type="Boolean" Name="Resultanswer" Nullable="true" />
-        </ComplexType>
-        <ComplexType Name="AF_UpdateApprovedSchedule_Result">
-          <Property Type="String" Name="Column1" Nullable="true" MaxLength="50" />
-          <Property Type="Int64" Name="Column2" Nullable="true" />
-          <Property Type="String" Name="Column3" Nullable="true" MaxLength="50" />
-          <Property Type="DateTime" Name="Column4" Nullable="true" Precision="23" />
-          <Property Type="DateTime" Name="Column5" Nullable="true" Precision="23" />
-          <Property Type="String" Name="Column6" Nullable="true" MaxLength="50" />
         </ComplexType>
         <ComplexType Name="GET_RP_WrongShiftV2_Result">
           <Property Type="String" Name="EmpNo" Nullable="false" MaxLength="1" />
@@ -5448,18 +5439,6 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="AF_UpdateApprovedSchedule" FunctionName="Brothers_AMSDBModel.Store.AF_UpdateApprovedSchedule">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="Brothers_AMSDBModel.AF_UpdateApprovedSchedule_Result">
-                <ScalarProperty Name="Column1" ColumnName="Column1" />
-                <ScalarProperty Name="Column2" ColumnName="Column2" />
-                <ScalarProperty Name="Column3" ColumnName="Column3" />
-                <ScalarProperty Name="Column4" ColumnName="Column4" />
-                <ScalarProperty Name="Column5" ColumnName="Column5" />
-                <ScalarProperty Name="Column6" ColumnName="Column6" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="GET_RP_WrongShiftV2" FunctionName="Brothers_AMSDBModel.Store.GET_RP_WrongShiftV2">
             <ResultMapping>
               <ComplexTypeMapping TypeName="Brothers_AMSDBModel.GET_RP_WrongShiftV2_Result">
@@ -5484,6 +5463,7 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="AF_UpdateApprovedSchedule" FunctionName="Brothers_AMSDBModel.Store.AF_UpdateApprovedSchedule" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

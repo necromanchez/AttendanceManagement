@@ -252,12 +252,13 @@ namespace Brothers_WMS.Areas.Correction.Controllers
 
 
             #endregion
-            db.AF_EmailCSRequest(refno);
+            
             if (stat == statmax)
             {
                 db.AF_UpdateApprovedSchedule(refno);
                 //SendTheMail(GetApproved[0].CS_RefNo);
             }
+            db.AF_EmailCSRequest(refno);
             return Json(new { }, JsonRequestBehavior.AllowGet);
         }
 

@@ -664,11 +664,6 @@ namespace Brothers_WMS.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GET_AF_DTRExport_Result>("GET_AF_DTRExport", refNoParameter, bIPH_AgencyParameter);
         }
     
-        public virtual int AF_UpdateApprovedSchedule_old()
-        {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AF_UpdateApprovedSchedule_old");
-        }
-    
         public virtual int GET_RP_AttendanceMonitoring_Shift(Nullable<int> month, Nullable<int> year, string section, string agency, Nullable<int> pageCount, Nullable<int> rowCount, string searchvalue)
         {
             var monthParameter = month.HasValue ?
@@ -2384,15 +2379,6 @@ namespace Brothers_WMS.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<TT_GETTIMEOut_Result>("TT_GETTIMEOut", shiftParameter);
         }
     
-        public virtual ObjectResult<AF_UpdateApprovedSchedule_Result> AF_UpdateApprovedSchedule(string refNoCS)
-        {
-            var refNoCSParameter = refNoCS != null ?
-                new ObjectParameter("RefNoCS", refNoCS) :
-                new ObjectParameter("RefNoCS", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<AF_UpdateApprovedSchedule_Result>("AF_UpdateApprovedSchedule", refNoCSParameter);
-        }
-    
         public virtual ObjectResult<GET_RP_WrongShiftV2_Result> GET_RP_WrongShiftV2(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, Nullable<int> month, Nullable<int> year, string section, string agency, Nullable<int> pageCount, Nullable<int> rowCount, string searchvalue, string shift)
         {
             var dateFromParameter = dateFrom.HasValue ?
@@ -2461,6 +2447,15 @@ namespace Brothers_WMS.Models
                 new ObjectParameter("DateTo", typeof(System.DateTime));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GET_Employee_TimeIns_Result>("GET_Employee_TimeIns", rFIDParameter, pageCountParameter, rowCountParameter, dateFromParameter, dateToParameter, totalCount);
+        }
+    
+        public virtual int AF_UpdateApprovedSchedule(string refNoCS)
+        {
+            var refNoCSParameter = refNoCS != null ?
+                new ObjectParameter("RefNoCS", refNoCS) :
+                new ObjectParameter("RefNoCS", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AF_UpdateApprovedSchedule", refNoCSParameter);
         }
     }
 }
