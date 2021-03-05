@@ -468,8 +468,8 @@ function Dropdown_selectMP(id, url) {
             $('#' + id).append(option);
         });
         var idd = "select2-" + id + "-container";
-        document.getElementById(idd).style.whiteSpace = "nowrap";
-        document.getElementById(id).style.whiteSpace = "nowrap";
+        //document.getElementById(idd).style.whiteSpace = "nowrap";
+        //document.getElementById(id).style.whiteSpace = "nowrap";
         //GetUser();
 
     }).fail(function (xhr, textStatus, errorThrown) {

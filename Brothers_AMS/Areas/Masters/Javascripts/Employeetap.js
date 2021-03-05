@@ -7,9 +7,12 @@
     Dropdown_selectMPMain22('Section', "/Helper/GetDropdown_SectionAMS?Dgroup=");
 
     //$("#Section").on("change", InitializepageTT);
-
+    $("#Section").on("change", function () {
+        selectedSection = $("#Section").val();
+        InitializepageTT();
+    })
 });
-
+var selectedSection = "";
 function InitializepageTT() {
     //$("#loading_modal").modal("show");
     var d = new Date();
@@ -20,7 +23,7 @@ function InitializepageTT() {
             data: {
                 searchdate: $("#DateFilter").val(),
                 searchdate2: $("#DateFilter2").val(),
-                Sectiontap: $("#Section").val(),
+                Sectiontap: selectedSection,
                 Agency: $("#BIPH_Agency").val(),
             },
             datatype: "json"
